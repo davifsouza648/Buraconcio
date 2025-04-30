@@ -1,0 +1,41 @@
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+eclipse.project.name = appName + '-core'
+
+dependencies {
+  api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
+  api "com.badlogicgames.gdx:gdx:$gdxVersion"
+  api "com.bladecoder.ink:blade-ink:$bladeInkVersion"
+  api "com.crashinvaders.basisu:basisu-gdx:$gdxBasisUniversalVersion"
+  api "com.crashinvaders.basisu:basisu-wrapper:$gdxBasisUniversalVersion"
+  api "com.crashinvaders.lml:gdx-autumn-mvc:$lmlVersion"
+  api "com.crashinvaders.lml:gdx-autumn:$lmlVersion"
+  api "com.crashinvaders.lml:gdx-kiwi:$lmlVersion"
+  api "com.crashinvaders.lml:gdx-lml:$lmlVersion"
+  api "com.github.crykn.guacamole:core:$guacamoleVersion"
+  api "com.github.crykn.guacamole:gdx:$guacamoleVersion"
+  api "com.github.lyze237:gdx-FlexBox:$flexBoxVersion"
+  api "com.github.mgsx-dev.gdx-gltf:gltf:$gdxGltfVersion"
+  api "com.github.raeleus:game-jolt-api:$gameJoltApiVersion"
+  api "com.github.tommyettinger:anim8-gdx:$anim8Version"
+  api "com.github.tommyettinger:colorful:$colorfulVersion"
+  api "com.github.tommyettinger:cringe:$cringeVersion"
+  api "com.github.tommyettinger:crux:$cruxVersion"
+  api "com.github.tommyettinger:digital:$digitalVersion"
+  api "com.github.tommyettinger:formic:$formicVersion"
+  api "com.github.tommyettinger:funderby:$funderbyVersion"
+  api "com.github.tommyettinger:gand:$gandVersion"
+  api "com.github.tommyettinger:gdcrux:$gdcruxVersion"
+  api "de.golfgl.gdxcontrollerutils:gdx-controllers-advanced:$controllerUtilsVersion"
+  api "de.golfgl.gdxcontrollerutils:gdx-controllerutils-mapping:$controllerMappingVersion"
+  api "de.golfgl.gdxcontrollerutils:gdx-controllerutils-scene2d:$controllerScene2DVersion"
+  api "de.tomgrill.gdxdialogs:gdx-dialogs-core:$dialogsVersion"
+  api "de.tomgrill.gdxfacebook:gdx-facebook-core:$facebookVersion"
+  api "io.github.quillraven.fleks:Fleks:$fleksVersion"
+  api "net.onedaybeard.artemis:artemis-odb:$artemisOdbVersion"
+  api "org.apache.commons:commons-collections4:$commonsCollectionsVersion"
+  api "org.apache.fury:fury-core:$furyVersion"
+
+  if(enableGraalNative == 'true') {
+    implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
+  }
+}
