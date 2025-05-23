@@ -32,10 +32,11 @@ public class LoginMenu implements Screen {
         table.setFillParent(true);
         table.center();
         stage.addActor(table);
+        table.setDebug(true); 
 
         userField = new TextField("", skin);
         userField.setMessageText("Digite seu username");
-
+        
         // passField = new TextField("", skin);
         // passField.setMessageText("Digite sua senha");
         // passField.setPasswordMode(true);
