@@ -1,0 +1,176 @@
+{ "frames": {
+   "buraconcio 0.ase": {
+    "frame": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 1.ase": {
+    "frame": { "x": 320, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 2.ase": {
+    "frame": { "x": 640, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 3.ase": {
+    "frame": { "x": 960, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 4.ase": {
+    "frame": { "x": 1280, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 5.ase": {
+    "frame": { "x": 1600, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 6.ase": {
+    "frame": { "x": 1920, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 7.ase": {
+    "frame": { "x": 2240, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 8.ase": {
+    "frame": { "x": 2560, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 9.ase": {
+    "frame": { "x": 2880, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 10.ase": {
+    "frame": { "x": 3200, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 11.ase": {
+    "frame": { "x": 3520, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 12.ase": {
+    "frame": { "x": 3840, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 13.ase": {
+    "frame": { "x": 4160, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 14.ase": {
+    "frame": { "x": 4480, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 15.ase": {
+    "frame": { "x": 4800, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 16.ase": {
+    "frame": { "x": 5120, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 17.ase": {
+    "frame": { "x": 5440, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 18.ase": {
+    "frame": { "x": 5760, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   },
+   "buraconcio 19.ase": {
+    "frame": { "x": 6080, "y": 0, "w": 320, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 320, "h": 32 },
+    "sourceSize": { "w": 320, "h": 32 },
+    "duration": 50
+   }
+ },
+ "meta": {
+  "app": "https://github.com/LibreSprite/LibreSprite/",
+  "version": "1.1-dev",
+  "format": "RGBA8888",
+  "size": { "w": 6400, "h": 32 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "Loop", "from": 0, "to": 19, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}
