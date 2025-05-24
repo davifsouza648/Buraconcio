@@ -5,6 +5,8 @@ public class Player {
     private String username;
     private double stars;
     private int id;
+    private boolean hosting;
+    private String avatarpath;
 
 
     public Player(String username){
@@ -37,5 +39,25 @@ public class Player {
     public void setStars(double stars) {
         this.stars = stars;
     }
+
+    public void setAvatar(String newAvatar){
+        avatarpath = newAvatar;
+    }
+
+    public String getAvatar(){
+        return avatarpath;
+    }
+
+    public void setHosting(boolean tf){
+        hosting = tf;
+    }
+
+    public Boolean getHosting(){
+        return hosting;
+    }
+
+
+
+
 
 }

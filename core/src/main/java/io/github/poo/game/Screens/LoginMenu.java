@@ -10,7 +10,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.poo.game.Main;
 import io.github.poo.game.Objects.Player;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-
+import java.util.*;
+import java.util.List;
 public class LoginMenu implements Screen {
 
     private Main game;
@@ -19,6 +20,8 @@ public class LoginMenu implements Screen {
     private Skin skin;
     private String username;
     // private String password;
+
+    String[] avatarVec = {"user1.png", "user2.png", "user3.png", "user3.png", "user4.png", "user5.png", "user6.png", "user7.png", "user8.png", "user9.png", "user10.png"};
 
     public LoginMenu(Main game) {
         this.game = game;
@@ -32,11 +35,11 @@ public class LoginMenu implements Screen {
         table.setFillParent(true);
         table.center();
         stage.addActor(table);
-        table.setDebug(true); 
+        table.setDebug(true);
 
         userField = new TextField("", skin);
         userField.setMessageText("Digite seu username");
-        
+
         // passField = new TextField("", skin);
         // passField.setMessageText("Digite sua senha");
         // passField.setPasswordMode(true);
@@ -54,7 +57,11 @@ public class LoginMenu implements Screen {
 
                 Player player = new Player(username);
 
-                player.setId(0);
+                Random random = new Random();
+
+                player.setId(username.hashCode() + random.nextInt(25));
+
+                player.setAvatar(avatarVec[random.nextInt(0, 10)]);
 
                 game.getPlayerManager().addPlayer(player);
 
@@ -105,4 +112,5 @@ public class LoginMenu implements Screen {
         stage.dispose();
         skin.dispose();
     }
+
 }

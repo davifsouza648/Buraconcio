@@ -29,7 +29,7 @@ public class MainMenu implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("uiskin.json")); // usa fonte padrão
-        
+
         Label title = new Label("Bem-vindo ao Golfzin!", skin); //trocar por imagem
         title.setFontScale(3f);
 
@@ -65,7 +65,7 @@ public class MainMenu implements Screen {
         });
 
         Table table = new Table();
-        
+
         table.setFillParent(true);
         table.center();
         table.add(title).padBottom(60);
@@ -77,7 +77,7 @@ public class MainMenu implements Screen {
         table.add(creditsButton).size(400, 90).pad(15);
         table.row();
         table.add(quitButton).size(400, 90).pad(15);
-        table.setDebug(true); 
+        table.setDebug(true);
         stage.addActor(table);
     }
 
