@@ -1,4 +1,4 @@
-package io.github.poo.game.Objects;
+package io.github.buraconcio.Objects;
 
 public class Player {
 

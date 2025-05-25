@@ -1,9 +1,9 @@
-package io.github.poo.game.Utils;
+package io.github.buraconcio.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.poo.game.Objects.Player;
+import io.github.buraconcio.Objects.Player;
 
 public class PlayerManager {
 

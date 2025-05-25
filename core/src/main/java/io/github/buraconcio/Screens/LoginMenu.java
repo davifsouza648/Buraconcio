@@ -1,4 +1,4 @@
-package io.github.poo.game.Screens;
+package io.github.buraconcio.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import io.github.poo.game.Main;
-import io.github.poo.game.Objects.Player;
+import io.github.buraconcio.Main;
+import io.github.buraconcio.Objects.Player;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import java.util.*;
 import java.util.List;

@@ -1,4 +1,4 @@
-package io.github.poo.game.Screens;
+package io.github.buraconcio.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -10,8 +10,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import io.github.poo.game.Main;
-import io.github.poo.game.Objects.Player;
+import io.github.buraconcio.Main;
+import io.github.buraconcio.Objects.Player;
 
 public class ServerScreen implements Screen {
     private final Main game;
