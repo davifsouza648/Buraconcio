@@ -20,20 +20,22 @@ public class Main extends Game {
         Box2D.init();
         Vector2 grav = new Vector2(0, -10);
         world = new World(grav, true);
+
+        // skippar primeira tela para testar mais rapido
+        // comentar linha de baixo e iniciar menu desejado
         setScreen(new LoginMenu(this));
 
-        /* skippar primeira tela para testar mais rapido
-        Player player = new Player("test");
-        player.setId(0);
-        pManager.addPlayer(player);
-        setScreen(new MainMenu(this));
-        */
+        //setScreen(new PhysicsTest(this));
     }
 
     public PlayerManager getPlayerManager() {
 
         return pManager;
 
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     @Override

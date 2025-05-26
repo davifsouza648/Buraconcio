@@ -15,17 +15,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Objects.Player;
-import io.github.buraconcio.Objects.Ball;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class MainMenu implements Screen {
 
     private Main game;
     private Stage stage;
     private Skin skin;
-
-    private Ball testBall;
-    private ShapeRenderer shape;
 
     public MainMenu(Main game) {
         this.game = game;
@@ -84,10 +79,6 @@ public class MainMenu implements Screen {
         table.add(quitButton).size(400, 90).pad(15);
         table.setDebug(true);
         stage.addActor(table);
-
-        testBall = new Ball(10, 100, 60, 70, 70);
-
-        stage.addActor(testBall);
     }
 
     @Override
