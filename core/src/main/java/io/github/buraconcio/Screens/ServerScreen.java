@@ -119,13 +119,14 @@ public class ServerScreen implements Screen {
         Label Blabel = new Label("Criado pela resenha", skin);
 
         botInfo.add(Alabel);
+        botInfo.row();
         botInfo.add(Blabel);
 
         rightColumn.add(topInfo).expandY().top().right();
         rightColumn.row();
         rightColumn.add().expand();
         rightColumn.row();
-        rightColumn.add(botInfo).bottom().right().padBottom(-7);
+        rightColumn.add(botInfo).bottom().right().padBottom(-12);
 
         // topInfo.setDebug(true);
         // botInfo.setDebug(true);
