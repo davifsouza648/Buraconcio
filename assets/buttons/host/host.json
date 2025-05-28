@@ -1,0 +1,9 @@
+{
+"com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
+	"default": {
+		"up": "HOST1",
+		"down": "HOST2",
+		"over": "HOST3"
+	}
+}
+}

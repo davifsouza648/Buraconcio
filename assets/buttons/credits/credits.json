@@ -1,0 +1,9 @@
+{
+"com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
+	"default": {
+		"up": "CREDITS1",
+		"down": "CREDITS2",
+		"over": "CREDITS3"
+	}
+}
+}

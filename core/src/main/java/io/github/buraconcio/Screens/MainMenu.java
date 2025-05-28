@@ -7,10 +7,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -29,6 +32,9 @@ public class MainMenu implements Screen {
     private Main game;
     private Stage stage;
     private Skin skin;
+    private Skin skinHost, skinQuit, skinJoin, skinCredits;
+    private TextureAtlas textureAtlasHost, textureAtlasQuit, textureAtlasJoin, textureAtlasCredits;
+    private ImageButtonStyle imageButtonStyleHost, imageButtonStyleQuit, imageButtonStyleJoin, imageButtonStyleCredits;
     private Animation<TextureRegion> buraconcioAnimation, backAnimation;
     private float elapsedTimeName = 0f, elapsedTimeBack = 0f;
     private Texture spriteSheet1, spriteSheet2;
@@ -41,6 +47,42 @@ public class MainMenu implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("uiskin.json")); // usa fonte padrão
+
+        skinHost = new Skin(Gdx.files.internal("buttons/host/host.json"));
+        textureAtlasHost = new TextureAtlas("buttons/host/host.atlas");
+        skinHost.addRegions(textureAtlasHost);
+        imageButtonStyleHost = new ImageButtonStyle();
+        imageButtonStyleHost.up = skinHost.getDrawable("HOST1");
+        imageButtonStyleHost.down = skinHost.getDrawable("HOST2");
+        imageButtonStyleHost.over = skinHost.getDrawable("HOST3");
+
+
+        skinCredits = new Skin(Gdx.files.internal("buttons/credits/credits.json"));
+        textureAtlasCredits = new TextureAtlas("buttons/credits/credits.atlas");
+        skinCredits.addRegions(textureAtlasCredits);
+        imageButtonStyleCredits = new ImageButtonStyle();
+        imageButtonStyleCredits.up = skinCredits.getDrawable("CREDITS1");
+        imageButtonStyleCredits.down = skinCredits.getDrawable("CREDITS2");
+        imageButtonStyleCredits.over = skinCredits.getDrawable("CREDITS3");
+
+
+        skinJoin = new Skin(Gdx.files.internal("buttons/join/join.json"));
+        textureAtlasJoin = new TextureAtlas("buttons/join/join.atlas");
+        skinJoin.addRegions(textureAtlasJoin);
+        imageButtonStyleJoin = new ImageButtonStyle();
+        imageButtonStyleJoin.up = skinJoin.getDrawable("JOIN1");
+        imageButtonStyleJoin.down = skinJoin.getDrawable("JOIN2");
+        imageButtonStyleJoin.over = skinJoin.getDrawable("JOIN3");
+
+
+        skinQuit = new Skin(Gdx.files.internal("buttons/quit/quit.json"));
+        textureAtlasQuit = new TextureAtlas("buttons/quit/quit.atlas");
+        skinQuit.addRegions(textureAtlasJoin);
+        imageButtonStyleQuit = new ImageButtonStyle();
+        imageButtonStyleQuit.up = skinQuit.getDrawable("QUIT1");
+        imageButtonStyleQuit.down = skinQuit.getDrawable("QUIT2");
+        imageButtonStyleQuit.over = skinQuit.getDrawable("QUIT3");
+
 
         spriteSheet1 = new Texture(Gdx.files.internal("backgroundMenu.png"));
         JsonValue json1 = new JsonReader().parse(Gdx.files.internal("backgroundMenu.json"));
@@ -90,10 +132,10 @@ public class MainMenu implements Screen {
 
         buraconcioImage = new Image(new TextureRegionDrawable(buraconcioAnimation.getKeyFrame(0)));
 
-        TextButton playButton = new TextButton("Play", skin);
-        TextButton hostButton = new TextButton("Host", skin);
-        TextButton creditsButton = new TextButton("Credits", skin);
-        TextButton quitButton = new TextButton("Quit", skin);
+        ImageButton playButton = new ImageButton(imageButtonStyleJoin);
+        ImageButton hostButton = new ImageButton(imageButtonStyleHost);
+        ImageButton creditsButton = new ImageButton(imageButtonStyleCredits);
+        ImageButton quitButton = new ImageButton(imageButtonStyleQuit);
 
         playButton.addListener(new ClickListener() {
             @Override
@@ -132,13 +174,13 @@ public class MainMenu implements Screen {
         table.center();
         table.add(buraconcioImage).padBottom(60).width(900).height(160).expandX().center().padRight(-22);
         table.row();
-        table.add(playButton).size(400, 90).pad(15);
+        table.add(playButton).pad(15);
         table.row();
-        table.add(hostButton).size(400, 90).pad(15);
+        table.add(hostButton).pad(15);
         table.row();
-        table.add(creditsButton).size(400, 90).pad(15);
+        table.add(creditsButton).pad(15);
         table.row();
-        table.add(quitButton).size(400, 90).pad(15);
+        table.add(quitButton).pad(15);
 
         table.setDebug(false);
 

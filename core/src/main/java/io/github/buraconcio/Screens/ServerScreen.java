@@ -35,7 +35,7 @@ public class ServerScreen implements Screen {
         root.add(createLeftColumn()).expand().fill().left().pad(75);
         root.add(createRightColumn()).expand().fill().top().right().pad(75);
 
-        root.setDebug(true);
+        root.setDebug(false);
     }
 
     private Table createLeftColumn() {
