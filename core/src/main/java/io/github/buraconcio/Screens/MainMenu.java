@@ -48,15 +48,15 @@ public class MainMenu implements Screen {
 
         ArrayList<TextureRegion> frames1 = new ArrayList<>();
 
-        for (int i = 0; i < 54; i++) {
-            String key = "teste " + i + ".ase";
-            JsonValue frameData = framesJson1.get(key).get("frame");
-
+        for (int i = 0; i < framesJson1.size; i++) {
+            JsonValue frameObj = framesJson1.get(i);
+            JsonValue frameData = frameObj.get("frame");
+        
             int x = frameData.getInt("x");
             int y = frameData.getInt("y");
             int w = frameData.getInt("w");
             int h = frameData.getInt("h");
-
+        
             TextureRegion region = new TextureRegion(spriteSheet1, x, y, w, h);
             frames1.add(region);
         }
@@ -152,7 +152,7 @@ public class MainMenu implements Screen {
 
     @Override
     public void render(float delta) {
-        elapsedTimeBack += delta * 0.4f;
+        elapsedTimeBack += delta * 0.7f;
         elapsedTimeName += delta;
 
         backImage.setDrawable(new TextureRegionDrawable(backAnimation.getKeyFrame(elapsedTimeBack)));
