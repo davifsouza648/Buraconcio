@@ -66,21 +66,17 @@ public class PhysicsTest implements Screen {
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1;
 
-            // convert mouse coords (top left) to stage coords (bottom left)
-            private void convertCoords(Vector2 pos) {
-                pos.y = 0;
-            }
-
+            // mouse coords are in top left and stage coords are in bottom left
             @Override
             public boolean touchDown(int x, int y, int pointer, int button) {
-                mouse1 = new Vector2(x, y);
+                mouse1 = new Vector2(x, -y);  // quick fix to adapt coords
 
                 return true;
             }
 
             @Override
             public boolean touchUp(int x, int y, int pointer, int button) {
-                Vector2 mouse2 = new Vector2(x, y);
+                Vector2 mouse2 = new Vector2(x, -y);
                 testBall.applyImpulse(testBall.calculateImpulse(mouse1, mouse2));
 
                 return true;

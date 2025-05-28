@@ -80,7 +80,6 @@ public class Ball extends Actor {
 
     public Vector2 calculateImpulse(Vector2 mouse1, Vector2 mouse2) {
         Vector2 diff = mouse1.sub(mouse2);
-        diff.y *= -1;
 
         float magnitude = (diff.len() / Constants.MAX_IMPULSE_DISTANCE) * Constants.MAX_IMPULSE;
         if (magnitude > Constants.MAX_IMPULSE) magnitude = Constants.MAX_IMPULSE;
