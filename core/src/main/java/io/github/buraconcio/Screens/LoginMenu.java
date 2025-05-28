@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Utils.PlayerManager;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import java.util.*;
 import java.util.List;
@@ -63,7 +64,7 @@ public class LoginMenu implements Screen {
 
                 player.setAvatar(avatarVec[random.nextInt(0, 10)]);
 
-                game.getPlayerManager().addPlayer(player);
+                PlayerManager.getInstance().addPlayer(player);
 
                 System.out.println(player.getUsername());
 

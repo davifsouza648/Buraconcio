@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Utils.PlayerManager;
 
 public class ServerScreen implements Screen {
     private final Main game;
@@ -108,7 +109,7 @@ public class ServerScreen implements Screen {
         // topInfo.add(createPlayerRow("Murilo",
         // "user-icons/user4.png")).left().padBottom(5);
 
-        for (Player p : game.getPlayerManager().getAllPlayers()) {
+        for (Player p : PlayerManager.getInstance().getAllPlayers()) {
             topInfo.add(createPlayerRow(p.getUsername(), "user-icons/" + p.getAvatar())).left().padBottom(5);
             topInfo.row();
         }
@@ -150,14 +151,14 @@ public class ServerScreen implements Screen {
         topInfo.clear();
 
         Label playersLabel = new Label(
-                game.getPlayerManager().getAllPlayers().size() + " Player(s) (4 Max)",
+                PlayerManager.getInstance().getAllPlayers().size() + " Player(s) (4 Max)",
                 skin);
         playersLabel.setFontScale(1.1f);
 
         topInfo.add(playersLabel).left().padBottom(10);
         topInfo.row();
 
-        for (Player p : game.getPlayerManager().getAllPlayers()) {
+        for (Player p : PlayerManager.getInstance().getAllPlayers()) {
             topInfo.add(createPlayerRow(p.getUsername(), "user-icons/" + p.getAvatar())).left().padBottom(5);
             topInfo.row();
         }

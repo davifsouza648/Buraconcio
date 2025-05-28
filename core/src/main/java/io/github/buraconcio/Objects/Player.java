@@ -1,5 +1,11 @@
 package io.github.buraconcio.Objects;
 
+import io.github.buraconcio.Objects.Ball;
+import io.github.buraconcio.Utils.Constants;
+
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
+
 public class Player {
 
     private String username;
@@ -8,13 +14,26 @@ public class Player {
     private boolean hosting;
     private String avatarpath;
 
+    private Ball ball;
 
     public Player(String username){
         this.username = username;
+        stars = 0.0;
+    }
+
+    public Ball createBall(Vector2 pos, World world) {
+        ball = new Ball(pos, Constants.BALL_RADIUS, world, id);
+
+        return ball;
+    }
+
+    public void stroke(Vector2 mouse1, Vector2 mouse2) {
+        ball.applyImpulse(ball.calculateImpulse(mouse1, mouse2));
+
+        stars += 1.0;
     }
 
     public String getUsername(){
-
         return username;
     }
 
@@ -55,9 +74,4 @@ public class Player {
     public Boolean getHosting(){
         return hosting;
     }
-
-
-
-
-
 }

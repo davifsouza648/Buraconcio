@@ -15,8 +15,11 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Ball;
+import io.github.buraconcio.Objects.Flag;
+import io.github.buraconcio.Utils.PlayerManager;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -29,6 +32,7 @@ public class PhysicsTest implements Screen {
     private Skin skin;
 
     private Ball testBall;
+    private Flag testFlag;
 
     private World world;
     private float tickrate;
@@ -36,6 +40,8 @@ public class PhysicsTest implements Screen {
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
 
+    // public PhysicsTest(Main game, Player player) {
+    // mas ai ja vou mexer pra uma classe mais final
     public PhysicsTest(Main game) {
         this.game = game;
         tickrate = 1/60f;
@@ -49,11 +55,17 @@ public class PhysicsTest implements Screen {
         stage.getViewport().setCamera(camera);
         Gdx.input.setInputProcessor(stage);
 
-        //skin = new Skin(Gdx.files.internal("backgroundMenu.json"), new TextureAtlas(Gdx.files.internal("backgroundMenu.jpg"))); // usa fonte padrão
+        //testBall = new Ball(new Vector2(3f, 3f), 1f, world, 0);
+        Player p = new Player("Murilio");
+        p.setId(0);
+        Ball pBall = p.createBall(new Vector2(3f, 3f), world);
 
-        testBall = new Ball(3f, 3f, 1f, world);
+        PlayerManager.getInstance().addPlayer(p);
 
-        stage.addActor(testBall);
+        testFlag = new Flag(new Vector2(20f, 3f), world);
+
+        stage.addActor(pBall);
+        stage.addActor(testFlag);
 
         BodyDef wallDef = new BodyDef();
         wallDef.position.set(new Vector2(stage.getWidth()/2, stage.getHeight()));
@@ -63,24 +75,54 @@ public class PhysicsTest implements Screen {
         wall.createFixture(wallBox, 0f);
         wallBox.dispose();
 
+        PlayerManager pManager = PlayerManager.getInstance();
+
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1;
 
-            // mouse coords are in top left and stage coords are in bottom left
             @Override
             public boolean touchDown(int x, int y, int pointer, int button) {
-                mouse1 = new Vector2(x, -y);  // quick fix to adapt coords
+                Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
+                mouse1 = new Vector2(unprojected.x, unprojected.y);
 
                 return true;
             }
 
             @Override
             public boolean touchUp(int x, int y, int pointer, int button) {
-                Vector2 mouse2 = new Vector2(x, -y);
-                testBall.applyImpulse(testBall.calculateImpulse(mouse1, mouse2));
+                Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
+                Vector2 mouse2 = new Vector2(unprojected.x, unprojected.y);
+                p.stroke(mouse1, mouse2);
 
                 return true;
             }
+        });
+
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void endContact(Contact contact) {}
+
+            @Override
+            public void beginContact(Contact contact) {
+                if ( contact.getFixtureA().getBody().getUserData() == "Flag"
+                 || contact.getFixtureB().getBody().getUserData() == "Flag" ) {
+                    System.out.println("Gol!");
+
+                    // find wich fixture is ball
+                    Object ballId = contact.getFixtureA().getBody().getUserData();
+                    if (ballId == "Flag") ballId = contact.getFixtureB().getBody().getUserData();
+
+                    Player player = PlayerManager.getInstance().getPlayer(Integer.parseInt(ballId.toString()));
+                    System.out.println(player.getUsername());
+                }
+            }
+
+            @Override
+	        public void preSolve(Contact contact, Manifold oldManifold) {}
+
+	        @Override
+	        public void postSolve(Contact contact, ContactImpulse impulse) {}
+
         });
     }
 

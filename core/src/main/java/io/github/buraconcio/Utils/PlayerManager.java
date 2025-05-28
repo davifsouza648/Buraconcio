@@ -5,12 +5,22 @@ import java.util.List;
 
 import io.github.buraconcio.Objects.Player;
 
+// singleton
 public class PlayerManager {
-
     private List<Player> players;
+    private static PlayerManager instance;
+
 
     public PlayerManager() {
         players = new ArrayList<>();
+    }
+
+    public static synchronized PlayerManager getInstance() {
+        if (instance == null) {
+            instance = new PlayerManager();
+        }
+
+        return instance;
     }
 
     public void addPlayer(Player player) {

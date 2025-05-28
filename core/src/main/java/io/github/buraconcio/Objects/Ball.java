@@ -19,12 +19,12 @@ public class Ball extends Actor {
 
     private World world;
 
-    public Ball(float x, float y, float r, World world) {
+    public Ball(Vector2 pos, float r, World world, int id) {
         super();
 
         this.world = world;
 
-        setBounds(x, y, r, r);
+        setBounds(pos.x, pos.y, 2*r, 2*r);
 
         Texture texture = new Texture(Gdx.files.internal("ball.png"));
         sprite = new Sprite(texture);
@@ -32,10 +32,11 @@ public class Ball extends Actor {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DynamicBody;
-        bodyDef.position.set(x, y);
+        bodyDef.position.set(pos.x, pos.y);
         bodyDef.linearDamping = 1f;
 
         body = world.createBody(bodyDef);
+        body.setUserData(id);
 
         CircleShape circle = new CircleShape();
         circle.setRadius(r);
@@ -49,16 +50,6 @@ public class Ball extends Actor {
         body.createFixture(fixtureDef);
 
         circle.dispose();
-
-        //body.setLinearVelocity(new Vector2(20f, 20f));
-
-        /*addListener(new DragListener() {
-            public void dragStop(InputEvent event, float x, float y, int pointer) {
-                System.out.println("aaaaaaaaa");
-                System.out.println(Float.toString(x) + " " +  Float.toString(y));
-                applyImpulse(calculateImpulse(x, y));
-            }
-        });*/
     }
 
     @Override
@@ -71,7 +62,7 @@ public class Ball extends Actor {
     public void act(float delta) {
         super.act(delta);
 
-        this.setPosition(body.getPosition().x - getWidth(), body.getPosition().y - getHeight());
+        this.setPosition(body.getPosition().x - getWidth()/2, body.getPosition().y - getHeight()/2);
    }
 
     public void applyImpulse(Vector2 impulse) {
