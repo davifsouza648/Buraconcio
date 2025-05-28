@@ -1,9 +1,12 @@
 package io.github.buraconcio.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -12,12 +15,12 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Ball;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class PhysicsTest implements Screen {
 
@@ -26,14 +29,12 @@ public class PhysicsTest implements Screen {
     private Skin skin;
 
     private Ball testBall;
-    private ShapeRenderer shape;
 
     private World world;
     private float tickrate;
 
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
-    //private PerspectiveCamera camera;
 
     public PhysicsTest(Main game) {
         this.game = game;
@@ -45,22 +46,46 @@ public class PhysicsTest implements Screen {
         camera = new OrthographicCamera(23, 13);
 
         stage = new Stage(new FitViewport(23, 13));
-        Gdx.input.setInputProcessor(stage);
         stage.getViewport().setCamera(camera);
+        Gdx.input.setInputProcessor(stage);
 
-        skin = new Skin(Gdx.files.internal("uiskin.json")); // usa fonte padrão
+        //skin = new Skin(Gdx.files.internal("backgroundMenu.json"), new TextureAtlas(Gdx.files.internal("backgroundMenu.jpg"))); // usa fonte padrão
 
-        testBall = new Ball(0.2f, 0.2f, 1f, 20f, 20f, world);
+        testBall = new Ball(3f, 3f, 1f, world);
 
         stage.addActor(testBall);
 
         BodyDef wallDef = new BodyDef();
-        wallDef.position.set(new Vector2(stage.getViewport().getWorldWidth()/2, stage.getViewport().getWorldHeight()));
+        wallDef.position.set(new Vector2(stage.getWidth()/2, stage.getHeight()));
         Body wall = world.createBody(wallDef);
         PolygonShape wallBox = new PolygonShape();
         wallBox.setAsBox(2f, 2f);
         wall.createFixture(wallBox, 0f);
         wallBox.dispose();
+
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            private Vector2 mouse1;
+
+            // convert mouse coords (top left) to stage coords (bottom left)
+            private void convertCoords(Vector2 pos) {
+                pos.y = 0;
+            }
+
+            @Override
+            public boolean touchDown(int x, int y, int pointer, int button) {
+                mouse1 = new Vector2(x, y);
+
+                return true;
+            }
+
+            @Override
+            public boolean touchUp(int x, int y, int pointer, int button) {
+                Vector2 mouse2 = new Vector2(x, y);
+                testBall.applyImpulse(testBall.calculateImpulse(mouse1, mouse2));
+
+                return true;
+            }
+        });
     }
 
     @Override

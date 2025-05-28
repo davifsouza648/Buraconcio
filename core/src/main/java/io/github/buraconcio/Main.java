@@ -25,7 +25,7 @@ public class Main extends Game {
         // comentar linha de baixo e iniciar menu desejado
         setScreen(new LoginMenu(this));
 
-        //setScreen(new PhysicsTest(this));
+        // setScreen(new PhysicsTest(this));
     }
 
     public PlayerManager getPlayerManager() {

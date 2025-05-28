@@ -93,12 +93,12 @@ public class MainMenu implements Screen {
         for (int i = 0; i < framesJson1.size; i++) {
             JsonValue frameObj = framesJson1.get(i);
             JsonValue frameData = frameObj.get("frame");
-        
+
             int x = frameData.getInt("x");
             int y = frameData.getInt("y");
             int w = frameData.getInt("w");
             int h = frameData.getInt("h");
-        
+
             TextureRegion region = new TextureRegion(spriteSheet1, x, y, w, h);
             frames1.add(region);
         }
@@ -197,10 +197,9 @@ public class MainMenu implements Screen {
         elapsedTimeBack += delta * 0.7f;
         elapsedTimeName += delta;
 
-        backImage.setDrawable(new TextureRegionDrawable(backAnimation.getKeyFrame(elapsedTimeBack)));
         buraconcioImage.setDrawable(new TextureRegionDrawable(buraconcioAnimation.getKeyFrame(elapsedTimeName)));
+        backImage.setDrawable(new TextureRegionDrawable(backAnimation.getKeyFrame(elapsedTimeBack)));
 
-        ScreenUtils.clear(0, 0.1f, 0, 1, true);
         stage.act(delta);
         stage.draw();
 
