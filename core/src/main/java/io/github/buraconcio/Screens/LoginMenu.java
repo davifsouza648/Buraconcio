@@ -64,7 +64,7 @@ public class LoginMenu implements Screen {
 
                 player.setAvatar(avatarVec[random.nextInt(0, 10)]);
 
-                PlayerManager.getInstance().addPlayer(player);
+                PlayerManager.getInstance().setLocalPlayer(player);
 
                 System.out.println(player.getUsername());
 

@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.buraconcio.Main;
+import io.github.buraconcio.Network.Client;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Ball;
 import io.github.buraconcio.Objects.Flag;
@@ -40,6 +41,9 @@ public class PhysicsTest implements Screen {
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
 
+    //server test
+    private Client client;
+
     // public PhysicsTest(Main game, Player player) {
     // mas ai ja vou mexer pra uma classe mais final
     public PhysicsTest(Main game) {
@@ -56,8 +60,9 @@ public class PhysicsTest implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         //testBall = new Ball(new Vector2(3f, 3f), 1f, world, 0);
-        Player p = new Player("Murilio");
-        p.setId(0);
+
+        Player p = PlayerManager.getInstance().getLocalPlayer();
+
         Ball pBall = p.createBall(new Vector2(3f, 3f), world);
 
         PlayerManager.getInstance().addPlayer(p);
@@ -74,8 +79,6 @@ public class PhysicsTest implements Screen {
         wallBox.setAsBox(2f, 2f);
         wall.createFixture(wallBox, 0f);
         wallBox.dispose();
-
-        PlayerManager pManager = PlayerManager.getInstance();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1;
@@ -114,6 +117,7 @@ public class PhysicsTest implements Screen {
 
                     Player player = PlayerManager.getInstance().getPlayer(Integer.parseInt(ballId.toString()));
                     System.out.println(player.getUsername());
+
                 }
             }
 
@@ -127,7 +131,11 @@ public class PhysicsTest implements Screen {
     }
 
     @Override
-    public void show() {}
+    public void show() {
+
+        this.client = new Client();
+        client.connect();
+    }
 
     @Override
     public void render(float delta) {

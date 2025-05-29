@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Utils.PlayerManager;
 
 public class MainMenu implements Screen {
 
@@ -141,6 +142,8 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new PhysicsTest(game));
+
+                PlayerManager.getInstance().getLocalPlayer().setHosting(false);
             }
         });
 
@@ -148,6 +151,8 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new ServerScreen(game));
+
+                PlayerManager.getInstance().getLocalPlayer().setHosting(true);
             }
         });
 

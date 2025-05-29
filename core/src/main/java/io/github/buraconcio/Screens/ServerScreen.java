@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import io.github.buraconcio.Main;
+import io.github.buraconcio.Network.Server;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Utils.PlayerManager;
 
@@ -19,6 +20,7 @@ public class ServerScreen implements Screen {
     private final Stage stage;
     private final Skin skin;
     private Table topInfo;
+    private Server server;
 
     public ServerScreen(Main game) {
         this.game = game;
@@ -37,6 +39,10 @@ public class ServerScreen implements Screen {
         root.add(createRightColumn()).expand().fill().top().right().pad(75);
 
         root.setDebug(false);
+
+        this.server = new Server();
+        server.startTCPServer();
+
     }
 
     private Table createLeftColumn() {
@@ -64,6 +70,16 @@ public class ServerScreen implements Screen {
         bottomInfo.add(mapImage).left().size(600, 400).padBottom(10);
         bottomInfo.row();
         bottomInfo.add(quitButton).left().padBottom(10).size(90, 65);
+
+        startButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Start Match pressionado!");
+                if (server != null) {
+                    server.stopAccepting();
+                }
+            }
+        });
         quitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -127,7 +143,7 @@ public class ServerScreen implements Screen {
         rightColumn.row();
         rightColumn.add().expand();
         rightColumn.row();
-        rightColumn.add(botInfo).bottom().right().padBottom(-12);
+        rightColumn.add(botInfo).bottom().right().padBottom(-25);
 
         // topInfo.setDebug(true);
         // botInfo.setDebug(true);
@@ -138,14 +154,20 @@ public class ServerScreen implements Screen {
 
     private Table createPlayerRow(String playerName, String imagePath) {
         Table row = new Table();
+
         Image image = new Image(new Texture(imagePath));
+
         TextField playerField = new TextField(playerName, skin);
+
+        playerField.setDisabled(true);
+
         row.add(image).padRight(8);
         row.add(playerField).width(300);
+
         return row;
     }
 
-    //LEMBRAR DE PUXAR NA BOMBA DO SERVER TODA VEZ QUE ENTRAR ALGUEM NO SERVER;
+    // LEMBRAR DE PUXAR NA BOMBA DO SERVER TODA VEZ QUE ENTRAR ALGUEM NO SERVER;
 
     public void refreshPlayers() {
         topInfo.clear();

@@ -9,8 +9,9 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Player {
 
     private String username;
-    private double stars;
+    private int stars;
     private int id;
+    private int strokes;
     private boolean hosting;
     private String avatarpath;
 
@@ -18,19 +19,13 @@ public class Player {
 
     public Player(String username){
         this.username = username;
-        stars = 0.0;
+        stars = 0;
     }
 
     public Ball createBall(Vector2 pos, World world) {
         ball = new Ball(pos, Constants.BALL_RADIUS, world, id);
 
         return ball;
-    }
-
-    public void stroke(Vector2 mouse1, Vector2 mouse2) {
-        ball.applyImpulse(ball.calculateImpulse(mouse1, mouse2));
-
-        stars += 1.0;
     }
 
     public String getUsername(){
@@ -55,7 +50,7 @@ public class Player {
         return stars;
     }
 
-    public void setStars(double stars) {
+    public void setStars(int stars) {
         this.stars = stars;
     }
 
@@ -73,5 +68,23 @@ public class Player {
 
     public Boolean getHosting(){
         return hosting;
+    }
+
+    public int getStrokes(){
+        return this.strokes;
+    }
+
+    public void stroke(Vector2 mouse1, Vector2 mouse2) {
+        ball.applyImpulse(ball.calculateImpulse(mouse1, mouse2));
+
+        strokes += 1.0;
+    }
+
+    public void rewardStar(){
+        if(strokes <= 2){
+            stars += 3;
+        }else if(strokes <= 5){
+            stars += 1;
+        }
     }
 }

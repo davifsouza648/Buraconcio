@@ -9,7 +9,7 @@ import io.github.buraconcio.Objects.Player;
 public class PlayerManager {
     private List<Player> players;
     private static PlayerManager instance;
-
+    private Player localPlayer;
 
     public PlayerManager() {
         players = new ArrayList<>();
@@ -40,7 +40,6 @@ public class PlayerManager {
         return null;
     }
 
-
     public boolean exists(int id) {
         for (Player p : players) {
             if (p.getId() == id) {
@@ -54,8 +53,22 @@ public class PlayerManager {
         return List.copyOf(players);
     }
 
+    public void setPlayers(List<Player> newPlayers) {
+        players.clear();
+        players.addAll(newPlayers);
+    }
+
     public int getPlayerCount() {
         return players.size();
+    }
+
+    public void setLocalPlayer(Player player) {
+        this.localPlayer = player;
+        addPlayer(player);
+    }
+
+    public Player getLocalPlayer() {
+        return localPlayer;
     }
 
 }
