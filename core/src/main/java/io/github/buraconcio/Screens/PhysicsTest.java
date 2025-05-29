@@ -5,8 +5,6 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -23,8 +21,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
+import java.util.ArrayList;
+import java.lang.Runnable;
 
 public class PhysicsTest implements Screen {
 
@@ -37,6 +36,7 @@ public class PhysicsTest implements Screen {
 
     private World world;
     private float tickrate;
+    private ArrayList<Runnable> box2dScheduler;
 
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
@@ -69,8 +69,8 @@ public class PhysicsTest implements Screen {
 
         testFlag = new Flag(new Vector2(20f, 3f), world);
 
-        stage.addActor(pBall);
         stage.addActor(testFlag);
+        stage.addActor(pBall);
 
         BodyDef wallDef = new BodyDef();
         wallDef.position.set(new Vector2(stage.getWidth()/2, stage.getHeight()));
@@ -79,6 +79,8 @@ public class PhysicsTest implements Screen {
         wallBox.setAsBox(2f, 2f);
         wall.createFixture(wallBox, 0f);
         wallBox.dispose();
+
+        box2dScheduler = new ArrayList();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1;
@@ -95,7 +97,9 @@ public class PhysicsTest implements Screen {
             public boolean touchUp(int x, int y, int pointer, int button) {
                 Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
                 Vector2 mouse2 = new Vector2(unprojected.x, unprojected.y);
-                p.stroke(mouse1, mouse2);
+
+                Runnable task = () -> {p.stroke(mouse1, mouse2);};
+                box2dScheduler.add(task);
 
                 return true;
             }
@@ -116,8 +120,9 @@ public class PhysicsTest implements Screen {
                     if (ballId == "Flag") ballId = contact.getFixtureB().getBody().getUserData();
 
                     Player player = PlayerManager.getInstance().getPlayer(Integer.parseInt(ballId.toString()));
-                    System.out.println(player.getUsername());
 
+                    Runnable task = () -> {player.score();};
+                    box2dScheduler.add(task);
                 }
             }
 
@@ -144,6 +149,9 @@ public class PhysicsTest implements Screen {
         stage.draw();
 
         debugRenderer.render(world, camera.combined);
+
+        box2dScheduler.forEach(task -> task.run());
+        box2dScheduler.clear();
 
         world.step(tickrate, 6, 2);
     }

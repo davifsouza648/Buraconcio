@@ -28,6 +28,26 @@ public class Player {
         return ball;
     }
 
+    public void stroke(Vector2 mouse1, Vector2 mouse2) {
+        ball.applyImpulse(ball.calculateImpulse(mouse1, mouse2));
+
+        strokes += 1.0;
+    }
+
+    public void score() {
+        ball.enterHole();
+
+        rewardStar();
+    }
+
+    public void rewardStar(){
+        if(strokes <= 2){
+            stars += 3;
+        }else if(strokes <= 5){
+            stars += 1;
+        }
+    }
+
     public String getUsername(){
         return username;
     }
@@ -74,17 +94,4 @@ public class Player {
         return this.strokes;
     }
 
-    public void stroke(Vector2 mouse1, Vector2 mouse2) {
-        ball.applyImpulse(ball.calculateImpulse(mouse1, mouse2));
-
-        strokes += 1.0;
-    }
-
-    public void rewardStar(){
-        if(strokes <= 2){
-            stars += 3;
-        }else if(strokes <= 5){
-            stars += 1;
-        }
-    }
 }

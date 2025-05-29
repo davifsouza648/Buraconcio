@@ -6,10 +6,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.badlogic.gdx.utils.Align;
 
 import io.github.buraconcio.Utils.Constants;
 
@@ -18,6 +20,7 @@ public class Ball extends Actor {
     private Body body;
 
     private World world;
+    private boolean enterHole;
 
     public Ball(Vector2 pos, float r, World world, int id) {
         super();
@@ -25,15 +28,18 @@ public class Ball extends Actor {
         this.world = world;
 
         setBounds(pos.x, pos.y, 2*r, 2*r);
+        setOrigin(Align.center);
 
         Texture texture = new Texture(Gdx.files.internal("ball.png"));
         sprite = new Sprite(texture);
         sprite.setSize(2*r, 2*r);
+        sprite.setOriginCenter();
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DynamicBody;
         bodyDef.position.set(pos.x, pos.y);
         bodyDef.linearDamping = 1f;
+        bodyDef.angularDamping = 1f;
 
         body = world.createBody(bodyDef);
         body.setUserData(id);
@@ -54,6 +60,7 @@ public class Ball extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        sprite.setRotation(getRotation());
         sprite.setPosition(getX(), getY());
         sprite.draw(batch, parentAlpha);
     }
@@ -63,6 +70,7 @@ public class Ball extends Actor {
         super.act(delta);
 
         this.setPosition(body.getPosition().x - getWidth()/2, body.getPosition().y - getHeight()/2);
+        this.setRotation(body.getAngle() * 180f/3.14f);
    }
 
     public void applyImpulse(Vector2 impulse) {
@@ -78,5 +86,11 @@ public class Ball extends Actor {
         diff.setLength(magnitude);
 
         return diff;
+    }
+
+    public void enterHole() {
+        body.setLinearVelocity(new Vector2(0f, 0f));
+
+        body.setTransform(new Vector2(-10f, -10f), 0f);
     }
 }
