@@ -1,0 +1,27 @@
+
+cancel.png
+size: 512, 512
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+CANCEL1
+  rotate: false
+  xy: 1, 261
+  size: 320, 128
+  orig: 320, 128
+  offset: 0, 0
+  index: -1
+CANCEL2
+  rotate: false
+  xy: 1, 131
+  size: 320, 128
+  orig: 320, 128
+  offset: 0, 0
+  index: -1
+CANCEL3
+  rotate: false
+  xy: 1, 1
+  size: 320, 128
+  orig: 320, 128
+  offset: 0, 0
+  index: -1

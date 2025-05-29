@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Objects.Button;
 import io.github.buraconcio.Utils.PlayerManager;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import java.util.*;
@@ -45,8 +46,8 @@ public class LoginMenu implements Screen {
         // passField.setMessageText("Digite sua senha");
         // passField.setPasswordMode(true);
         // passField.setPasswordCharacter('*');
-
-        TextButton loginButton = new TextButton("Entrar", skin);
+        Button entrar = new Button();
+        ImageButton loginButton = entrar.createButton("enter", "enter");
 
         loginButton.addListener(new ClickListener() {
             @Override
@@ -76,7 +77,7 @@ public class LoginMenu implements Screen {
         table.row();
         // table.add(passField).width(200).pad(10);
         // table.row();
-        table.add(loginButton).colspan(2).padTop(10);
+        table.add(loginButton).size(160, 64).colspan(2).padTop(10);
     }
 
     @Override

@@ -1,0 +1,9 @@
+{
+"com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
+	"default": {
+		"up": "BACK1",
+		"down": "BACK2",
+		"over": "BACK3"
+	}
+}
+}

@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Server;
 import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Objects.Button;
 import io.github.buraconcio.Utils.PlayerManager;
 
 public class ServerScreen implements Screen {
@@ -53,23 +54,28 @@ public class ServerScreen implements Screen {
         topInfo.top().left();
         Label title = new Label("MATCH LOBBY", skin);
         title.setFontScale(2.5f);
-        TextButton startButton = new TextButton("Start Match", skin);
-        TextButton mapButton = new TextButton("Map", skin);
+
+        Button start = new Button();
+        ImageButton startButton = start.createButton("start", "start");
+        Button map = new Button();
+        ImageButton mapButton = map.createButton("map", "map");
 
         topInfo.add(title).left().padBottom(20);
         topInfo.row();
-        topInfo.add(startButton).left().padBottom(10).size(200, 100);
+        topInfo.add(startButton).left().padBottom(10).size(160, 64);
         topInfo.row();
-        topInfo.add(mapButton).left().padBottom(20).size(90, 65);
+        topInfo.add(mapButton).left().padBottom(20).size(96, 64);
 
         Table bottomInfo = new Table();
         bottomInfo.bottom().left();
         Image mapImage = new Image(new Texture("teste.jpg"));
-        TextButton quitButton = new TextButton("Quit", skin);
+
+        Button back = new Button();
+        ImageButton backButton = back.createButton("back", "back");
 
         bottomInfo.add(mapImage).left().size(600, 400).padBottom(10);
         bottomInfo.row();
-        bottomInfo.add(quitButton).left().padBottom(10).size(90, 65);
+        bottomInfo.add(backButton).left().padBottom(10).size(64, 64);
 
         startButton.addListener(new ClickListener() {
             @Override
@@ -80,10 +86,10 @@ public class ServerScreen implements Screen {
                 }
             }
         });
-        quitButton.addListener(new ClickListener() {
+        backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
+                game.setScreen(new MainMenu(game));
             }
         });
 

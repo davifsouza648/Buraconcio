@@ -1,0 +1,27 @@
+
+map.png
+size: 512, 512
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+MAP1
+  rotate: false
+  xy: 1, 257
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
+MAP2
+  rotate: false
+  xy: 1, 127
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
+MAP3
+  rotate: false
+  xy: 195, 257
+  size: 192, 128
+  orig: 192, 128
+  offset: 0, 0
+  index: -1
