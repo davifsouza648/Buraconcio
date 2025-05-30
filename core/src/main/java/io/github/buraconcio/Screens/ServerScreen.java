@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import io.github.buraconcio.Main;
+import io.github.buraconcio.Network.Client;
 import io.github.buraconcio.Network.Server;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Button;
@@ -22,6 +23,7 @@ public class ServerScreen implements Screen {
     private final Skin skin;
     private Table topInfo;
     private Server server;
+    private Client cliente;
 
     public ServerScreen(Main game) {
         this.game = game;
@@ -41,8 +43,29 @@ public class ServerScreen implements Screen {
 
         root.setDebug(false);
 
-        this.server = new Server();
-        server.startTCPServer();
+        if (PlayerManager.getInstance().getLocalPlayer().getHosting().equals(true)) {
+
+            this.server = new Server();
+            server.startTCPServer();
+
+            PlayerManager.getInstance().clear();
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        this.cliente = new Client();
+
+        cliente.setPlayerConnectedListener(() -> {
+            Gdx.app.postRunnable(() -> {
+                refreshPlayers();
+            });
+        });
+
+        cliente.startTCPClient();
 
     }
 
@@ -80,18 +103,47 @@ public class ServerScreen implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
                 System.out.println("Start Match pressionado!");
-                if (server != null) {
-                    server.stopAccepting();
+
+                if (PlayerManager.getInstance().getLocalPlayer().getHosting()) {
+
+                    if (server != null) {
+                        //TODO: timer + troca de botao;
+                        server.stopAccepting(); //TODO: verificar se stopAccepting esta funfando
+                    }
+
                 }
             }
         });
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
+                // if(PlayerManager.getInstance().getLocalPlayer().getHosting()){
+                //
+                // fazerr todos voltarem ao menu e fechar o server;
+                //
+                // }else{
+                //
+                // sair do lobby e atualizar (clear no PLayerManager e mensagem para o server para sairr do deles)
+                //
+                // }
+
+                for(Player a : PlayerManager.getInstance().getAllPlayers()){
+                    System.out.println(a.getUsername());
+                }
+
                 game.setScreen(new MainMenu(game));
             }
         });
+
+        mapButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+            }
+        });
+
 
         leftColumn.add(topInfo).expandY().top().left();
         leftColumn.row();
@@ -219,5 +271,8 @@ public class ServerScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        if (server != null) {
+            server.stop();
+        }
     }
 }

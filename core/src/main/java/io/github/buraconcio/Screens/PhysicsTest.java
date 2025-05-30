@@ -41,9 +41,6 @@ public class PhysicsTest implements Screen {
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
 
-    //server test
-    private Client client;
-
     // public PhysicsTest(Main game, Player player) {
     // mas ai ja vou mexer pra uma classe mais final
     public PhysicsTest(Main game) {
@@ -80,7 +77,7 @@ public class PhysicsTest implements Screen {
         wall.createFixture(wallBox, 0f);
         wallBox.dispose();
 
-        box2dScheduler = new ArrayList();
+        box2dScheduler = new ArrayList<>();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1;
@@ -119,7 +116,9 @@ public class PhysicsTest implements Screen {
                     Object ballId = contact.getFixtureA().getBody().getUserData();
                     if (ballId == "Flag") ballId = contact.getFixtureB().getBody().getUserData();
 
-                    Player player = PlayerManager.getInstance().getPlayer(Integer.parseInt(ballId.toString()));
+                    Player player = PlayerManager.getInstance().getPlayer(Integer.parseInt(ballId.toString())); //pegar player pelo userData?? como funciona essa bomba?
+
+                    // Player player = p;
 
                     Runnable task = () -> {player.score();};
                     box2dScheduler.add(task);
@@ -137,9 +136,6 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void show() {
-
-        this.client = new Client();
-        client.connect();
     }
 
     @Override

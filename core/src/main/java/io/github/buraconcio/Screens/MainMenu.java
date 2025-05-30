@@ -40,7 +40,6 @@ public class MainMenu implements Screen {
     private Texture spriteSheet1, spriteSheet2;
     private Image buraconcioImage, backImage;
 
-
     public MainMenu(Main game) {
         this.game = game;
 
@@ -109,25 +108,27 @@ public class MainMenu implements Screen {
         imageButtonJoin.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new PhysicsTest(game));
-
                 PlayerManager.getInstance().getLocalPlayer().setHosting(false);
+
+                // game.setScreen(new PhysicsTest(game));
+
+                game.setScreen(new ServerScreen(game)); // para testar o cliente
+
             }
         });
 
         imageButtonHost.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new ServerScreen(game));
-
                 PlayerManager.getInstance().getLocalPlayer().setHosting(true);
+                game.setScreen(new ServerScreen(game));
             }
         });
 
         imageButtonCredits.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                game.setScreen(new PhysicsTest(game));
             }
         });
 
@@ -141,8 +142,6 @@ public class MainMenu implements Screen {
         Table backgroundTable = new Table();
         backgroundTable.setFillParent(true);
         backgroundTable.add(backImage).expand().fill();
-
-
 
         Table table = new Table();
 
@@ -160,8 +159,8 @@ public class MainMenu implements Screen {
 
         table.setDebug(false);
 
-        stage.addActor(backgroundTable); 
-        stage.addActor(table);        
+        stage.addActor(backgroundTable);
+        stage.addActor(table);
 
     }
 

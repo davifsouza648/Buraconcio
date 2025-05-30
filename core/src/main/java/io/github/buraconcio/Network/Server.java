@@ -1,71 +1,63 @@
 package io.github.buraconcio.Network;
 
 import java.io.*;
-import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import com.badlogic.gdx.Gdx;
-
-import io.github.buraconcio.Objects.Player;
-import io.github.buraconcio.Utils.PlayerManager;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Server {
 
     private static final int PORT = 5050;
-    private boolean start = true;
-    private ServerListener listener;
-    private boolean flagAccept = true;
+
+    private ServerSocket serverSocket;
+
+    private volatile boolean flagAccept = true;
+
+    private final List<ClientHandler> clients = new ArrayList<>();
 
     public void stopAccepting() {
         this.flagAccept = false;
-        System.out.println("parei");
     }
 
     public void startTCPServer() {
-        new Thread(() -> runTCPServer()).start();
+        Thread thread = new Thread(() -> runTCPServer());
+        thread.setDaemon(true);
+        thread.start();
     }
 
     private void runTCPServer() {
-        try (ServerSocket sv = new ServerSocket(PORT)) {
-
-            System.out.println("serverr TCP CRIADO");
+        try {
+            serverSocket = new ServerSocket(PORT);
+            System.out.println("server TCP CRIADO");
 
             while (flagAccept) {
-                Socket socket = sv.accept();
+                Socket socket = serverSocket.accept();
 
-                ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                System.out.println("Server connected");
 
-                out.writeObject("success conection");
-                out.flush();
+                ClientHandler clientHandler = new ClientHandler(socket, flagAccept, clients);
+                clients.add(clientHandler);
+                new Thread(clientHandler).start();
 
-                Object newP = in.readObject();
-
-                if (newP instanceof Player) {
-
-                    Player p = (Player) newP;
-
-                    PlayerManager.getInstance().addPlayer(p);
-
-                    for (Player a : PlayerManager.getInstance().getAllPlayers()) {
-                        System.out.println(a);
-                    }
-                } else {
-                    System.out.println("objeto diferente de PLAYER");
+                if (clients.size() >= 4) {
+                    stopAccepting();
                 }
-
-                // out.writeObject(PlayerManager.getInstance().getAllPlayers());
-                // out.flush();
-
-                socket.close();
             }
 
-        } catch (IOException | ClassNotFoundException  e) {
+        } catch (IOException e) {
             System.out.println("socket TCP fail");
-            System.out.println("errrrrro");
-            e.getStackTrace();
+            e.printStackTrace();
         }
     }
 
+    public void stop() {
+        if (serverSocket != null && !serverSocket.isClosed()) {
+            try {
+                serverSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

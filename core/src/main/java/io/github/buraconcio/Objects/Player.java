@@ -3,10 +3,16 @@ package io.github.buraconcio.Objects;
 import io.github.buraconcio.Objects.Ball;
 import io.github.buraconcio.Utils.Constants;
 
+import java.io.Serializable;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 
-public class Player {
+public class Player implements Serializable {
+
+    private static final long serialVersionUID = 1L; // parar serializar
 
     private String username;
     private int stars;
@@ -15,9 +21,12 @@ public class Player {
     private boolean hosting;
     private String avatarpath;
 
-    private Ball ball;
+    private transient Ball ball;
 
-    public Player(String username){
+    public Player() {
+    } // precisa parra o serializable
+
+    public Player(String username) {
         this.username = username;
         stars = 0;
     }
@@ -31,24 +40,25 @@ public class Player {
     public void stroke(Vector2 mouse1, Vector2 mouse2) {
         ball.applyImpulse(ball.calculateImpulse(mouse1, mouse2));
 
-        strokes += 1.0;
+        strokes += 1;
     }
 
     public void score() {
+
         ball.enterHole();
 
         rewardStar();
     }
 
-    public void rewardStar(){
-        if(strokes <= 2){
+    public void rewardStar() {
+        if (strokes <= 2) {
             stars += 3;
-        }else if(strokes <= 5){
+        } else if (strokes <= 5) {
             stars += 1;
         }
     }
 
-    public String getUsername(){
+    public String getUsername() {
         return username;
     }
 
@@ -65,7 +75,7 @@ public class Player {
         return id;
     }
 
-    public double getStars(){
+    public double getStars() {
 
         return stars;
     }
@@ -74,24 +84,28 @@ public class Player {
         this.stars = stars;
     }
 
-    public void setAvatar(String newAvatar){
+    public void setAvatar(String newAvatar) {
         avatarpath = newAvatar;
     }
 
-    public String getAvatar(){
+    public String getAvatar() {
         return avatarpath;
     }
 
-    public void setHosting(boolean tf){
+    public void setHosting(boolean tf) {
         hosting = tf;
     }
 
-    public Boolean getHosting(){
+    public Boolean getHosting() {
         return hosting;
     }
 
-    public int getStrokes(){
+    public int getStrokes() {
         return this.strokes;
+    }
+
+    public Ball getBall() {
+        return ball;
     }
 
 }

@@ -71,4 +71,7 @@ public class PlayerManager {
         return localPlayer;
     }
 
+    public void clear() {
+        players.clear();
+    }
 }
