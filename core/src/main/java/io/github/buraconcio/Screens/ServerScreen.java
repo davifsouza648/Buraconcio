@@ -20,7 +20,7 @@ import io.github.buraconcio.Utils.PlayerManager;
 public class ServerScreen implements Screen {
     private final Main game;
     private final Stage stage;
-    private final Skin skin, skinFontPixely;
+    private final Skin skin, skinLabel;
     private Table topInfo;
     private Server server;
     private Client cliente;
@@ -30,7 +30,7 @@ public class ServerScreen implements Screen {
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         this.skin = new Skin(Gdx.files.internal("uiskin.json"));
-        this.skinFontPixely = new Skin(Gdx.files.internal("fonts/pixely/pixely.json"));
+        this.skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
     }
 
     @Override
@@ -76,7 +76,7 @@ public class ServerScreen implements Screen {
 
         Table topInfo = new Table();
         topInfo.top().left();
-        Label title = new Label("MATCH LOBBY", skinFontPixely);
+        Label title = new Label("MATCH LOBBY", skinLabel, "labelPixelyWhite64");
         title.setFontScale(1f);
 
         Button start = new Button();
@@ -86,9 +86,9 @@ public class ServerScreen implements Screen {
 
         topInfo.add(title).left().padBottom(20);
         topInfo.row();
-        topInfo.add(startButton).left().padBottom(10).size(160, 64);
+        topInfo.add(startButton).left().padBottom(10).size(280, 112);
         topInfo.row();
-        topInfo.add(mapButton).left().padBottom(20).size(96, 64);
+        topInfo.add(mapButton).left().padBottom(20).size(140, 93);
 
         Table bottomInfo = new Table();
         bottomInfo.bottom().left();
@@ -163,8 +163,8 @@ public class ServerScreen implements Screen {
         Table rightColumn = new Table();
         rightColumn.setFillParent(false);
         rightColumn.top().right().pad(40);
-        Label playersLabel = new Label("1 Player(s) (4 Max)", skinFontPixely); // receber N de algum lugar
-        playersLabel.setFontScale(0.4f);
+        Label playersLabel = new Label("1 Player(s) (4 Max)", skinLabel, "labelPixelyWhite32"); // receber N de algum lugar
+        // playersLabel.setFontScale(0.7f);
 
         topInfo = new Table();
         topInfo.top().right();
@@ -191,10 +191,10 @@ public class ServerScreen implements Screen {
 
         Table botInfo = new Table();
 
-        Label Alabel = new Label("Socket Server", skinFontPixely);
-        Alabel.setFontScale(0.3f);
-        Label Blabel = new Label("Criado pela resenha", skinFontPixely);
-        Blabel.setFontScale(0.3f);
+        Label Alabel = new Label("Socket Server", skinLabel, "labelPixelyWhite16");
+        // Alabel.setFontScale(0.3f);
+        Label Blabel = new Label("Criado pela resenha", skinLabel, "labelPixelyWhite16");
+        // Blabel.setFontScale(0.3f);
 
         botInfo.add(Alabel);
         botInfo.row();
@@ -235,8 +235,8 @@ public class ServerScreen implements Screen {
 
         Label playersLabel = new Label(
                 PlayerManager.getInstance().getAllPlayers().size() + " Player(s) (4 Max)",
-                skinFontPixely);
-        playersLabel.setFontScale(0.4f);
+                skinLabel, "labelPixelyWhite32");
+        // playersLabel.setFontScale(0.7f);
 
         topInfo.add(playersLabel).left().padBottom(10);
         topInfo.row();
