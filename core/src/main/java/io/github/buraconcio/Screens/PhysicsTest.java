@@ -77,7 +77,7 @@ public class PhysicsTest implements Screen {
         wall.createFixture(wallBox, 0f);
         wallBox.dispose();
 
-        box2dScheduler = new ArrayList<>();
+        box2dScheduler = new ArrayList();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1;

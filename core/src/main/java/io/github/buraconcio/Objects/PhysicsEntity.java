@@ -1,5 +1,6 @@
 package io.github.buraconcio.Objects;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
@@ -15,6 +16,7 @@ import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PhysicsManager;
 
 public class PhysicsEntity extends Actor {
+
     protected Sprite sprite;
     protected Body body;
 

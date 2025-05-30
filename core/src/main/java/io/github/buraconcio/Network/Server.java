@@ -24,6 +24,11 @@ public class Server {
         Thread thread = new Thread(() -> runTCPServer());
         thread.setDaemon(true);
         thread.start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            stop();
+        }));
+
     }
 
     private void runTCPServer() {

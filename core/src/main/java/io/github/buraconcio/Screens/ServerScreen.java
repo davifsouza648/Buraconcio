@@ -162,7 +162,7 @@ public class ServerScreen implements Screen {
         Table rightColumn = new Table();
         rightColumn.setFillParent(false);
         rightColumn.top().right().pad(40);
-        Label playersLabel = new Label("4 Player(s) (4 Max)", skin); // receber N de algum lugar
+        Label playersLabel = new Label("1 Player(s) (4 Max)", skin); // receber N de algum lugar
         playersLabel.setFontScale(1.1f);
 
         topInfo = new Table();

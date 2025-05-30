@@ -41,6 +41,9 @@ public class Client {
 
             receivePlayerList(in);
 
+
+            //receber estagios e outras atualizacoes por tcp
+
         } catch (Exception e) {
             System.err.println("connection fail: " + e.getMessage());
             e.printStackTrace();
@@ -77,10 +80,6 @@ public class Client {
                 if (listener != null) {
                     listener.PlayerCon();
                 }
-
-            } else {
-
-                System.out.println("objeto rrecebido: " + obj.getClass());
             }
         }
     }

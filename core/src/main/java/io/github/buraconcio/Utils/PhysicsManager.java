@@ -50,4 +50,3 @@ public class PhysicsManager {
         contactList.clear();
     }
 }
-

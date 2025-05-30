@@ -3,9 +3,13 @@ package io.github.buraconcio.Objects;
 import io.github.buraconcio.Objects.Ball;
 import io.github.buraconcio.Utils.Constants;
 
+import java.io.Serializable;
+
 import com.badlogic.gdx.math.Vector2;
 
-public class Player {
+public class Player implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String username;
     private int stars;
@@ -14,7 +18,7 @@ public class Player {
     private boolean hosting;
     private String avatarpath;
 
-    private Ball ball;
+    private transient Ball ball;
 
     public Player(String username){
         this.username = username;
