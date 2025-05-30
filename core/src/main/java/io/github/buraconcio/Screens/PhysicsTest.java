@@ -15,6 +15,8 @@ import io.github.buraconcio.Network.Client;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Ball;
 import io.github.buraconcio.Objects.Flag;
+import io.github.buraconcio.Objects.CrossBow;
+import io.github.buraconcio.Objects.Obstacle;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.PhysicsManager;
 
@@ -34,9 +36,9 @@ public class PhysicsTest implements Screen {
 
     private Ball testBall;
     private Flag testFlag;
+    private Obstacle testObstacle;
 
     private float tickrate;
-    private ArrayList<Runnable> box2dScheduler;
 
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
@@ -66,8 +68,12 @@ public class PhysicsTest implements Screen {
 
         testFlag = new Flag(new Vector2(20f, 3f));
 
+        testObstacle = new CrossBow(new Vector2(10f, 1f), new Vector2(1.5f, 1.5f));
+        testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
+
         stage.addActor(testFlag);
         stage.addActor(pBall);
+        stage.addActor(testObstacle);
 
         BodyDef wallDef = new BodyDef();
         wallDef.position.set(new Vector2(stage.getWidth()/2, stage.getHeight()));
@@ -77,7 +83,6 @@ public class PhysicsTest implements Screen {
         wall.createFixture(wallBox, 0f);
         wallBox.dispose();
 
-        box2dScheduler = new ArrayList();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1;
@@ -96,7 +101,7 @@ public class PhysicsTest implements Screen {
                 Vector2 mouse2 = new Vector2(unprojected.x, unprojected.y);
 
                 Runnable task = () -> {p.stroke(mouse1, mouse2);};
-                box2dScheduler.add(task);
+                PhysicsManager.getInstance().schedule(task);
 
                 return true;
             }
@@ -104,12 +109,17 @@ public class PhysicsTest implements Screen {
 
         PhysicsManager.getInstance().getWorld().setContactListener(new ContactListener() {
             @Override
-            public void endContact(Contact contact) {}
+            public void endContact(Contact contact) {
+                PhysicsManager.getInstance().removeContact(contact);
+            }
 
             @Override
             public void beginContact(Contact contact) {
+                PhysicsManager.getInstance().addContact(contact);
+
                 if ( contact.getFixtureA().getBody().getUserData() == "Flag"
                  || contact.getFixtureB().getBody().getUserData() == "Flag" ) {
+
                     System.out.println("Gol!");
 
                     // find wich fixture is ball
@@ -119,7 +129,7 @@ public class PhysicsTest implements Screen {
                     Player player = PlayerManager.getInstance().getPlayer(Integer.parseInt(ballId.toString()));
 
                     Runnable task = () -> {player.score();};
-                    box2dScheduler.add(task);
+                    PhysicsManager.getInstance().schedule(task);
                 }
             }
 
@@ -147,8 +157,8 @@ public class PhysicsTest implements Screen {
 
         debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
 
-        box2dScheduler.forEach(task -> task.run());
-        box2dScheduler.clear();
+        PhysicsManager.getInstance().getBox2dScheduler().forEach(task -> task.run());
+        PhysicsManager.getInstance().clearScheduler();
 
         PhysicsManager.getInstance().getWorld().step(tickrate, 6, 2);
     }

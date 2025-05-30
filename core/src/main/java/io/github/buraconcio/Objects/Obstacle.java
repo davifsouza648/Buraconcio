@@ -15,7 +15,7 @@ public class Obstacle extends PhysicsEntity {
     public final static int CLOCKWISE = 0;
     public final static int COUNTER_CLOCKWISE = 1;
 
-    public Obstacle(Vector2 pos, Vector2 size, String texturePath) {
+   public Obstacle(Vector2 pos, Vector2 size, String texturePath) {
         super(pos, size, texturePath);
     }
 
@@ -53,6 +53,8 @@ public class Obstacle extends PhysicsEntity {
     // 0 clock 1 counter
     public void rotate(int direction) {
         body.getTransform().setRotation(body.getTransform().getRotation() + (direction * 2 - 1) * 1.5708f ); // 90 em rad
+        PhysicsManager.getInstance().getWorld().step(1/60f, 1, 1);
+        System.out.println(body.getTransform().getRotation());
     }
 
     public void move(Vector2 pos) {

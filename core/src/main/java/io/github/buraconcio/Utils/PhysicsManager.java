@@ -2,6 +2,9 @@ package io.github.buraconcio.Utils;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.util.ArrayList;
+import java.lang.Runnable;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -12,10 +15,12 @@ public class PhysicsManager {
 
     World world;
     Set<Contact> contactList;
+    ArrayList<Runnable> box2dScheduler;
 
     public PhysicsManager() {
         world = new World(new Vector2(0f, 0f), true);
         contactList = new HashSet<Contact>();
+        box2dScheduler = new ArrayList();
     }
 
     public static synchronized PhysicsManager getInstance() {
@@ -24,6 +29,18 @@ public class PhysicsManager {
         }
 
         return instance;
+    }
+
+    public void schedule(Runnable task) {
+        box2dScheduler.add(task);
+    }
+
+    public void clearScheduler() {
+        box2dScheduler.clear();
+    }
+
+    public ArrayList<Runnable> getBox2dScheduler() {
+        return box2dScheduler;
     }
 
     public World getWorld() {
