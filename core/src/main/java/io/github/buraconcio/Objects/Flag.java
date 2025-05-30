@@ -62,4 +62,3 @@ public class Flag extends Actor {
         sprite.draw(batch, parentAlpha);
     }
 }
-

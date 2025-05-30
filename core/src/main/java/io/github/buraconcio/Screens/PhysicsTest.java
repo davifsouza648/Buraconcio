@@ -16,6 +16,7 @@ import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Ball;
 import io.github.buraconcio.Objects.Flag;
 import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.PhysicsManager;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -34,20 +35,20 @@ public class PhysicsTest implements Screen {
     private Ball testBall;
     private Flag testFlag;
 
-    private World world;
     private float tickrate;
     private ArrayList<Runnable> box2dScheduler;
 
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
 
+    //server test
+    private Client client;
+
     // public PhysicsTest(Main game, Player player) {
     // mas ai ja vou mexer pra uma classe mais final
     public PhysicsTest(Main game) {
         this.game = game;
         tickrate = 1/60f;
-
-        world = new World(new Vector2(0f, 0f), true);
 
         debugRenderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera(23, 13);
@@ -56,22 +57,21 @@ public class PhysicsTest implements Screen {
         stage.getViewport().setCamera(camera);
         Gdx.input.setInputProcessor(stage);
 
-        //testBall = new Ball(new Vector2(3f, 3f), 1f, world, 0);
-
         Player p = PlayerManager.getInstance().getLocalPlayer();
 
-        Ball pBall = p.createBall(new Vector2(3f, 3f), world);
+        Ball pBall = p.createBall(new Vector2(3f, 3f));
+        pBall.setZIndex(0);
 
         PlayerManager.getInstance().addPlayer(p);
 
-        testFlag = new Flag(new Vector2(20f, 3f), world);
+        testFlag = new Flag(new Vector2(20f, 3f));
 
         stage.addActor(testFlag);
         stage.addActor(pBall);
 
         BodyDef wallDef = new BodyDef();
         wallDef.position.set(new Vector2(stage.getWidth()/2, stage.getHeight()));
-        Body wall = world.createBody(wallDef);
+        Body wall = PhysicsManager.getInstance().getWorld().createBody(wallDef);
         PolygonShape wallBox = new PolygonShape();
         wallBox.setAsBox(2f, 2f);
         wall.createFixture(wallBox, 0f);
@@ -102,7 +102,7 @@ public class PhysicsTest implements Screen {
             }
         });
 
-        world.setContactListener(new ContactListener() {
+        PhysicsManager.getInstance().getWorld().setContactListener(new ContactListener() {
             @Override
             public void endContact(Contact contact) {}
 
@@ -116,9 +116,7 @@ public class PhysicsTest implements Screen {
                     Object ballId = contact.getFixtureA().getBody().getUserData();
                     if (ballId == "Flag") ballId = contact.getFixtureB().getBody().getUserData();
 
-                    Player player = PlayerManager.getInstance().getPlayer(Integer.parseInt(ballId.toString())); //pegar player pelo userData?? como funciona essa bomba?
-
-                    // Player player = p;
+                    Player player = PlayerManager.getInstance().getPlayer(Integer.parseInt(ballId.toString()));
 
                     Runnable task = () -> {player.score();};
                     box2dScheduler.add(task);
@@ -136,6 +134,9 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void show() {
+
+        this.client = new Client();
+        client.connect();
     }
 
     @Override
@@ -144,12 +145,12 @@ public class PhysicsTest implements Screen {
         stage.act(delta);
         stage.draw();
 
-        debugRenderer.render(world, camera.combined);
+        debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
 
         box2dScheduler.forEach(task -> task.run());
         box2dScheduler.clear();
 
-        world.step(tickrate, 6, 2);
+        PhysicsManager.getInstance().getWorld().step(tickrate, 6, 2);
     }
 
     @Override public void resize(int width, int height) {
