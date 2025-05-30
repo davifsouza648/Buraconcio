@@ -1,47 +1,30 @@
 package io.github.buraconcio.Objects;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 
 import io.github.buraconcio.Utils.Constants;
+import io.github.buraconcio.Objects.PhysicsEntity;
 
-public class Ball extends Actor {
-    private Sprite sprite;
-    private Body body;
+public class Ball extends PhysicsEntity {
 
-    private World world;
-    private boolean enterHole;
+    public Ball(Vector2 pos, float r, int id) {
+        super(pos, new Vector2(r, r), "ball.png");
 
-    public Ball(Vector2 pos, float r, World world, int id) {
-        super();
-
-        this.world = world;
-
-        setBounds(pos.x, pos.y, 2*r, 2*r);
-        setOrigin(Align.center);
-
-        Texture texture = new Texture(Gdx.files.internal("ball.png"));
-        sprite = new Sprite(texture);
-        sprite.setSize(2*r, 2*r);
-        sprite.setOriginCenter();
-
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyType.DynamicBody;
-        bodyDef.position.set(pos.x, pos.y);
-        bodyDef.linearDamping = 1f;
-        bodyDef.angularDamping = 1f;
-
-        body = world.createBody(bodyDef);
+        body.setType(BodyType.DynamicBody);
+        body.setLinearDamping(1f);
+        body.setAngularDamping(1f);
         body.setUserData(id);
 
         CircleShape circle = new CircleShape();
@@ -57,21 +40,6 @@ public class Ball extends Actor {
 
         circle.dispose();
     }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        sprite.setRotation(getRotation());
-        sprite.setPosition(getX(), getY());
-        sprite.draw(batch, parentAlpha);
-    }
-
-    @Override
-    public void act(float delta) {
-        super.act(delta);
-
-        this.setPosition(body.getPosition().x - getWidth()/2, body.getPosition().y - getHeight()/2);
-        this.setRotation(body.getAngle() * 180f/3.14f);
-   }
 
     public void applyImpulse(Vector2 impulse) {
         body.applyLinearImpulse(impulse, body.getWorldCenter(), true);

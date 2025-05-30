@@ -4,7 +4,6 @@ import io.github.buraconcio.Objects.Ball;
 import io.github.buraconcio.Utils.Constants;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 
 public class Player {
 
@@ -22,8 +21,8 @@ public class Player {
         stars = 0;
     }
 
-    public Ball createBall(Vector2 pos, World world) {
-        ball = new Ball(pos, Constants.BALL_RADIUS, world, id);
+    public Ball createBall(Vector2 pos) {
+        ball = new Ball(pos, Constants.BALL_RADIUS, id);
 
         return ball;
     }
