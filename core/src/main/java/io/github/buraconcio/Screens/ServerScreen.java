@@ -23,7 +23,7 @@ import io.github.buraconcio.Utils.PlayerManager;
 public class ServerScreen implements Screen {
     private final Main game;
     private final Stage stage;
-    private final Skin skin, skinLabel;
+    private final Skin skinTextField, skinLabel;
     private Table topInfo;
     private Server server;
     private Client cliente;
@@ -32,7 +32,7 @@ public class ServerScreen implements Screen {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        this.skin = new Skin(Gdx.files.internal("uiskin.json"));
+        this.skinTextField = new Skin(Gdx.files.internal("fonts/pixely/textFields/textField.json"));
         this.skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
     }
 
@@ -241,7 +241,7 @@ public class ServerScreen implements Screen {
 
         Image image = new Image(new Texture(imagePath));
 
-        TextField playerField = new TextField(playerName, skin);
+        TextField playerField = new TextField(playerName, skinTextField, "labelPixelyWhite32");
 
         playerField.setDisabled(true);
 

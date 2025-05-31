@@ -19,7 +19,8 @@ public class LoginMenu implements Screen {
     private Main game;
     private Stage stage;
     private TextField userField, passField;
-    private Skin skin;
+    private Label warningUserLabel;
+    private Skin skinTextField, skinLabel;
     private String username;
     // private String password;
 
@@ -31,7 +32,9 @@ public class LoginMenu implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        skinTextField = new Skin(Gdx.files.internal("fonts/pixely/textFields/textField.json"));
+        skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
+
 
         Table table = new Table();
         table.setFillParent(true);
@@ -39,7 +42,7 @@ public class LoginMenu implements Screen {
         stage.addActor(table);
         table.setDebug(true);
 
-        userField = new TextField("", skin);
+        userField = new TextField("", skinTextField, "labelPixelyWhite32");
         userField.setMessageText("Digite seu username");
 
         Button entrar = new Button();
@@ -48,7 +51,6 @@ public class LoginMenu implements Screen {
         loginButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
                 username = userField.getText();
 
                 //verificar melhor momento paa criar o id do player
@@ -70,11 +72,11 @@ public class LoginMenu implements Screen {
             }
         });
 
-        table.add(userField).width(200).pad(10);
+        table.add(userField).width(500).pad(10);
         table.row();
         // table.add(passField).width(200).pad(10);
         // table.row();
-        table.add(loginButton).size(160, 64).colspan(2).padTop(10);
+        table.add(loginButton).size(200, 80).colspan(2).padTop(10);
     }
 
     @Override
@@ -109,7 +111,7 @@ public class LoginMenu implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        skin.dispose();
+        skinTextField.dispose();
     }
 
 }
