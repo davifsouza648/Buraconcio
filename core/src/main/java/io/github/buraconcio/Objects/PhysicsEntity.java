@@ -40,6 +40,11 @@ public class PhysicsEntity extends Actor {
         body.setUserData(this);
     }
 
+    public void destroy() {
+        PhysicsManager.getInstance().getWorld().destroyBody(body);
+        remove();
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         sprite.setRotation(getRotation());

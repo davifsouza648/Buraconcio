@@ -16,7 +16,7 @@ public class Arrow extends PhysicsEntity {
     public Arrow(Vector2 pos, float speed, float angle) {
         super(pos, arrowSize, "arrow.png");
 
-        body.setType(BodyType.KinematicBody);
+        body.setType(BodyType.DynamicBody);
 
         PolygonShape shapeDef = new PolygonShape();
         shapeDef.setAsBox(arrowSize.x, arrowSize.y);
@@ -36,18 +36,25 @@ public class Arrow extends PhysicsEntity {
     public void act(float delta) {
         super.act(delta);
 
+        if (getX() > 100f) this.destroy();
+
         for (Contact contact : PhysicsManager.getInstance().getContactList()) {
             if (contact.getFixtureA().getBody().getUserData() == this
                 || contact.getFixtureB().getBody().getUserData() == this) {
 
-                    Object ballId = contact.getFixtureB().getBody().getUserData();
-                    if (ballId == "Arrow") ballId = contact.getFixtureA().getBody().getUserData();
+                Object other = contact.getFixtureA().getBody().getUserData();
+                if (other == this.toString()) other = contact.getFixtureB().getBody().getUserData();
 
-                    Player player = PlayerManager.getInstance().getPlayer(Integer.parseInt(ballId.toString()));
+                try {
+                    Player player = PlayerManager.getInstance().getPlayer(Integer.parseInt(other.toString()));
 
-                    Runnable task = () -> {player.score();};
-                    PhysicsManager.getInstance().schedule(task);
+                    if (PlayerManager.getInstance().getLocalPlayer() == player) { // only kill local player
+                        Runnable task = () -> {player.die();};
+                        PhysicsManager.getInstance().schedule(task);
+                    }
+                } catch (Exception e) {}
 
+                this.destroy();
             }
         }
     }

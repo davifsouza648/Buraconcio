@@ -43,8 +43,12 @@ public class CrossBow extends Obstacle {
     public void spawnArrow() {
         float angle = body.getAngle();
 
-        Vector2 arrowPos = new Vector2(getX() + getWidth()*((float) Math.cos(angle) + 0.5f),
-            getY() + getHeight()*((float) Math.sin(angle) + 0.5f));
+        float sin = (float) Math.sin(angle);
+        float cos = (float) Math.cos(angle);
+        float arrowLen = Arrow.arrowSize.x;
+
+        Vector2 arrowPos = new Vector2(getX() + getWidth()*(cos*0.5f + 0.5f) + arrowLen*cos*1.05f ,
+            getY() + getHeight()*(sin*0.5f + 0.5f) + arrowLen*sin*1.05f);
         getStage().addActor(new Arrow(arrowPos, arrowSpeed, angle));
     }
 }

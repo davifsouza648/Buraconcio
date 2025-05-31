@@ -46,8 +46,6 @@ public class PhysicsTest implements Screen {
     //server test
     private Client client;
 
-    // public PhysicsTest(Main game, Player player) {
-    // mas ai ja vou mexer pra uma classe mais final
     public PhysicsTest(Main game) {
         this.game = game;
         tickrate = 1/60f;
@@ -68,8 +66,8 @@ public class PhysicsTest implements Screen {
 
         testFlag = new Flag(new Vector2(20f, 3f));
 
-        testObstacle = new CrossBow(new Vector2(10f, 1f), new Vector2(1.5f, 1.5f));
-        testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
+        testObstacle = new CrossBow(new Vector2(10f, 2f), new Vector2(1.5f, 1.5f));
+        //testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
 
         stage.addActor(testFlag);
         stage.addActor(pBall);
@@ -82,6 +80,16 @@ public class PhysicsTest implements Screen {
         wallBox.setAsBox(2f, 2f);
         wall.createFixture(wallBox, 0f);
         wallBox.dispose();
+
+        BodyDef wallDef2 = new BodyDef();
+        wallDef2.position.set(new Vector2(stage.getWidth(), 1.5f));
+        Body wall2 = PhysicsManager.getInstance().getWorld().createBody(wallDef2);
+        PolygonShape wallBox2 = new PolygonShape();
+        wallBox2.setAsBox(2f, 2f);
+        wall2.createFixture(wallBox2, 0f);
+        wallBox2.dispose();
+
+
 
 
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -123,13 +131,16 @@ public class PhysicsTest implements Screen {
                     System.out.println("Gol!");
 
                     // find wich fixture is ball
+
                     Object ballId = contact.getFixtureA().getBody().getUserData();
                     if (ballId == "Flag") ballId = contact.getFixtureB().getBody().getUserData();
 
-                    Player player = PlayerManager.getInstance().getPlayer(Integer.parseInt(ballId.toString()));
+                    try {
+                        Player player = PlayerManager.getInstance().getPlayer(Integer.parseInt(ballId.toString()));
 
-                    Runnable task = () -> {player.score();};
-                    PhysicsManager.getInstance().schedule(task);
+                        Runnable task = () -> {player.score();};
+                        PhysicsManager.getInstance().schedule(task);
+                    } catch (Exception e) {}
                 }
             }
 

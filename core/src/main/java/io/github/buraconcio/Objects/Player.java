@@ -43,6 +43,11 @@ public class Player implements Serializable {
         rewardStar();
     }
 
+    public void die() {
+        // temporary
+        ball.enterHole();
+    }
+
     public void rewardStar(){
         if(strokes <= 2){
             stars += 3;

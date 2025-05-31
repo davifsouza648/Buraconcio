@@ -23,11 +23,6 @@ public class Obstacle extends PhysicsEntity {
 
     }
 
-    public void erase() {
-        PhysicsManager.getInstance().getWorld().destroyBody(body);
-        remove();
-    }
-
     // not colliding
     // not in spawn area
     // not in flag area
