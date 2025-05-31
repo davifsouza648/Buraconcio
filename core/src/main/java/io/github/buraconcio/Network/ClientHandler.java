@@ -4,28 +4,25 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Utils.PlayerManager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ClientHandler implements Runnable {
 
     private Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
-
-    // Controle de flag e lista de clientes você precisa receber por algum jeito
     private volatile boolean flagAccept;
-    private List<ClientHandler> clients; // lista compartilhada do servidor
+    private List<ClientHandler> clients;
+
+    private Player currentPlayer;
 
     public ClientHandler(Socket socket, boolean flagAccept, List<ClientHandler> clients) throws IOException {
         this.socket = socket;
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
-
         this.flagAccept = flagAccept;
         this.clients = clients;
     }
@@ -33,15 +30,12 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
-
             out.writeObject("Client connected");
             out.flush();
 
             while (!socket.isClosed() && flagAccept) {
-
                 receivePlayer(in);
-                sendPlayers(out);
-
+                // sendPlayers(out);
                 Thread.sleep(100);
             }
 
@@ -51,9 +45,8 @@ public class ClientHandler implements Runnable {
             }
 
             while (!socket.isClosed()) {
-                out.writeObject("Modo de envio alternativo ativo");
+                out.writeObject("enviar alguma outra coisa");
                 out.flush();
-
                 Thread.sleep(1000);
             }
 
@@ -64,58 +57,73 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public void broadcastPlayerList() {
-        List<Player> players = PlayerManager.getInstance().getAllPlayers();
-        for (ClientHandler client : clients) {
-            try {
-
-                client.out.writeObject(players);
-                client.out.flush();
-
-            } catch (IOException e) {
-
-                System.out.println("Erro ao enviar lista: " + e.getMessage());
-
-            }
-        }
-    }
-
-
-    private void sendPlayers(ObjectOutputStream out) throws IOException {
-        List<Player> players = PlayerManager.getInstance().getAllPlayers();
-        out.writeObject(players);
-        out.flush();
-        System.out.println("Lista enviada.");
-    }
-
     private void receivePlayer(ObjectInputStream in) throws IOException, ClassNotFoundException {
         Object obj = in.readObject();
         if (obj instanceof Player) {
             Player newPlayer = (Player) obj;
+            this.currentPlayer = newPlayer;
             PlayerManager.getInstance().addPlayer(newPlayer);
-
             broadcastPlayerList();
-            System.out.println("Novo player: " + newPlayer.getUsername());
+
+            System.out.println("new player connected: " + newPlayer.getUsername());
+
         } else {
-            System.out.println("Not a player");
+            System.out.println("not a player");
         }
+    }
+
+    // private void sendPlayers(ObjectOutputStream out) throws IOException {
+    //     List<Player> players = PlayerManager.getInstance().getAllPlayers();
+    //     out.writeObject(players);
+    //     out.flush();
+    //     System.out.println("Lista de jogadores enviada.");
+    // }
+
+    public void broadcastPlayerList() {
+        for (ClientHandler client : clients) {
+            try {
+                client.out.writeObject(PlayerManager.getInstance().getAllPlayers());
+                client.out.flush();
+            } catch (IOException e) {
+                System.out.println("Erro ao enviar lista para cliente: " + e.getMessage());
+            }
+        }
+    }
+
+    public void broadcastServerClosed(){
+
+        for(ClientHandler client : clients){
+            try{
+                client.out.writeObject("get out");
+                client.out.flush();
+            }catch(IOException e){
+                System.out.println("Erro ao enviar msg de disconnect");
+            }
+        }
+
     }
 
     private void cleanup() {
         try {
-
             if (in != null)
                 in.close();
             if (out != null)
                 out.close();
             if (socket != null && !socket.isClosed())
                 socket.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        if (currentPlayer != null) {
+
+            PlayerManager.getInstance().removePlayerbyId(currentPlayer.getId());
+            System.out.println("Jogador removido: " + currentPlayer.getUsername());
+        }
+
         clients.remove(this);
-        System.out.println("ClientHandler stopped and removed");
+        System.out.println("Cliente successfully removed");
+
+        broadcastPlayerList();
     }
 }

@@ -155,9 +155,6 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void show() {
-
-        this.client = new Client();
-        client.connect();
     }
 
     @Override

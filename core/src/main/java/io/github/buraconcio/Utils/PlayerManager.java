@@ -27,8 +27,12 @@ public class PlayerManager {
         players.add(player);
     }
 
-    public boolean removePlayer(int id) {
+    public boolean removePlayerbyId(int id) {
         return players.removeIf(p -> p.getId() == id);
+    }
+
+    public boolean removePlayerbyUser(String name) {
+        return players.removeIf(p -> p.getUsername() == name);
     }
 
     public Player getPlayer(int id) {

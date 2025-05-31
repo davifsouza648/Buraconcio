@@ -4,11 +4,12 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
+
+import io.github.buraconcio.Utils.Constants;
+
 import java.util.ArrayList;
 
 public class Server {
-
-    private static final int PORT = 5050;
 
     private ServerSocket serverSocket;
 
@@ -33,7 +34,7 @@ public class Server {
 
     private void runTCPServer() {
         try {
-            serverSocket = new ServerSocket(PORT);
+            serverSocket = new ServerSocket(Constants.PORT);
             System.out.println("server TCP CRIADO");
 
             while (flagAccept) {
@@ -51,18 +52,33 @@ public class Server {
             }
 
         } catch (IOException e) {
-            System.out.println("socket TCP fail");
-            e.printStackTrace();
+
+            // System.out.println("socket TCP fail");
+
+            if (e.getMessage().equals("Socket closed")) {
+
+                System.err.println("connection successfully closed");
+
+            } else {
+                e.printStackTrace();
+            }
         }
     }
 
     public void stop() {
         if (serverSocket != null && !serverSocket.isClosed()) {
             try {
+
+                for (ClientHandler client : clients) {
+                    client.broadcastServerClosed();
+                }
+
                 serverSocket.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
 }

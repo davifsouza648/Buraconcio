@@ -23,7 +23,7 @@ public class LoginMenu implements Screen {
     private String username;
     // private String password;
 
-    String[] avatarVec = {"user1.png", "user2.png", "user3.png", "user3.png", "user4.png", "user5.png", "user6.png", "user7.png", "user8.png", "user9.png", "user10.png"};
+    // String[] avatarVec = {"user1.png", "user2.png", "user3.png", "user3.png", "user4.png", "user5.png", "user6.png", "user7.png", "user8.png", "user9.png", "user10.png"};
 
     public LoginMenu(Main game) {
         this.game = game;
@@ -42,10 +42,6 @@ public class LoginMenu implements Screen {
         userField = new TextField("", skin);
         userField.setMessageText("Digite seu username");
 
-        // passField = new TextField("", skin);
-        // passField.setMessageText("Digite sua senha");
-        // passField.setPasswordMode(true);
-        // passField.setPasswordCharacter('*');
         Button entrar = new Button();
         ImageButton loginButton = entrar.createButton("enter", "enter");
 
@@ -63,13 +59,14 @@ public class LoginMenu implements Screen {
 
                 player.setId(username.hashCode() + random.nextInt(25));
 
-                player.setAvatar(avatarVec[random.nextInt(0, 10)]);
+                player.setAvatar(random.nextInt(1, 32));
 
                 PlayerManager.getInstance().setLocalPlayer(player);
 
-                System.out.println(player.getUsername());
+                System.out.println("Usuario: " + player.getUsername());
 
                 game.setScreen(new MainMenu(game));
+
             }
         });
 

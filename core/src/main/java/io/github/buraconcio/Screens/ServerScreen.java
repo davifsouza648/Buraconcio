@@ -1,5 +1,7 @@
 package io.github.buraconcio.Screens;
 
+import java.io.IOException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,6 +17,7 @@ import io.github.buraconcio.Network.Client;
 import io.github.buraconcio.Network.Server;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Button;
+import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.PlayerManager;
 
 public class ServerScreen implements Screen {
@@ -53,17 +56,23 @@ public class ServerScreen implements Screen {
 
             try {
                 Thread.sleep(100);
+
             } catch (InterruptedException e) {
+
                 e.printStackTrace();
             }
         }
 
-        this.cliente = new Client();
+        // TODO: verificar se há alguma porta aberta, caso nao tenha voltar para o main
+        // menu, talvez uma tela de loading??
 
-        cliente.setPlayerConnectedListener(() -> {
-            Gdx.app.postRunnable(() -> {
-                refreshPlayers();
-            });
+        this.cliente = new Client();
+        cliente.setServerListener(new Client.ServerListener() {
+            @Override
+            public void PlayerCon() {
+                Gdx.app.postRunnable(() -> refreshPlayers());
+            }
+
         });
 
         cliente.startTCPClient();
@@ -110,8 +119,8 @@ public class ServerScreen implements Screen {
                 if (PlayerManager.getInstance().getLocalPlayer().getHosting()) {
 
                     if (server != null) {
-                        //TODO: timer + troca de botao;
-                        server.stopAccepting(); //TODO: verificar se stopAccepting esta funfando
+                        // TODO: timer + troca de botao;
+                        server.stopAccepting(); // TODO: verificar se stopAccepting esta funfando
                     }
 
                 }
@@ -121,19 +130,33 @@ public class ServerScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                // if(PlayerManager.getInstance().getLocalPlayer().getHosting()){
-                //
-                // fazerr todos voltarem ao menu e fechar o server;
-                //
-                // }else{
-                //
-                // sair do lobby e atualizar (clear no PLayerManager e mensagem para o server para sairr do deles)
-                //
-                // }
+                if (PlayerManager.getInstance().getLocalPlayer().getHosting()) {
 
-                for(Player a : PlayerManager.getInstance().getAllPlayers()){
-                    System.out.println(a.getUsername());
+                    if (server != null) {
+                        server.stop();
+                    }
+
+                    Auxiliaries.cls();
+
+                    System.out.println("host encerrou a sala");
+                } else {
+
+                    if (cliente != null) {
+                        try {
+                            cliente.disconnect();
+
+                        } catch (IOException e) {
+
+                            e.printStackTrace();
+                        }
+                    }
+
+                    Auxiliaries.cls();
+                    System.out.println("saiu da sala");
                 }
+
+                PlayerManager.getInstance().clear();
+                PlayerManager.getInstance().addPlayer(PlayerManager.getInstance().getLocalPlayer());
 
                 game.setScreen(new MainMenu(game));
             }
@@ -144,7 +167,6 @@ public class ServerScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
             }
         });
-
 
         leftColumn.add(topInfo).expandY().top().left();
         leftColumn.row();
@@ -163,7 +185,8 @@ public class ServerScreen implements Screen {
         Table rightColumn = new Table();
         rightColumn.setFillParent(false);
         rightColumn.top().right().pad(40);
-        Label playersLabel = new Label("1 Player(s) (4 Max)", skinLabel, "labelPixelyWhite32"); // receber N de algum lugar
+        Label playersLabel = new Label("1 Player(s) (4 Max)", skinLabel, "labelPixelyWhite32"); // receber N de algum
+                                                                                                // lugar
         // playersLabel.setFontScale(0.7f);
 
         topInfo = new Table();

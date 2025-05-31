@@ -82,8 +82,9 @@ public class Player implements Serializable {
         this.stars = stars;
     }
 
-    public void setAvatar(String newAvatar){
-        avatarpath = newAvatar;
+    public void setAvatar(int num){
+
+        avatarpath = "user" + num + ".png";
     }
 
     public String getAvatar(){

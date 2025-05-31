@@ -112,7 +112,9 @@ public class MainMenu implements Screen {
 
                 // game.setScreen(new PhysicsTest(game));
 
-                game.setScreen(new ServerScreen(game)); // para testar o cliente
+                // game.setScreen(new LoadingScreen(game)); // arrumar loading screen
+
+                game.setScreen(new ServerScreen(game));
 
             }
         });
@@ -128,7 +130,9 @@ public class MainMenu implements Screen {
         imageButtonCredits.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new PhysicsTest(game));
+
+                //TODO: DAVI VAI FAZER A TELA;
+
             }
         });
 
@@ -138,6 +142,7 @@ public class MainMenu implements Screen {
                 Gdx.app.exit();
             }
         });
+
 
         Table backgroundTable = new Table();
         backgroundTable.setFillParent(true);
@@ -154,13 +159,34 @@ public class MainMenu implements Screen {
         table.add(imageButtonHost).pad(15);
         table.row();
         table.add(imageButtonCredits).pad(15);
+
+        createTestButton(table);
+
         table.row();
         table.add(imageButtonQuit).pad(15);
+
 
         table.setDebug(false);
 
         stage.addActor(backgroundTable);
         stage.addActor(table);
+
+    }
+
+    public void createTestButton(Table table){
+
+        TextButton teste = new TextButton("TESTE A PHYSICS AQUI", skin);
+        teste.setSize(150, 90);
+        teste.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new PhysicsTest(game));
+                stage.dispose();
+            }
+        });
+
+        table.row();
+        table.add(teste).pad(15);
 
     }
 

@@ -8,17 +8,18 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.List;
 
 import com.badlogic.gdx.utils.Json;
 
 import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PlayerManager;
 
 public class Client {
 
-    private static final String IP = "localhost";
-    private static final int PORT = 5050;
+    private Socket socket;
     private ServerListener listener;
     private boolean svScreen = true;
 
@@ -29,7 +30,8 @@ public class Client {
     }
 
     public void connect() {
-        try (Socket socket = new Socket(IP, PORT)) {
+        try {
+            socket = new Socket(Constants.IP, Constants.PORT);
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
@@ -41,12 +43,17 @@ public class Client {
 
             receivePlayerList(in);
 
+            // receber estagios e outras atualizacoes por tcp
 
-            //receber estagios e outras atualizacoes por tcp
+        } catch (IOException | ClassNotFoundException e) {
 
-        } catch (Exception e) {
-            System.err.println("connection fail: " + e.getMessage());
-            e.printStackTrace();
+            if(e.getMessage().equals("Socket closed")){
+
+                System.err.println("connection successfully closed");
+
+            } else {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -58,6 +65,8 @@ public class Client {
 
     public void receivePlayerList(ObjectInputStream in) throws IOException, ClassNotFoundException {
 
+
+
         while (svScreen) {
             Object obj = in.readObject();
 
@@ -65,10 +74,8 @@ public class Client {
 
                 Boolean msg = (Boolean) obj;
 
-                if (msg == false) {
-
+                if (!msg) {
                     svScreen = false;
-
                 }
 
             } else if (obj instanceof List<?>) {
@@ -84,12 +91,19 @@ public class Client {
         }
     }
 
-    public interface ServerListener { //puxar o refresh
+    public interface ServerListener { // puxar o refresh
         void PlayerCon();
     }
 
-    public void setPlayerConnectedListener(ServerListener listener) {
+    public void setServerListener(ServerListener listener) {
         this.listener = listener;
+    }
+
+    public void disconnect() throws IOException {
+
+        if (socket != null && socket.isConnected()) {
+            socket.close();
+        }
     }
 
 }
