@@ -47,7 +47,7 @@ public class Client {
 
         } catch (IOException | ClassNotFoundException e) {
 
-            if(e.getMessage().equals("Socket closed")){
+            if (e.getMessage().equals("Socket closed")) {
 
                 System.err.println("connection successfully closed");
 
@@ -64,8 +64,6 @@ public class Client {
     }
 
     public void receivePlayerList(ObjectInputStream in) throws IOException, ClassNotFoundException {
-
-
 
         while (svScreen) {
             Object obj = in.readObject();
@@ -87,12 +85,27 @@ public class Client {
                 if (listener != null) {
                     listener.PlayerCon();
                 }
+            } else if (obj instanceof String) {
+                String msg = (String) obj;
+
+                if (msg.equals("get out")) {
+
+                    disconnect();
+
+                    if (listener != null) {
+                        listener.ServerDisconnected();
+                    }
+
+                    svScreen = false;
+                }
             }
         }
     }
 
     public interface ServerListener { // puxar o refresh
         void PlayerCon();
+
+        void ServerDisconnected();
     }
 
     public void setServerListener(ServerListener listener) {
@@ -104,6 +117,8 @@ public class Client {
         if (socket != null && socket.isConnected()) {
             socket.close();
         }
+
+        System.out.println("client disconnect");
     }
 
 }

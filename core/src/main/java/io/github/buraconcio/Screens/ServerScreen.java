@@ -27,6 +27,8 @@ public class ServerScreen implements Screen {
     private Table topInfo;
     private Server server;
     private Client cliente;
+    private boolean flag;
+    private ImageButton startButton;
 
     public ServerScreen(Main game) {
         this.game = game;
@@ -73,6 +75,14 @@ public class ServerScreen implements Screen {
                 Gdx.app.postRunnable(() -> refreshPlayers());
             }
 
+            @Override
+            public void ServerDisconnected() {
+                PlayerManager.getInstance().clear();
+                PlayerManager.getInstance().addPlayer(PlayerManager.getInstance().getLocalPlayer());
+
+
+                Gdx.app.postRunnable(() -> game.setScreen(new MainMenu(game)));
+            }
         });
 
         cliente.startTCPClient();
@@ -89,7 +99,9 @@ public class ServerScreen implements Screen {
         title.setFontScale(1f);
 
         Button start = new Button();
-        ImageButton startButton = start.createButton("start", "start");
+
+        startButton = start.createButton("start", "start");
+
         Button map = new Button();
         ImageButton mapButton = map.createButton("map", "map");
 
@@ -120,6 +132,7 @@ public class ServerScreen implements Screen {
 
                     if (server != null) {
                         // TODO: timer + troca de botao;
+
                         server.stopAccepting(); // TODO: verificar se stopAccepting esta funfando
                     }
 
@@ -139,10 +152,12 @@ public class ServerScreen implements Screen {
                     Auxiliaries.cls();
 
                     System.out.println("host encerrou a sala");
+
                 } else {
 
                     if (cliente != null) {
                         try {
+
                             cliente.disconnect();
 
                         } catch (IOException e) {

@@ -2,17 +2,18 @@ package io.github.buraconcio.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.github.buraconcio.Objects.Player;
 
 // singleton
 public class PlayerManager {
-    private List<Player> players;
+    private List<Player> players = new CopyOnWriteArrayList<>();
     private static PlayerManager instance;
     private Player localPlayer;
 
     public PlayerManager() {
-        players = new ArrayList<>();
+        // players = new ArrayList<>();
     }
 
     public static synchronized PlayerManager getInstance() {

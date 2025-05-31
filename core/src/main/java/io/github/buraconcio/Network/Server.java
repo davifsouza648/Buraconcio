@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.github.buraconcio.Utils.Constants;
 
@@ -15,7 +16,7 @@ public class Server {
 
     private volatile boolean flagAccept = true;
 
-    private final List<ClientHandler> clients = new ArrayList<>();
+    private final List<ClientHandler> clients = new CopyOnWriteArrayList<>();
 
     public void stopAccepting() {
         this.flagAccept = false;
@@ -70,7 +71,7 @@ public class Server {
             try {
 
                 for (ClientHandler client : clients) {
-                    client.broadcastServerClosed();
+                    client.broadcastString("get out");
                 }
 
                 serverSocket.close();

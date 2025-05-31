@@ -51,7 +51,9 @@ public class ClientHandler implements Runnable {
             }
 
         } catch (IOException | ClassNotFoundException | InterruptedException e) {
-            System.out.println("Client disconnected or error: " + e.getMessage());
+
+            e.printStackTrace();
+
         } finally {
             cleanup();
         }
@@ -85,12 +87,14 @@ public class ClientHandler implements Runnable {
                 client.out.writeObject(PlayerManager.getInstance().getAllPlayers());
                 client.out.flush();
             } catch (IOException e) {
-                System.out.println("Erro ao enviar lista para cliente: " + e.getMessage());
+
+                System.out.println("Erro ao enviar lista para cliente: " ); /*+ e.getMessage()*/
+
             }
         }
     }
 
-    public void broadcastServerClosed(){
+    public void broadcastString(String x){
 
         for(ClientHandler client : clients){
             try{
@@ -122,7 +126,7 @@ public class ClientHandler implements Runnable {
         }
 
         clients.remove(this);
-        System.out.println("Cliente successfully removed");
+        System.out.println("Client successfully removed");
 
         broadcastPlayerList();
     }

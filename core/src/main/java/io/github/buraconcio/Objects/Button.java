@@ -15,7 +15,7 @@ public class Button {
 
         Skin skin = new Skin(Gdx.files.internal(skinPath));
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(atlasPath));
-        
+
         atlas.getTextures().forEach(texture -> {
             texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         });

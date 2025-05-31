@@ -165,7 +165,6 @@ public class MainMenu implements Screen {
         table.row();
         table.add(imageButtonQuit).pad(15);
 
-
         table.setDebug(false);
 
         stage.addActor(backgroundTable);
