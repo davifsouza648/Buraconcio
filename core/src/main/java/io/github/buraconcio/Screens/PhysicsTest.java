@@ -28,6 +28,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
@@ -54,7 +55,7 @@ public class PhysicsTest implements Screen {
 
     private TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
-    float scale = 1/16f;
+    float scale = 1/32f;
 
     //server test
     private Client client;
@@ -87,20 +88,20 @@ public class PhysicsTest implements Screen {
 
         testFlag = new Flag(new Vector2(20f, 3f));
 
-        testObstacle = new CrossBow(new Vector2(10f, 2f), new Vector2(1.5f, 1.5f));
-        testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
+        // testObstacle = new CrossBow(new Vector2(10f, 2f), new Vector2(1.5f, 1.5f));
+        // testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
 
-        PhysicsEntity wall1 = new PhysicsEntity(new Vector2(stage.getWidth()/2, stage.getHeight()), new Vector2(2f, 2f), "crossBow.png");
-        PolygonShape wallBox = new PolygonShape();
-        wallBox.setAsBox(2f, 2f);
-        wall1.getBody().createFixture(wallBox, 0f);
-        wallBox.dispose();
+        // PhysicsEntity wall1 = new PhysicsEntity(new Vector2(stage.getWidth()/2, stage.getHeight()), new Vector2(2f, 2f), "crossBow.png");
+        // PolygonShape wallBox = new PolygonShape();
+        // wallBox.setAsBox(2f, 2f);
+        // wall1.getBody().createFixture(wallBox, 0f);
+        // wallBox.dispose();
 
-        PhysicsEntity wall2 = new PhysicsEntity(new Vector2(stage.getWidth(), 1.5f), new Vector2(2f, 2f),  "crossBow.png");
-        PolygonShape wallBox2 = new PolygonShape();
-        wallBox2.setAsBox(2f, 2f);
-        wall2.getBody().createFixture(wallBox2, 0f);
-        wallBox2.dispose();
+        // PhysicsEntity wall2 = new PhysicsEntity(new Vector2(stage.getWidth(), 1.5f), new Vector2(2f, 2f),  "crossBow.png");
+        // PolygonShape wallBox2 = new PolygonShape();
+        // wallBox2.setAsBox(2f, 2f);
+        // wall2.getBody().createFixture(wallBox2, 0f);
+        // wallBox2.dispose();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1;
@@ -143,7 +144,35 @@ public class PhysicsTest implements Screen {
 	        public void postSolve(Contact contact, ContactImpulse impulse) {}
 
         });
+
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("Tile Layer 1");
+
+        float tileSize = 32 * scale; // 32px em metros
+
+        for (int x = 0; x < layer.getWidth(); x++) 
+        {
+            for (int y = 0; y < layer.getHeight(); y++) 
+            {
+                TiledMapTileLayer.Cell cell = layer.getCell(x, y);
+                if (cell != null && cell.getTile() != null) 
+                {
+                    int tileId = cell.getTile().getId();
+
+                    if (tileId == 3) 
+                    {
+                        PhysicsEntity wall1 = new PhysicsEntity(new Vector2((x + 0.5f) * tileSize, (y + 0.5f) * tileSize), new Vector2(tileSize / 2, tileSize / 2), null);
+                        PolygonShape wallBox = new PolygonShape();
+                        wallBox.setAsBox(tileSize / 2, tileSize / 2);
+                        wall1.getBody().createFixture(wallBox, 0f);
+                        wallBox.dispose();
+                    }
+                }
+            }
+        }
+
+
     }
+
 
     @Override
     public void show() {
