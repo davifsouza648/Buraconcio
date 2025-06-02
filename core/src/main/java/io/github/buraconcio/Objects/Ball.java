@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.Batch;
-
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -18,14 +18,20 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Objects.PhysicsEntity;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
 public class Ball extends PhysicsEntity {
 
-    public Ball(Vector2 pos, float r, int id) {
+    private Label labelUserName;
+    private Skin skinLabel;
+
+    public Ball(Vector2 pos, float r, int id, String userName) {
         super(pos, new Vector2(r, r), "ball.png");
 
         body.setType(BodyType.DynamicBody);
-        body.setLinearDamping(1f);
-        body.setAngularDamping(1f);
+        body.setLinearDamping(.5f);
+        body.setAngularDamping(.5f);
         body.setUserData(id);
 
         CircleShape circle = new CircleShape();
@@ -38,8 +44,14 @@ public class Ball extends PhysicsEntity {
         fixtureDef.restitution = 0.6f;
 
         body.createFixture(fixtureDef);
-
         circle.dispose();
+
+        skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
+
+        labelUserName = new Label(userName, skinLabel, "labelPixelyWhite16"); //Não to conseguindo deixar essa fonte menor
+        labelUserName.setFontScale(1f);  //Tentei mexer aqui e não ajudou
+        labelUserName.setAlignment(Align.center);
+        labelUserName.pack();
     }
 
     public void applyImpulse(Vector2 impulse) {
@@ -57,9 +69,31 @@ public class Ball extends PhysicsEntity {
         return diff;
     }
 
+    @Override
+    public void draw(Batch batch, float parentAlpha) 
+    {
+        super.draw(batch, parentAlpha); 
+
+        if (labelUserName != null) 
+        {
+            labelUserName.setPosition(
+                getX(),
+                getY() 
+            );
+
+            labelUserName.draw(batch, parentAlpha);
+        }
+    }
+
     public void enterHole() {
         body.setLinearVelocity(new Vector2(0f, 0f));
 
-        body.setTransform(new Vector2(-10f, -10f), 0f);
+        // body.setTransform(new Vector2(-10f, -10f), 0f);
+    }
+
+    public Vector2 getPosition()
+    {
+        Vector2 pos = new Vector2(this.getX(), this.getY());
+        return pos;
     }
 }

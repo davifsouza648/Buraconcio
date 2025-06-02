@@ -26,7 +26,7 @@ public class Player implements Serializable {
     }
 
     public Ball createBall(Vector2 pos) {
-        ball = new Ball(pos, Constants.BALL_RADIUS, id);
+        ball = new Ball(pos, Constants.BALL_RADIUS, id, this.username);
 
         return ball;
     }

@@ -43,6 +43,9 @@ public class PhysicsTest implements Screen {
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
 
+    Player p;
+    private Ball pBall;
+
     //server test
     private Client client;
 
@@ -57,9 +60,9 @@ public class PhysicsTest implements Screen {
         stage.getViewport().setCamera(camera);
         Gdx.input.setInputProcessor(stage);
 
-        Player p = PlayerManager.getInstance().getLocalPlayer();
+        p = PlayerManager.getInstance().getLocalPlayer();
 
-        Ball pBall = p.createBall(new Vector2(3f, 3f));
+        pBall = p.createBall(new Vector2(3f, 3f));
         pBall.setZIndex(0);
 
         PlayerManager.getInstance().addPlayer(p);
@@ -160,6 +163,14 @@ public class PhysicsTest implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0.1f, 0, 1, true);
+
+        if (pBall != null) 
+        {
+            Vector2 ballPos = pBall.getPosition();
+            camera.position.set(ballPos.x, ballPos.y, 0);
+            camera.update();
+        }
+
         stage.act(delta);
         stage.draw();
 
