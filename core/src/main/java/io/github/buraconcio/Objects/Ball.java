@@ -51,7 +51,7 @@ public class Ball extends PhysicsEntity {
 
         labelGroup = new Group(); // melhor jeito de escalar texto ... zuado
         labelGroup.addActor(labelUserName);
-        labelGroup.setScale(0.05f);
+        labelGroup.setScale(0.02f);
 
         PhysicsManager.getInstance().addToStage(labelGroup);
 
@@ -86,7 +86,7 @@ public class Ball extends PhysicsEntity {
 
         labelGroup.setPosition(
             getX() - labelGroup.getWidth()/2,
-            getY() - getHeight() - 0.5f
+            getY() + getHeight() + 0.5f
         );
     }
 
