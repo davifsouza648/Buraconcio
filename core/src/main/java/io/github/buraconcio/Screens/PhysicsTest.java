@@ -88,8 +88,8 @@ public class PhysicsTest implements Screen {
 
         testFlag = new Flag(new Vector2(20f, 3f));
 
-        // testObstacle = new CrossBow(new Vector2(10f, 2f), new Vector2(1.5f, 1.5f));
-        // testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
+        testObstacle = new CrossBow(new Vector2(10f, 2f), new Vector2(1.5f, 1.5f));
+        testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
 
         // PhysicsEntity wall1 = new PhysicsEntity(new Vector2(stage.getWidth()/2, stage.getHeight()), new Vector2(2f, 2f), "crossBow.png");
         // PolygonShape wallBox = new PolygonShape();

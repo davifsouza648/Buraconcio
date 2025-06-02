@@ -48,11 +48,17 @@ public class PhysicsManager {
         // collisions
         for (Contact contact : contactList) {
 
-            PhysicsEntity entityA = getEntity(contact.getFixtureA().getBody().getUserData());
-            PhysicsEntity entityB = getEntity(contact.getFixtureB().getBody().getUserData());
+            try
+            {
+                PhysicsEntity entityA = getEntity(contact.getFixtureA().getBody().getUserData());
+                PhysicsEntity entityB = getEntity(contact.getFixtureB().getBody().getUserData());
 
-            entityA.contact(entityB);
-            entityB.contact(entityA);
+                entityA.contact(entityB);
+                entityB.contact(entityA);
+            }catch(Exception e){}
+
+
+
             // be carefull not to run same collision logic on both objects
         }
 
