@@ -58,6 +58,8 @@ public class PhysicsTest implements Screen {
         stage.getViewport().setCamera(camera);
         Gdx.input.setInputProcessor(stage);
 
+        PhysicsManager.getInstance().setStage(stage);
+
         p = PlayerManager.getInstance().getLocalPlayer();
 
         pBall = p.createBall(new Vector2(3f, 3f));
@@ -69,10 +71,6 @@ public class PhysicsTest implements Screen {
 
         testObstacle = new CrossBow(new Vector2(10f, 2f), new Vector2(1.5f, 1.5f));
         testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
-
-        stage.addActor(testFlag);
-        stage.addActor(pBall);
-        stage.addActor(testObstacle);
 
         PhysicsEntity wall1 = new PhysicsEntity(new Vector2(stage.getWidth()/2, stage.getHeight()), new Vector2(2f, 2f), "crossBow.png");
         PolygonShape wallBox = new PolygonShape();

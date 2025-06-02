@@ -7,6 +7,8 @@ import java.util.Hashtable;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import io.github.buraconcio.Objects.PhysicsEntity;
 
@@ -16,10 +18,11 @@ public class PhysicsManager {
     private static final float tickrate = 1/60f;
 
     World world;
+    Stage stage;
+    ArrayList<Runnable> box2dScheduler;
     ArrayList<Contact> contactList;
     Hashtable<Integer, PhysicsEntity> entityList;
     int id;
-    ArrayList<Runnable> box2dScheduler;
 
     public PhysicsManager() {
         world = new World(new Vector2(0f, 0f), true);
@@ -27,6 +30,7 @@ public class PhysicsManager {
         entityList = new Hashtable<Integer, PhysicsEntity> ();
         id = 0;
         contactList = new ArrayList<Contact> ();
+        stage = null;
     }
 
     public static synchronized PhysicsManager getInstance() {
@@ -131,5 +135,17 @@ public class PhysicsManager {
 
     public void resetContactList() {
         contactList.clear();
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public void addToStage(Actor actor) {
+        stage.addActor(actor);
     }
 }

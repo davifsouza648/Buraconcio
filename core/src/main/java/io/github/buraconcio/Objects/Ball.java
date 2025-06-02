@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.PhysicsManager;
 import io.github.buraconcio.Objects.PhysicsEntity;
 import io.github.buraconcio.Objects.Arrow;
 import io.github.buraconcio.Objects.Flag;
@@ -19,10 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Ball extends PhysicsEntity {
-    Player player;
+    private Player player;
 
-    private Label labelUserName;
-    private Skin skinLabel;
+    private Group labelGroup;
 
     public Ball(Vector2 pos, float r, Player player) {
         super(pos, new Vector2(r, r), "ball.png");
@@ -43,17 +44,21 @@ public class Ball extends PhysicsEntity {
         body.createFixture(fixtureDef);
         circle.dispose();
 
-        skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
-
-        labelUserName = new Label(player.getUsername(), skinLabel, "labelPixelyWhite16"); //Não to conseguindo deixar essa fonte menor
-        labelUserName.setFontScale(1f);  //Tentei mexer aqui e não ajudou
+        Skin skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
+        Label labelUserName = new Label(player.getUsername(), skinLabel, "labelPixelyWhite32");
         labelUserName.setAlignment(Align.center);
         labelUserName.pack();
+
+        labelGroup = new Group(); // melhor jeito de escalar texto ... zuado
+        labelGroup.addActor(labelUserName);
+        labelGroup.setScale(0.05f);
+
+        PhysicsManager.getInstance().addToStage(labelGroup);
 
         this.player = player;
     }
 
-    public Boolean isStill()
+    public boolean isStill()
     {
         return body.getLinearVelocity().len() < Constants.STILL_TOLERANCE;
     }
@@ -79,19 +84,15 @@ public class Ball extends PhysicsEntity {
     {
         super.draw(batch, parentAlpha);
 
-        if (labelUserName != null)
-        {
-            labelUserName.setPosition(
-                getX(),
-                getY()
-            );
-
-            labelUserName.draw(batch, parentAlpha);
-        }
+        labelGroup.setPosition(
+            getX() - labelGroup.getWidth()/2,
+            getY() - getHeight() - 0.5f
+        );
     }
 
     public void enterHole() {
         body.setLinearVelocity(new Vector2(0f, 0f));
+        body.setAwake(false);
 
         // body.setTransform(new Vector2(-10f, -10f), 0f);
         setVisible(false);

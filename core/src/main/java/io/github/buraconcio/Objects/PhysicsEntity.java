@@ -39,6 +39,7 @@ public class PhysicsEntity extends Actor {
         body = PhysicsManager.getInstance().getWorld().createBody(bodyDef);
 
         PhysicsManager.getInstance().addEntity(this);
+        PhysicsManager.getInstance().addToStage(this);
     }
 
     public void destroy() {
