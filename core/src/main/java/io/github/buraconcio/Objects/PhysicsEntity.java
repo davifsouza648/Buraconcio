@@ -1,6 +1,5 @@
 package io.github.buraconcio.Objects;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
@@ -19,6 +18,7 @@ public class PhysicsEntity extends Actor {
 
     protected Sprite sprite;
     protected Body body;
+    protected int id;
 
     public PhysicsEntity(Vector2 pos, Vector2 size, String texturePath) {
         super();
@@ -37,12 +37,26 @@ public class PhysicsEntity extends Actor {
         bodyDef.position.set(pos.x, pos.y);
 
         body = PhysicsManager.getInstance().getWorld().createBody(bodyDef);
-        body.setUserData(this);
+
+        PhysicsManager.getInstance().addEntity(this);
     }
 
     public void destroy() {
         PhysicsManager.getInstance().getWorld().destroyBody(body);
         remove();
+    }
+
+    public void setId(int id) {
+        body.setUserData(id);
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void contact(PhysicsEntity entity) {
+
     }
 
     @Override
@@ -58,5 +72,17 @@ public class PhysicsEntity extends Actor {
 
         this.setPosition(body.getPosition().x - getWidth()/2, body.getPosition().y - getHeight()/2);
         this.setRotation(body.getAngle() * 180f/3.14f);
-   }
+    }
+
+    public Player getPlayer() throws Exception {
+        throw new Exception("Error: only ball should implement this method."); // meio choggles
+    }
+
+    public void setPlayer(Player player) throws Exception {
+        throw new Exception("Error: only ball should implement this method."); // meio choggles
+    }
+
+    public Body getBody() {
+        return body;
+    }
 }

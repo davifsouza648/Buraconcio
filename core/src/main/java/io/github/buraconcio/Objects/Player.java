@@ -26,12 +26,14 @@ public class Player implements Serializable {
     }
 
     public Ball createBall(Vector2 pos) {
-        ball = new Ball(pos, Constants.BALL_RADIUS, id, this.username);
+        ball = new Ball(pos, Constants.BALL_RADIUS, this);
 
         return ball;
     }
 
     public void stroke(Vector2 mouse1, Vector2 mouse2) {
+        if (!ball.isStill()) return;
+
         ball.applyImpulse(ball.calculateImpulse(mouse1, mouse2));
 
         strokes += 1;

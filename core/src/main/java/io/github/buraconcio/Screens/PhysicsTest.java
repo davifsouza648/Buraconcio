@@ -17,6 +17,7 @@ import io.github.buraconcio.Objects.Ball;
 import io.github.buraconcio.Objects.Flag;
 import io.github.buraconcio.Objects.CrossBow;
 import io.github.buraconcio.Objects.Obstacle;
+import io.github.buraconcio.Objects.PhysicsEntity;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.PhysicsManager;
 
@@ -38,8 +39,6 @@ public class PhysicsTest implements Screen {
     private Flag testFlag;
     private Obstacle testObstacle;
 
-    private float tickrate;
-
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera camera;
 
@@ -51,7 +50,6 @@ public class PhysicsTest implements Screen {
 
     public PhysicsTest(Main game) {
         this.game = game;
-        tickrate = 1/60f;
 
         debugRenderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera(23, 13);
@@ -70,30 +68,23 @@ public class PhysicsTest implements Screen {
         testFlag = new Flag(new Vector2(20f, 3f));
 
         testObstacle = new CrossBow(new Vector2(10f, 2f), new Vector2(1.5f, 1.5f));
-        //testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
+        testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
 
         stage.addActor(testFlag);
         stage.addActor(pBall);
         stage.addActor(testObstacle);
 
-        BodyDef wallDef = new BodyDef();
-        wallDef.position.set(new Vector2(stage.getWidth()/2, stage.getHeight()));
-        Body wall = PhysicsManager.getInstance().getWorld().createBody(wallDef);
+        PhysicsEntity wall1 = new PhysicsEntity(new Vector2(stage.getWidth()/2, stage.getHeight()), new Vector2(2f, 2f), "crossBow.png");
         PolygonShape wallBox = new PolygonShape();
         wallBox.setAsBox(2f, 2f);
-        wall.createFixture(wallBox, 0f);
+        wall1.getBody().createFixture(wallBox, 0f);
         wallBox.dispose();
 
-        BodyDef wallDef2 = new BodyDef();
-        wallDef2.position.set(new Vector2(stage.getWidth(), 1.5f));
-        Body wall2 = PhysicsManager.getInstance().getWorld().createBody(wallDef2);
+        PhysicsEntity wall2 = new PhysicsEntity(new Vector2(stage.getWidth(), 1.5f), new Vector2(2f, 2f),  "crossBow.png");
         PolygonShape wallBox2 = new PolygonShape();
         wallBox2.setAsBox(2f, 2f);
-        wall2.createFixture(wallBox2, 0f);
+        wall2.getBody().createFixture(wallBox2, 0f);
         wallBox2.dispose();
-
-
-
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1;
@@ -127,24 +118,6 @@ public class PhysicsTest implements Screen {
             @Override
             public void beginContact(Contact contact) {
                 PhysicsManager.getInstance().addContact(contact);
-
-                if ( contact.getFixtureA().getBody().getUserData() == "Flag"
-                 || contact.getFixtureB().getBody().getUserData() == "Flag" ) {
-
-                    System.out.println("Gol!");
-
-                    // find wich fixture is ball
-
-                    Object ballId = contact.getFixtureA().getBody().getUserData();
-                    if (ballId == "Flag") ballId = contact.getFixtureB().getBody().getUserData();
-
-                    try {
-                        Player player = PlayerManager.getInstance().getPlayer(Integer.parseInt(ballId.toString()));
-
-                        Runnable task = () -> {player.score();};
-                        PhysicsManager.getInstance().schedule(task);
-                    } catch (Exception e) {}
-                }
             }
 
             @Override
@@ -164,7 +137,7 @@ public class PhysicsTest implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0.1f, 0, 1, true);
 
-        if (pBall != null) 
+        if (pBall != null)
         {
             Vector2 ballPos = pBall.getPosition();
             camera.position.set(ballPos.x, ballPos.y, 0);
@@ -176,12 +149,7 @@ public class PhysicsTest implements Screen {
 
         debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
 
-        PhysicsManager.getInstance().getBox2dScheduler().forEach(task -> task.run());
-        PhysicsManager.getInstance().clearScheduler();
-
-        PhysicsManager.getInstance().getWorld().step(tickrate, 6, 2);
-
-        
+        PhysicsManager.getInstance().tick();
     }
 
     @Override public void resize(int width, int height) {

@@ -47,9 +47,7 @@ public class Obstacle extends PhysicsEntity {
 
     // 0 clock 1 counter
     public void rotate(int direction) {
-        body.getTransform().setRotation(body.getTransform().getRotation() + (direction * 2 - 1) * 1.5708f ); // 90 em rad
-        PhysicsManager.getInstance().getWorld().step(1/60f, 1, 1);
-        System.out.println(body.getTransform().getRotation());
+        body.setTransform(body.getPosition(), body.getTransform().getRotation() + (direction * 2 - 1) * 1.5708f ); // 90 em rad
     }
 
     public void move(Vector2 pos) {

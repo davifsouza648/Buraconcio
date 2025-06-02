@@ -1,38 +1,35 @@
 package io.github.buraconcio.Objects;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 
 import io.github.buraconcio.Utils.Constants;
+import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Objects.PhysicsEntity;
+import io.github.buraconcio.Objects.Arrow;
+import io.github.buraconcio.Objects.Flag;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Ball extends PhysicsEntity {
+    Player player;
 
     private Label labelUserName;
     private Skin skinLabel;
 
-    public Ball(Vector2 pos, float r, int id, String userName) {
+    public Ball(Vector2 pos, float r, Player player) {
         super(pos, new Vector2(r, r), "ball.png");
 
         body.setType(BodyType.DynamicBody);
-        body.setLinearDamping(0.4f);
+        body.setLinearDamping(0.5f);
         body.setAngularDamping(1f);
-        body.setUserData(id);
 
         CircleShape circle = new CircleShape();
         circle.setRadius(r);
@@ -48,23 +45,22 @@ public class Ball extends PhysicsEntity {
 
         skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
 
-        labelUserName = new Label(userName, skinLabel, "labelPixelyWhite16"); //Não to conseguindo deixar essa fonte menor
+        labelUserName = new Label(player.getUsername(), skinLabel, "labelPixelyWhite16"); //Não to conseguindo deixar essa fonte menor
         labelUserName.setFontScale(1f);  //Tentei mexer aqui e não ajudou
         labelUserName.setAlignment(Align.center);
         labelUserName.pack();
+
+        this.player = player;
     }
 
-    public Boolean isStill() 
+    public Boolean isStill()
     {
-        return body.getLinearVelocity().x <= 0.3 && body.getLinearVelocity().y <= 0.3;
+        return body.getLinearVelocity().len() < Constants.STILL_TOLERANCE;
     }
 
-    public void applyImpulse(Vector2 impulse) 
+    public void applyImpulse(Vector2 impulse)
     {
-        if(isStill())
-        {
-            body.applyLinearImpulse(impulse, body.getWorldCenter(), true);
-        }
+        body.applyLinearImpulse(impulse, body.getWorldCenter(), true);
     }
 
     public Vector2 calculateImpulse(Vector2 mouse1, Vector2 mouse2) {
@@ -79,15 +75,15 @@ public class Ball extends PhysicsEntity {
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) 
+    public void draw(Batch batch, float parentAlpha)
     {
-        super.draw(batch, parentAlpha); 
+        super.draw(batch, parentAlpha);
 
-        if (labelUserName != null) 
+        if (labelUserName != null)
         {
             labelUserName.setPosition(
                 getX(),
-                getY() 
+                getY()
             );
 
             labelUserName.draw(batch, parentAlpha);
@@ -98,12 +94,32 @@ public class Ball extends PhysicsEntity {
         body.setLinearVelocity(new Vector2(0f, 0f));
 
         // body.setTransform(new Vector2(-10f, -10f), 0f);
+        setVisible(false);
     }
 
-    public Vector2 getPosition()
-    {
+    public Vector2 getPosition() {
         Vector2 pos = new Vector2(this.getX(), this.getY());
         return pos;
     }
 
+    @Override
+    public void contact(PhysicsEntity entity) {
+
+        if (entity instanceof Arrow) {
+            if (PlayerManager.getInstance().getLocalPlayer().getId() == player.getId()) // player should only die if hit on his own screen
+                player.die();
+        } else if (entity instanceof Flag) {
+            player.score();
+        }
+    }
+
+    @Override
+    public Player getPlayer() {
+        return player;
+    }
+
+    @Override
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 }

@@ -8,7 +8,10 @@ import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PhysicsManager;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Objects.Ball;
 import io.github.buraconcio.Objects.PhysicsEntity;
+
+import java.lang.Math;
 
 public class Arrow extends PhysicsEntity {
     public static final Vector2 arrowSize = new Vector2(0.8f, 0.3f);
@@ -28,8 +31,15 @@ public class Arrow extends PhysicsEntity {
         body.createFixture(fixtureDef);
         shapeDef.dispose();
 
-        body.getTransform().setRotation(angle);
-        body.setLinearVelocity(new Vector2(speed, 0).setAngleDeg(angle));
+        body.setTransform(body.getPosition(), angle);
+        body.setLinearVelocity(new Vector2((float) Math.cos(angle), (float) Math.sin(angle)).scl(speed));
+
+        act(0f); // to update sprite before rendering
+    }
+
+    @Override
+    public void contact(PhysicsEntity entity) {
+        this.destroy();
     }
 
     @Override
@@ -37,26 +47,6 @@ public class Arrow extends PhysicsEntity {
         super.act(delta);
 
         if (getX() > 100f) this.destroy();
-
-        for (Contact contact : PhysicsManager.getInstance().getContactList()) {
-            if (contact.getFixtureA().getBody().getUserData() == this
-                || contact.getFixtureB().getBody().getUserData() == this) {
-
-                Object other = contact.getFixtureA().getBody().getUserData();
-                if (other == this.toString()) other = contact.getFixtureB().getBody().getUserData();
-
-                try {
-                    Player player = PlayerManager.getInstance().getPlayer(Integer.parseInt(other.toString()));
-
-                    if (PlayerManager.getInstance().getLocalPlayer() == player) { // only kill local player
-                        Runnable task = () -> {player.die();};
-                        PhysicsManager.getInstance().schedule(task);
-                    }
-                } catch (Exception e) {}
-
-                this.destroy();
-            }
-        }
     }
 }
 

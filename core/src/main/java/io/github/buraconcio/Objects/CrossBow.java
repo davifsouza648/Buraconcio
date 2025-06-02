@@ -47,8 +47,8 @@ public class CrossBow extends Obstacle {
         float cos = (float) Math.cos(angle);
         float arrowLen = Arrow.arrowSize.x;
 
-        Vector2 arrowPos = new Vector2(getX() + getWidth()*(cos*0.5f + 0.5f) + arrowLen*cos*1.05f ,
-            getY() + getHeight()*(sin*0.5f + 0.5f) + arrowLen*sin*1.05f);
+        Vector2 arrowPos = new Vector2(getX() + getWidth()*(cos*0.5f + 0.5f) + arrowLen*cos*1.25f ,
+            getY() + getHeight()*(sin*0.5f + 0.5f) + arrowLen*sin*1.25f);
         getStage().addActor(new Arrow(arrowPos, arrowSpeed, angle));
     }
 }
