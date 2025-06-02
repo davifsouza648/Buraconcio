@@ -30,8 +30,8 @@ public class Ball extends PhysicsEntity {
         super(pos, new Vector2(r, r), "ball.png");
 
         body.setType(BodyType.DynamicBody);
-        body.setLinearDamping(.5f);
-        body.setAngularDamping(.5f);
+        body.setLinearDamping(0.4f);
+        body.setAngularDamping(1f);
         body.setUserData(id);
 
         CircleShape circle = new CircleShape();
@@ -54,8 +54,17 @@ public class Ball extends PhysicsEntity {
         labelUserName.pack();
     }
 
-    public void applyImpulse(Vector2 impulse) {
-        body.applyLinearImpulse(impulse, body.getWorldCenter(), true);
+    public Boolean isStill() 
+    {
+        return body.getLinearVelocity().x <= 0.3 && body.getLinearVelocity().y <= 0.3;
+    }
+
+    public void applyImpulse(Vector2 impulse) 
+    {
+        if(isStill())
+        {
+            body.applyLinearImpulse(impulse, body.getWorldCenter(), true);
+        }
     }
 
     public Vector2 calculateImpulse(Vector2 mouse1, Vector2 mouse2) {
@@ -96,4 +105,5 @@ public class Ball extends PhysicsEntity {
         Vector2 pos = new Vector2(this.getX(), this.getY());
         return pos;
     }
+
 }

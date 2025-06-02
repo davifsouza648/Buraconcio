@@ -180,6 +180,8 @@ public class PhysicsTest implements Screen {
         PhysicsManager.getInstance().clearScheduler();
 
         PhysicsManager.getInstance().getWorld().step(tickrate, 6, 2);
+
+        
     }
 
     @Override public void resize(int width, int height) {
