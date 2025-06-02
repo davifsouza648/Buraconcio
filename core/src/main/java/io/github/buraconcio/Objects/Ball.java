@@ -26,7 +26,7 @@ public class Ball extends PhysicsEntity {
     private Group labelGroup;
 
     public Ball(Vector2 pos, float r, Player player) {
-        super(pos, new Vector2(r, r), "ball.png");
+        super(pos, new Vector2(r, r), "ballteste.png");
 
         body.setType(BodyType.DynamicBody);
         body.setLinearDamping(0.5f);
