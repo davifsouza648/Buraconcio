@@ -131,7 +131,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                //TODO: DAVI VAI FAZER A TELA;
+                // TODO: DAVI VAI FAZER A TELA;
 
             }
         });
@@ -142,7 +142,6 @@ public class MainMenu implements Screen {
                 Gdx.app.exit();
             }
         });
-
 
         Table backgroundTable = new Table();
         backgroundTable.setFillParent(true);
@@ -172,7 +171,7 @@ public class MainMenu implements Screen {
 
     }
 
-    public void createTestButton(Table table){
+    public void createTestButton(Table table) {
 
         TextButton teste = new TextButton("TESTE A PHYSICS AQUI", skin);
         teste.setSize(150, 90);

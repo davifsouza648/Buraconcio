@@ -9,7 +9,12 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Button {
 
+
     public ImageButton createButton(String pathBase, String nomeBase) {
+        return new ImageButton(createButtonStyle(pathBase, nomeBase));
+    }
+
+    public ImageButtonStyle createButtonStyle(String pathBase, String nomeBase) {
         String skinPath = "buttons/" + pathBase + "/" + nomeBase.toLowerCase() + ".json";
         String atlasPath = "buttons/" + pathBase + "/" + nomeBase.toLowerCase() + ".atlas";
 
@@ -28,6 +33,7 @@ public class Button {
         style.down = skin.getDrawable(nomeBase + "2");
         style.over = skin.getDrawable(nomeBase + "3");
 
-        return new ImageButton(style);
+        return style;
     }
+
 }

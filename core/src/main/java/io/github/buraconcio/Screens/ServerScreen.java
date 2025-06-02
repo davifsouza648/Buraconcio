@@ -6,11 +6,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
@@ -25,44 +28,37 @@ public class ServerScreen implements Screen {
     private final Stage stage;
     private final Skin skinTextField, skinLabel;
     private Table topInfo;
+    private ImageButton startButton, backButton;
+    private ImageButtonStyle startStyle, cancelStyle;
+    private Label title;
     private Server server;
     private Client cliente;
-    private boolean flag;
-    private ImageButton startButton;
+    private boolean started = false, flagBackButton = true;
+    private boolean isHosting = PlayerManager.getInstance().getLocalPlayer().getHosting();
+
+    private Timer.Task countdownTask;
 
     public ServerScreen(Main game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
         this.skinTextField = new Skin(Gdx.files.internal("fonts/pixely/textFields/textField.json"));
         this.skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
+        Button tempButton = new Button();
+        this.startStyle = tempButton.createButtonStyle("start", "start");
+        this.cancelStyle = tempButton.createButtonStyle("cancel", "cancel");
     }
 
     @Override
     public void show() {
-        Table root = new Table();
-        root.setFillParent(true);
-        stage.addActor(root);
+        Gdx.input.setInputProcessor(stage);
 
-        root.add(createLeftColumn()).expand().fill().left().pad(75);
-        root.add(createRightColumn()).expand().fill().top().right().pad(75);
-
-        root.setDebug(false);
-
-        if (PlayerManager.getInstance().getLocalPlayer().getHosting().equals(true)) {
+        if (isHosting) {
 
             this.server = new Server();
+
             server.startTCPServer();
 
             PlayerManager.getInstance().clear();
-
-            try {
-                Thread.sleep(100);
-
-            } catch (InterruptedException e) {
-
-                e.printStackTrace();
-            }
         }
 
         // TODO: verificar se há alguma porta aberta, caso nao tenha voltar para o main
@@ -71,6 +67,7 @@ public class ServerScreen implements Screen {
         this.cliente = new Client();
         cliente.setServerListener(new Client.ServerListener() {
             @Override
+
             public void PlayerCon() {
                 Gdx.app.postRunnable(() -> refreshPlayers());
             }
@@ -80,12 +77,46 @@ public class ServerScreen implements Screen {
                 PlayerManager.getInstance().clear();
                 PlayerManager.getInstance().addPlayer(PlayerManager.getInstance().getLocalPlayer());
 
-
                 Gdx.app.postRunnable(() -> game.setScreen(new MainMenu(game)));
             }
+
+            @Override
+            public void ServerStartMatch() {
+
+                Gdx.app.postRunnable(() -> startMatch());
+
+            }
+
+            @Override
+            public void ServerCancelMatch() {
+
+                Gdx.app.postRunnable(() -> cancelMatch());
+
+            }
+
+            // @Override
+            // public void ConnectionFailed(Exception e) {
+
+            // System.err.println("Falha na conexão");
+
+            // Gdx.app.postRunnable(() -> {
+            // PlayerManager.getInstance().clear();
+            // PlayerManager.getInstance().addPlayer(PlayerManager.getInstance().getLocalPlayer());
+            // game.setScreen(new MainMenu(game));
+            // });
+            // }
         });
 
         cliente.startTCPClient();
+
+        Table root = new Table();
+        root.setFillParent(true);
+        stage.addActor(root);
+
+        root.add(createLeftColumn()).expand().fill().left().pad(75);
+        root.add(createRightColumn()).expand().fill().top().right().pad(75);
+
+        root.setDebug(false);
 
     }
 
@@ -95,7 +126,8 @@ public class ServerScreen implements Screen {
 
         Table topInfo = new Table();
         topInfo.top().left();
-        Label title = new Label("MATCH LOBBY", skinLabel, "labelPixelyWhite64");
+
+        title = new Label("MATCH LOBBY", skinLabel, "labelPixelyWhite64");
         title.setFontScale(1f);
 
         Button start = new Button();
@@ -116,34 +148,34 @@ public class ServerScreen implements Screen {
         Image mapImage = new Image(new Texture("teste.jpg"));
 
         Button back = new Button();
-        ImageButton backButton = back.createButton("back", "back");
+        backButton = back.createButton("back", "back");
 
         bottomInfo.add(mapImage).left().size(600, 400).padBottom(10);
         bottomInfo.row();
         bottomInfo.add(backButton).left().padBottom(10).size(64, 64);
 
         startButton.addListener(new ClickListener() {
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
                 System.out.println("Start Match pressionado!");
 
-                if (PlayerManager.getInstance().getLocalPlayer().getHosting()) {
-
-                    if (server != null) {
-                        // TODO: timer + troca de botao;
-
-                        server.stopAccepting(); // TODO: verificar se stopAccepting esta funfando
-                    }
-
+                if (isHosting) {
+                    server.changeButton(false);
                 }
             }
         });
+
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                if (PlayerManager.getInstance().getLocalPlayer().getHosting()) {
+                if(!flagBackButton){
+                    return;
+                }
+
+                if (isHosting) {
 
                     if (server != null) {
                         server.stop();
@@ -177,6 +209,10 @@ public class ServerScreen implements Screen {
             }
         });
 
+        if (!isHosting) {
+            startButton.clearListeners();
+        }
+
         mapButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -200,8 +236,8 @@ public class ServerScreen implements Screen {
         Table rightColumn = new Table();
         rightColumn.setFillParent(false);
         rightColumn.top().right().pad(40);
-        Label playersLabel = new Label("1 Player(s) (4 Max)", skinLabel, "labelPixelyWhite32"); // receber N de algum
-                                                                                                // lugar
+        Label playersLabel = new Label("1 Player(s) (4 Max)", skinLabel, "labelPixelyWhite32");
+
         // playersLabel.setFontScale(0.7f);
 
         topInfo = new Table();
@@ -283,6 +319,85 @@ public class ServerScreen implements Screen {
             topInfo.add(createPlayerRow(p.getUsername(), "user-icons/" + p.getAvatar())).left().padBottom(5);
             topInfo.row();
         }
+    }
+
+    public void startMatch() {
+        if (!started) {
+
+            startButton.setStyle(cancelStyle);
+
+            if (isHosting) {
+                startButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        cancelMatch();
+                        server.changeButton(true);
+                    }
+                });
+            }
+
+            started = true;
+
+            startCountdown();
+        }
+    }
+
+    private void cancelMatch() {
+
+        startButton.setStyle(startStyle);
+        flagBackButton = true;
+
+        if (isHosting) {
+            startButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (isHosting) {
+                        server.changeButton(false);
+                    }
+                }
+            });
+        }
+
+        started = false;
+
+        if (countdownTask != null) {
+            countdownTask.cancel();
+            countdownTask = null;
+        }
+
+        title.setText("MATCH LOBBY");
+        title.invalidate();
+    }
+
+    private void startCountdown() {
+        final int[] count = { 10 };
+
+        countdownTask = new Timer.Task() {
+            @Override
+            public void run() {
+                if (count[0] > 0) {
+                    title.setText("MATCH LOBBY - INICIANDO EM " + count[0] + "...");
+                    title.invalidate();
+                    count[0]--;
+
+                    flagBackButton = false;
+
+                } else {
+
+                    if (isHosting) {
+                        server.stopAccepting();
+                    }
+
+                    title.setText("MATCH LOBBY - GO!");
+                    title.invalidate();
+                    this.cancel();
+
+                    game.setScreen(new MainMenu(game)); // TODO: LEMBRAR DA TELA DE GAME AQUI
+                }
+            }
+        };
+
+        Timer.schedule(countdownTask, 0, 1);
     }
 
     @Override

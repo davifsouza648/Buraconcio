@@ -33,6 +33,8 @@ public class Client {
         try {
             socket = new Socket(Constants.IP, Constants.PORT);
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            out.flush();
+
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
             String serverMsg = (String) in.readObject();
@@ -47,12 +49,20 @@ public class Client {
 
         } catch (IOException | ClassNotFoundException e) {
 
-            if (e.getMessage().equals("Socket closed")) {
+            // if (listener != null) {
+            //     listener.ConnectionFailed(e); // avisa listener
+            // }
+
+            if ("Socket closed".equals(e.getMessage())) {
 
                 System.err.println("connection successfully closed");
 
             } else {
+
                 e.printStackTrace();
+
+                System.out.println("AAAAAAAAAAAAAAAAAAA");
+
             }
         }
     }
@@ -97,6 +107,17 @@ public class Client {
                     }
 
                     svScreen = false;
+
+                }else if(msg.equals("tocancel")){
+
+                    if(listener !=null){
+                        listener.ServerStartMatch();
+                    }
+
+                }else if(msg.equals("tostart")){
+                    if(listener !=null){
+                        listener.ServerCancelMatch();
+                    }
                 }
             }
         }
@@ -106,6 +127,10 @@ public class Client {
         void PlayerCon();
 
         void ServerDisconnected();
+
+        void ServerStartMatch();
+
+        void ServerCancelMatch();
     }
 
     public void setServerListener(ServerListener listener) {

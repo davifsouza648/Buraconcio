@@ -8,8 +8,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.github.buraconcio.Utils.Constants;
 
-import java.util.ArrayList;
-
 public class Server {
 
     private ServerSocket serverSocket;
@@ -56,7 +54,7 @@ public class Server {
 
             // System.out.println("socket TCP fail");
 
-            if (e.getMessage().equals("Socket closed")) {
+            if ("Socket closed".equals(e.getMessage())) {
 
                 System.err.println("connection successfully closed");
 
@@ -80,6 +78,16 @@ public class Server {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void changeButton(boolean x) {
+
+        String str = x ? "tostart" : "tocancel";
+
+        for (ClientHandler client : clients) {
+            client.broadcastString(str);
+        }
+
     }
 
 }

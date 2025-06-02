@@ -22,6 +22,7 @@ public class ClientHandler implements Runnable {
     public ClientHandler(Socket socket, boolean flagAccept, List<ClientHandler> clients) throws IOException {
         this.socket = socket;
         this.out = new ObjectOutputStream(socket.getOutputStream());
+        out.flush();
         this.in = new ObjectInputStream(socket.getInputStream());
         this.flagAccept = flagAccept;
         this.clients = clients;
@@ -34,8 +35,10 @@ public class ClientHandler implements Runnable {
             out.flush();
 
             while (!socket.isClosed() && flagAccept) {
+
                 receivePlayer(in);
                 // sendPlayers(out);
+
                 Thread.sleep(100);
             }
 
@@ -55,7 +58,9 @@ public class ClientHandler implements Runnable {
             e.printStackTrace();
 
         } finally {
+
             cleanup();
+
         }
     }
 
@@ -75,10 +80,10 @@ public class ClientHandler implements Runnable {
     }
 
     // private void sendPlayers(ObjectOutputStream out) throws IOException {
-    //     List<Player> players = PlayerManager.getInstance().getAllPlayers();
-    //     out.writeObject(players);
-    //     out.flush();
-    //     System.out.println("Lista de jogadores enviada.");
+    // List<Player> players = PlayerManager.getInstance().getAllPlayers();
+    // out.writeObject(players);
+    // out.flush();
+    // System.out.println("Lista de jogadores enviada.");
     // }
 
     public void broadcastPlayerList() {
@@ -88,19 +93,19 @@ public class ClientHandler implements Runnable {
                 client.out.flush();
             } catch (IOException e) {
 
-                System.out.println("Erro ao enviar lista para cliente: " ); /*+ e.getMessage()*/
+                System.out.println("Erro ao enviar lista para cliente: "); /* + e.getMessage() */
 
             }
         }
     }
 
-    public void broadcastString(String x){
+    public void broadcastString(String x) {
 
-        for(ClientHandler client : clients){
-            try{
-                client.out.writeObject("get out");
+        for (ClientHandler client : clients) {
+            try {
+                client.out.writeObject(x);
                 client.out.flush();
-            }catch(IOException e){
+            } catch (IOException e) {
                 System.out.println("Erro ao enviar msg de disconnect");
             }
         }
