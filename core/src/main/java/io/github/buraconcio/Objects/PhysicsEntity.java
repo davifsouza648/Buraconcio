@@ -75,14 +75,6 @@ public class PhysicsEntity extends Actor {
         this.setRotation(body.getAngle() * 180f/3.14f);
     }
 
-    public Player getPlayer() throws Exception {
-        throw new Exception("Error: only ball should implement this method."); // meio choggles
-    }
-
-    public void setPlayer(Player player) throws Exception {
-        throw new Exception("Error: only ball should implement this method."); // meio choggles
-    }
-
     public Body getBody() {
         return body;
     }

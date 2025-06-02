@@ -113,14 +113,4 @@ public class Ball extends PhysicsEntity {
             player.score();
         }
     }
-
-    @Override
-    public Player getPlayer() {
-        return player;
-    }
-
-    @Override
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
 }
