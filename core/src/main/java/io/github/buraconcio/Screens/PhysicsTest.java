@@ -25,11 +25,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.*;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 import java.util.ArrayList;
 import java.lang.Runnable;
 
 public class PhysicsTest implements Screen {
+
+
 
     private Main game;
     private Stage stage;
@@ -45,18 +52,29 @@ public class PhysicsTest implements Screen {
     Player p;
     private Ball pBall;
 
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer mapRenderer;
+    float scale = 1/16f;
+
     //server test
     private Client client;
 
     public PhysicsTest(Main game) {
         this.game = game;
 
+        map = new TmxMapLoader().load("maps/mapa1/teste.tmx");
+        mapRenderer = new OrthogonalTiledMapRenderer(map, scale);
+
         debugRenderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera(23, 13);
+
+        
 
         stage = new Stage(new FitViewport(23, 13));
         stage.getViewport().setCamera(camera);
         Gdx.input.setInputProcessor(stage);
+
+
 
         PhysicsManager.getInstance().setStage(stage);
 
@@ -141,6 +159,8 @@ public class PhysicsTest implements Screen {
             camera.position.set(ballPos.x, ballPos.y, 0);
             camera.update();
         }
+        mapRenderer.setView(camera);
+        mapRenderer.render();
 
         stage.act(delta);
         stage.draw();

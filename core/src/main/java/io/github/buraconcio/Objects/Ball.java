@@ -93,6 +93,8 @@ public class Ball extends PhysicsEntity {
     public void enterHole() {
         body.setLinearVelocity(new Vector2(0f, 0f));
         body.setAwake(false);
+        
+        labelGroup.setVisible(false);
 
         // body.setTransform(new Vector2(-10f, -10f), 0f);
         setVisible(false);

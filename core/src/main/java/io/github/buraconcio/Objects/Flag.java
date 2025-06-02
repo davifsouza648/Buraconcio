@@ -15,7 +15,7 @@ import io.github.buraconcio.Objects.PhysicsEntity;
 public class Flag extends PhysicsEntity {
 
     public Flag(Vector2 pos, float r) {
-        super(pos, new Vector2(r, r), "flag.png");
+        super(pos, new Vector2(r, r), "hole.png");
 
         CircleShape circle = new CircleShape();
         circle.setRadius(r*Constants.FLAG_LENIENCY);
