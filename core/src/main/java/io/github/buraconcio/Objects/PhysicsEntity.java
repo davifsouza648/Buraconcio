@@ -26,12 +26,16 @@ public class PhysicsEntity extends Actor {
         setPosition(pos.x, pos.y);
         setOrigin(Align.center);
 
-        Texture texture = new Texture(Gdx.files.internal(texturePath));
-        sprite = new Sprite(texture);
-        sprite.setSize(2*size.x, 2*size.x*(sprite.getHeight()/sprite.getWidth()));
-        sprite.setOriginCenter();
+        setSize(size.x, size.y);
 
-        setSize(sprite.getWidth(), sprite.getHeight());
+        if(texturePath != null)
+        {
+            Texture texture = new Texture(Gdx.files.internal(texturePath));
+            sprite = new Sprite(texture);
+            sprite.setSize(2*size.x, 2*size.x*(sprite.getHeight()/sprite.getWidth()));
+            sprite.setOriginCenter();
+            setSize(sprite.getWidth(), sprite.getHeight());
+        }
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(pos.x, pos.y);
@@ -62,6 +66,9 @@ public class PhysicsEntity extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        if (sprite == null)
+            return;
+            
         sprite.setRotation(getRotation());
         sprite.setPosition(getX(), getY());
         sprite.draw(batch, parentAlpha);
