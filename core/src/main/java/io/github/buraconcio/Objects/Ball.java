@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -90,28 +92,75 @@ public class Ball extends PhysicsEntity {
     @Override
     public void draw(Batch batch, float parentAlpha)
     {
-        super.draw(batch, parentAlpha);
-
         labelGroup.setPosition(
             getX() - labelGroup.getWidth()/2,
             getY() + getHeight() + 0.5f
         );
 
-        batch.end(); // bem choggles por enquanto
-        shapeRenderer.setProjectionMatrix(PhysicsManager.getInstance().getStage().getCamera().combined);
+        if (mouseMovement.len() > 0.01f) {
+            final float segmentLength = 1f;
 
-        shapeRenderer.begin(ShapeType.Line);
-        shapeRenderer.setColor(0, 0, 1, 1);
+            Texture texture = new Texture(Gdx.files.internal("shootingGuideEnd.png"));
+            Sprite endSprite = new Sprite(texture);
+            endSprite.setSize(segmentLength, segmentLength);
+            endSprite.setOriginCenter();
 
-        Vector2 center = new Vector2(getX() + getWidth()/2, getY() + getHeight()/2);
-        shapeRenderer.line(center.x, center.y, center.x - mouseMovement.x, center.y - mouseMovement.y);
+            // prioritize positioning end sprite center at end of line seg
+            Vector2 center = new Vector2(getX() + getWidth()/2, getY() + getHeight()/2);
 
-        shapeRenderer.setColor(1, 0, 0, 1);
-        Vector2 impulse = calculateImpulse(new Vector2(0f, 0f), mouseMovement).scl(0.1f);
-        shapeRenderer.line(center.x, center.y, center.x - impulse.x, center.y - impulse.y);
+            endSprite.setPosition(center.x - mouseMovement.x - endSprite.getWidth()/2, center.y - mouseMovement.y - endSprite.getHeight()/2);
+            endSprite.setRotation(mouseMovement.angleDeg());
+            endSprite.draw(batch);
 
-        shapeRenderer.end();
-        batch.begin();
+            // prioritize positioning tip to represent actual impulse
+            Vector2 impulse = calculateImpulse(new Vector2(0f, 0f), mouseMovement).scl(0.1f);
+
+            texture = new Texture(Gdx.files.internal("shootingGuideTip.png"));
+            Sprite tipSprite = new Sprite(texture);
+            tipSprite.setSize(segmentLength, segmentLength);
+            tipSprite.setOriginCenter();
+
+            tipSprite.setPosition(center.x - impulse.x - tipSprite.getWidth()/2, center.y - impulse.y - tipSprite.getHeight()/2);
+            tipSprite.setRotation(mouseMovement.angleDeg());
+            tipSprite.draw(batch);
+
+            texture = new Texture(Gdx.files.internal("shootingGuideSegment.png"));
+            Sprite segmentSprite = new Sprite(texture);
+
+            Vector2 seg = new Vector2(tipSprite.getX() - endSprite.getX(), tipSprite.getY() - endSprite.getY());
+            segmentSprite.setSize(seg.len(), segmentLength);
+            segmentSprite.setOriginCenter();
+            segmentSprite.setRotation(mouseMovement.angleDeg());
+
+
+            Vector2 pos = new Vector2(endSprite.getX() + endSprite.getWidth()/2, endSprite.getY() + endSprite.getHeight()/2);
+            pos.add(seg.scl(0.5f));
+            pos.sub(new Vector2(segmentSprite.getWidth()*0.5f, segmentSprite.getHeight()*0.5f));
+            segmentSprite.setPosition(pos.x, pos.y);
+            segmentSprite.draw(batch);
+/*
+            segmentSprite.setSize(segmentLength/2, segmentLength);
+            segmentSprite.setOriginCenter();
+            segmentSprite.setRotation(mouseMovement.angleDeg() + 180);
+
+            Vector2 step = new Vector2(mouseMovement).nor().scl(segmentLength/2);
+
+            Vector2 pos = new Vector2(endSprite.getX(), endSprite.getY()).add(step).add(step);
+
+            while ((pos.x) * Math.signum(step.x) < tipSprite.getX() * Math.signum(step.x)) {
+                segmentSprite.setPosition(pos.x, pos.y);
+
+                segmentSprite.draw(batch);
+
+                pos.add(step);
+            }*/
+
+            //segmentSprite.setPosition(tipSprite.getX() - step.x/2, tipSprite.getY() - step.y/2);
+            //segmentSprite.draw(batch);
+
+        }
+
+        super.draw(batch, parentAlpha);
     }
 
     public void enterHole() {
@@ -142,7 +191,9 @@ public class Ball extends PhysicsEntity {
     }
 
     public void setShootingGuide(Vector2 mouse1, Vector2 mouse2) {
-        mouseMovement = mouse1.sub(mouse2);
+        //mouseMovement = mouse1.sub(mouse2);
+        mouseMovement.x = mouse1.x - mouse2.x;
+        mouseMovement.y = mouse1.y - mouse2.y;
     }
 
     public void resetShootingGuide() {

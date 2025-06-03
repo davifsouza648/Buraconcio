@@ -53,6 +53,8 @@ public class PhysicsManager {
         while (it.hasNext()) {
             Contact contact = it.next();
 
+            try {
+
             PhysicsEntity entityA = getEntity(contact.getFixtureA().getBody().getUserData());
             PhysicsEntity entityB = getEntity(contact.getFixtureB().getBody().getUserData());
 
@@ -63,6 +65,8 @@ public class PhysicsManager {
             if (dA || dB) { // nao iria rodar as duas colisoes se funcoes tivessem dentro do if :(
                 it.remove();
             }
+
+            } catch (Exception e) {}
         }
 
         world.step(tickrate, 6, 2);

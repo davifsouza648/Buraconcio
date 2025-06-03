@@ -104,11 +104,12 @@ public class PhysicsTest implements Screen {
         // wallBox2.dispose();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
-            private Vector2 mouse1;
+            private Vector2 mouse1 = new Vector2();
 
             @Override
             public boolean touchDown(int x, int y, int pointer, int button) {
-                mouse1 = new Vector2(x, y);
+                mouse1.x = x;
+                mouse1.y = y;
 
                 return true;
             }
