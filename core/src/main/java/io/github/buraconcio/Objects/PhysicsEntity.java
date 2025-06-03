@@ -46,6 +46,8 @@ public class PhysicsEntity extends Actor {
 
         PhysicsManager.getInstance().addEntity(this);
         PhysicsManager.getInstance().addToStage(this);
+
+        setVisible(true);
     }
 
     public void destroy() {

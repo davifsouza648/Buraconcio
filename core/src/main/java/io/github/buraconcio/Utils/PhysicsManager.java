@@ -120,7 +120,6 @@ public class PhysicsManager {
             PhysicsEntity exentityB = getEntity(existingContact.getFixtureB().getBody().getUserData());
 
             if (entityA.getId() == exentityA.getId() && entityB.getId() == exentityB.getId()) {
-                System.out.println("found duplicate");
                 duplicate = true;
                 break;
             }

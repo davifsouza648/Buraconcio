@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -24,6 +26,9 @@ public class Ball extends PhysicsEntity {
     private Player player;
 
     private Group labelGroup;
+    private ShapeRenderer shapeRenderer;
+
+    private Vector2 mouseMovement;
 
     public Ball(Vector2 pos, float r, Player player) {
         super(pos, new Vector2(r, r), "ballteste.png");
@@ -56,6 +61,9 @@ public class Ball extends PhysicsEntity {
         PhysicsManager.getInstance().addToStage(labelGroup);
 
         this.player = player;
+
+        shapeRenderer = new ShapeRenderer();
+        mouseMovement = new Vector2(0, 0);
     }
 
     public boolean isStill()
@@ -88,6 +96,22 @@ public class Ball extends PhysicsEntity {
             getX() - labelGroup.getWidth()/2,
             getY() + getHeight() + 0.5f
         );
+
+        batch.end(); // bem choggles por enquanto
+        shapeRenderer.setProjectionMatrix(PhysicsManager.getInstance().getStage().getCamera().combined);
+
+        shapeRenderer.begin(ShapeType.Line);
+        shapeRenderer.setColor(0, 0, 1, 1);
+
+        Vector2 center = new Vector2(getX() + getWidth()/2, getY() + getHeight()/2);
+        shapeRenderer.line(center.x, center.y, center.x - mouseMovement.x, center.y - mouseMovement.y);
+
+        shapeRenderer.setColor(1, 0, 0, 1);
+        Vector2 impulse = calculateImpulse(new Vector2(0f, 0f), mouseMovement).scl(0.1f);
+        shapeRenderer.line(center.x, center.y, center.x - impulse.x, center.y - impulse.y);
+
+        shapeRenderer.end();
+        batch.begin();
     }
 
     public void enterHole() {
@@ -115,5 +139,13 @@ public class Ball extends PhysicsEntity {
         }
 
         return true;
+    }
+
+    public void setShootingGuide(Vector2 mouse1, Vector2 mouse2) {
+        mouseMovement = mouse1.sub(mouse2);
+    }
+
+    public void resetShootingGuide() {
+        mouseMovement.x = mouseMovement.y = 0;
     }
 }

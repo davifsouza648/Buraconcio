@@ -108,19 +108,32 @@ public class PhysicsTest implements Screen {
 
             @Override
             public boolean touchDown(int x, int y, int pointer, int button) {
-                Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
-                mouse1 = new Vector2(unprojected.x, unprojected.y);
+                mouse1 = new Vector2(x, y);
 
                 return true;
             }
 
             @Override
             public boolean touchUp(int x, int y, int pointer, int button) {
-                Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
+                Vector3 unprojected = camera.unproject(new Vector3(mouse1.x, mouse1.y, 0));
+                mouse1 = new Vector2(unprojected.x, unprojected.y);
+
+                unprojected = camera.unproject(new Vector3(x, y, 0));
                 Vector2 mouse2 = new Vector2(unprojected.x, unprojected.y);
 
                 Runnable task = () -> {p.stroke(mouse1, mouse2);};
                 PhysicsManager.getInstance().schedule(task);
+                pBall.resetShootingGuide();
+
+                return true;
+            }
+
+            public boolean touchDragged(int x, int y, int pointer) {
+                Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
+                Vector2 currentMouse = new Vector2(unprojected.x, unprojected.y);
+
+                unprojected = camera.unproject(new Vector3(mouse1.x, mouse1.y, 0));
+                pBall.setShootingGuide(new Vector2(unprojected.x, unprojected.y), new Vector2(currentMouse));
 
                 return true;
             }
