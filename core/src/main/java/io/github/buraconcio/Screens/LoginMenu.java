@@ -14,6 +14,13 @@ import io.github.buraconcio.Utils.PlayerManager;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import java.util.*;
 import java.util.List;
+
+import de.tomgrill.gdxdialogs.core.GDXDialogs;
+import de.tomgrill.gdxdialogs.core.GDXDialogsSystem;
+import de.tomgrill.gdxdialogs.core.dialogs.*;
+import de.tomgrill.gdxdialogs.core.listener.ButtonClickListener;
+
+
 public class LoginMenu implements Screen {
 
     private Main game;
@@ -26,11 +33,14 @@ public class LoginMenu implements Screen {
 
     // String[] avatarVec = {"user1.png", "user2.png", "user3.png", "user3.png", "user4.png", "user5.png", "user6.png", "user7.png", "user8.png", "user9.png", "user10.png"};
 
+    private GDXDialogs dialogs;
+
     public LoginMenu(Main game) {
         this.game = game;
 
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+        dialogs = GDXDialogsSystem.install();
 
         skinTextField = new Skin(Gdx.files.internal("fonts/pixely/textFields/textField.json"));
         skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
@@ -53,21 +63,22 @@ public class LoginMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 username = userField.getText();
 
-                //verificar melhor momento paa criar o id do player
+                if(isUsernameValid(username))
+                {
+                    Player player = new Player(username);
 
-                Player player = new Player(username);
-
-                Random random = new Random();
-
-                player.setId(username.hashCode() + random.nextInt(25));
-
-                player.setAvatar(random.nextInt(1, 32));
-
-                PlayerManager.getInstance().setLocalPlayer(player);
-
-                System.out.println("Usuario: " + player.getUsername());
-
-                game.setScreen(new MainMenu(game));
+                    Random random = new Random();
+    
+                    player.setId(username.hashCode() + random.nextInt(25));
+    
+                    player.setAvatar(random.nextInt(1, 32));
+    
+                    PlayerManager.getInstance().setLocalPlayer(player);
+    
+                    System.out.println("Usuario: " + player.getUsername());
+    
+                    game.setScreen(new MainMenu(game));
+                }
 
             }
         });
@@ -77,6 +88,43 @@ public class LoginMenu implements Screen {
         // table.add(passField).width(200).pad(10);
         // table.row();
         table.add(loginButton).size(200, 80).colspan(2).padTop(10);
+    }
+    
+    private boolean isUsernameValid(String username)
+    {
+        boolean valid = true;
+        if(username.length() == 0)
+        {
+            showErrorMessage("Nome inválido", "Motivo: Nome nulo");
+            valid = false;
+        }
+
+        if(username.length() > 10)
+        {
+            showErrorMessage("Nome inválido", "Motivo: Nome muito grande.");
+            valid = false;
+        }
+
+        return valid;
+    }
+
+    private void showErrorMessage(String title, String text)
+    {
+        GDXButtonDialog bDialog = dialogs.newDialog(GDXButtonDialog.class);
+        bDialog.setTitle(title);
+        bDialog.setMessage(text);
+
+        bDialog.setClickListener(new ButtonClickListener() 
+        {
+            @Override
+            public void click(int button) {
+                bDialog.dismiss();
+            }
+        });
+
+        bDialog.addButton("Ok");
+
+        bDialog.build().show();
     }
 
     @Override
