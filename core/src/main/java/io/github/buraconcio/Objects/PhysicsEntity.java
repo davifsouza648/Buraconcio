@@ -14,6 +14,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PhysicsManager;
 
+import java.lang.Runnable;
+
 public class PhysicsEntity extends Actor {
 
     protected Sprite sprite;
@@ -47,8 +49,16 @@ public class PhysicsEntity extends Actor {
     }
 
     public void destroy() {
-        PhysicsManager.getInstance().getWorld().destroyBody(body);
+        Runnable task = () -> {
+            PhysicsManager.getInstance().destroyBody(body);
+            remove();
+        };
+        PhysicsManager.getInstance().schedule(task);
+
+        /*
+        PhysicsManager.getInstance().destroyBody(body);
         remove();
+        */
     }
 
     public void setId(int id) {
@@ -60,15 +70,16 @@ public class PhysicsEntity extends Actor {
         return id;
     }
 
-    public void contact(PhysicsEntity entity) {
-
+    // return true if contact should be removed on collission
+    public boolean contact(PhysicsEntity entity) {
+        return false;
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (sprite == null)
             return;
-            
+
         sprite.setRotation(getRotation());
         sprite.setPosition(getX(), getY());
         sprite.draw(batch, parentAlpha);

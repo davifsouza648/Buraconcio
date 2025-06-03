@@ -69,7 +69,7 @@ public class PhysicsTest implements Screen {
         debugRenderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera(23, 13);
 
-        
+
 
         stage = new Stage(new FitViewport(23, 13));
         stage.getViewport().setCamera(camera);
@@ -88,7 +88,7 @@ public class PhysicsTest implements Screen {
 
         testFlag = new Flag(new Vector2(20f, 3f));
 
-        testObstacle = new CrossBow(new Vector2(10f, 2f), new Vector2(1.5f, 1.5f));
+        testObstacle = new CrossBow(new Vector2(10.5f, 2f), new Vector2(1.5f, 1.5f));
         testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
 
         // PhysicsEntity wall1 = new PhysicsEntity(new Vector2(stage.getWidth()/2, stage.getHeight()), new Vector2(2f, 2f), "crossBow.png");
@@ -129,7 +129,7 @@ public class PhysicsTest implements Screen {
         PhysicsManager.getInstance().getWorld().setContactListener(new ContactListener() {
             @Override
             public void endContact(Contact contact) {
-                PhysicsManager.getInstance().removeContact(contact);
+                //PhysicsManager.getInstance().removeContact(contact);
             }
 
             @Override
@@ -145,20 +145,20 @@ public class PhysicsTest implements Screen {
 
         });
 
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("Tile Layer 1");
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("Tile Layer");
 
         float tileSize = 32 * scale; // 32px em metros
 
-        for (int x = 0; x < layer.getWidth(); x++) 
+        for (int x = 0; x < layer.getWidth(); x++)
         {
-            for (int y = 0; y < layer.getHeight(); y++) 
+            for (int y = 0; y < layer.getHeight(); y++)
             {
                 TiledMapTileLayer.Cell cell = layer.getCell(x, y);
-                if (cell != null && cell.getTile() != null) 
+                if (cell != null && cell.getTile() != null)
                 {
                     int tileId = cell.getTile().getId();
 
-                    if (tileId == 3) 
+                    if (tileId == 3)
                     {
                         PhysicsEntity wall1 = new PhysicsEntity(new Vector2((x + 0.5f) * tileSize, (y + 0.5f) * tileSize), new Vector2(tileSize / 2, tileSize / 2), null);
                         PolygonShape wallBox = new PolygonShape();

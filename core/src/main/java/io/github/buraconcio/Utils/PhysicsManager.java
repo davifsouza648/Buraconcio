@@ -3,9 +3,11 @@ package io.github.buraconcio.Utils;
 import java.util.ArrayList;
 import java.lang.Runnable;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -41,25 +43,26 @@ public class PhysicsManager {
         return instance;
     }
 
-    public void tick() {
-        box2dScheduler.forEach(task -> task.run());
+    public synchronized void tick() {
+        ArrayList<Runnable> copy = new ArrayList<>(box2dScheduler);
+        copy.forEach(Runnable::run);
         clearScheduler();
 
         // collisions
-        for (Contact contact : contactList) {
+        Iterator<Contact> it = contactList.iterator();
+        while (it.hasNext()) {
+            Contact contact = it.next();
 
-            try
-            {
-                PhysicsEntity entityA = getEntity(contact.getFixtureA().getBody().getUserData());
-                PhysicsEntity entityB = getEntity(contact.getFixtureB().getBody().getUserData());
+            PhysicsEntity entityA = getEntity(contact.getFixtureA().getBody().getUserData());
+            PhysicsEntity entityB = getEntity(contact.getFixtureB().getBody().getUserData());
 
-                entityA.contact(entityB);
-                entityB.contact(entityA);
-            }catch(Exception e){}
-
-
-
+            // return true if contact should be removed
             // be carefull not to run same collision logic on both objects
+            boolean dA = entityA.contact(entityB);
+            boolean dB = entityB.contact(entityA);
+            if (dA || dB) { // nao iria rodar as duas colisoes se funcoes tivessem dentro do if :(
+                it.remove();
+            }
         }
 
         world.step(tickrate, 6, 2);
@@ -95,11 +98,18 @@ public class PhysicsManager {
         this.world = world;
     }
 
+    public void destroyBody(Body body) {
+        //Runnable task = () -> {world.destroyBody(body);};
+        //schedule(task);
+        world.destroyBody(body);
+    }
+
     public ArrayList<Contact> getContactList() {
         return contactList;
     }
 
     public void addContact(Contact contact) {
+        Runnable task = () -> {
         boolean duplicate = false;
 
         for (Contact existingContact : contactList) {
@@ -110,33 +120,43 @@ public class PhysicsManager {
             PhysicsEntity exentityB = getEntity(existingContact.getFixtureB().getBody().getUserData());
 
             if (entityA.getId() == exentityA.getId() && entityB.getId() == exentityB.getId()) {
+                System.out.println("found duplicate");
                 duplicate = true;
                 break;
             }
         }
 
         if (!duplicate) {
-            Runnable task = () -> {contactList.add(contact);};
-            schedule(task);
+            contactList.add(contact);
         }
+        };
+
+        schedule(task);
     }
 
     public void removeContact(Contact contact) {
-        for (int i = 0; i < contactList.size(); ++i) {
-            PhysicsEntity entityA = getEntity(contact.getFixtureA().getBody().getUserData());
-            PhysicsEntity entityB = getEntity(contact.getFixtureB().getBody().getUserData());
 
-            PhysicsEntity exentityA = getEntity(contactList.get(i).getFixtureA().getBody().getUserData());
-            PhysicsEntity exentityB = getEntity(contactList.get(i).getFixtureB().getBody().getUserData());
+        Runnable task = () -> {
+
+        Iterator<Contact> it = contactList.iterator();
+        while(it.hasNext()) {
+            Contact exContact = it.next();
+
+            PhysicsEntity entityA, entityB, exentityA, exentityB;
+            entityA = getEntity(contact.getFixtureA().getBody().getUserData());
+            entityB = getEntity(contact.getFixtureB().getBody().getUserData());
+
+            exentityA = getEntity(exContact.getFixtureA().getBody().getUserData());
+            exentityB = getEntity(exContact.getFixtureB().getBody().getUserData());
 
             if (entityA.getId() == exentityA.getId() && entityB.getId() == exentityB.getId()) {
-                final int index = i;
-
-                Runnable task = () -> {contactList.remove(index);};
-                schedule(task);
+                it.remove();
                 break;
             }
         }
+        };
+
+        schedule(task);
     }
 
     public void resetContactList() {

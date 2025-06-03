@@ -38,15 +38,20 @@ public class Arrow extends PhysicsEntity {
     }
 
     @Override
-    public void contact(PhysicsEntity entity) {
+    public boolean contact(PhysicsEntity entity) {
         this.destroy();
+
+        return true;
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
 
-        if (getX() > 100f) this.destroy();
+        if (getX() > 200f) this.destroy();
+        if (getX() < -200f) this.destroy();
+        if (getY() > 200f) this.destroy();
+        if (getY() < -200f) this.destroy();
     }
 }
 

@@ -106,13 +106,14 @@ public class Ball extends PhysicsEntity {
     }
 
     @Override
-    public void contact(PhysicsEntity entity) {
-
+    public boolean contact(PhysicsEntity entity) {
         if (entity instanceof Arrow) {
             if (PlayerManager.getInstance().getLocalPlayer().getId() == player.getId()) // player should only die if hit on his own screen
                 player.die();
         } else if (entity instanceof Flag) {
             player.score();
         }
+
+        return true;
     }
 }
