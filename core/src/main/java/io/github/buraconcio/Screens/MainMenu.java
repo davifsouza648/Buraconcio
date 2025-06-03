@@ -112,9 +112,9 @@ public class MainMenu implements Screen {
 
                 // game.setScreen(new PhysicsTest(game));
 
-                // game.setScreen(new LoadingScreen(game)); // arrumar loading screen
+                game.setScreen(new LoadingScreen(game)); // arrumar loading screen
 
-                game.setScreen(new ServerScreen(game));
+                // game.setScreen(new ServerScreen(game));
 
             }
         });

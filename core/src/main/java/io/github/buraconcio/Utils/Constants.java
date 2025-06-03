@@ -12,6 +12,14 @@ public class Constants {
 
     //usar no server e client
     public static final int PORT = 5050;
-    public static final String IP = "localhost";
+    public static String IP = "localhost";
+
+    public static String getIP() {
+        return IP;
+    }
+
+    public static void setIP(String newIP) {
+        IP = newIP;
+    }
 
 }

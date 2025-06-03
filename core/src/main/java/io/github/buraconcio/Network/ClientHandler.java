@@ -1,5 +1,6 @@
 package io.github.buraconcio.Network;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -53,9 +54,15 @@ public class ClientHandler implements Runnable {
                 Thread.sleep(1000);
             }
 
+        } catch (EOFException eof) {
+            //evitar exception ao desconectar
         } catch (IOException | ClassNotFoundException | InterruptedException e) {
 
-            e.printStackTrace();
+            if (e instanceof java.net.SocketException && e.getMessage().equals("Connection reset")) {
+                System.out.println("Cliente desconectou abruptamente.");
+            } else {
+                e.printStackTrace();
+            }
 
         } finally {
 
@@ -65,7 +72,9 @@ public class ClientHandler implements Runnable {
     }
 
     private void receivePlayer(ObjectInputStream in) throws IOException, ClassNotFoundException {
+
         Object obj = in.readObject();
+
         if (obj instanceof Player) {
             Player newPlayer = (Player) obj;
             this.currentPlayer = newPlayer;

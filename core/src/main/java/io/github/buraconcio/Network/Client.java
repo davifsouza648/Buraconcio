@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
@@ -31,7 +32,10 @@ public class Client {
 
     public void connect() {
         try {
-            socket = new Socket(Constants.IP, Constants.PORT);
+
+            socket = new Socket();
+            socket.connect(new InetSocketAddress(Constants.IP, Constants.PORT), 5000);
+
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             out.flush();
 
@@ -49,9 +53,9 @@ public class Client {
 
         } catch (IOException | ClassNotFoundException e) {
 
-            // if (listener != null) {
-            //     listener.ConnectionFailed(e); // avisa listener
-            // }
+            if (listener != null) {
+                listener.ServerDisconnected();
+            }
 
             if ("Socket closed".equals(e.getMessage())) {
 
@@ -59,7 +63,7 @@ public class Client {
 
             } else {
 
-                e.printStackTrace();
+                // e.printStackTrace();
 
                 System.out.println("AAAAAAAAAAAAAAAAAAA");
 

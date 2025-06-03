@@ -21,6 +21,7 @@ import io.github.buraconcio.Network.Server;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Button;
 import io.github.buraconcio.Utils.Auxiliaries;
+import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.PlayerManager;
 
 public class ServerScreen implements Screen {
@@ -31,12 +32,12 @@ public class ServerScreen implements Screen {
     private ImageButton startButton, backButton;
     private ImageButtonStyle startStyle, cancelStyle;
     private Label title;
-    private Server server;
-    private Client cliente;
     private boolean started = false, flagBackButton = true;
     private boolean isHosting = PlayerManager.getInstance().getLocalPlayer().getHosting();
-
+    private Client cliente = ConnectionManager.getInstance().getClient();
+    private Server server = ConnectionManager.getInstance().getServer();
     private Timer.Task countdownTask;
+    private int pzz = 0;
 
     public ServerScreen(Main game) {
         this.game = game;
@@ -46,36 +47,58 @@ public class ServerScreen implements Screen {
         Button tempButton = new Button();
         this.startStyle = tempButton.createButtonStyle("start", "start");
         this.cancelStyle = tempButton.createButtonStyle("cancel", "cancel");
+
+        if (!isHosting)
+            pzz = 1;
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
 
+        Table root = new Table();
+        root.setFillParent(true);
+        stage.addActor(root);
+
+        root.add(createLeftColumn()).expand().fill().left().pad(75);
+        root.add(createRightColumn()).expand().fill().top().right().pad(75);
+
+        root.setDebug(false);
+
+        if (!isHosting && pzz == 1) {
+            refreshPlayers();
+            pzz = 2;
+        }
+
         if (isHosting) {
 
-            this.server = new Server();
+            server = new Server();
+
+            ConnectionManager.getInstance().setServer(server);
 
             server.startTCPServer();
 
             PlayerManager.getInstance().clear();
+
+            cliente = new Client();
+
+            ConnectionManager.getInstance().setClient(cliente);
+
+            cliente.startTCPClient();
         }
 
-        // TODO: verificar se há alguma porta aberta, caso nao tenha voltar para o main
-        // menu, talvez uma tela de loading??
-
-        this.cliente = new Client();
         cliente.setServerListener(new Client.ServerListener() {
-            @Override
 
+            @Override
             public void PlayerCon() {
+
                 Gdx.app.postRunnable(() -> refreshPlayers());
             }
 
             @Override
             public void ServerDisconnected() {
-                PlayerManager.getInstance().clear();
-                PlayerManager.getInstance().addPlayer(PlayerManager.getInstance().getLocalPlayer());
+
+                Auxiliaries.clearAddLocal();
 
                 Gdx.app.postRunnable(() -> game.setScreen(new MainMenu(game)));
             }
@@ -93,30 +116,7 @@ public class ServerScreen implements Screen {
                 Gdx.app.postRunnable(() -> cancelMatch());
 
             }
-
-            // @Override
-            // public void ConnectionFailed(Exception e) {
-
-            // System.err.println("Falha na conexão");
-
-            // Gdx.app.postRunnable(() -> {
-            // PlayerManager.getInstance().clear();
-            // PlayerManager.getInstance().addPlayer(PlayerManager.getInstance().getLocalPlayer());
-            // game.setScreen(new MainMenu(game));
-            // });
-            // }
         });
-
-        cliente.startTCPClient();
-
-        Table root = new Table();
-        root.setFillParent(true);
-        stage.addActor(root);
-
-        root.add(createLeftColumn()).expand().fill().left().pad(75);
-        root.add(createRightColumn()).expand().fill().top().right().pad(75);
-
-        root.setDebug(false);
 
     }
 
@@ -171,7 +171,7 @@ public class ServerScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                if(!flagBackButton){
+                if (!flagBackButton) {
                     return;
                 }
 
@@ -180,8 +180,6 @@ public class ServerScreen implements Screen {
                     if (server != null) {
                         server.stop();
                     }
-
-                    Auxiliaries.cls();
 
                     System.out.println("host encerrou a sala");
 
@@ -198,13 +196,13 @@ public class ServerScreen implements Screen {
                         }
                     }
 
-                    Auxiliaries.cls();
                     System.out.println("saiu da sala");
                 }
 
-                PlayerManager.getInstance().clear();
-                PlayerManager.getInstance().addPlayer(PlayerManager.getInstance().getLocalPlayer());
+                // PlayerManager.getInstance().clear();
+                // PlayerManager.getInstance().addPlayer(PlayerManager.getInstance().getLocalPlayer());
 
+                Auxiliaries.clearAddLocal();
                 game.setScreen(new MainMenu(game));
             }
         });
@@ -426,9 +424,12 @@ public class ServerScreen implements Screen {
 
     @Override
     public void dispose() {
+
         stage.dispose();
+
         if (server != null) {
             server.stop();
         }
     }
+
 }
