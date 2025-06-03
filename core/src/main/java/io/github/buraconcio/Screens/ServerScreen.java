@@ -1,6 +1,8 @@
 package io.github.buraconcio.Screens;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -262,8 +264,21 @@ public class ServerScreen implements Screen {
         }
 
         Table botInfo = new Table();
+        Label Alabel = null;
 
-        Label Alabel = new Label("Socket Server", skinLabel, "labelPixelyWhite16");
+        if (isHosting) {
+            try {
+                Alabel = new Label("IP Server: " + InetAddress.getLocalHost().getHostAddress(), skinLabel, "labelPixelyWhite32");
+                Alabel.setFontScale(1f);
+                
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+
+        }else{
+            Alabel = new Label("Socket Server", skinLabel, "labelPixelyWhite16");
+        }
+        
         // Alabel.setFontScale(0.3f);
         Label Blabel = new Label("Criado pela resenha", skinLabel, "labelPixelyWhite16");
         // Blabel.setFontScale(0.3f);

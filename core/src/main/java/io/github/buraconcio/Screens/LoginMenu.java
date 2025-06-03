@@ -79,7 +79,7 @@ public class LoginMenu implements Screen {
     
                     game.setScreen(new MainMenu(game));
                 }
-
+                userField.setText("");
             }
         });
 

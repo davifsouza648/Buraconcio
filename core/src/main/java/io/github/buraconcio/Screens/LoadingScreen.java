@@ -15,6 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import de.tomgrill.gdxdialogs.core.GDXDialogs;
+import de.tomgrill.gdxdialogs.core.GDXDialogsSystem;
+import de.tomgrill.gdxdialogs.core.dialogs.*;
+import de.tomgrill.gdxdialogs.core.listener.ButtonClickListener;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
@@ -41,11 +45,14 @@ public class LoadingScreen implements Screen {
     private float messageTimer = 0f;
     private final float MESSAGE_DURATION = 4f;
 
+    private GDXDialogs dialogs;
+    
     public LoadingScreen(Main game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
         this.skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
         this.skinTextField = new Skin(Gdx.files.internal("fonts/pixely/textFields/textField.json"));
+        dialogs = GDXDialogsSystem.install();
     }
 
     @Override
@@ -91,7 +98,14 @@ public class LoadingScreen implements Screen {
         confirmButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                handleConnection(table, ipField.getText());
+                String _ipCorrect = "";
+
+                if (isIpvalid(ipField, _ipCorrect)) {
+                    handleConnection(table, _ipCorrect);
+                }else{
+                    showErrorMessage("IP invalid", "Digite o IP (ipv4) corretamente (exemplo: xxx.xxx.xx.x)");
+                    ipField.setText("");
+                }
             }
         });
 
@@ -102,11 +116,29 @@ public class LoadingScreen implements Screen {
         table.add(confirmButton).size(200, 80).colspan(2).padTop(10);
     }
 
+    private boolean isIpvalid(TextField ipField, String _ipCorrect) {
+        String _ip = ipField.getText().trim();
+        boolean flagInit = false;
+
+        if (_ip.equalsIgnoreCase("localhost")) {
+            _ipCorrect = _ip;
+            flagInit = true;
+        } else if (isValidIPv4(_ip)) {
+            _ipCorrect = _ip;
+            flagInit = true;
+        } else {
+            System.out.println("Ip Invalido");
+            flagInit = false;
+        }
+
+        return flagInit;
+    }
+
     private void handleConnection(Table table, String ipText) {
         table.setVisible(false);
         showImage = true;
 
-        Constants.setIP("localhost"); //davizao fazer uma verificacao aqui para colocar os pontos no ip
+        Constants.setIP("localhost"); // davizao fazer uma verificacao aqui para colocar os pontos no ip
 
         cliente = new Client();
         ConnectionManager.getInstance().setClient(cliente);
@@ -138,6 +170,23 @@ public class LoadingScreen implements Screen {
         });
 
         cliente.startTCPClient();
+    }
+
+    private void showErrorMessage(String title, String text) {
+        GDXButtonDialog bDialog = dialogs.newDialog(GDXButtonDialog.class);
+        bDialog.setTitle(title);
+        bDialog.setMessage(text);
+
+        bDialog.setClickListener(new ButtonClickListener() {
+            @Override
+            public void click(int button) {
+                bDialog.dismiss();
+            }
+        });
+
+        bDialog.addButton("Ok");
+
+        bDialog.build().show();
     }
 
     private void showMessage(String msg) {
@@ -179,6 +228,7 @@ public class LoadingScreen implements Screen {
                 } else if (flagFail) {
                     game.setScreen(new MainMenu(game));
                 }
+                
             }
         } else {
             if (!flagCon && flagFail && elapsedTime >= TIMEOUT) {
@@ -187,6 +237,11 @@ public class LoadingScreen implements Screen {
                 messageTimer = 0;
             }
         }
+    }
+
+    private static boolean isValidIPv4(String ip) {
+        String ipv4Pattern = "^((25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})\\.){3}(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})$";
+        return ip.matches(ipv4Pattern);
     }
 
     @Override
