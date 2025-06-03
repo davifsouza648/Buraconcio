@@ -65,7 +65,8 @@ public class Client {
 
                 // e.printStackTrace();
 
-                System.out.println("AAAAAAAAAAAAAAAAAAA");
+                System.out.println("connection erro" + e.getMessage());
+
 
             }
         }

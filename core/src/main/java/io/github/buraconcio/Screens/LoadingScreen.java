@@ -31,7 +31,7 @@ public class LoadingScreen implements Screen {
     private Client cliente;
     private boolean flagCon = false, flagFail = false, flagMsg = false, showImage = false;
     private final Stage stage;
-
+    private String _ip;
     private final float TIMEOUT = 4f;
     private float elapsedTime = 0f;
 
@@ -46,7 +46,7 @@ public class LoadingScreen implements Screen {
     private final float MESSAGE_DURATION = 4f;
 
     private GDXDialogs dialogs;
-    
+
     public LoadingScreen(Main game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -98,11 +98,11 @@ public class LoadingScreen implements Screen {
         confirmButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String _ipCorrect = "";
 
-                if (isIpvalid(ipField, _ipCorrect)) {
-                    handleConnection(table, _ipCorrect);
-                }else{
+                if (isIpvalid(ipField)) {
+                    handleConnection(table);
+                    System.out.println(_ip);
+                } else {
                     showErrorMessage("IP invalid", "Digite o IP (ipv4) corretamente (exemplo: xxx.xxx.xx.x)");
                     ipField.setText("");
                 }
@@ -116,29 +116,31 @@ public class LoadingScreen implements Screen {
         table.add(confirmButton).size(200, 80).colspan(2).padTop(10);
     }
 
-    private boolean isIpvalid(TextField ipField, String _ipCorrect) {
-        String _ip = ipField.getText().trim();
-        boolean flagInit = false;
+    private boolean isIpvalid(TextField ipField) {
+
+        _ip = ipField.getText().trim();
 
         if (_ip.equalsIgnoreCase("localhost")) {
-            _ipCorrect = _ip;
-            flagInit = true;
+
+            return true;
+
         } else if (isValidIPv4(_ip)) {
-            _ipCorrect = _ip;
-            flagInit = true;
+
+            return true;
+
         } else {
-            System.out.println("Ip Invalido");
-            flagInit = false;
+
+            return false;
+
         }
 
-        return flagInit;
     }
 
-    private void handleConnection(Table table, String ipText) {
+    private void handleConnection(Table table) {
         table.setVisible(false);
         showImage = true;
 
-        Constants.setIP(ipText);// davizao fazer uma verificacao aqui para colocar os pontos no ip
+        Constants.setIP(_ip);
 
         cliente = new Client();
         ConnectionManager.getInstance().setClient(cliente);
@@ -189,6 +191,11 @@ public class LoadingScreen implements Screen {
         bDialog.build().show();
     }
 
+    private static boolean isValidIPv4(String ip) {
+        String ipv4Pattern = "^((25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})\\.){3}(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})$";
+        return ip.matches(ipv4Pattern);
+    }
+
     private void showMessage(String msg) {
         title.setText(msg);
         title.setVisible(true);
@@ -228,7 +235,7 @@ public class LoadingScreen implements Screen {
                 } else if (flagFail) {
                     game.setScreen(new MainMenu(game));
                 }
-                
+
             }
         } else {
             if (!flagCon && flagFail && elapsedTime >= TIMEOUT) {
@@ -237,11 +244,6 @@ public class LoadingScreen implements Screen {
                 messageTimer = 0;
             }
         }
-    }
-
-    private static boolean isValidIPv4(String ip) {
-        String ipv4Pattern = "^((25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})\\.){3}(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})$";
-        return ip.matches(ipv4Pattern);
     }
 
     @Override

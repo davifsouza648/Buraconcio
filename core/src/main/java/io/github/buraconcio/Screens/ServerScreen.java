@@ -39,7 +39,7 @@ public class ServerScreen implements Screen {
     private Client cliente = ConnectionManager.getInstance().getClient();
     private Server server = ConnectionManager.getInstance().getServer();
     private Timer.Task countdownTask;
-    private int pzz = 0;
+    private boolean firstIn = true;
 
     public ServerScreen(Main game) {
         this.game = game;
@@ -49,9 +49,6 @@ public class ServerScreen implements Screen {
         Button tempButton = new Button();
         this.startStyle = tempButton.createButtonStyle("start", "start");
         this.cancelStyle = tempButton.createButtonStyle("cancel", "cancel");
-
-        if (!isHosting)
-            pzz = 1;
     }
 
     @Override
@@ -67,9 +64,9 @@ public class ServerScreen implements Screen {
 
         root.setDebug(false);
 
-        if (!isHosting && pzz == 1) {
+        if (!isHosting && firstIn) {
             refreshPlayers();
-            pzz = 2;
+            firstIn = false;
         }
 
         if (isHosting) {
@@ -216,7 +213,7 @@ public class ServerScreen implements Screen {
         mapButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                
+
             }
         });
 
@@ -271,7 +268,7 @@ public class ServerScreen implements Screen {
             try {
                 Alabel = new Label("IP Server: " + InetAddress.getLocalHost().getHostAddress(), skinLabel, "labelPixelyWhite32");
                 Alabel.setFontScale(1f);
-                
+
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
@@ -279,7 +276,7 @@ public class ServerScreen implements Screen {
         }else{
             Alabel = new Label("Socket Server", skinLabel, "labelPixelyWhite16");
         }
-        
+
         // Alabel.setFontScale(0.3f);
         Label Blabel = new Label("Criado pela resenha", skinLabel, "labelPixelyWhite16");
         // Blabel.setFontScale(0.3f);
@@ -316,7 +313,6 @@ public class ServerScreen implements Screen {
         return row;
     }
 
-    // LEMBRAR DE PUXAR NA BOMBA DO SERVER TODA VEZ QUE ENTRAR ALGUEM NO SERVER;
 
     public void refreshPlayers() {
         topInfo.clear();
