@@ -138,7 +138,7 @@ public class LoadingScreen implements Screen {
         table.setVisible(false);
         showImage = true;
 
-        Constants.setIP("localhost"); // davizao fazer uma verificacao aqui para colocar os pontos no ip
+        Constants.setIP(ipText);// davizao fazer uma verificacao aqui para colocar os pontos no ip
 
         cliente = new Client();
         ConnectionManager.getInstance().setClient(cliente);
