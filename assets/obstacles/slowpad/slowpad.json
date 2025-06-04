@@ -1,0 +1,77 @@
+{ "frames": [
+   {
+    "filename": "SLOWPAD 0.ase",
+    "frame": { "x": 0, "y": 0, "w": 128, "h": 85 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 85 },
+    "sourceSize": { "w": 128, "h": 85 },
+    "duration": 150
+   },
+   {
+    "filename": "SLOWPAD 1.ase",
+    "frame": { "x": 128, "y": 0, "w": 128, "h": 85 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 85 },
+    "sourceSize": { "w": 128, "h": 85 },
+    "duration": 150
+   },
+   {
+    "filename": "SLOWPAD 2.ase",
+    "frame": { "x": 256, "y": 0, "w": 128, "h": 85 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 85 },
+    "sourceSize": { "w": 128, "h": 85 },
+    "duration": 150
+   },
+   {
+    "filename": "SLOWPAD 3.ase",
+    "frame": { "x": 384, "y": 0, "w": 128, "h": 85 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 85 },
+    "sourceSize": { "w": 128, "h": 85 },
+    "duration": 150
+   },
+   {
+    "filename": "SLOWPAD 4.ase",
+    "frame": { "x": 512, "y": 0, "w": 128, "h": 85 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 85 },
+    "sourceSize": { "w": 128, "h": 85 },
+    "duration": 150
+   },
+   {
+    "filename": "SLOWPAD 5.ase",
+    "frame": { "x": 640, "y": 0, "w": 128, "h": 85 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 85 },
+    "sourceSize": { "w": 128, "h": 85 },
+    "duration": 150
+   },
+   {
+    "filename": "SLOWPAD 6.ase",
+    "frame": { "x": 768, "y": 0, "w": 128, "h": 85 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 128, "h": 85 },
+    "sourceSize": { "w": 128, "h": 85 },
+    "duration": 150
+   }
+ ],
+ "meta": {
+  "app": "https://github.com/LibreSprite/LibreSprite/",
+  "version": "1.1-dev",
+  "image": "C:\\Users\\Masao\\Downloads\\Pixel UI pack 1\\SLOWPAD\\slowpad.png",
+  "format": "RGBA8888",
+  "size": { "w": 896, "h": 85 },
+  "scale": "1",
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}
