@@ -204,7 +204,7 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void show() {
-        CursorManager.resetToArrow();
+        CursorManager.setGameCursor();
 
     }
 

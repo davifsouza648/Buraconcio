@@ -12,6 +12,7 @@ public class CursorManager {
     private static Cursor arrowCursor;
     private static Cursor handCursor;
     private static Cursor ibeamCursor;
+    private static Cursor gameCursor;
 
     private static boolean loaded = false;
 
@@ -21,6 +22,7 @@ public class CursorManager {
         arrowCursor = createCursor("cursor/arrowCursor.png", 15, 15);
         handCursor = createCursor("cursor/handCursor.png", 15, 15);
         ibeamCursor = createCursor("cursor/ibeamCursor.png", 15, 15);
+        gameCursor = createCursor("cursor/gameCursor.png", 15, 15);
 
         loaded = true;
     }
@@ -85,6 +87,11 @@ public class CursorManager {
     public static void resetToArrow() {
         loadCursors();
         Gdx.graphics.setCursor(arrowCursor);
+    }
+
+    public static void setGameCursor(){
+        loadCursors();
+        Gdx.graphics.setCursor(gameCursor);
     }
 
 }
