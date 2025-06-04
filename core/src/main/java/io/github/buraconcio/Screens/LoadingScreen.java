@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -25,6 +27,7 @@ import io.github.buraconcio.Network.Client;
 import io.github.buraconcio.Objects.Button;
 import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
+import io.github.buraconcio.Utils.CursorManager;
 
 public class LoadingScreen implements Screen {
     private final Main game;
@@ -53,12 +56,27 @@ public class LoadingScreen implements Screen {
         this.skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
         this.skinTextField = new Skin(Gdx.files.internal("fonts/pixely/textFields/textField.json"));
         dialogs = GDXDialogsSystem.install();
+        //Se clicar fora do textField ele perde o foco
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Actor target = event.getTarget();
+
+                if (!(target instanceof com.badlogic.gdx.scenes.scene2d.ui.TextField)) {
+                    stage.setKeyboardFocus(null);
+                }
+                return false;
+            }
+        });
     }
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
         batch = new SpriteBatch();
+        CursorManager.resetToArrow();
+
+
 
         setupTitle();
         setupLogo();
@@ -90,7 +108,13 @@ public class LoadingScreen implements Screen {
         title.setFontScale(0.8f);
 
         TextField ipField = new TextField("", skinTextField, "labelPixelyWhite32");
-        ipField.setMessageText("Digite o IP");
+        ipField.setMessageText("Digite o IP: (XXX.XXX.XX.X)");
+        ipField.setTextFieldFilter((textField, c) -> {
+            return (Character.isDigit(c) || c == '.') && textField.getText().length() < 12;
+        });
+        //Seta Ibeam Cursor
+        CursorManager.applyIbeamCursorOnHover(ipField);
+
 
         Button entrar = new Button();
         ImageButton confirmButton = entrar.createButton("enter", "enter");

@@ -21,6 +21,7 @@ import io.github.buraconcio.Objects.CrossBow;
 import io.github.buraconcio.Objects.Obstacle;
 import io.github.buraconcio.Objects.PhysicsEntity;
 import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.PhysicsManager;
 
 import com.badlogic.gdx.math.Vector2;
@@ -203,6 +204,8 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void show() {
+        CursorManager.resetToArrow();
+
     }
 
     @Override

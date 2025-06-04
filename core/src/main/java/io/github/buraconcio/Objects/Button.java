@@ -3,15 +3,20 @@ package io.github.buraconcio.Objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
+import io.github.buraconcio.Utils.CursorManager;
+
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Button {
-
+    
 
     public ImageButton createButton(String pathBase, String nomeBase) {
-        return new ImageButton(createButtonStyle(pathBase, nomeBase));
+        ImageButton button = new ImageButton(createButtonStyle(pathBase, nomeBase));
+        CursorManager.applyHandCursorOnHover(button);
+        return button;
     }
 
     public ImageButtonStyle createButtonStyle(String pathBase, String nomeBase) {
@@ -32,6 +37,7 @@ public class Button {
         style.up = skin.getDrawable(nomeBase + "1");
         style.down = skin.getDrawable(nomeBase + "2");
         style.over = skin.getDrawable(nomeBase + "3");
+
 
         return style;
     }

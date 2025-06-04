@@ -10,8 +10,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Button;
+import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.PlayerManager;
+
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+
 import java.util.*;
 import java.util.List;
 
@@ -40,11 +45,26 @@ public class LoginMenu implements Screen {
 
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+
+        //Se clicar fora do textField ele perde o foco
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                Actor target = event.getTarget();
+
+                if (!(target instanceof com.badlogic.gdx.scenes.scene2d.ui.TextField)) {
+                    stage.setKeyboardFocus(null);
+                }
+                return false;
+            }
+        });
+
+
+
         dialogs = GDXDialogsSystem.install();
 
         skinTextField = new Skin(Gdx.files.internal("fonts/pixely/textFields/textField.json"));
         skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
-
 
         Table table = new Table();
         table.setFillParent(true);
@@ -54,6 +74,14 @@ public class LoginMenu implements Screen {
 
         userField = new TextField("", skinTextField, "labelPixelyWhite32");
         userField.setMessageText("Digite seu username");
+
+        //Não permite que o usuário possa digitar mais que 20 caracteres no nome
+        userField.setTextFieldFilter((textField, c) -> {
+            return textField.getText().length() < 20;
+        });
+        //Seta Ibeam Cursor
+        CursorManager.applyIbeamCursorOnHover(userField);
+
 
         Button entrar = new Button();
         ImageButton loginButton = entrar.createButton("enter", "enter");
@@ -83,6 +111,8 @@ public class LoginMenu implements Screen {
             }
         });
 
+        
+
         table.add(userField).width(500).pad(10);
         table.row();
         // table.add(passField).width(200).pad(10);
@@ -96,12 +126,6 @@ public class LoginMenu implements Screen {
         if(username.length() == 0)
         {
             showErrorMessage("Nome inválido", "Motivo: Nome nulo");
-            valid = false;
-        }
-
-        if(username.length() > 10)
-        {
-            showErrorMessage("Nome inválido", "Motivo: Nome muito grande.");
             valid = false;
         }
 
@@ -129,6 +153,8 @@ public class LoginMenu implements Screen {
 
     @Override
     public void show() {
+        CursorManager.resetToArrow();
+
     }
 
     @Override

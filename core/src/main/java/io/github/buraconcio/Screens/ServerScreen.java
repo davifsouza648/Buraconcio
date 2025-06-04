@@ -24,6 +24,7 @@ import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Button;
 import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.ConnectionManager;
+import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.PlayerManager;
 
 public class ServerScreen implements Screen {
@@ -54,6 +55,8 @@ public class ServerScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
+        CursorManager.resetToArrow();
+
 
         Table root = new Table();
         root.setFillParent(true);
