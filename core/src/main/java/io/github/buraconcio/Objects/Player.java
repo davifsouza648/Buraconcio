@@ -1,6 +1,7 @@
 package io.github.buraconcio.Objects;
 
 import io.github.buraconcio.Objects.Ball;
+import io.github.buraconcio.Objects.Obstacle;
 import io.github.buraconcio.Utils.Constants;
 
 import java.io.Serializable;
@@ -17,16 +18,20 @@ public class Player implements Serializable {
     private int strokes;
     private boolean hosting;
     private String avatarpath;
+    private Obstacle selectedObstacle;
 
     private transient Ball ball;
 
     public Player(String username){
         this.username = username;
         stars = 0;
+
+        ball = null;
+        selectedObstacle = null;
     }
 
     public Ball createBall(Vector2 pos) {
-        ball = new Ball(pos, Constants.BALL_RADIUS, this);
+        ball = new Ball(pos, Constants.BALL_RADIUS*2, this);
 
         return ball;
     }
@@ -58,6 +63,23 @@ public class Player implements Serializable {
         }
     }
 
+    public void placeObstacle() {
+        //if (selectedObstacle == null)
+        //    return;
+
+        selectedObstacle.place();
+        selectedObstacle = null;
+    }
+
+    public void selectObstacle(Obstacle obstacle) {
+        selectedObstacle = obstacle;
+        obstacle.claim();
+    }
+
+    public Obstacle getSelectedObstacle() {
+        return selectedObstacle;
+    }
+
     public String getUsername(){
         return username;
     }
@@ -71,12 +93,10 @@ public class Player implements Serializable {
     }
 
     public int getId() {
-
         return id;
     }
 
     public double getStars(){
-
         return stars;
     }
 

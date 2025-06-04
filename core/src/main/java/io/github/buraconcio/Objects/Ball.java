@@ -28,19 +28,18 @@ public class Ball extends PhysicsEntity {
     private Player player;
 
     private Group labelGroup;
-    private ShapeRenderer shapeRenderer;
 
     private Vector2 mouseMovement;
 
-    public Ball(Vector2 pos, float r, Player player) {
-        super(pos, new Vector2(r, r), "ballteste.png");
+    public Ball(Vector2 pos, float d, Player player) {
+        super(pos, new Vector2(d, d), "ballteste.png");
 
         body.setType(BodyType.DynamicBody);
         body.setLinearDamping(0.5f);
         body.setAngularDamping(1f);
 
         CircleShape circle = new CircleShape();
-        circle.setRadius(r);
+        circle.setRadius(d/2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
@@ -64,7 +63,6 @@ public class Ball extends PhysicsEntity {
 
         this.player = player;
 
-        shapeRenderer = new ShapeRenderer();
         mouseMovement = new Vector2(0, 0);
     }
 
@@ -138,26 +136,6 @@ public class Ball extends PhysicsEntity {
             pos.sub(new Vector2(segmentSprite.getWidth()*0.5f, segmentSprite.getHeight()*0.5f));
             segmentSprite.setPosition(pos.x, pos.y);
             segmentSprite.draw(batch);
-/*
-            segmentSprite.setSize(segmentLength/2, segmentLength);
-            segmentSprite.setOriginCenter();
-            segmentSprite.setRotation(mouseMovement.angleDeg() + 180);
-
-            Vector2 step = new Vector2(mouseMovement).nor().scl(segmentLength/2);
-
-            Vector2 pos = new Vector2(endSprite.getX(), endSprite.getY()).add(step).add(step);
-
-            while ((pos.x) * Math.signum(step.x) < tipSprite.getX() * Math.signum(step.x)) {
-                segmentSprite.setPosition(pos.x, pos.y);
-
-                segmentSprite.draw(batch);
-
-                pos.add(step);
-            }*/
-
-            //segmentSprite.setPosition(tipSprite.getX() - step.x/2, tipSprite.getY() - step.y/2);
-            //segmentSprite.draw(batch);
-
         }
 
         super.draw(batch, parentAlpha);

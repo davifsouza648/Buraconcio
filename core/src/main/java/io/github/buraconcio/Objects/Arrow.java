@@ -14,7 +14,7 @@ import io.github.buraconcio.Objects.PhysicsEntity;
 import java.lang.Math;
 
 public class Arrow extends PhysicsEntity {
-    public static final Vector2 arrowSize = new Vector2(0.8f, 0.3f);
+    public static final Vector2 arrowSize = new Vector2(1.6f, 0.6f);
 
     public Arrow(Vector2 pos, float speed, float angle) {
         super(pos, arrowSize, "arrow.png");
@@ -22,7 +22,7 @@ public class Arrow extends PhysicsEntity {
         body.setType(BodyType.DynamicBody);
 
         PolygonShape shapeDef = new PolygonShape();
-        shapeDef.setAsBox(arrowSize.x, arrowSize.y);
+        shapeDef.setAsBox(arrowSize.x/2, arrowSize.y/2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shapeDef;

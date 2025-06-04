@@ -15,15 +15,19 @@ public class CrossBow extends Obstacle {
     public static final float spawnRate = 1f; // seconds
     public static final float arrowSpeed = 3f;
 
+    private boolean spawning = false;
     private float timer;
 
     public CrossBow(Vector2 pos, Vector2 size) {
         super(pos, size, "crossBow.png");
 
-        PolygonShape fixtureDef = new PolygonShape();
-        fixtureDef.setAsBox(size.x, size.y);
-        body.createFixture(fixtureDef, 0f);
-        fixtureDef.dispose();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fixtureDef = new FixtureDef();
+        shape.setAsBox(size.x/2, size.y/2);
+        fixtureDef.shape = shape;
+        fixtureDef.isSensor = true;
+        body.createFixture(fixtureDef);
+        shape.dispose();
 
         timer = 0f;
     }
@@ -41,6 +45,9 @@ public class CrossBow extends Obstacle {
     }
 
     public void spawnArrow() {
+        if (!spawning)
+            return;
+
         float angle = body.getAngle();
 
         float sin = (float) Math.sin(angle);
@@ -49,7 +56,26 @@ public class CrossBow extends Obstacle {
 
         Vector2 arrowPos = new Vector2(getX() + getWidth()*(cos*0.5f + 0.5f) + arrowLen*cos*1.25f ,
             getY() + getHeight()*(sin*0.5f + 0.5f) + arrowLen*sin*1.25f);
+
         getStage().addActor(new Arrow(arrowPos, arrowSpeed, angle));
+    }
+
+    @Override
+    public void preRound() {
+        setSpawning(true);
+    }
+
+    public void setSpawning(boolean spawning) {
+        this.spawning = spawning;
+        timer = 0f;
+    }
+
+    public boolean getSpawning() {
+        return spawning;
+    }
+
+    public void toggleSpawning() {
+        setSpawning(!spawning);
     }
 }
 

@@ -14,14 +14,17 @@ import java.util.Iterator;
 public class Obstacle extends PhysicsEntity {
     public final static int CLOCKWISE = 0;
     public final static int COUNTER_CLOCKWISE = 1;
+    public boolean claimed = false;
 
-   public Obstacle(Vector2 pos, Vector2 size, String texturePath) {
+    public Obstacle(Vector2 pos, Vector2 size, String texturePath) {
         super(pos, size, texturePath);
     }
 
-    public void applyEffect(Player player) {
+    public void applyEffect(Player player) {}
 
-    }
+    public void preRound() {}
+
+    public void postRound() {}
 
     // not colliding
     // not in spawn area
@@ -45,12 +48,24 @@ public class Obstacle extends PhysicsEntity {
         body.getFixtureList().forEach(fixture -> {fixture.setSensor(false);});
     }
 
+    public void claim() {
+        claimed = true;
+    }
+
+    public void unclaim() {
+        claimed = false;
+    }
+
+    public boolean claimed() {
+        return claimed;
+    }
+
     // 0 clock 1 counter
     public void rotate(int direction) {
         body.setTransform(body.getPosition(), body.getTransform().getRotation() + (direction * 2 - 1) * 1.5708f ); // 90 em rad
     }
 
     public void move(Vector2 pos) {
-        body.getTransform().setPosition(pos);
+        body.setTransform(pos, body.getTransform().getRotation());
     }
 }

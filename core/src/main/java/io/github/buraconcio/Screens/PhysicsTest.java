@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
+
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Ball;
 import io.github.buraconcio.Objects.Flag;
@@ -69,13 +71,11 @@ public class PhysicsTest implements Screen {
         debugRenderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera(23, 13);
 
-
-
         stage = new Stage(new FitViewport(23, 13));
         stage.getViewport().setCamera(camera);
         Gdx.input.setInputProcessor(stage);
 
-
+        stage.setDebugAll(true);
 
         PhysicsManager.getInstance().setStage(stage);
 
@@ -88,20 +88,8 @@ public class PhysicsTest implements Screen {
 
         testFlag = new Flag(new Vector2(20f, 3f));
 
-        testObstacle = new CrossBow(new Vector2(10.5f, 2f), new Vector2(1.5f, 1.5f));
+        testObstacle = new CrossBow(new Vector2(10.5f, 2f), new Vector2(3f, 3f));
         testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
-
-        // PhysicsEntity wall1 = new PhysicsEntity(new Vector2(stage.getWidth()/2, stage.getHeight()), new Vector2(2f, 2f), "crossBow.png");
-        // PolygonShape wallBox = new PolygonShape();
-        // wallBox.setAsBox(2f, 2f);
-        // wall1.getBody().createFixture(wallBox, 0f);
-        // wallBox.dispose();
-
-        // PhysicsEntity wall2 = new PhysicsEntity(new Vector2(stage.getWidth(), 1.5f), new Vector2(2f, 2f),  "crossBow.png");
-        // PolygonShape wallBox2 = new PolygonShape();
-        // wallBox2.setAsBox(2f, 2f);
-        // wall2.getBody().createFixture(wallBox2, 0f);
-        // wallBox2.dispose();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1 = new Vector2();
@@ -126,6 +114,22 @@ public class PhysicsTest implements Screen {
                 PhysicsManager.getInstance().schedule(task);
                 pBall.resetShootingGuide();
 
+                // test
+
+                Vector2 stageCoords = stage.screenToStageCoordinates(new Vector2(x, y));
+                Actor hitActor = stage.hit(stageCoords.x, stageCoords.y, true);
+
+                if (p.getSelectedObstacle() != null) {
+                    p.placeObstacle();
+                    testObstacle.preRound();
+                }
+
+                if (hitActor instanceof Obstacle) {
+                    Obstacle hitObstacle = (Obstacle) hitActor;
+                    if (!hitObstacle.claimed())
+                        p.selectObstacle(testObstacle);
+                }
+
                 return true;
             }
 
@@ -138,6 +142,15 @@ public class PhysicsTest implements Screen {
 
                 return true;
             }
+
+            public boolean mouseMoved(int x, int y)  {
+                Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
+                if (p.getSelectedObstacle() != null) p.getSelectedObstacle().move(new Vector2(unprojected.x, unprojected.y));
+
+                return true;
+            }
+
+
         });
 
         PhysicsManager.getInstance().getWorld().setContactListener(new ContactListener() {
@@ -174,7 +187,7 @@ public class PhysicsTest implements Screen {
 
                     if (tileId == 3)
                     {
-                        PhysicsEntity wall1 = new PhysicsEntity(new Vector2((x + 0.5f) * tileSize, (y + 0.5f) * tileSize), new Vector2(tileSize / 2, tileSize / 2), null);
+                        PhysicsEntity wall1 = new PhysicsEntity(new Vector2((x + 0.5f) * tileSize, (y + 0.5f) * tileSize), new Vector2(tileSize, tileSize), null);
                         PolygonShape wallBox = new PolygonShape();
                         wallBox.setAsBox(tileSize / 2, tileSize / 2);
                         wall1.getBody().createFixture(wallBox, 0f);
