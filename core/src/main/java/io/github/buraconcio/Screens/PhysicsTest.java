@@ -44,8 +44,6 @@ import java.lang.Runnable;
 
 public class PhysicsTest implements Screen {
 
-
-
     private Main game;
     private Stage stage;
     private Skin skin;

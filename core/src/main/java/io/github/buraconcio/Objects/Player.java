@@ -25,9 +25,7 @@ public class Player implements Serializable {
     private String avatarpath;
     private Obstacle selectedObstacle;
 
-    private ArrayList<Sound> strokeSounds = new ArrayList<>();
-
-    
+    private transient ArrayList<Sound> strokeSounds = new ArrayList<>();
 
     private transient Ball ball;
 

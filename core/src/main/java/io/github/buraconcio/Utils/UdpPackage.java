@@ -7,37 +7,61 @@ public class UdpPackage implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int id;
-    private float x, y;
+    private float ballX, ballY, ballVel;
+    private float ObsX, ObsY, ObsID;
 
-    public UdpPackage(int id, float x, float y) {
-
+    public UdpPackage(int id, float x, float y, float vel) {
         this.id = id;
-        this.x = x;
-        this.y = y;
+        this.ballX = x;
+        this.ballY = y;
+        this.ballVel = vel;
     }
 
-    // public static UdpPackage createPackage(int id, float x, float y) {
-    //     return new UdpPackage(id, x, y);
-    // }
+    public UdpPackage(int id, float x, float y, int ObsId) {
+        this.id = id;
+        this.ObsX = x;
+        this.ObsY = y;
+        this.ObsID = ObsId;
+    }
 
     public int getId() {
         return id;
     }
 
-    public float getX() {
-        return x;
+    public float getBallX() {
+        return ballX;
     }
 
-    public float getY() {
-        return y;
+    public float getBallY() {
+        return ballY;
     }
 
-    @Override
-    public String toString() {
+    public float getBallVel() {
+        return ballVel;
+    }
+
+    public float getObsX() {
+        return ObsX;
+    }
+
+    public float getObsY() {
+        return ObsY;
+    }
+
+    public String toObjectString() {
         return "UdpPackage{" +
                 "id=" + id +
-                ", x=" + x +
-                ", y=" + y +
+                ", x=" + ballX +
+                ", y=" + ballY +
+                ", vel=" + ballVel +
+                '}';
+    }
+
+    public String toBallString() {
+        return "UdpPackage{" +
+                "id=" + id +
+                ", x=" + ObsX +
+                ", y=" + ObsY +
                 '}';
     }
 
