@@ -20,9 +20,11 @@ import io.github.buraconcio.Objects.Flag;
 import io.github.buraconcio.Objects.CrossBow;
 import io.github.buraconcio.Objects.Obstacle;
 import io.github.buraconcio.Objects.PhysicsEntity;
+import io.github.buraconcio.Objects.BallCamera;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.PhysicsManager;
+
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -51,7 +53,7 @@ public class PhysicsTest implements Screen {
     private Obstacle testObstacle;
 
     private Box2DDebugRenderer debugRenderer;
-    private OrthographicCamera camera;
+    private BallCamera camera;
 
     Player p;
     private Ball pBall;
@@ -70,10 +72,9 @@ public class PhysicsTest implements Screen {
         mapRenderer = new OrthogonalTiledMapRenderer(map, scale);
 
         debugRenderer = new Box2DDebugRenderer();
-        camera = new OrthographicCamera(23, 13);
+
 
         stage = new Stage(new FitViewport(23, 13));
-        stage.getViewport().setCamera(camera);
         Gdx.input.setInputProcessor(stage);
 
         stage.setDebugAll(true);
@@ -86,6 +87,9 @@ public class PhysicsTest implements Screen {
         pBall.setZIndex(0);
 
         PlayerManager.getInstance().addPlayer(p);
+
+        camera = new BallCamera(pBall);
+        stage.getViewport().setCamera(camera);
 
         testFlag = new Flag(new Vector2(20f, 3f));
 
@@ -188,7 +192,7 @@ public class PhysicsTest implements Screen {
 
                     if (tileId == 3)
                     {
-                        PhysicsEntity wall1 = new PhysicsEntity(new Vector2((x + 0.5f) * tileSize, (y + 0.5f) * tileSize), new Vector2(tileSize, tileSize), null);
+                        PhysicsEntity wall1 = new PhysicsEntity(new Vector2((x + 0.5f) * tileSize, (y + 0.5f) * tileSize), new Vector2(tileSize, tileSize));
                         PolygonShape wallBox = new PolygonShape();
                         wallBox.setAsBox(tileSize / 2, tileSize / 2);
                         wall1.getBody().createFixture(wallBox, 0f);
@@ -212,12 +216,7 @@ public class PhysicsTest implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0.1f, 0, 1, true);
 
-        if (pBall != null)
-        {
-            Vector2 ballPos = pBall.getPosition();
-            camera.position.set(ballPos.x, ballPos.y, 0);
-            camera.update();
-        }
+        camera.updateCamera();
         mapRenderer.setView(camera);
         mapRenderer.render();
 
