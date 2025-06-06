@@ -2,6 +2,7 @@ package io.github.buraconcio.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -155,6 +156,16 @@ public class PhysicsTest implements Screen {
                 return true;
             }
 
+            @Override
+            public boolean keyDown(int keyCode) {
+                if (keyCode == Keys.Q) {
+                    p.getSelectedObstacle().rotate(Obstacle.COUNTER_CLOCKWISE);
+                } else if (keyCode == Keys.E) {
+                    p.getSelectedObstacle().rotate(Obstacle.CLOCKWISE);
+                }
+
+                return true;
+            }
 
         });
 
