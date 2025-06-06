@@ -4,9 +4,14 @@ import io.github.buraconcio.Objects.Ball;
 import io.github.buraconcio.Objects.Obstacle;
 import io.github.buraconcio.Utils.Constants;
 
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.random.*;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 
 public class Player implements Serializable {
 
@@ -20,11 +25,23 @@ public class Player implements Serializable {
     private String avatarpath;
     private Obstacle selectedObstacle;
 
+    private ArrayList<Sound> strokeSounds = new ArrayList<>();
+
+    
+
     private transient Ball ball;
 
     public Player(String username){
         this.username = username;
         stars = 0;
+
+        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit1.wav")));
+        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit2.wav")));
+        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit3.wav")));
+        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit4.wav")));
+        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit5.wav")));
+        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit6.wav")));
+        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit7.wav")));
 
         ball = null;
         selectedObstacle = null;
@@ -40,6 +57,8 @@ public class Player implements Serializable {
         if (!ball.isStill()) return;
 
         ball.applyImpulse(ball.calculateImpulse(mouse1, mouse2));
+        strokeSounds.get((int)(Math.random() * strokeSounds.size())).play(1f);
+
 
         strokes += 1;
     }

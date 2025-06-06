@@ -1,57 +1,57 @@
-package io.github.buraconcio.Network;
+// package io.github.buraconcio.Network;
 
-import java.io.*;
-import java.net.*;
+// import java.io.*;
+// import java.net.*;
 
-import io.github.buraconcio.Objects.Player;
-import io.github.buraconcio.Utils.Constants;
-import io.github.buraconcio.Utils.PlayerManager;
-import io.github.buraconcio.Utils.UdpPackage;
+// import io.github.buraconcio.Objects.Player;
+// import io.github.buraconcio.Utils.Constants;
+// import io.github.buraconcio.Utils.PlayerManager;
+// import io.github.buraconcio.Utils.UdpPackage;
 
-public class UDPClient {
+// public class UDPClient {
     
-    private DatagramSocket UDPsocket;
-    private DatagramPacket PlayerPackage;
+//     private DatagramSocket UDPsocket;
+//     private DatagramPacket PlayerPackage;
 
-    public void startUDPClient(){
-        Thread thread = new Thread(() -> connect());
-        thread.setDaemon(true);
-        thread.start();
-    }
+//     public void startUDPClient(){
+//         Thread thread = new Thread(() -> connect());
+//         thread.setDaemon(true);
+//         thread.start();
+//     }
 
-    byte[] sendData = new byte[1024];
-    byte[] receiveData = new byte[1024];
+//     byte[] sendData = new byte[1024];
+//     byte[] receiveData = new byte[1024];
 
-    public void connect(){
+//     public void connect(){
 
-        try{
+//         try{
 
-            UDPsocket = new DatagramSocket();
+//             UDPsocket = new DatagramSocket();
 
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ObjectOutputStream out = new ObjectOutputStream(bos);
+//             ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//             ObjectOutputStream out = new ObjectOutputStream(bos);
 
-            //para teste
+//             //para teste
 
-            UdpPackage package = new UdpPackage(PlayerManager.getInstance().getLocalPlayer().getId(), 0, 0)
+//             UdpPackage package = new UdpPackage(PlayerManager.getInstance().getLocalPlayer().getId(), 0, 0)
 
-            out.writeObject(PlayerManager.getInstance().getLocalPlayer());
-            out.flush();
+//             out.writeObject(PlayerManager.getInstance().getLocalPlayer());
+//             out.flush();
 
-            sendData = bos.toByteArray();
+//             sendData = bos.toByteArray();
 
-            UDPsocket = new DatagramSocket();
-            InetAddress address = InetAddress.getByName(Constants.IP);
-            PlayerPackage = new DatagramPacket(sendData, sendData.length, address, Constants.PORT);
+//             UDPsocket = new DatagramSocket();
+//             InetAddress address = InetAddress.getByName(Constants.IP);
+//             PlayerPackage = new DatagramPacket(sendData, sendData.length, address, Constants.PORT);
 
-            UDPsocket.send(PlayerPackage);
-            System.out.println("enviamos o player local");
+//             UDPsocket.send(PlayerPackage);
+//             System.out.println("enviamos o player local");
 
-            UDPsocket.close();
-        }
+//             UDPsocket.close();
+//         }
 
-    }
+//     }
 
 
 
-}
+// }
