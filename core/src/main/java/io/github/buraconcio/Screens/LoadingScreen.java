@@ -56,6 +56,7 @@ public class LoadingScreen implements Screen {
         this.skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
         this.skinTextField = new Skin(Gdx.files.internal("fonts/pixely/textFields/textField.json"));
         dialogs = GDXDialogsSystem.install();
+
         //Se clicar fora do textField ele perde o foco
         stage.addListener(new InputListener() {
             @Override
@@ -75,8 +76,6 @@ public class LoadingScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         batch = new SpriteBatch();
         CursorManager.resetToArrow();
-
-
 
         setupTitle();
         setupLogo();
@@ -109,12 +108,11 @@ public class LoadingScreen implements Screen {
 
         TextField ipField = new TextField("", skinTextField, "labelPixelyWhite32");
         ipField.setMessageText("Digite o IP: (XXX.XXX.XX.X)");
-        ipField.setTextFieldFilter((textField, c) -> {
-            return (Character.isDigit(c) || c == '.') && textField.getText().length() < 12;
-        });
+        // ipField.setTextFieldFilter((textField, c) -> {
+        //     return (Character.isDigit(c) || c == '.') && textField.getText().length() < 12;
+        // });
         //Seta Ibeam Cursor
         CursorManager.applyIbeamCursorOnHover(ipField);
-
 
         Button entrar = new Button();
         ImageButton confirmButton = entrar.createButton("enter", "enter");
@@ -216,7 +214,7 @@ public class LoadingScreen implements Screen {
     }
 
     private static boolean isValidIPv4(String ip) {
-        String ipv4Pattern = "^((25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})\\.){3}(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})$";
+        String ipv4Pattern = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$";
         return ip.matches(ipv4Pattern);
     }
 
