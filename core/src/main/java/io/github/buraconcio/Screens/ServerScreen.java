@@ -20,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
 import io.github.buraconcio.Network.Server;
+import io.github.buraconcio.Network.UDPClient;
+import io.github.buraconcio.Network.UDPServer;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Button;
 import io.github.buraconcio.Utils.Auxiliaries;
@@ -39,6 +41,7 @@ public class ServerScreen implements Screen {
     private boolean isHosting = PlayerManager.getInstance().getLocalPlayer().getHosting();
     private Client cliente = ConnectionManager.getInstance().getClient();
     private Server server = ConnectionManager.getInstance().getServer();
+    private UDPServer udpServer = ConnectionManager.getInstance().getUdpServer();
     private Timer.Task countdownTask;
     private boolean firstIn = true;
 
@@ -56,7 +59,6 @@ public class ServerScreen implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(stage);
         CursorManager.resetToArrow();
-
 
         Table root = new Table();
         root.setFillParent(true);
@@ -269,14 +271,15 @@ public class ServerScreen implements Screen {
 
         if (isHosting) {
             try {
-                Alabel = new Label("IP Server: " + InetAddress.getLocalHost().getHostAddress(), skinLabel, "labelPixelyWhite32");
+                Alabel = new Label("IP Server: " + InetAddress.getLocalHost().getHostAddress(), skinLabel,
+                        "labelPixelyWhite32");
                 Alabel.setFontScale(1f);
 
             } catch (UnknownHostException e) {
                 e.printStackTrace();
             }
 
-        }else{
+        } else {
             Alabel = new Label("Socket Server", skinLabel, "labelPixelyWhite16");
         }
 
@@ -315,7 +318,6 @@ public class ServerScreen implements Screen {
 
         return row;
     }
-
 
     public void refreshPlayers() {
         topInfo.clear();
@@ -399,13 +401,22 @@ public class ServerScreen implements Screen {
 
                     if (isHosting) {
                         server.stopAccepting();
+
+                        UDPServer udpServer = new UDPServer();
+                        ConnectionManager.getInstance().setUDPserver(udpServer);
+                        udpServer.startUDPServer();
+
                     }
 
                     title.setText("MATCH LOBBY - GO!");
                     title.invalidate();
                     this.cancel();
 
-                    game.setScreen(new MainMenu(game)); // TODO: LEMBRAR DA TELA DE GAME AQUI
+                    if (isHosting) {
+                        game.setScreen(new MainMenu(game)); // TODO: LEMBRAR DA TELA DE GAME AQUI
+                    } else {
+                        game.setScreen(new PhysicsTest(game));
+                    }
                 }
             }
         };

@@ -2,11 +2,15 @@ package io.github.buraconcio.Utils;
 
 import io.github.buraconcio.Network.Client;
 import io.github.buraconcio.Network.Server;
+import io.github.buraconcio.Network.UDPClient;
+import io.github.buraconcio.Network.UDPServer;
 
 public class ConnectionManager {
     private static ConnectionManager instance;
     private Client client;
     private Server server;
+    private UDPClient clientUDP;
+    private UDPServer serverUDP;
 
     private ConnectionManager() {
     }
@@ -34,5 +38,21 @@ public class ConnectionManager {
 
     public void setServer(Server server) {
         this.server = server;
+    }
+
+    public UDPClient getUdpClient(){
+        return clientUDP;
+    }
+    
+    public void setUDPclient(UDPClient clientUDP){
+        this.clientUDP = clientUDP;
+    }
+
+    public UDPServer getUdpServer(){
+        return serverUDP;
+    }
+
+    public void setUDPserver(UDPServer serverUDP){
+        this.serverUDP = serverUDP;
     }
 }

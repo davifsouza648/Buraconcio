@@ -1,5 +1,7 @@
 package io.github.buraconcio.Utils;
 
+import io.github.buraconcio.Objects.Player;
+
 public class Constants {
     public static final float BALL_RADIUS = 0.5f;
     public static final float MAX_IMPULSE = 12.5f;
@@ -11,8 +13,10 @@ public class Constants {
     public static final float STILL_TOLERANCE = 0.5f;
 
     //usar no server e client
-    public static final int PORT = 5050;
+    public static final int PORT = 5050, UDP_PORT = 5565;
     public static String IP = "localhost";
+
+    public static Player localP = PlayerManager.getInstance().getLocalPlayer();
 
     public static String getIP() {
         return IP;

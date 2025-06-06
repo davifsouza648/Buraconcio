@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
-
+import io.github.buraconcio.Network.UDPClient;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Ball;
 import io.github.buraconcio.Objects.Flag;
@@ -219,6 +219,10 @@ public class PhysicsTest implements Screen {
     @Override
     public void show() {
         CursorManager.setGameCursor();
+
+        UDPClient udpClient = new UDPClient();
+
+        udpClient.startUDPClient();
 
     }
 

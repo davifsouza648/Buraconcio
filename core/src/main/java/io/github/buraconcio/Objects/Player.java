@@ -53,6 +53,10 @@ public class Player implements Serializable {
         return ball;
     }
 
+    public Ball getBall(){
+        return ball;
+    }
+
     public void stroke(Vector2 mouse1, Vector2 mouse2) {
         if (!ball.isStill()) return;
 

@@ -1,57 +1,63 @@
-// package io.github.buraconcio.Network;
+package io.github.buraconcio.Network;
 
-// import java.io.*;
-// import java.net.*;
+import java.io.*;
+import java.net.*;
 
-// import io.github.buraconcio.Objects.Player;
-// import io.github.buraconcio.Utils.Constants;
-// import io.github.buraconcio.Utils.PlayerManager;
-// import io.github.buraconcio.Utils.UdpPackage;
+import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Utils.Constants;
+import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.UdpPackage;
 
-// public class UDPClient {
-    
-//     private DatagramSocket UDPsocket;
-//     private DatagramPacket PlayerPackage;
+public class UDPClient {
 
-//     public void startUDPClient(){
-//         Thread thread = new Thread(() -> connect());
-//         thread.setDaemon(true);
-//         thread.start();
-//     }
+    private DatagramSocket UDPsocket;
+    private DatagramPacket PlayerPackage;
+    private UdpPackage teste;
 
-//     byte[] sendData = new byte[1024];
-//     byte[] receiveData = new byte[1024];
+    public void startUDPClient() {
+        Thread thread = new Thread(() -> connect());
+        thread.setDaemon(true);
+        thread.start();
+    }
 
-//     public void connect(){
+    byte[] sendData = new byte[1024];
+    byte[] receiveData = new byte[1024];
 
-//         try{
+    public void connect() {
 
-//             UDPsocket = new DatagramSocket();
+        try {
 
-//             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//             ObjectOutputStream out = new ObjectOutputStream(bos);
+            UDPsocket = new DatagramSocket();
+            InetAddress address = InetAddress.getByName(Constants.IP);
 
-//             //para teste
+            while (true) {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                ObjectOutputStream out = new ObjectOutputStream(bos);
 
-//             UdpPackage package = new UdpPackage(PlayerManager.getInstance().getLocalPlayer().getId(), 0, 0)
+                // para teste
 
-//             out.writeObject(PlayerManager.getInstance().getLocalPlayer());
-//             out.flush();
+                UdpPackage pacote = new UdpPackage(Constants.localP.getId(), Constants.localP.getBall().getX(),
+                        Constants.localP.getBall().getY());
 
-//             sendData = bos.toByteArray();
+                out.writeObject(pacote);
+                out.flush();
 
-//             UDPsocket = new DatagramSocket();
-//             InetAddress address = InetAddress.getByName(Constants.IP);
-//             PlayerPackage = new DatagramPacket(sendData, sendData.length, address, Constants.PORT);
+                sendData = bos.toByteArray();
 
-//             UDPsocket.send(PlayerPackage);
-//             System.out.println("enviamos o player local");
+                PlayerPackage = new DatagramPacket(sendData, sendData.length, address, Constants.UDP_PORT);
 
-//             UDPsocket.close();
-//         }
+                UDPsocket.send(PlayerPackage);
+                System.out.println("enviamos o player local");
+                System.out.println(pacote);
 
-//     }
+                Thread.sleep(100);
+            }
+            // UDPsocket.close();
 
+        } catch (IOException | InterruptedException e) {
 
+            System.out.println("MANDOUU");
 
-// }
+        }
+    }
+}
