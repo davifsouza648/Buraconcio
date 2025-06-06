@@ -24,6 +24,7 @@ import io.github.buraconcio.Objects.PhysicsEntity;
 import io.github.buraconcio.Objects.BallCamera;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.CursorManager;
+import io.github.buraconcio.Utils.MapRenderer;
 import io.github.buraconcio.Utils.PhysicsManager;
 
 
@@ -59,8 +60,7 @@ public class PhysicsTest implements Screen {
     Player p;
     private Ball pBall;
 
-    private TiledMap map;
-    private OrthogonalTiledMapRenderer mapRenderer;
+    private MapRenderer mapRenderer;
     float scale = 1/32f;
 
     //server test
@@ -69,8 +69,7 @@ public class PhysicsTest implements Screen {
     public PhysicsTest(Main game) {
         this.game = game;
 
-        map = new TmxMapLoader().load("maps/mapa1/teste.tmx");
-        mapRenderer = new OrthogonalTiledMapRenderer(map, scale);
+        mapRenderer = new MapRenderer("mapa1");
 
         debugRenderer = new Box2DDebugRenderer();
 
@@ -188,7 +187,7 @@ public class PhysicsTest implements Screen {
 
         });
 
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get("Tile Layer");
+        TiledMapTileLayer layer = (TiledMapTileLayer) mapRenderer.getMap().getLayers().get("Tile Layer");
 
         float tileSize = 32 * scale; // 32px em metros
 
