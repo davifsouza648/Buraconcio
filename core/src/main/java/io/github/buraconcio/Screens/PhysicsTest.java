@@ -4,13 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
@@ -31,24 +28,14 @@ import io.github.buraconcio.Utils.PhysicsManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.*;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
-import java.util.ArrayList;
 import java.lang.Runnable;
 
 public class PhysicsTest implements Screen {
-    private Main game;
     private Stage stage;
     private Skin skin;
 
-    private Ball testBall;
-    private Flag testFlag;
     private Obstacle testObstacle;
 
     private Box2DDebugRenderer debugRenderer;
@@ -64,7 +51,6 @@ public class PhysicsTest implements Screen {
     private Client client;
 
     public PhysicsTest(Main game) {
-        this.game = game;
 
         mapRenderer = new MapRenderer("mapa1");
 
@@ -83,12 +69,20 @@ public class PhysicsTest implements Screen {
         pBall = p.createBall(new Vector2(3f, 3f));
         pBall.setZIndex(0);
 
-        PlayerManager.getInstance().addPlayer(p);
+        float add = 0.5f;
+        for (Player player : PlayerManager.getInstance().getAllPlayers()) {
+            if (player.getId() == PlayerManager.getInstance().getLocalPlayer().getId())
+                continue;
+
+            player.createBall(new Vector2(3f, 3f + add));
+            add += 0.5f;
+        }
 
         camera = new BallCamera(pBall);
         stage.getViewport().setCamera(camera);
 
-        testFlag = new Flag(new Vector2(20f, 3f));
+        //testFlag = new Flag(new Vector2(20f, 3f));
+        new Flag(new Vector2(20f, 3f));
 
         testObstacle = new CrossBow(new Vector2(10.5f, 2f), new Vector2(3f, 3f));
         testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);

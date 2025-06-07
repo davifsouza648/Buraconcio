@@ -8,7 +8,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.badlogic.gdx.math.Vector2;
 
+import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Utils.Constants;
+import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.UdpPackage;
 import io.github.buraconcio.Utils.UdpPackage.UdpType;
 
@@ -130,6 +132,9 @@ public class UDPClient {
             packageList = deserialize(validData);
 
             System.out.println("Pacotes recebidos: " + packageList.size());
+
+
+            PlayerManager.getInstance().updatePlayers(packageList);
 
             // for (UdpPackage p : packageList) {
 

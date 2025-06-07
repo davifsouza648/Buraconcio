@@ -413,7 +413,7 @@ public class ServerScreen implements Screen {
                     this.cancel();
 
                     if (isHosting) {
-                        game.setScreen(new MainMenu(game)); // TODO: LEMBRAR DA TELA DE GAME AQUI
+                        game.setScreen(new PhysicsTest(game)); // TODO: LEMBRAR DA TELA DE GAME AQUI
                     } else {
                         game.setScreen(new PhysicsTest(game));
                     }

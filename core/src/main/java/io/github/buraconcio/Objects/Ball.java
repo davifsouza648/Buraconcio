@@ -177,4 +177,17 @@ public class Ball extends PhysicsEntity {
     public void resetShootingGuide() {
         mouseMovement.x = mouseMovement.y = 0;
     }
+
+    public void setAngle(float angle) {
+        body.setTransform(body.getPosition(), body.getTransform().getRotation() + angle ); // 90 em rad
+    }
+
+    public void setPos(Vector2 pos) {
+        body.setTransform(pos, body.getTransform().getRotation());
+    }
+
+    public void setVelocity(Vector2 vel) {
+        body.setLinearVelocity(vel);
+    }
+
 }

@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.badlogic.gdx.math.Vector2;
+
 import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Utils.UdpPackage;
 
 // singleton
 public class PlayerManager {
@@ -61,6 +64,22 @@ public class PlayerManager {
     public void setPlayers(List<Player> newPlayers) {
         players.clear();
         players.addAll(newPlayers);
+    }
+
+    public void updatePlayers(List<UdpPackage> update) {
+        System.out.println("called update players");
+        System.out.println();
+
+        for (UdpPackage pack : update) {
+            // testing ball for now
+            int playerId = pack.getId();
+            Vector2 ballPos = new Vector2(pack.getBallX(), pack.getBallY());
+            Vector2 ballVel = new Vector2(pack.getBallVX(), pack.getBallVY());
+
+            Vector2 obstaclePos = new Vector2(pack.getObsX(), pack.getObsY());
+
+            PlayerManager.getInstance().getPlayer(playerId).update(ballPos, ballVel, obstaclePos);
+        }
     }
 
     public int getPlayerCount() {

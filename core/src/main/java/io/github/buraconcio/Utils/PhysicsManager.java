@@ -49,7 +49,6 @@ public class PhysicsManager {
         clearScheduler();
 
         // collisions
-        System.out.println(contactList.size());
         Iterator<Contact> it = contactList.iterator();
         while (it.hasNext()) {
             Contact contact = it.next();

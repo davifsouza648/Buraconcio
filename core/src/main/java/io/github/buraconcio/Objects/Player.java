@@ -3,7 +3,7 @@ package io.github.buraconcio.Objects;
 import io.github.buraconcio.Objects.Ball;
 import io.github.buraconcio.Objects.Obstacle;
 import io.github.buraconcio.Utils.Constants;
-
+import io.github.buraconcio.Utils.UdpPackage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -54,6 +54,14 @@ public class Player implements Serializable {
 
     public Ball getBall(){
         return ball;
+    }
+
+    public void update(Vector2 ballPos, Vector2 velocity, Vector2 obstaclePos) {
+        ball.setPos(ballPos);
+        ball.setVelocity(velocity);
+
+        if (selectedObstacle != null)
+            selectedObstacle.move(obstaclePos);
     }
 
     public void stroke(Vector2 mouse1, Vector2 mouse2) {
