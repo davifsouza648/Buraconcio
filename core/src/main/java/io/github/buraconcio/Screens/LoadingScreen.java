@@ -108,9 +108,9 @@ public class LoadingScreen implements Screen {
 
         TextField ipField = new TextField("", skinTextField, "labelPixelyWhite32");
         ipField.setMessageText("Digite o IP: (XXX.XXX.XX.X)");
-        // ipField.setTextFieldFilter((textField, c) -> {
-        //     return (Character.isDigit(c) || c == '.') && textField.getText().length() < 12;
-        // });
+        ipField.setTextFieldFilter((textField, c) -> {
+            return (Character.isDigit(c) || c == '.') && textField.getText().length() < 16;
+        });
         //Seta Ibeam Cursor
         CursorManager.applyIbeamCursorOnHover(ipField);
 

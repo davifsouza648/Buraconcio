@@ -34,8 +34,8 @@ public class Obstacle extends PhysicsEntity {
             return false;
 
         for (Contact contact : PhysicsManager.getInstance().getContactList()) {
-            if (contact.getFixtureA().getBody().getUserData() == this
-                || contact.getFixtureB().getBody().getUserData() == this)
+            if (PhysicsManager.getInstance().getEntity(contact.getFixtureA().getBody().getUserData()).getId() == getId()
+                || PhysicsManager.getInstance().getEntity(contact.getFixtureB().getBody().getUserData()).getId() == getId())
                 return false;
         }
 

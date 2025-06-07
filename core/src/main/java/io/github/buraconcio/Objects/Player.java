@@ -24,6 +24,7 @@ public class Player implements Serializable {
     private boolean hosting;
     private String avatarpath;
     private Obstacle selectedObstacle;
+    private boolean canSelect = true;
 
     private transient ArrayList<Sound> strokeSounds = new ArrayList<>();
 
@@ -92,9 +93,22 @@ public class Player implements Serializable {
         selectedObstacle = null;
     }
 
+    public void setCanSelect(boolean canSelect) {
+        this.canSelect = canSelect;
+    }
+
+    public boolean canSelect() {
+        return canSelect;
+    }
+
     public void selectObstacle(Obstacle obstacle) {
+        if (!canSelect)
+            return;
+
         selectedObstacle = obstacle;
         obstacle.claim();
+
+        canSelect = false;
     }
 
     public Obstacle getSelectedObstacle() {

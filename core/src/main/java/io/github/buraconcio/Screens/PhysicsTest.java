@@ -43,7 +43,6 @@ import java.util.ArrayList;
 import java.lang.Runnable;
 
 public class PhysicsTest implements Screen {
-
     private Main game;
     private Stage stage;
     private Skin skin;
@@ -94,6 +93,8 @@ public class PhysicsTest implements Screen {
         testObstacle = new CrossBow(new Vector2(10.5f, 2f), new Vector2(3f, 3f));
         testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
 
+        Obstacle starObstacle = new Obstacle(new Vector2(12.5f, 2f), new Vector2(1f, 1f), "obstacles/star/star.png");
+
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1 = new Vector2();
 
@@ -122,15 +123,13 @@ public class PhysicsTest implements Screen {
                 Vector2 stageCoords = stage.screenToStageCoordinates(new Vector2(x, y));
                 Actor hitActor = stage.hit(stageCoords.x, stageCoords.y, true);
 
-                if (p.getSelectedObstacle() != null) {
+                if (p.getSelectedObstacle() != null && p.getSelectedObstacle().canPlace()) {
                     p.placeObstacle();
                     testObstacle.preRound();
-                }
-
-                if (hitActor instanceof Obstacle) {
+                } else if (hitActor instanceof Obstacle) {
                     Obstacle hitObstacle = (Obstacle) hitActor;
                     if (!hitObstacle.claimed())
-                        p.selectObstacle(testObstacle);
+                        p.selectObstacle(hitObstacle);
                 }
 
                 return true;
@@ -155,9 +154,9 @@ public class PhysicsTest implements Screen {
 
             @Override
             public boolean keyDown(int keyCode) {
-                if (keyCode == Keys.Q) {
+                if (keyCode == Keys.Q && p.getSelectedObstacle() != null) {
                     p.getSelectedObstacle().rotate(Obstacle.COUNTER_CLOCKWISE);
-                } else if (keyCode == Keys.E) {
+                } else if (keyCode == Keys.E && p.getSelectedObstacle() != null) {
                     p.getSelectedObstacle().rotate(Obstacle.CLOCKWISE);
                 }
 
