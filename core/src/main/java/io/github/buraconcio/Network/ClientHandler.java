@@ -21,14 +21,14 @@ public class ClientHandler implements Runnable {
     private Player currentPlayer;
 
     public ClientHandler(Socket socket, boolean flagAccept, List<ClientHandler> clients) throws IOException {
-        
+
         this.socket = socket;
         this.out = new ObjectOutputStream(socket.getOutputStream());
         out.flush();
         this.in = new ObjectInputStream(socket.getInputStream());
         this.flagAccept = flagAccept;
         this.clients = clients;
-        
+
     }
 
     @Override
