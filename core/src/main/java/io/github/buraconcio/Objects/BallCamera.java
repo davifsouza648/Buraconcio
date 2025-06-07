@@ -12,6 +12,7 @@ public class BallCamera extends OrthographicCamera
     {
         super(23,13);
         this.playerBall = playerBall;
+        this.zoom = (float)1.17;
     }
 
     public void updateCamera()

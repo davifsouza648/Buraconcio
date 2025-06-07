@@ -61,8 +61,9 @@ public class PhysicsTest implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         stage.setDebugAll(true);
-
         PhysicsManager.getInstance().setStage(stage);
+
+        mapRenderer.createCollisions();
 
         p = PlayerManager.getInstance().getLocalPlayer();
 
@@ -80,9 +81,6 @@ public class PhysicsTest implements Screen {
 
         camera = new BallCamera(pBall);
         stage.getViewport().setCamera(camera);
-
-        //testFlag = new Flag(new Vector2(20f, 3f));
-        new Flag(new Vector2(20f, 3f));
 
         testObstacle = new CrossBow(new Vector2(10.5f, 2f), new Vector2(3f, 3f));
         testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
@@ -178,30 +176,8 @@ public class PhysicsTest implements Screen {
 
         });
 
-        TiledMapTileLayer layer = (TiledMapTileLayer) mapRenderer.getMap().getLayers().get("Tile Layer");
 
-        float tileSize = 32 * scale; // 32px em metros
 
-        for (int x = 0; x < layer.getWidth(); x++)
-        {
-            for (int y = 0; y < layer.getHeight(); y++)
-            {
-                TiledMapTileLayer.Cell cell = layer.getCell(x, y);
-                if (cell != null && cell.getTile() != null)
-                {
-                    int tileId = cell.getTile().getId();
-
-                    if (tileId == 3)
-                    {
-                        PhysicsEntity wall1 = new PhysicsEntity(new Vector2((x + 0.5f) * tileSize, (y + 0.5f) * tileSize), new Vector2(tileSize, tileSize));
-                        PolygonShape wallBox = new PolygonShape();
-                        wallBox.setAsBox(tileSize / 2, tileSize / 2);
-                        wall1.getBody().createFixture(wallBox, 0f);
-                        wallBox.dispose();
-                    }
-                }
-            }
-        }
 
 
     }
