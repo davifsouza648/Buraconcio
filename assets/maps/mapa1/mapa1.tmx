@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="116">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="119">
  <tileset firstgid="1" source="mapa1.tsx"/>
  <layer id="1" name="Tile Layer" width="100" height="100">
   <data encoding="csv">
@@ -106,8 +106,8 @@
 </data>
  </layer>
  <objectgroup id="4" name="Objetos">
-  <object id="41" name="Box" type="Box" x="0" y="0" width="32" height="3136"/>
-  <object id="48" name="Box" type="Box" x="32" y="0" width="1344" height="32"/>
+  <object id="41" name="Box" type="Box" x="0" y="64" width="32" height="3104"/>
+  <object id="48" name="Box" type="Box" x="64" y="0" width="1312" height="32"/>
   <object id="49" name="Buraco" type="Buraco" x="2942" y="2038" width="64" height="64"/>
   <object id="51" name="Box" x="1376" y="32" width="192" height="32"/>
   <object id="56" name="Box" x="1568" y="64" width="96" height="32"/>
@@ -156,10 +156,11 @@
   </object>
   <object id="106" gid="1073741828" x="32" y="3168" width="32" height="32"/>
   <object id="109" gid="4" x="2400" y="3264" width="32" height="32"/>
-  <object id="110" name="Curva4" x="2296" y="3048" width="64" height="64">
+  <object id="110" name="Curva4" x="2272" y="3072" width="64" height="64">
    <ellipse/>
   </object>
-  <object id="113" gid="3221225476" x="2272" y="3168" width="32" height="32"/>
-  <object id="114" gid="4" x="2304" y="3136" width="32" height="32"/>
+  <object id="117" name="Curva4" x="32" y="32" width="64" height="64">
+   <ellipse/>
+  </object>
  </objectgroup>
 </map>

@@ -86,18 +86,18 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
                         startAngle = (float) Math.PI;
                         break;
                     case 2: // inferior direito
-                        centerX = x;
+                        centerX = x + 8f/pixelsPerMeter;
                         centerY = y + height - 8f/pixelsPerMeter;
                         startAngle = (float) (3 * Math.PI / 2);
                         break;
                     case 3: // superior direito
-                        centerX = x;
-                        centerY = y;
+                        centerX = x + 8f/pixelsPerMeter;
+                        centerY = y + 8f/pixelsPerMeter;
                         startAngle = 0f;
                         break;
                     case 4: // superior esquerdo
-                        centerX = x + width;
-                        centerY = y;
+                        centerX = x + width - 8f/pixelsPerMeter;
+                        centerY = y + 8f/pixelsPerMeter;
                         startAngle = (float) (Math.PI / 2);
                         break;
                 }
