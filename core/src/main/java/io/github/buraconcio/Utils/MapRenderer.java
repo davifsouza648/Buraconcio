@@ -60,7 +60,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
                 Vector2 pos = new Vector2((rect.x + rect.width / 2f) / pixelsPerMeter, (rect.y + rect.height/2f) / pixelsPerMeter);
                 new Flag(pos, rect.width / pixelsPerMeter);
             }
-            else if (object.getName() != null && object.getName().startsWith("Curva")) 
+            else if (object.getName() != null && object.getName().startsWith("Curva"))
             {
                 Ellipse ellipse = ((EllipseMapObject) object).getEllipse();
 
