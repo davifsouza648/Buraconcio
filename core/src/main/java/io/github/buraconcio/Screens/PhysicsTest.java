@@ -65,19 +65,15 @@ public class PhysicsTest implements Screen {
 
         mapRenderer.createCollisions();
 
-        p = PlayerManager.getInstance().getLocalPlayer();
+        //System.out.println(p.getId());
 
-        pBall = p.createBall(new Vector2(3f, 3f));
-        pBall.setZIndex(0);
-
-        float add = 0.5f;
+        float add = 0f;
         for (Player player : PlayerManager.getInstance().getAllPlayers()) {
-            if (player.getId() == PlayerManager.getInstance().getLocalPlayer().getId())
-                continue;
-
             player.createBall(new Vector2(3f, 3f + add));
             add += 0.5f;
         }
+
+        pBall = PlayerManager.getInstance().getLocalPlayer().getBall();
 
         camera = new BallCamera(pBall);
         stage.getViewport().setCamera(camera);
@@ -100,6 +96,7 @@ public class PhysicsTest implements Screen {
 
             @Override
             public boolean touchUp(int x, int y, int pointer, int button) {
+                p = PlayerManager.getInstance().getLocalPlayer();
                 Vector3 unprojected = camera.unproject(new Vector3(mouse1.x, mouse1.y, 0));
                 mouse1 = new Vector2(unprojected.x, unprojected.y);
 
@@ -138,6 +135,7 @@ public class PhysicsTest implements Screen {
             }
 
             public boolean mouseMoved(int x, int y)  {
+                p = PlayerManager.getInstance().getLocalPlayer();
                 Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
                 if (p.getSelectedObstacle() != null) p.getSelectedObstacle().move(new Vector2(unprojected.x, unprojected.y));
 
@@ -146,6 +144,7 @@ public class PhysicsTest implements Screen {
 
             @Override
             public boolean keyDown(int keyCode) {
+                p = PlayerManager.getInstance().getLocalPlayer();
                 if (keyCode == Keys.Q && p.getSelectedObstacle() != null) {
                     p.getSelectedObstacle().rotate(Obstacle.COUNTER_CLOCKWISE);
                 } else if (keyCode == Keys.E && p.getSelectedObstacle() != null) {
