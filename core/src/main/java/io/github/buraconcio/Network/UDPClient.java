@@ -36,7 +36,7 @@ public class UDPClient {
 
         try {
 
-            UDPsocket = new DatagramSocket(Constants.UDP_PORT_CLIENT);
+            UDPsocket = new DatagramSocket();
             address = InetAddress.getByName(Constants.IP);
 
             new Thread(() -> {
@@ -49,7 +49,7 @@ public class UDPClient {
 
                 sendPlayerData(false);
 
-                Thread.sleep(100);
+                Thread.sleep(16);
 
             }
             // UDPsocket.close();
@@ -131,7 +131,7 @@ public class UDPClient {
 
             packageList = deserialize(validData);
 
-            System.out.println("Pacotes recebidos: " + packageList.size());
+            // System.out.println("Pacotes recebidos: " + packageList.size());
 
 
             PlayerManager.getInstance().updatePlayers(packageList);
@@ -148,7 +148,7 @@ public class UDPClient {
 
         } catch (IOException | ClassNotFoundException e) {
 
-            System.out.println("erro no recebimento: " + e.getMessage());
+            // System.out.println("erro no recebimento: " + e.getMessage());
 
         }
 

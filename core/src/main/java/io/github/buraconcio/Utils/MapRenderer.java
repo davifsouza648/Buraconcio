@@ -22,7 +22,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
 {
     private static float scale = 1/32f;
     private static TiledMap map;
-    
+
     public MapRenderer(String mapName)
     {
         super(map = new TmxMapLoader().load("maps/" + mapName + "/" + mapName + ".tmx"), scale);
@@ -31,13 +31,13 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
     public void createCollisions()
     {
         float pixelsPerMeter = 32f;
-        float tileSize = 1f; 
-        
+        float tileSize = 1f;
+
         MapObjects objects = getMap().getLayers().get("Objetos").getObjects();
 
         for(MapObject object: objects)
         {
-            System.out.println(object.getName());
+            // System.out.println(object.getName());
             if ("Box".equals(object.getName())) //No tiled apenas sete o nome do objeto criado que ele será reconhecido aqui, caso não esteja nesses ifs, crie um.
             {
                 Rectangle rect = ((RectangleMapObject)object).getRectangle();
@@ -180,5 +180,5 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
 
 
 
-    
+
 }

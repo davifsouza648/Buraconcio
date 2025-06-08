@@ -15,17 +15,16 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
+// import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
 import io.github.buraconcio.Network.Server;
-import io.github.buraconcio.Network.UDPClient;
-import io.github.buraconcio.Network.UDPServer;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Button;
 import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.ConnectionManager;
+import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.PlayerManager;
 
@@ -38,10 +37,8 @@ public class ServerScreen implements Screen {
     private ImageButtonStyle startStyle, cancelStyle;
     private Label title;
     private boolean started = false, flagBackButton = true;
-    private boolean isHosting = PlayerManager.getInstance().getLocalPlayer().getHosting();
     private Client cliente = ConnectionManager.getInstance().getClient();
     private Server server = ConnectionManager.getInstance().getServer();
-    private UDPServer udpServer = ConnectionManager.getInstance().getUdpServer();
     private Timer.Task countdownTask;
     private boolean firstIn = true;
 
@@ -69,12 +66,12 @@ public class ServerScreen implements Screen {
 
         root.setDebug(false);
 
-        if (!isHosting && firstIn) {
+        if (!Constants.isHosting() && firstIn) {
             refreshPlayers();
             firstIn = false;
         }
 
-        if (isHosting) {
+        if (Constants.isHosting()) {
 
             server = new Server();
 
@@ -165,7 +162,7 @@ public class ServerScreen implements Screen {
 
                 System.out.println("Start Match pressionado!");
 
-                if (isHosting) {
+                if (Constants.isHosting()) {
                     server.changeButton(false);
                 }
             }
@@ -179,7 +176,7 @@ public class ServerScreen implements Screen {
                     return;
                 }
 
-                if (isHosting) {
+                if (Constants.isHosting()) {
 
                     if (server != null) {
                         server.stop();
@@ -211,7 +208,7 @@ public class ServerScreen implements Screen {
             }
         });
 
-        if (!isHosting) {
+        if (!Constants.isHosting()) {
             startButton.clearListeners();
         }
 
@@ -269,7 +266,7 @@ public class ServerScreen implements Screen {
         Table botInfo = new Table();
         Label Alabel = null;
 
-        if (isHosting) {
+        if (Constants.isHosting()) {
             try {
                 Alabel = new Label("IP Server: " + InetAddress.getLocalHost().getHostAddress(), skinLabel,
                         "labelPixelyWhite32");
@@ -341,7 +338,7 @@ public class ServerScreen implements Screen {
 
             startButton.setStyle(cancelStyle);
 
-            if (isHosting) {
+            if (Constants.isHosting()) {
                 startButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
@@ -362,11 +359,11 @@ public class ServerScreen implements Screen {
         startButton.setStyle(startStyle);
         flagBackButton = true;
 
-        if (isHosting) {
+        if (Constants.isHosting()) {
             startButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    if (isHosting) {
+                    if (Constants.isHosting()) {
                         server.changeButton(false);
                     }
                 }
@@ -399,20 +396,24 @@ public class ServerScreen implements Screen {
 
                 } else {
 
-                    if (isHosting) {
+                    if (Constants.isHosting()) {
                         server.stopAccepting();
-
-                        UDPServer udpServer = new UDPServer();
-                        ConnectionManager.getInstance().setUDPserver(udpServer);
-                        udpServer.startUDPServer();
-
                     }
 
                     title.setText("MATCH LOBBY - GO!");
                     title.invalidate();
                     this.cancel();
 
-                    if (isHosting) {
+                    for (Player a : PlayerManager.getInstance().getAllPlayers()) {
+                        System.out.println(a.getUsername());
+
+                        if (a.getId() == PlayerManager.getInstance().getLocalPlayer().getId()) {
+                            PlayerManager.getInstance().setLocalPlayer(a);
+                        }
+
+                    }
+
+                    if (Constants.isHosting()) {
                         game.setScreen(new PhysicsTest(game)); // TODO: LEMBRAR DA TELA DE GAME AQUI
                     } else {
                         game.setScreen(new PhysicsTest(game));

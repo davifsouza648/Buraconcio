@@ -70,18 +70,21 @@ public class PlayerManager {
     public void updatePlayers(List<UdpPackage> update) {
         Runnable task = () -> {
 
-            System.out.println("called update players");
-            System.out.println();
+            // System.out.println("called update players");
+            // System.out.println();
 
             for (UdpPackage pack : update) {
                 // testing ball for now
                 int playerId = pack.getId();
-                Vector2 ballPos = new Vector2(pack.getBallX(), pack.getBallY());
-                Vector2 ballVel = new Vector2(pack.getBallVX(), pack.getBallVY());
 
-                Vector2 obstaclePos = new Vector2(pack.getObsX(), pack.getObsY());
+                if (playerId != Constants.localP().getId()) {
+                    Vector2 ballPos = new Vector2(pack.getBallX(), pack.getBallY());
+                    Vector2 ballVel = new Vector2(pack.getBallVX(), pack.getBallVY());
 
-                PlayerManager.getInstance().getPlayer(playerId).update(ballPos, ballVel, obstaclePos);
+                    Vector2 obstaclePos = new Vector2(pack.getObsX(), pack.getObsY());
+
+                    PlayerManager.getInstance().getPlayer(playerId).update(ballPos, ballVel, obstaclePos);
+                }
             }
 
         };

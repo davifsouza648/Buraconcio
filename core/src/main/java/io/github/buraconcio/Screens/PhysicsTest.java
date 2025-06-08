@@ -12,12 +12,14 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
 import io.github.buraconcio.Network.UDPClient;
+import io.github.buraconcio.Network.UDPServer;
 import io.github.buraconcio.Objects.*;
 import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.ConnectionManager;
+import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.MapRenderer;
 import io.github.buraconcio.Utils.PhysicsManager;
-
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -39,9 +41,9 @@ public class PhysicsTest implements Screen {
     private Ball pBall;
 
     private MapRenderer mapRenderer;
-    float scale = 1/32f;
+    float scale = 1 / 32f;
 
-    //server test
+    // server test
     private Client client;
 
     public PhysicsTest(Main game) {
@@ -50,7 +52,6 @@ public class PhysicsTest implements Screen {
 
         debugRenderer = new Box2DDebugRenderer();
 
-
         stage = new Stage(new FitViewport(23, 13));
         Gdx.input.setInputProcessor(stage);
 
@@ -58,13 +59,16 @@ public class PhysicsTest implements Screen {
         PhysicsManager.getInstance().setStage(stage);
 
         mapRenderer.createCollisions();
-
-        //System.out.println(p.getId());
+        // System.out.println(p.getId());
 
         float add = 0f;
         for (Player player : PlayerManager.getInstance().getAllPlayers()) {
-            player.createBall(new Vector2(3f, 3f + add));
-            add += 0.5f;
+
+            if (player.getBall() == null) {
+                player.createBall(new Vector2(3f, 3f + add));
+                add += 0.5f;
+            }
+
         }
 
         pBall = PlayerManager.getInstance().getLocalPlayer().getBall();
@@ -98,7 +102,9 @@ public class PhysicsTest implements Screen {
                 unprojected = camera.unproject(new Vector3(x, y, 0));
                 Vector2 mouse2 = new Vector2(unprojected.x, unprojected.y);
 
-                Runnable task = () -> {p.stroke(mouse1, mouse2);};
+                Runnable task = () -> {
+                    p.stroke(mouse1, mouse2);
+                };
                 PhysicsManager.getInstance().schedule(task);
                 pBall.resetShootingGuide();
 
@@ -129,10 +135,11 @@ public class PhysicsTest implements Screen {
                 return true;
             }
 
-            public boolean mouseMoved(int x, int y)  {
+            public boolean mouseMoved(int x, int y) {
                 p = PlayerManager.getInstance().getLocalPlayer();
                 Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
-                if (p.getSelectedObstacle() != null) p.getSelectedObstacle().move(new Vector2(unprojected.x, unprojected.y));
+                if (p.getSelectedObstacle() != null)
+                    p.getSelectedObstacle().move(new Vector2(unprojected.x, unprojected.y));
 
                 return true;
             }
@@ -154,7 +161,7 @@ public class PhysicsTest implements Screen {
         PhysicsManager.getInstance().getWorld().setContactListener(new ContactListener() {
             @Override
             public void endContact(Contact contact) {
-                //PhysicsManager.getInstance().removeContact(contact);
+                // PhysicsManager.getInstance().removeContact(contact);
             }
 
             @Override
@@ -163,26 +170,30 @@ public class PhysicsTest implements Screen {
             }
 
             @Override
-	        public void preSolve(Contact contact, Manifold oldManifold) {}
+            public void preSolve(Contact contact, Manifold oldManifold) {
+            }
 
-	        @Override
-	        public void postSolve(Contact contact, ContactImpulse impulse) {}
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+            }
 
         });
 
-
-
-
-
     }
-
 
     @Override
     public void show() {
         CursorManager.setGameCursor();
 
-        UDPClient udpClient = new UDPClient();
+        if (Constants.isHosting()) {
 
+            UDPServer udpServer = new UDPServer();
+            ConnectionManager.getInstance().setUDPserver(udpServer);
+            udpServer.startUDPServer();
+        }
+
+        UDPClient udpClient = new UDPClient();
+        ConnectionManager.getInstance().setUDPclient(udpClient);
         udpClient.startUDPClient();
 
     }
@@ -203,13 +214,22 @@ public class PhysicsTest implements Screen {
         PhysicsManager.getInstance().tick();
     }
 
-    @Override public void resize(int width, int height) {
+    @Override
+    public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
-    @Override public void pause() {}
-    @Override public void resume() {}
-    @Override public void hide() {}
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
+    public void hide() {
+    }
 
     @Override
     public void dispose() {

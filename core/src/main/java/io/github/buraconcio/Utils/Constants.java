@@ -26,6 +26,10 @@ public class Constants {
         return IP;
     }
 
+    public static boolean isHosting(){
+        return localP().getHosting();
+    }
+
     public static void setIP(String newIP) {
         IP = newIP;
     }

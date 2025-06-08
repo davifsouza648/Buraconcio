@@ -38,7 +38,7 @@ public class UDPServer {
                     packageList.clear();
 
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(16);
 
                     } catch (InterruptedException e) {
 
@@ -88,7 +88,7 @@ public class UDPServer {
 
         UdpPackage pacote = deserialize(receivedPacket.getData());
 
-        InetSocketAddress clientAddress = new InetSocketAddress(receivedPacket.getAddress(), Constants.PORT);
+        InetSocketAddress clientAddress = new InetSocketAddress(receivedPacket.getAddress(), receivedPacket.getPort());
 
         if (!clientAddressList.contains(clientAddress)) {
             clientAddressList.add(clientAddress);
@@ -121,12 +121,12 @@ public class UDPServer {
             for (InetSocketAddress s : clientAddressList) {
 
                 DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, s.getAddress(),
-                        Constants.UDP_PORT_CLIENT);
+                        s.getPort());
                 socket.send(sendPacket);
 
             }
 
-            System.out.println("Pacotes enviados: " + packagesToSend.size());
+            // System.out.println("Pacotes enviados: " + packagesToSend.size());
 
         } catch (IOException e) {
 

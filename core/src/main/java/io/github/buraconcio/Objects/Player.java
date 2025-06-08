@@ -30,7 +30,7 @@ public class Player implements Serializable {
 
     private transient Ball ball;
 
-    public Player(String username){
+    public Player(String username) {
         this.username = username;
         stars = 0;
 
@@ -47,12 +47,12 @@ public class Player implements Serializable {
     }
 
     public Ball createBall(Vector2 pos) {
-        ball = new Ball(pos, Constants.BALL_RADIUS*2, this);
+        ball = new Ball(pos, Constants.BALL_RADIUS * 2, this);
 
         return ball;
     }
 
-    public Ball getBall(){
+    public Ball getBall() {
         return ball;
     }
 
@@ -71,11 +71,15 @@ public class Player implements Serializable {
     }
 
     public void stroke(Vector2 mouse1, Vector2 mouse2) {
-        if (!ball.isStill()) return;
+        if (!ball.isStill())
+            return;
+
+        if (strokeSounds == null || strokeSounds.isEmpty()) {
+            initSounds();
+        }
 
         ball.applyImpulse(ball.calculateImpulse(mouse1, mouse2));
-        strokeSounds.get((int)(Math.random() * strokeSounds.size())).play(1f);
-
+        strokeSounds.get((int) (Math.random() * strokeSounds.size())).play(1f);
 
         strokes += 1;
     }
@@ -91,17 +95,17 @@ public class Player implements Serializable {
         ball.enterHole();
     }
 
-    public void rewardStar(){
-        if(strokes <= 2){
+    public void rewardStar() {
+        if (strokes <= 2) {
             stars += 3;
-        }else if(strokes <= 5){
+        } else if (strokes <= 5) {
             stars += 1;
         }
     }
 
     public void placeObstacle() {
-        //if (selectedObstacle == null)
-        //    return;
+        // if (selectedObstacle == null)
+        // return;
 
         selectedObstacle.place();
         selectedObstacle = null;
@@ -129,7 +133,7 @@ public class Player implements Serializable {
         return selectedObstacle;
     }
 
-    public String getUsername(){
+    public String getUsername() {
         return username;
     }
 
@@ -145,7 +149,7 @@ public class Player implements Serializable {
         return id;
     }
 
-    public double getStars(){
+    public double getStars() {
         return stars;
     }
 
@@ -153,25 +157,36 @@ public class Player implements Serializable {
         this.stars = stars;
     }
 
-    public void setAvatar(int num){
+    public void setAvatar(int num) {
 
         avatarpath = "user" + num + ".png";
     }
 
-    public String getAvatar(){
+    public String getAvatar() {
         return avatarpath;
     }
 
-    public void setHosting(boolean tf){
+    public void setHosting(boolean tf) {
         hosting = tf;
     }
 
-    public Boolean getHosting(){
+    public Boolean getHosting() {
         return hosting;
     }
 
-    public int getStrokes(){
+    public int getStrokes() {
         return this.strokes;
+    }
+
+    private void initSounds() {
+        strokeSounds = new ArrayList<>();
+        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit1.wav")));
+        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit2.wav")));
+        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit3.wav")));
+        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit4.wav")));
+        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit5.wav")));
+        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit6.wav")));
+        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit7.wav")));
     }
 
 }
