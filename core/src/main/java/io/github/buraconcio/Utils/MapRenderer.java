@@ -38,7 +38,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
         for(MapObject object: objects)
         {
             System.out.println(object.getName());
-            if ("Box".equals(object.getName()))
+            if ("Box".equals(object.getName())) //No tiled apenas sete o nome do objeto criado que ele será reconhecido aqui, caso não esteja nesses ifs, crie um.
             {
                 Rectangle rect = ((RectangleMapObject)object).getRectangle();
 

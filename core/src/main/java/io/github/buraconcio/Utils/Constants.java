@@ -10,7 +10,7 @@ public class Constants {
     // multiplica o tamanho padrao do sensor da flag
     public static final float FLAG_LENIENCY = 0.5f;
     // quanto a bola deve estar parada para poder jogar
-    public static final float STILL_TOLERANCE = 999999f;
+    public static final float STILL_TOLERANCE = 0.5f;
 
     //usar no server e client
     public static final int PORT = 5050, UDP_PORT_SERVER = 5565, UDP_PORT_CLIENT = 5566;
