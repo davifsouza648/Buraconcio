@@ -14,6 +14,7 @@ public class PlayerManager {
     private List<Player> players = new CopyOnWriteArrayList<>();
     private static PlayerManager instance;
     private int localPlayerID;
+    private Player localPlayer;
 
     public PlayerManager() {
         players = new ArrayList<>();
@@ -69,19 +70,19 @@ public class PlayerManager {
     public void updatePlayers(List<UdpPackage> update) {
         Runnable task = () -> {
 
-        System.out.println("called update players");
-        System.out.println();
+            System.out.println("called update players");
+            System.out.println();
 
-        for (UdpPackage pack : update) {
-            // testing ball for now
-            int playerId = pack.getId();
-            Vector2 ballPos = new Vector2(pack.getBallX(), pack.getBallY());
-            Vector2 ballVel = new Vector2(pack.getBallVX(), pack.getBallVY());
+            for (UdpPackage pack : update) {
+                // testing ball for now
+                int playerId = pack.getId();
+                Vector2 ballPos = new Vector2(pack.getBallX(), pack.getBallY());
+                Vector2 ballVel = new Vector2(pack.getBallVX(), pack.getBallVY());
 
-            Vector2 obstaclePos = new Vector2(pack.getObsX(), pack.getObsY());
+                Vector2 obstaclePos = new Vector2(pack.getObsX(), pack.getObsY());
 
-            PlayerManager.getInstance().getPlayer(playerId).update(ballPos, ballVel, obstaclePos);
-        }
+                PlayerManager.getInstance().getPlayer(playerId).update(ballPos, ballVel, obstaclePos);
+            }
 
         };
         PhysicsManager.getInstance().schedule(task);
@@ -91,12 +92,15 @@ public class PlayerManager {
         return players.size();
     }
 
-    public void setLocalPlayer(int id) {
-        this.localPlayerID = id;
+    public void setLocalPlayer(Player player) {
+
+        this.localPlayer = player;
+        addPlayer(player);
+
     }
 
     public Player getLocalPlayer() {
-        return getPlayer(localPlayerID);
+        return localPlayer;
     }
 
     public void clear() {
