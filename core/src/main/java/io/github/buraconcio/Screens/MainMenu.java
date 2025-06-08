@@ -4,17 +4,13 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -22,11 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import io.github.buraconcio.Main;
-import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Utils.CursorManager;
+import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Objects.Button;
 
@@ -49,52 +45,10 @@ public class MainMenu implements Screen {
 
         skin = new Skin(Gdx.files.internal("uiskin.json")); // usa fonte padrão
 
-        spriteSheet1 = new Texture(Gdx.files.internal("backgroundMenu.png"));
-        JsonValue json1 = new JsonReader().parse(Gdx.files.internal("backgroundMenu.json"));
-        JsonValue framesJson1 = json1.get("frames");
-
-        ArrayList<TextureRegion> frames1 = new ArrayList<>();
-
-        for (int i = 0; i < framesJson1.size; i++) {
-            JsonValue frameObj = framesJson1.get(i);
-            JsonValue frameData = frameObj.get("frame");
-
-            int x = frameData.getInt("x");
-            int y = frameData.getInt("y");
-            int w = frameData.getInt("w");
-            int h = frameData.getInt("h");
-
-            TextureRegion region = new TextureRegion(spriteSheet1, x, y, w, h);
-            frames1.add(region);
-        }
-
-        spriteSheet2 = new Texture(Gdx.files.internal("nomeMenu.png"));
-        JsonValue json2 = new JsonReader().parse(Gdx.files.internal("nomeMenu.json"));
-        JsonValue framesJson2 = json2.get("frames");
-
-        ArrayList<TextureRegion> frames2 = new ArrayList<>();
-
-        for (int i = 0; i < 20; i++) {
-            String key = "buraconcio " + i + ".ase";
-            JsonValue frameData2 = framesJson2.get(key).get("frame");
-
-            int x = frameData2.getInt("x");
-            int y = frameData2.getInt("y");
-            int w = frameData2.getInt("w");
-            int h = frameData2.getInt("h");
-
-            TextureRegion region = new TextureRegion(spriteSheet2, x, y, w, h);
-            frames2.add(region);
-        }
-
-        backAnimation = new Animation<>(0.1f, frames1.toArray(new TextureRegion[0]));
-        backAnimation.setPlayMode(Animation.PlayMode.LOOP);
-
+        backAnimation = Auxiliaries.animationFromFiles("backgroundMenu.png", "backgroundMenu.json");
         backImage = new Image(new TextureRegionDrawable(backAnimation.getKeyFrame(0)));
 
-        buraconcioAnimation = new Animation<>(0.1f, frames2.toArray(new TextureRegion[0]));
-        buraconcioAnimation.setPlayMode(Animation.PlayMode.LOOP);
-
+        buraconcioAnimation = Auxiliaries.animationFromFiles("nomeMenu.png", "nomeMenu.json");
         buraconcioImage = new Image(new TextureRegionDrawable(buraconcioAnimation.getKeyFrame(0)));
 
         Button join = new Button();
