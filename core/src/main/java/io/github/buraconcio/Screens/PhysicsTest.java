@@ -15,6 +15,7 @@ import io.github.buraconcio.Network.UDPClient;
 import io.github.buraconcio.Network.UDPServer;
 import io.github.buraconcio.Objects.*;
 import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.CursorManager;
@@ -79,7 +80,8 @@ public class PhysicsTest implements Screen {
         testObstacle = new CrossBow(new Vector2(10.5f, 2f), new Vector2(3f, 3f));
         testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
 
-        new Obstacle(new Vector2(12.5f, 2f), new Vector2(1f, 1f), "obstacles/star/star.png");
+        new Obstacle(new Vector2(12.5f, 2f), new Vector2(1f, 1f),
+            Auxiliaries.animationFromFiles("obstacles/star/star.png", "obstacles/star/star.json"));
         new BoostPad(new Vector2(14.5f, 2f), new Vector2(3f, 3f));
 
         Gdx.input.setInputProcessor(new InputAdapter() {

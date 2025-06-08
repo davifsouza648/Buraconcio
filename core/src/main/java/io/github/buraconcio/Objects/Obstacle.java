@@ -26,14 +26,12 @@ public class Obstacle extends PhysicsEntity {
     }
 
     public Obstacle(Vector2 pos, Vector2 size, Animation<TextureRegion> animation) {
-        super(pos, size, new AnimationPlay(animation));
+        super(pos, size, animation);
     }
 
     public Obstacle(Vector2 pos, Vector2 size, AnimationPlay animation) {
         super(pos, size, animation);
     }
-
-
 
     public void applyEffect(Player player) {}
 

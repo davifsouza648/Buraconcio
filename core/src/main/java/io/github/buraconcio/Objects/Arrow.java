@@ -17,7 +17,7 @@ public class Arrow extends PhysicsEntity {
     public static final Vector2 arrowSize = new Vector2(1.6f, 0.6f);
 
     public Arrow(Vector2 pos, float speed, float angle) {
-        super(pos, arrowSize, "arrow.png");
+        super(pos, arrowSize, "obstacles/arrow/arrow.png");
 
         body.setType(BodyType.DynamicBody);
 

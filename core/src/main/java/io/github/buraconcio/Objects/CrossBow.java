@@ -3,23 +3,24 @@ package io.github.buraconcio.Objects;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-import io.github.buraconcio.Utils.Constants;
-import io.github.buraconcio.Utils.PhysicsManager;
-import io.github.buraconcio.Objects.Player;
-import io.github.buraconcio.Objects.Obstacle;
+import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Objects.Arrow;
 
 import java.lang.Math;
 
 public class CrossBow extends Obstacle {
-    public static final float spawnRate = 1f; // seconds
     public static final float arrowSpeed = 3f;
+    public static final float frameDuration = 0.05f;
+    public static final float shootFrame = 0.05f;
 
-    private boolean spawning = false;
+    private boolean canSpawn = true;
     private float timer;
 
     public CrossBow(Vector2 pos, Vector2 size) {
-        super(pos, size, "crossBow.png");
+        super(pos, size,
+            Auxiliaries.animationFromFiles("obstacles/crossbow/crossbow.png", "obstacles/crossbow/crossbow.json"));
+        animacao.setAnimationSpeed(frameDuration);
+        animacao.pauseAnimation();
 
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
@@ -36,18 +37,18 @@ public class CrossBow extends Obstacle {
     public void act(float delta) {
         super.act(delta);
 
-        timer += delta;
+        System.out.println(animacao.isLastFrame());
+        if (animacao.isLastFrame()) {
+            if (canSpawn)
+                spawnArrow();
 
-        if (timer >= spawnRate) {
-            spawnArrow();
-            timer -= spawnRate;
+            canSpawn = false;
+        } else {
+            canSpawn = true;
         }
     }
 
     public void spawnArrow() {
-        if (!spawning)
-            return;
-
         float angle = body.getAngle();
 
         float sin = (float) Math.sin(angle);
@@ -62,26 +63,13 @@ public class CrossBow extends Obstacle {
 
     @Override
     public void preRound() {
-        setSpawning(true);
+        animacao.resumeAnimation();
     }
 
     @Override
     public void place() {
         super.place();
         body.getFixtureList().forEach(fixture -> {fixture.setSensor(false);});
-    }
-
-    public void setSpawning(boolean spawning) {
-        this.spawning = spawning;
-        timer = 0f;
-    }
-
-    public boolean getSpawning() {
-        return spawning;
-    }
-
-    public void toggleSpawning() {
-        setSpawning(!spawning);
     }
 }
 

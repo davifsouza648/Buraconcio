@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -22,7 +24,7 @@ public class PhysicsEntity extends Actor {
     protected Sprite sprite;
     protected Body body;
     protected int id;
-    private AnimationPlay animacao;
+    protected AnimationPlay animacao;
 
     public PhysicsEntity(Vector2 pos, Vector2 size)
     {
@@ -38,29 +40,27 @@ public class PhysicsEntity extends Actor {
         body = PhysicsManager.getInstance().getWorld().createBody(bodyDef);
 
         PhysicsManager.getInstance().addEntity(this);
-        PhysicsManager.getInstance().addToStage(this);
     }
 
     public PhysicsEntity(Vector2 pos, Vector2 size, String texturePath) {
         this(pos, size);
 
-        if (texturePath != null)
-        {
-            Texture texture = new Texture(Gdx.files.internal(texturePath));
-            sprite = new Sprite(texture);
-            sprite.setSize(size.x, size.x * (sprite.getHeight() / sprite.getWidth()));
-            sprite.setOriginCenter();
-            setSize(sprite.getWidth() * sprite.getScaleX(), sprite.getHeight() * sprite.getScaleY());
-        }
+        animacao = new AnimationPlay(texturePath, this);
+        PhysicsManager.getInstance().addToStage(this); // choggs pq precisa ser posto dps da animacao
+    }
+
+    public PhysicsEntity(Vector2 pos, Vector2 size, Animation<TextureRegion> animacao) {
+        this(pos, size);
+
+        this.animacao = new AnimationPlay(animacao, this);
+        PhysicsManager.getInstance().addToStage(this);
     }
 
     public PhysicsEntity(Vector2 pos, Vector2 size, AnimationPlay animacao) {
         this(pos, size);
 
-        setSize(animacao.getWidth() * animacao.getScaleX(), animacao.getHeight() * animacao.getScaleY());
-
-        // Armazenando a animação
         this.animacao = animacao;
+        PhysicsManager.getInstance().addToStage(this);
     }
 
     // Método para destruir a entidade
@@ -91,20 +91,7 @@ public class PhysicsEntity extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha)
     {
-        if (sprite != null)
-        {
-            sprite.setRotation(getRotation());
-            sprite.setPosition(getX(), getY());
-            sprite.draw(batch, parentAlpha);
-        }
-        else if (animacao != null)
-        {
-            // Caso tenha animação, desenha a animação
-            sprite.setRegion(animacao.getCurrentFrame());
-            sprite.setRotation(getRotation());
-            sprite.setPosition(getX(), getY());
-            sprite.draw(batch, parentAlpha);
-        }
+        //animacao.draw(batch, parentAlpha);
     }
 
     // Método para atualizar animação e posição da entidade
@@ -116,9 +103,7 @@ public class PhysicsEntity extends Actor {
         this.setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         this.setRotation(body.getAngle() * 180f / 3.14f);
 
-        if (animacao != null) {
-            animacao.act(delta);
-        }
+        //animacao.act(delta);
     }
 
     // Método para obter o corpo físico

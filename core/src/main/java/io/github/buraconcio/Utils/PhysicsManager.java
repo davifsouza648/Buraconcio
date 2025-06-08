@@ -116,6 +116,7 @@ public class PhysicsManager {
         Runnable task = () -> {
         boolean duplicate = false;
 
+        try{
         for (Contact existingContact : contactList) {
             PhysicsEntity entityA = getEntity(contact.getFixtureA().getBody().getUserData());
             PhysicsEntity entityB = getEntity(contact.getFixtureB().getBody().getUserData());
@@ -128,6 +129,7 @@ public class PhysicsManager {
                 break;
             }
         }
+        } catch (Exception e) {}
 
         if (!duplicate) {
             contactList.add(contact);
