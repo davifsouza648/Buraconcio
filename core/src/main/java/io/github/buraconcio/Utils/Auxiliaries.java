@@ -1,7 +1,14 @@
 package io.github.buraconcio.Utils;
 
-import io.github.buraconcio.Screens.MainMenu;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 
+import io.github.buraconcio.Screens.MainMenu;
 
 public class Auxiliaries {
 
@@ -30,4 +37,24 @@ public class Auxiliaries {
         PlayerManager.getInstance().addPlayer(PlayerManager.getInstance().getLocalPlayer());
     }
 
+    public static final Animation<TextureRegion> animationFromFiles(String imagePath, String jsonPath) {
+        Texture spriteSheet = new Texture(Gdx.files.internal(imagePath));
+        JsonReader reader = new JsonReader();
+        JsonValue root = reader.parse(Gdx.files.internal(jsonPath));
+
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+        for (JsonValue frame : root.get("frames")) {
+            JsonValue frameData = frame.get("frame");
+
+            int x = frameData.getInt("x");
+            int y = frameData.getInt("y");
+            int w = frameData.getInt("w");
+            int h = frameData.getInt("h");
+
+            frames.add(new TextureRegion(spriteSheet, x, y, w, h));
+        }
+
+        return new Animation<TextureRegion>(0.1f, frames, Animation.PlayMode.LOOP);
+
+    }
 }

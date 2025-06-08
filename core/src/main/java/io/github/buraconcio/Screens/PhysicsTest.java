@@ -12,13 +12,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
 import io.github.buraconcio.Network.UDPClient;
-import io.github.buraconcio.Objects.Player;
-import io.github.buraconcio.Objects.Ball;
-import io.github.buraconcio.Objects.Flag;
-import io.github.buraconcio.Objects.CrossBow;
-import io.github.buraconcio.Objects.Obstacle;
-import io.github.buraconcio.Objects.PhysicsEntity;
-import io.github.buraconcio.Objects.BallCamera;
+import io.github.buraconcio.Objects.*;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.MapRenderer;
@@ -81,7 +75,8 @@ public class PhysicsTest implements Screen {
         testObstacle = new CrossBow(new Vector2(10.5f, 2f), new Vector2(3f, 3f));
         testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
 
-        Obstacle starObstacle = new Obstacle(new Vector2(12.5f, 2f), new Vector2(1f, 1f), "obstacles/star/star.png");
+        new Obstacle(new Vector2(12.5f, 2f), new Vector2(1f, 1f), "obstacles/star/star.png");
+        new BoostPad(new Vector2(14.5f, 2f), new Vector2(3f, 3f));
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1 = new Vector2();

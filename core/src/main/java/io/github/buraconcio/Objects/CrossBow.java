@@ -65,6 +65,12 @@ public class CrossBow extends Obstacle {
         setSpawning(true);
     }
 
+    @Override
+    public void place() {
+        super.place();
+        body.getFixtureList().forEach(fixture -> {fixture.setSensor(false);});
+    }
+
     public void setSpawning(boolean spawning) {
         this.spawning = spawning;
         timer = 0f;

@@ -5,12 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.graphics.g2d.Animation;
 
-public class AnimationPlay extends Image
-{
+public class AnimationPlay extends Image {
     private Animation<TextureRegion> animation;
     private float elapsedTime = 0f;
 
-    public AnimationPlay(Animation<TextureRegion> animation) 
+    public AnimationPlay(Animation<TextureRegion> animation)
     {
         super(new TextureRegionDrawable(animation.getKeyFrame(0)));
         this.animation = animation;
@@ -18,7 +17,7 @@ public class AnimationPlay extends Image
     }
 
     @Override
-    public void act(float delta) 
+    public void act(float delta)
     {
         super.act(delta);
         elapsedTime += delta;
@@ -29,5 +28,5 @@ public class AnimationPlay extends Image
     {
         return animation.getKeyFrame(elapsedTime);
     }
-    
+
 }

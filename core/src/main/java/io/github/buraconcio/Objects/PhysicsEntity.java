@@ -27,7 +27,7 @@ public class PhysicsEntity extends Actor {
     public PhysicsEntity(Vector2 pos, Vector2 size)
     {
         super();
-        
+
         setPosition(pos.x, pos.y);
         setOrigin(Align.center);
 
@@ -42,14 +42,9 @@ public class PhysicsEntity extends Actor {
     }
 
     public PhysicsEntity(Vector2 pos, Vector2 size, String texturePath) {
-        super();
+        this(pos, size);
 
-        setPosition(pos.x, pos.y);
-        setOrigin(Align.center);
-
-        setSize(size.x, size.y);
-
-        if (texturePath != null) 
+        if (texturePath != null)
         {
             Texture texture = new Texture(Gdx.files.internal(texturePath));
             sprite = new Sprite(texture);
@@ -57,23 +52,12 @@ public class PhysicsEntity extends Actor {
             sprite.setOriginCenter();
             setSize(sprite.getWidth() * sprite.getScaleX(), sprite.getHeight() * sprite.getScaleY());
         }
-
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(pos.x, pos.y);
-        body = PhysicsManager.getInstance().getWorld().createBody(bodyDef);
-
-        PhysicsManager.getInstance().addEntity(this);
-        PhysicsManager.getInstance().addToStage(this);
-
-        setVisible(true);
     }
 
     public PhysicsEntity(Vector2 pos, Vector2 size, AnimationPlay animacao) {
-        super();
+        this(pos, size);
 
-        setPosition(pos.x, pos.y);
-        setOrigin(Align.center);
-        setSize(size.x, size.y);
+        setSize(animacao.getWidth() * animacao.getScaleX(), animacao.getHeight() * animacao.getScaleY());
 
         // Armazenando a animação
         this.animacao = animacao;
@@ -99,22 +83,21 @@ public class PhysicsEntity extends Actor {
         return id;
     }
 
-
-    public boolean contact(PhysicsEntity entity) 
+    public boolean contact(PhysicsEntity entity)
     {
         return false;
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) 
+    public void draw(Batch batch, float parentAlpha)
     {
-        if (sprite != null) 
+        if (sprite != null)
         {
             sprite.setRotation(getRotation());
             sprite.setPosition(getX(), getY());
             sprite.draw(batch, parentAlpha);
-        } 
-        else if (animacao != null) 
+        }
+        else if (animacao != null)
         {
             // Caso tenha animação, desenha a animação
             sprite.setRegion(animacao.getCurrentFrame());

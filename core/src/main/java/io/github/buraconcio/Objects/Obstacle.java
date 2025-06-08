@@ -1,11 +1,14 @@
 package io.github.buraconcio.Objects;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Contact;
 
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PhysicsManager;
+import io.github.buraconcio.Utils.AnimationPlay;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.PhysicsEntity;
 
@@ -14,11 +17,23 @@ import java.util.Iterator;
 public class Obstacle extends PhysicsEntity {
     public final static int CLOCKWISE = 0;
     public final static int COUNTER_CLOCKWISE = 1;
-    public boolean claimed = false;
+
+    protected boolean claimed = false;
+    protected boolean active = false;
 
     public Obstacle(Vector2 pos, Vector2 size, String texturePath) {
         super(pos, size, texturePath);
     }
+
+    public Obstacle(Vector2 pos, Vector2 size, Animation<TextureRegion> animation) {
+        super(pos, size, new AnimationPlay(animation));
+    }
+
+    public Obstacle(Vector2 pos, Vector2 size, AnimationPlay animation) {
+        super(pos, size, animation);
+    }
+
+
 
     public void applyEffect(Player player) {}
 
@@ -45,7 +60,7 @@ public class Obstacle extends PhysicsEntity {
     }
 
     public void place() {
-        body.getFixtureList().forEach(fixture -> {fixture.setSensor(false);});
+        active = true;
     }
 
     public void claim() {
