@@ -21,9 +21,9 @@ public class UDPClient {
     InetAddress address;
 
     private boolean run = true;
-    private final int id = Constants.localP.getId();
+    private final int id = Constants.localP().getId();
 
-    private final byte[] receiveData = new byte[4096];
+    private final byte[] receivedData = new byte[4096];
     private List<UdpPackage> packageList = new CopyOnWriteArrayList<>();
 
     public void startUDPClient() {
@@ -95,9 +95,9 @@ public class UDPClient {
 
     private UdpPackage createBallPackage() {
 
-        float x = Constants.localP.getBall().getX();
-        float y = Constants.localP.getBall().getY();
-        Vector2 velocity = Constants.localP.getBall().getBody().getLinearVelocity();
+        float x = Constants.localP().getBall().getX();
+        float y = Constants.localP().getBall().getY();
+        Vector2 velocity = Constants.localP().getBall().getBody().getLinearVelocity();
 
         return new UdpPackage(id, x, y, velocity, UdpType.PLAY);
     }
@@ -122,7 +122,7 @@ public class UDPClient {
     private void receiveData() {
 
         try {
-            DatagramPacket packet = new DatagramPacket(receiveData, receiveData.length);
+            DatagramPacket packet = new DatagramPacket(receivedData, receivedData.length);
 
             UDPsocket.receive(packet);
 
@@ -138,7 +138,7 @@ public class UDPClient {
 
             // for (UdpPackage p : packageList) {
 
-            //     // if (p.getId() != Constants.localP.getId())
+            //     // if (p.getId() != Constants.localP().getId())
             //     // System.out.println("jogador remoto: " + p.toBallString());
 
             //     System.out.println("Recebi pacote UDP do id: " + p.getId());

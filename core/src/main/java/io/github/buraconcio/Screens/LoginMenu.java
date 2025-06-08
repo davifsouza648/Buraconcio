@@ -70,7 +70,8 @@ public class LoginMenu implements Screen {
         table.setFillParent(true);
         table.center();
         stage.addActor(table);
-        table.setDebug(true);
+        // table.setDebug(true);
+        table.setDebug(false); // tiltei
 
         userField = new TextField("", skinTextField, "labelPixelyWhite32");
         userField.setMessageText("Digite seu username");
@@ -96,22 +97,21 @@ public class LoginMenu implements Screen {
                     Player player = new Player(username);
 
                     Random random = new Random();
-    
-                    player.setId(username.hashCode() + random.nextInt(25));
-    
+
+                    player.setId(username.hashCode()); // + random.nextInt(25));
+
                     player.setAvatar(random.nextInt(1, 32));
-    
-                    PlayerManager.getInstance().setLocalPlayer(player);
-    
+
+                    PlayerManager.getInstance().addPlayer(player);
+                    PlayerManager.getInstance().setLocalPlayer(player.getId());
+
                     System.out.println("Usuario: " + player.getUsername());
-    
+
                     game.setScreen(new MainMenu(game));
                 }
                 userField.setText("");
             }
         });
-
-        
 
         table.add(userField).width(500).pad(10);
         table.row();
@@ -119,7 +119,7 @@ public class LoginMenu implements Screen {
         // table.row();
         table.add(loginButton).size(200, 80).colspan(2).padTop(10);
     }
-    
+
     private boolean isUsernameValid(String username)
     {
         boolean valid = true;
@@ -138,7 +138,7 @@ public class LoginMenu implements Screen {
         bDialog.setTitle(title);
         bDialog.setMessage(text);
 
-        bDialog.setClickListener(new ButtonClickListener() 
+        bDialog.setClickListener(new ButtonClickListener()
         {
             @Override
             public void click(int button) {

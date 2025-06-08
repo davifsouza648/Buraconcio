@@ -57,6 +57,12 @@ public class Player implements Serializable {
     }
 
     public void update(Vector2 ballPos, Vector2 velocity, Vector2 obstaclePos) {
+        System.out.println(getId());
+        if (ball == null) {
+            System.out.println("ball not yet created");
+            return;
+        }
+
         ball.setPos(ballPos);
         ball.setVelocity(velocity);
 

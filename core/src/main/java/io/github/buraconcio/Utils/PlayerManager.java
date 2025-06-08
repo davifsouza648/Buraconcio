@@ -13,10 +13,10 @@ import io.github.buraconcio.Utils.UdpPackage;
 public class PlayerManager {
     private List<Player> players = new CopyOnWriteArrayList<>();
     private static PlayerManager instance;
-    private Player localPlayer;
+    private int localPlayerID;
 
     public PlayerManager() {
-        // players = new ArrayList<>();
+        players = new ArrayList<>();
     }
 
     public static synchronized PlayerManager getInstance() {
@@ -67,6 +67,8 @@ public class PlayerManager {
     }
 
     public void updatePlayers(List<UdpPackage> update) {
+        Runnable task = () -> {
+
         System.out.println("called update players");
         System.out.println();
 
@@ -80,19 +82,21 @@ public class PlayerManager {
 
             PlayerManager.getInstance().getPlayer(playerId).update(ballPos, ballVel, obstaclePos);
         }
+
+        };
+        PhysicsManager.getInstance().schedule(task);
     }
 
     public int getPlayerCount() {
         return players.size();
     }
 
-    public void setLocalPlayer(Player player) {
-        this.localPlayer = player;
-        addPlayer(player);
+    public void setLocalPlayer(int id) {
+        this.localPlayerID = id;
     }
 
     public Player getLocalPlayer() {
-        return localPlayer;
+        return getPlayer(localPlayerID);
     }
 
     public void clear() {

@@ -16,7 +16,9 @@ public class Constants {
     public static final int PORT = 5050, UDP_PORT_SERVER = 5565, UDP_PORT_CLIENT = 5566;
     public static String IP = "localhost";
 
-    public static Player localP = PlayerManager.getInstance().getLocalPlayer();
+    public static Player localP() {
+        return PlayerManager.getInstance().getLocalPlayer();
+    }
 
     public static String getIP() {
         return IP;
