@@ -33,6 +33,10 @@ public class Obstacle extends PhysicsEntity {
         super(pos, size, animation);
     }
 
+    public Obstacle(Vector2 pos, Vector2 size) {
+        super(pos, size);
+    }
+
     public void applyEffect(Player player) {}
 
     public void preRound() {}

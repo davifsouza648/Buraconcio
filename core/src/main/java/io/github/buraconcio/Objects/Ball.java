@@ -6,20 +6,14 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.PhysicsManager;
-import io.github.buraconcio.Objects.PhysicsEntity;
-import io.github.buraconcio.Objects.Arrow;
-import io.github.buraconcio.Objects.Flag;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -151,21 +145,21 @@ public class Ball extends PhysicsEntity {
         setVisible(false);
     }
 
-    public Vector2 getPosition() {
-        Vector2 pos = new Vector2(this.getX(), this.getY());
-        return pos;
-    }
 
     @Override
     public boolean contact(PhysicsEntity entity) {
         if (entity instanceof Arrow) {
             if (PlayerManager.getInstance().getLocalPlayer().getId() == player.getId()) // player should only die if hit on his own screen
                 player.die();
+
+            return true;
         } else if (entity instanceof Flag) {
             player.score();
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public void setShootingGuide(Vector2 mouse1, Vector2 mouse2) {
@@ -190,4 +184,7 @@ public class Ball extends PhysicsEntity {
         body.setLinearVelocity(vel);
     }
 
+    public Player getPlayer() {
+        return player;
+    }
 }

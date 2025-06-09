@@ -39,9 +39,12 @@ public class Arrow extends PhysicsEntity {
 
     @Override
     public boolean contact(PhysicsEntity entity) {
-        this.destroy();
+        if (!(entity instanceof BlackHole)) {
+            this.destroy();
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     @Override

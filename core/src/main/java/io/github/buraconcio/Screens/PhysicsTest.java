@@ -69,7 +69,6 @@ public class PhysicsTest implements Screen {
                 player.createBall(new Vector2(3f, 3f + add));
                 add += 0.5f;
             }
-
         }
 
         pBall = PlayerManager.getInstance().getLocalPlayer().getBall();
@@ -83,6 +82,7 @@ public class PhysicsTest implements Screen {
         new Obstacle(new Vector2(12.5f, 2f), new Vector2(1f, 1f),
             Auxiliaries.animationFromFiles("obstacles/star/star.png", "obstacles/star/star.json"));
         new BoostPad(new Vector2(14.5f, 2f), new Vector2(3f, 3f));
+        new BlackHole(new Vector2(16.5f, 2f), new Vector2(3f, 3f));
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1 = new Vector2();
