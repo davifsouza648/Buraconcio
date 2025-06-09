@@ -73,7 +73,8 @@ public class PlayerManager {
             // System.out.println("called update players");
             // System.out.println();
 
-            for (UdpPackage pack : update) {
+            for (UdpPackage pack : update) { //modificar para comparar por PackType do UDPpackage e atualizar oq realmente importa
+
                 // testing ball for now
                 int playerId = pack.getId();
 
@@ -92,6 +93,8 @@ public class PlayerManager {
         };
         PhysicsManager.getInstance().schedule(task);
     }
+
+
 
     public int getPlayerCount() {
         return players.size();

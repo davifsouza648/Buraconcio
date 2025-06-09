@@ -125,6 +125,7 @@ public class Player implements Serializable {
     }
 
     public void selectObstacle(Obstacle obstacle) {
+
         if (!canSelect)
             return;
 
@@ -132,6 +133,7 @@ public class Player implements Serializable {
         obstacle.claim();
 
         canSelect = false;
+
     }
 
     public Obstacle getSelectedObstacle() {

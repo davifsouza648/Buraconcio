@@ -90,4 +90,11 @@ public class Server {
 
     }
 
+    public void changePhaseState(String str){
+
+        for(ClientHandler client : clients){
+            client.broadcastString(str);
+        }
+    }
+
 }

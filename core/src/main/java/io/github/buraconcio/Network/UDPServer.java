@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.UdpPackage;
 
@@ -17,6 +18,7 @@ public class UDPServer {
 
     private final ConcurrentHashMap<Integer, UdpPackage> packageList = new ConcurrentHashMap<>();
     private final List<InetSocketAddress> clientAddressList = new CopyOnWriteArrayList<>();
+    private boolean run = ConnectionManager.getInstance().getUDPRun();
 
     public void startUDPServer() {
         Thread thread = new Thread(this::runUDPServer);
@@ -31,7 +33,7 @@ public class UDPServer {
             System.out.println("Porta " + Constants.UDP_PORT_SERVER + " aberta.");
 
             new Thread(() -> {
-                while (true) {
+                while (run) {
 
                     broadcastPlayersPackages();
 
@@ -48,7 +50,7 @@ public class UDPServer {
                 }
             }).start();
 
-            while (true) {
+            while (run) {
 
                 receivePackage();
 

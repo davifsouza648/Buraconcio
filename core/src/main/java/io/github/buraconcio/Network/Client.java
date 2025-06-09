@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.List;
 
 import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PlayerManager;
 
@@ -16,6 +17,7 @@ public class Client {
     private Socket socket;
     private ServerListener listener;
     private boolean svScreen = true, gameScreen = true;
+    private GameStageListener listenerGame;
 
     public void startTCPClient() {
         Thread thread = new Thread(() -> connect());
@@ -38,11 +40,11 @@ public class Client {
             System.out.println("receive: " + serverMsg);
             out.flush();
 
-            //server screen
+            // server screen
             sendLocalPlayer(out);
             receivePlayerList(in);
 
-            //game updates
+            // game updates
             receiveGamePhases(in);
 
             // receber estagios e outras atualizacoes por tcp
@@ -63,31 +65,60 @@ public class Client {
 
                 System.out.println("connection erro" + e.getMessage());
 
-
             }
         }
     }
 
     private void receiveGamePhases(ObjectInputStream in) throws ClassNotFoundException, IOException {
-        while(gameScreen){
+
+        while (gameScreen) {
 
             Object obj = in.readObject();
 
-            if(obj instanceof Boolean){
-                
+            if (obj instanceof Boolean) {
+
                 Boolean msg = (Boolean) obj;
 
-                if(!msg){
+                if (!msg) {
                     gameScreen = false;
                 }
 
-            }else if(obj instanceof String){
+            } else if (obj instanceof String) {
 
-                String msg  = (String) obj;
+                String msg = (String) obj;
 
                 Constants.setPhase(msg);
 
+                if (Constants.phase == Constants.PHASE.SELECT_OBJ) {
+
+                    Constants.localP().setCanSelect(true);
+
+                    //decidir se vai ser em uma tela separada
+
+                }else if(Constants.phase == Constants.PHASE.PLAY){
+
+                    Constants.localP().setCanSelect(false);
+
+                }else if(Constants.phase == Constants.PHASE.SHOW_POINTS){
+
+                    //atualizar pontuações;
+
+                    if(listener != null){
+                        listenerGame.showPoints();
+                    }
+
+                }else if(Constants.phase == Constants.PHASE.SHOW_WIN){
+
+                    ConnectionManager.getInstance().setUDPRun(false);
+
+                    if(listener != null){
+                        listenerGame.showWin();
+                    }
+
+                }
+
             }
+
         }
     }
 
@@ -132,14 +163,14 @@ public class Client {
 
                     svScreen = false;
 
-                }else if(msg.equals("tocancel")){
+                } else if (msg.equals("tocancel")) {
 
-                    if(listener !=null){
+                    if (listener != null) {
                         listener.ServerStartMatch();
                     }
 
-                }else if(msg.equals("tostart")){
-                    if(listener !=null){
+                } else if (msg.equals("tostart")) {
+                    if (listener != null) {
                         listener.ServerCancelMatch();
                     }
                 }
@@ -168,6 +199,16 @@ public class Client {
         }
 
         System.out.println("client disconnect");
+    }
+
+    public interface GameStageListener {
+        void showWin();
+
+        void showPoints();
+    }
+
+    public void setGameListener(GameStageListener listener) {
+        this.listenerGame = listener;
     }
 
 }

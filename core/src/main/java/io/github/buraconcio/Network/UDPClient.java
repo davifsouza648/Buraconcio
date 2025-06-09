@@ -9,10 +9,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import com.badlogic.gdx.math.Vector2;
 
 import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.UdpPackage;
-
+import io.github.buraconcio.Utils.UdpPackage.PackType;
 
 public class UDPClient {
 
@@ -20,7 +21,7 @@ public class UDPClient {
     private UdpPackage teste;
     InetAddress address;
 
-    private boolean run = true, flag = true;
+    private boolean run = ConnectionManager.getInstance().getUDPRun(), flag = true;
     private final int id = Constants.localP().getId();
 
     private final byte[] receivedData = new byte[4096];
@@ -73,7 +74,7 @@ public class UDPClient {
         switch (Constants.phase) {
 
             case PLAY: {
-                return createBallPackage();
+                return createBallPackage(); //AUMENTAR AS INFORMACÇOES DO PACKAGE DA BOLA
             }
             case SELECT_OBJ: {
                 return createObstaclePackage();
@@ -82,13 +83,12 @@ public class UDPClient {
             default:
                 return createDefaultPackage();
         }
-
     }
 
     private void sendPlayerData() {
         try {
 
-            UdpPackage teste = selectPackType();
+            UdpPackage teste = selectPackType();s
 
             byte[] data = serialize(teste);
 
@@ -113,21 +113,21 @@ public class UDPClient {
         float y = pos.y;
         Vector2 velocity = Constants.localP().getBall().getBody().getLinearVelocity();
 
-        return new UdpPackage(id, x, y, velocity);
+        return new UdpPackage(id, x, y, velocity, PackType.BALL);
     }
 
     private UdpPackage createObstaclePackage(){
-        
+
         Vector2 pos = Constants.localP().getSelectedObstacle().getWorldPosition();
         float x = pos.x;
         float y = pos.y;
         Vector2 velocity = Constants.localP().getSelectedObstacle().getBody().getLinearVelocity();
 
-        return new UdpPackage(id, x, y, velocity);
+        return new UdpPackage(id, x, y, velocity, PackType.OBSTACLE);
     }
 
     private UdpPackage createDefaultPackage() {
-        return new UdpPackage(id, true);
+        return new UdpPackage(id, PackType.DEFAULT);
     }
 
     private byte[] serialize(UdpPackage packet) throws IOException {
@@ -139,9 +139,6 @@ public class UDPClient {
 
         return bos.toByteArray();
     }
-
-    // private void validate(){
-    // }
 
     private void receiveData() {
 
@@ -192,10 +189,6 @@ public class UDPClient {
 
         return new ArrayList<>(); // TODO: verificação de se estamos em uma fase de escolha ou jogo;
 
-    }
-
-    private void stop() {
-        run = false;
     }
 
 }

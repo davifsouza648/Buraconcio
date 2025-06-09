@@ -74,7 +74,6 @@ public class PhysicsManager {
 
     public void addEntity(PhysicsEntity entity) {
         entityList.put(id, entity);
-
         entity.setId(id++);
     }
 
@@ -179,4 +178,6 @@ public class PhysicsManager {
     public void addToStage(Actor actor) {
         stage.addActor(actor);
     }
+
+    //TODO: METODO PARA ATUALIZAR VETOR DE ENTIDADES
 }

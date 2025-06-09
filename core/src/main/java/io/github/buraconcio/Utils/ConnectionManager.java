@@ -11,6 +11,7 @@ public class ConnectionManager {
     private Server server;
     private UDPClient clientUDP;
     private UDPServer serverUDP;
+    private boolean udpRun = true;
 
     private ConnectionManager() {
     }
@@ -43,7 +44,7 @@ public class ConnectionManager {
     public UDPClient getUdpClient(){
         return clientUDP;
     }
-    
+
     public void setUDPclient(UDPClient clientUDP){
         this.clientUDP = clientUDP;
     }
@@ -54,5 +55,13 @@ public class ConnectionManager {
 
     public void setUDPserver(UDPServer serverUDP){
         this.serverUDP = serverUDP;
+    }
+
+    public void setUDPRun(boolean flag){
+        this.udpRun = flag;
+    }
+
+    public boolean getUDPRun(){
+        return udpRun;
     }
 }

@@ -18,14 +18,13 @@ public class Constants {
     public static final int PORT = 5050, UDP_PORT_SERVER = 5565, UDP_PORT_CLIENT = 5566;
     public static String IP = "localhost";
 
-    public static PHASE phase;
+    public static PHASE phase = PHASE.PLAY;
 
     public enum PHASE {
         PLAY,
         SELECT_OBJ,
         SHOW_POINTS,
         SHOW_WIN,
-        GET_BACK
     }
 
     public static void setPhase(String msg) {
