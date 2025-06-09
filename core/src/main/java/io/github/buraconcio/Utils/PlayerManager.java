@@ -78,12 +78,14 @@ public class PlayerManager {
                 int playerId = pack.getId();
 
                 if (playerId != Constants.localP().getId()) {
+
                     Vector2 ballPos = new Vector2(pack.getBallX(), pack.getBallY());
                     Vector2 ballVel = new Vector2(pack.getBallVX(), pack.getBallVY());
 
                     Vector2 obstaclePos = new Vector2(pack.getObsX(), pack.getObsY());
 
                     PlayerManager.getInstance().getPlayer(playerId).update(ballPos, ballVel, obstaclePos);
+
                 }
             }
 

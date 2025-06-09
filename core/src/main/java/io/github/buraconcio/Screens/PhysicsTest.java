@@ -105,8 +105,9 @@ public class PhysicsTest implements Screen {
                 Vector2 mouse2 = new Vector2(unprojected.x, unprojected.y);
 
                 Runnable task = () -> {
-                    p.stroke(mouse1, mouse2);
+                    p.stroke(mouse1, mouse2); 
                 };
+
                 PhysicsManager.getInstance().schedule(task);
                 pBall.resetShootingGuide();
 

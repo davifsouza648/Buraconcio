@@ -14,9 +14,33 @@ public class Constants {
 
     public static final float BOOST_IMPULSE = 20f;
 
-    //usar no server e client
+    // usar no server e client
     public static final int PORT = 5050, UDP_PORT_SERVER = 5565, UDP_PORT_CLIENT = 5566;
     public static String IP = "localhost";
+
+    public static PHASE phase;
+
+    public enum PHASE {
+        PLAY,
+        SELECT_OBJ,
+        SHOW_POINTS,
+        SHOW_WIN,
+        GET_BACK
+    }
+
+    public static void setPhase(String msg) {
+
+        try {
+
+            phase = PHASE.valueOf(msg.toUpperCase());
+
+        } catch (IllegalArgumentException e) {
+
+            e.printStackTrace();
+
+        }
+
+    }
 
     public static Player localP() {
         return PlayerManager.getInstance().getLocalPlayer();
@@ -26,7 +50,7 @@ public class Constants {
         return IP;
     }
 
-    public static boolean isHosting(){
+    public static boolean isHosting() {
         return localP().getHosting();
     }
 
@@ -34,7 +58,6 @@ public class Constants {
         IP = newIP;
     }
 
-
-    //gambiarra infinita
+    // gambiarra infinita
 
 }

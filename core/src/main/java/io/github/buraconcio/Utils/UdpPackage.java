@@ -6,33 +6,36 @@ import com.badlogic.gdx.math.Vector2;
 
 public class UdpPackage implements Serializable {
 
-    public enum UdpType {
-        SELECT_OBJ,
-        PLAY
-    }
-
     private static final long serialVersionUID = 1L;
 
     private int id;
-    private float ballX, ballY, ballVX, ballVY;
+    private float ballX, ballY, ballVX, ballVY, isAlive, isInHole;
     private float ObsX, ObsY, ObsID;
-    private UdpType type;
 
-    public UdpPackage(int id, float x, float y, Vector2 vel, UdpType type) {
+    private boolean default_ = false;
+
+    public UdpPackage(int id, float x, float y, Vector2 vel) {
         this.id = id;
         this.ballX = x;
         this.ballY = y;
         this.ballVX = vel.x;
         this.ballVY = vel.y;
-        this.type = type;
     }
 
-    public UdpPackage(int id, float x, float y, int ObsId, UdpType type) {
+    public UdpPackage(int id, float x, float y, int ObsId) {
         this.id = id;
         this.ObsX = x;
         this.ObsY = y;
         this.ObsID = ObsId;
-        this.type = type;
+    }
+
+    public UdpPackage(int id, boolean default_) {
+        this.id = id;
+        this.default_ = default_;
+    }
+
+    public boolean getDefault(){
+        return default_;
     }
 
     public int getId() {
@@ -65,10 +68,6 @@ public class UdpPackage implements Serializable {
 
     public float getObsId() {
         return ObsID;
-    }
-
-    public UdpType getType() {
-        return type;
     }
 
     public String toBallString() {

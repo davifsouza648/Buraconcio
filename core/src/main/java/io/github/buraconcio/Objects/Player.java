@@ -76,12 +76,15 @@ public class Player implements Serializable {
         if (!ball.isStill())
             return;
 
+        if (mouse1.dst(mouse2) < 0.05f)
+            return;
+
         if (strokeSounds == null || strokeSounds.isEmpty()) {
             initSounds();
         }
 
-        ball.applyImpulse(ball.calculateImpulse(mouse1, mouse2));
         strokeSounds.get((int) (Math.random() * strokeSounds.size())).play(1f);
+        ball.applyImpulse(ball.calculateImpulse(mouse1, mouse2));
 
         strokes += 1;
     }

@@ -12,7 +12,7 @@ import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.UdpPackage;
-import io.github.buraconcio.Utils.UdpPackage.UdpType;
+
 
 public class UDPClient {
 
@@ -20,7 +20,7 @@ public class UDPClient {
     private UdpPackage teste;
     InetAddress address;
 
-    private boolean run = true;
+    private boolean run = true, flag = true;
     private final int id = Constants.localP().getId();
 
     private final byte[] receivedData = new byte[4096];
@@ -47,7 +47,7 @@ public class UDPClient {
 
             while (run) {
 
-                sendPlayerData(false);
+                sendPlayerData();
 
                 Thread.sleep(16);
 
@@ -68,14 +68,27 @@ public class UDPClient {
         }
     }
 
-    private void sendPlayerData(boolean flag) {
+    public UdpPackage selectPackType() {
+
+        switch (Constants.phase) {
+
+            case PLAY: {
+                return createBallPackage();
+            }
+            case SELECT_OBJ: {
+                return createObstaclePackage();
+            }
+
+            default:
+                return createDefaultPackage();
+        }
+
+    }
+
+    private void sendPlayerData() {
         try {
 
-            if (flag) {
-                // teste = createObjectPackage();
-            } else {
-                teste = createBallPackage();
-            }
+            UdpPackage teste = selectPackType();
 
             byte[] data = serialize(teste);
 
@@ -100,12 +113,22 @@ public class UDPClient {
         float y = pos.y;
         Vector2 velocity = Constants.localP().getBall().getBody().getLinearVelocity();
 
-        return new UdpPackage(id, x, y, velocity, UdpType.PLAY);
+        return new UdpPackage(id, x, y, velocity);
     }
 
-    // private UdpPackage createObjectPackage() {
-    // // pensar se o player terá objetos ou se pegaremos de outro lugar.
-    // }
+    private UdpPackage createObstaclePackage(){
+        
+        Vector2 pos = Constants.localP().getSelectedObstacle().getWorldPosition();
+        float x = pos.x;
+        float y = pos.y;
+        Vector2 velocity = Constants.localP().getSelectedObstacle().getBody().getLinearVelocity();
+
+        return new UdpPackage(id, x, y, velocity);
+    }
+
+    private UdpPackage createDefaultPackage() {
+        return new UdpPackage(id, true);
+    }
 
     private byte[] serialize(UdpPackage packet) throws IOException {
 
@@ -127,23 +150,22 @@ public class UDPClient {
 
             UDPsocket.receive(packet);
 
-            byte[] validData = new byte[packet.getLength()]; //pegando só os dados validos
+            byte[] validData = new byte[packet.getLength()]; // pegando só os dados validos
             System.arraycopy(packet.getData(), 0, validData, 0, packet.getLength());
 
             packageList = deserialize(validData);
 
             // System.out.println("Pacotes recebidos: " + packageList.size());
 
-
             PlayerManager.getInstance().updatePlayers(packageList);
 
             // for (UdpPackage p : packageList) {
 
-            //     // if (p.getId() != Constants.localP().getId())
-            //     // System.out.println("jogador remoto: " + p.toBallString());
+            // // if (p.getId() != Constants.localP().getId())
+            // // System.out.println("jogador remoto: " + p.toBallString());
 
-            //     System.out.println("Recebi pacote UDP do id: " + p.getId());
-            //     System.out.println(p.toBallString());
+            // System.out.println("Recebi pacote UDP do id: " + p.getId());
+            // System.out.println(p.toBallString());
 
             // }
 

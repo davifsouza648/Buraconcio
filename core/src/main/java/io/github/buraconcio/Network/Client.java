@@ -1,18 +1,11 @@
 package io.github.buraconcio.Network;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.List;
-
-import com.badlogic.gdx.utils.Json;
 
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Utils.Constants;
@@ -22,7 +15,7 @@ public class Client {
 
     private Socket socket;
     private ServerListener listener;
-    private boolean svScreen = true;
+    private boolean svScreen = true, gameScreen = true;
 
     public void startTCPClient() {
         Thread thread = new Thread(() -> connect());
@@ -45,9 +38,12 @@ public class Client {
             System.out.println("receive: " + serverMsg);
             out.flush();
 
+            //server screen
             sendLocalPlayer(out);
-
             receivePlayerList(in);
+
+            //game updates
+            receiveGamePhases(in);
 
             // receber estagios e outras atualizacoes por tcp
 
@@ -67,6 +63,29 @@ public class Client {
 
                 System.out.println("connection erro" + e.getMessage());
 
+
+            }
+        }
+    }
+
+    private void receiveGamePhases(ObjectInputStream in) throws ClassNotFoundException, IOException {
+        while(gameScreen){
+
+            Object obj = in.readObject();
+
+            if(obj instanceof Boolean){
+                
+                Boolean msg = (Boolean) obj;
+
+                if(!msg){
+                    gameScreen = false;
+                }
+
+            }else if(obj instanceof String){
+
+                String msg  = (String) obj;
+
+                Constants.setPhase(msg);
 
             }
         }
