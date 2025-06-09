@@ -115,6 +115,10 @@ public class PhysicsEntity extends Actor {
         return new Vector2(this.getX(), this.getY());
     }
 
+    public Vector2 getWorldPosition() {
+        return body.getPosition();
+    }
+
     public void applyForce(Vector2 force) {
         body.applyForceToCenter(force, true);
     }

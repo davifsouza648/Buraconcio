@@ -95,8 +95,9 @@ public class UDPClient {
 
     private UdpPackage createBallPackage() {
 
-        float x = Constants.localP().getBall().getX();
-        float y = Constants.localP().getBall().getY();
+        Vector2 pos = Constants.localP().getBall().getWorldPosition();
+        float x = pos.x;
+        float y = pos.y;
         Vector2 velocity = Constants.localP().getBall().getBody().getLinearVelocity();
 
         return new UdpPackage(id, x, y, velocity, UdpType.PLAY);
