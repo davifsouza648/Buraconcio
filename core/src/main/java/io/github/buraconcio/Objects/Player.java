@@ -3,6 +3,7 @@ package io.github.buraconcio.Objects;
 import io.github.buraconcio.Objects.Ball;
 import io.github.buraconcio.Objects.Obstacle;
 import io.github.buraconcio.Utils.Constants;
+import io.github.buraconcio.Utils.PhysicsManager;
 import io.github.buraconcio.Utils.UdpPackage;
 
 import java.io.Serializable;
@@ -67,7 +68,7 @@ public class Player implements Serializable {
         return ball;
     }
 
-    public void update(Vector2 ballPos, Vector2 velocity, Vector2 obstaclePos) {
+    public void update(Vector2 ballPos, Vector2 velocity) {
         if (ball == null) {
             System.out.println("ball not yet created");
             return;
@@ -75,9 +76,14 @@ public class Player implements Serializable {
 
         ball.setPos(ballPos);
         ball.setVelocity(velocity);
+    }
 
+    public void update(Vector2 obstaclePos, int obsId){
+        // selectObstacle(PhysicsManager.getInstance().getEntity(obsId));
+        
         if (selectedObstacle != null)
-            selectedObstacle.move(obstaclePos);
+            selectedObstacle.move(obstaclePos); 
+                   
     }
 
     public void stroke(Vector2 mouse1, Vector2 mouse2) {

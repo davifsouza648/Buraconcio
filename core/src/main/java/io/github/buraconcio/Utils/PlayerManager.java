@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Utils.UdpPackage;
+import io.github.buraconcio.Utils.UdpPackage.PackType;
 
 // singleton
 public class PlayerManager {
@@ -38,7 +39,7 @@ public class PlayerManager {
     public void removePlayerbyId(int id) {
         Iterator<Player> it = players.iterator();
 
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Player p = it.next();
 
             if (p.getId() == id) {
@@ -51,7 +52,7 @@ public class PlayerManager {
     public void removePlayerbyUser(String name) {
         Iterator<Player> it = players.iterator();
 
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             Player p = it.next();
 
             if (p.getUsername() == name) {
@@ -95,28 +96,33 @@ public class PlayerManager {
     public void updatePlayers(List<UdpPackage> update) {
         Runnable task = () -> {
 
-            for (UdpPackage pack : update) { //modificar para comparar por PackType do UDPpackage e atualizar oq realmente importa
+            for (UdpPackage pack : update) { // modificar para comparar por PackType do UDPpackage e atualizar oq
+                                             // realmente importa
 
                 // testing ball for now
                 int playerId = pack.getId();
-
+                PackType type = pack.getTypeP();
                 if (playerId != Constants.localP().getId()) {
 
-                    Vector2 ballPos = new Vector2(pack.getBallX(), pack.getBallY());
-                    Vector2 ballVel = new Vector2(pack.getBallVX(), pack.getBallVY());
+                    if (type == PackType.BALL) {
+                        Vector2 ballPos = new Vector2(pack.getBallX(), pack.getBallY());
+                        Vector2 ballVel = new Vector2(pack.getBallVX(), pack.getBallVY());
 
-                    Vector2 obstaclePos = new Vector2(pack.getObsX(), pack.getObsY());
+                        PlayerManager.getInstance().getPlayer(playerId).update(ballPos, ballVel);
+                    
+                    } else if (type == PackType.OBSTACLE) {
+                        Vector2 obstaclePos = new Vector2(pack.getObsX(), pack.getObsY());
 
-                    PlayerManager.getInstance().getPlayer(playerId).update(ballPos, ballVel, obstaclePos);
+                        PlayerManager.getInstance().getPlayer(playerId).update(obstaclePos, pack.getId());
 
+                    }else{
+                        return;   
+                    }
                 }
             }
-
         };
         PhysicsManager.getInstance().schedule(task);
     }
-
-
 
     public int getPlayerCount() {
         return players.size();

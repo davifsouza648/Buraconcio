@@ -8,6 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.badlogic.gdx.math.Vector2;
 
+import io.github.buraconcio.Objects.PhysicsEntity;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
@@ -74,12 +75,13 @@ public class UDPClient {
         switch (Constants.phase) {
 
             case PLAY: {
-                return createBallPackage(); //AUMENTAR AS INFORMACÇOES DO PACKAGE DA BOLA
+                return createBallPackage(); // AUMENTAR AS INFORMACÇOES DO PACKAGE DA BOLA
             }
             case SELECT_OBJ: {
-                return createObstaclePackage();
+                if(Constants.localP().getSelectedObstacle() != null){
+                    return createObstaclePackage();
+                }
             }
-
             default:
                 return createDefaultPackage();
         }
@@ -88,7 +90,7 @@ public class UDPClient {
     private void sendPlayerData() {
         try {
 
-            UdpPackage teste = selectPackType();
+            teste = selectPackType();
 
             byte[] data = serialize(teste);
 
@@ -113,14 +115,16 @@ public class UDPClient {
         return new UdpPackage(id, x, y, velocity, PackType.BALL);
     }
 
-    private UdpPackage createObstaclePackage(){
+    private UdpPackage createObstaclePackage() {
 
         Vector2 pos = Constants.localP().getSelectedObstacle().getWorldPosition();
         float x = pos.x;
         float y = pos.y;
-        Vector2 velocity = Constants.localP().getSelectedObstacle().getBody().getLinearVelocity();
+        // Vector2 velocity =
+        // Constants.localP().getSelectedObstacle().getBody().getLinearVelocity();
+        int ObsID = Constants.localP().getSelectedObstacle().getId();
 
-        return new UdpPackage(id, x, y, velocity, PackType.OBSTACLE);
+        return new UdpPackage(id, x, y, ObsID, PackType.OBSTACLE);
     }
 
     private UdpPackage createDefaultPackage() {

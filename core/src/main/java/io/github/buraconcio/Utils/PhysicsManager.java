@@ -6,7 +6,7 @@ import java.lang.Runnable;
 import java.util.Iterator;
 import java.util.Random;
 
-
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -17,13 +17,14 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import io.github.buraconcio.Objects.Obstacle;
 import io.github.buraconcio.Objects.PhysicsEntity;
 import io.github.buraconcio.Objects.Player;
 
 // singleton
 public class PhysicsManager {
     private static PhysicsManager instance;
-    private static final float tickrate = 1/60f;
+    private static final float tickrate = 1 / 60f;
 
     private World world;
     private Stage stage;
@@ -40,24 +41,22 @@ public class PhysicsManager {
 
     public PhysicsManager() {
         world = new World(new Vector2(0f, 0f), true);
-        box2dScheduler = new ArrayList<Runnable> ();
-        entityList = new HashMap<Integer, PhysicsEntity> ();
+        box2dScheduler = new ArrayList<Runnable>();
+        entityList = new HashMap<Integer, PhysicsEntity>();
         id = 0;
-        contactList = new ArrayList<Contact> ();
+        contactList = new ArrayList<Contact>();
         stage = null;
 
         Vector2 startingAreaSize = new Vector2(1f, 3f);
         Vector2 startingAreaPos = new Vector2(3f, 3f);
 
         startingAreaTop = new Vector2(
-            startingAreaPos.x - startingAreaSize.x/2,
-            startingAreaPos.y + startingAreaSize.y/2
-        );
+                startingAreaPos.x - startingAreaSize.x / 2,
+                startingAreaPos.y + startingAreaSize.y / 2);
 
         startingAreaBot = new Vector2(
-            startingAreaPos.x + startingAreaSize.x/2,
-            startingAreaPos.y - startingAreaSize.y/2
-        );
+                startingAreaPos.x + startingAreaSize.x / 2,
+                startingAreaPos.y - startingAreaSize.y / 2);
 
         BodyDef bd = new BodyDef();
         bd.position.set(startingAreaPos);
@@ -98,18 +97,19 @@ public class PhysicsManager {
 
             try {
 
-            PhysicsEntity entityA = getEntity(contact.getFixtureA().getBody().getUserData());
-            PhysicsEntity entityB = getEntity(contact.getFixtureB().getBody().getUserData());
+                PhysicsEntity entityA = getEntity(contact.getFixtureA().getBody().getUserData());
+                PhysicsEntity entityB = getEntity(contact.getFixtureB().getBody().getUserData());
 
-            // return true if contact should be removed
-            // be carefull not to run same collision logic on both objects
-            boolean dA = entityA.contact(entityB);
-            boolean dB = entityB.contact(entityA);
-            if (dA || dB) { // nao iria rodar as duas colisoes se funcoes tivessem dentro do if :(
-                it.remove();
+                // return true if contact should be removed
+                // be carefull not to run same collision logic on both objects
+                boolean dA = entityA.contact(entityB);
+                boolean dB = entityB.contact(entityA);
+                if (dA || dB) { // nao iria rodar as duas colisoes se funcoes tivessem dentro do if :(
+                    it.remove();
+                }
+
+            } catch (Exception e) {
             }
-
-            } catch (Exception e) {}
         }
 
         world.step(tickrate, 6, 2);
@@ -145,8 +145,8 @@ public class PhysicsManager {
     }
 
     public void destroyBody(Body body) {
-        //Runnable task = () -> {world.destroyBody(body);};
-        //schedule(task);
+        // Runnable task = () -> {world.destroyBody(body);};
+        // schedule(task);
         world.destroyBody(body);
     }
 
@@ -156,26 +156,27 @@ public class PhysicsManager {
 
     public void addContact(Contact contact) {
         Runnable task = () -> {
-        boolean duplicate = false;
+            boolean duplicate = false;
 
-        try{
-        for (Contact existingContact : contactList) {
-            PhysicsEntity entityA = getEntity(contact.getFixtureA().getBody().getUserData());
-            PhysicsEntity entityB = getEntity(contact.getFixtureB().getBody().getUserData());
+            try {
+                for (Contact existingContact : contactList) {
+                    PhysicsEntity entityA = getEntity(contact.getFixtureA().getBody().getUserData());
+                    PhysicsEntity entityB = getEntity(contact.getFixtureB().getBody().getUserData());
 
-            PhysicsEntity exentityA = getEntity(existingContact.getFixtureA().getBody().getUserData());
-            PhysicsEntity exentityB = getEntity(existingContact.getFixtureB().getBody().getUserData());
+                    PhysicsEntity exentityA = getEntity(existingContact.getFixtureA().getBody().getUserData());
+                    PhysicsEntity exentityB = getEntity(existingContact.getFixtureB().getBody().getUserData());
 
-            if (entityA.getId() == exentityA.getId() && entityB.getId() == exentityB.getId()) {
-                duplicate = true;
-                break;
+                    if (entityA.getId() == exentityA.getId() && entityB.getId() == exentityB.getId()) {
+                        duplicate = true;
+                        break;
+                    }
+                }
+            } catch (Exception e) {
             }
-        }
-        } catch (Exception e) {}
 
-        if (!duplicate) {
-            contactList.add(contact);
-        }
+            if (!duplicate) {
+                contactList.add(contact);
+            }
         };
 
         schedule(task);
@@ -185,29 +186,30 @@ public class PhysicsManager {
 
         Runnable task = () -> {
 
-        Iterator<Contact> it = contactList.iterator();
-        while(it.hasNext()) {
-            Contact exContact = it.next();
+            Iterator<Contact> it = contactList.iterator();
+            while (it.hasNext()) {
+                Contact exContact = it.next();
 
-            PhysicsEntity entityA, entityB, exentityA, exentityB;
-            entityA = getEntity(contact.getFixtureA().getBody().getUserData());
-            entityB = getEntity(contact.getFixtureB().getBody().getUserData());
+                PhysicsEntity entityA, entityB, exentityA, exentityB;
+                entityA = getEntity(contact.getFixtureA().getBody().getUserData());
+                entityB = getEntity(contact.getFixtureB().getBody().getUserData());
 
-            exentityA = getEntity(exContact.getFixtureA().getBody().getUserData());
-            exentityB = getEntity(exContact.getFixtureB().getBody().getUserData());
+                exentityA = getEntity(exContact.getFixtureA().getBody().getUserData());
+                exentityB = getEntity(exContact.getFixtureB().getBody().getUserData());
 
-            if (entityA.getId() == exentityA.getId() && entityB.getId() == exentityB.getId()) {
-                it.remove();
-                break;
+                if (entityA.getId() == exentityA.getId() && entityB.getId() == exentityB.getId()) {
+                    it.remove();
+                    break;
+                }
             }
-        }
         };
 
         schedule(task);
     }
 
     public boolean ballsCollide(Vector2 pos1, Vector2 pos2) {
-        return pos1.dst2(pos2) < 4 * Constants.BALL_RADIUS*Constants.BALL_RADIUS * 1.1; // 1.1 aumenta espacamento entre as bolas um pouco
+        return pos1.dst2(pos2) < 4 * Constants.BALL_RADIUS * Constants.BALL_RADIUS * 1.1; // 1.1 aumenta espacamento
+                                                                                          // entre as bolas um pouco
     }
 
     public void placePlayer(Player player) {
@@ -219,8 +221,8 @@ public class PhysicsManager {
         for (int i = 0; i < 1000; ++i) { // max 1000
             boolean collides = false;
 
-             Vector2 pos = new Vector2(getRandomFloat(startingAreaTop.x, startingAreaBot.x),
-                getRandomFloat(startingAreaTop.y, startingAreaBot.y));
+            Vector2 pos = new Vector2(getRandomFloat(startingAreaTop.x, startingAreaBot.x),
+                    getRandomFloat(startingAreaTop.y, startingAreaBot.y));
 
             for (Vector2 otherBallPos : playerStartPosById.values()) {
                 if (ballsCollide(pos, otherBallPos)) {
@@ -241,7 +243,7 @@ public class PhysicsManager {
     }
 
     public float getRandomFloat(float min, float max) {
-         return min + random.nextFloat() * (max - min);
+        return min + random.nextFloat() * (max - min);
     }
 
     public HashMap<Integer, Vector2> getPlayerStartPosList() {
@@ -268,5 +270,5 @@ public class PhysicsManager {
         stage.addActor(actor);
     }
 
-    //TODO: METODO PARA ATUALIZAR VETOR DE ENTIDADES
+    // TODO: METODO PARA ATUALIZAR VETOR DE ENTIDADES
 }

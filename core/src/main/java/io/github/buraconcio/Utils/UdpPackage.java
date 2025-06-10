@@ -8,7 +8,6 @@ public class UdpPackage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
     public enum PackType {
         BALL,
         OBSTACLE,
@@ -17,7 +16,7 @@ public class UdpPackage implements Serializable {
 
     private int id;
     private float ballX, ballY, ballVX, ballVY, isAlive, isInHole;
-    private float ObsX, ObsY, ObsID;
+    private float obsX, obsY, obsID, obsVel;
 
     private PackType typeP;
 
@@ -32,11 +31,11 @@ public class UdpPackage implements Serializable {
         this.typeP = p;
     }
 
-    public UdpPackage(int id, float x, float y, int ObsId, PackType p) {
+    public UdpPackage(int id, float x, float y, /*Vector2 obsVel,*/ int ObsId, PackType p) {
         this.id = id;
-        this.ObsX = x;
-        this.ObsY = y;
-        this.ObsID = ObsId;
+        this.obsX = x;
+        this.obsY = y;
+        this.obsID = ObsId;
         this.typeP = p;
     }
 
@@ -70,15 +69,15 @@ public class UdpPackage implements Serializable {
     }
 
     public float getObsX() {
-        return ObsX;
+        return obsX;
     }
 
     public float getObsY() {
-        return ObsY;
+        return obsY;
     }
 
     public float getObsId() {
-        return ObsID;
+        return obsID;
     }
 
     public PackType getTypeP(){
@@ -98,9 +97,9 @@ public class UdpPackage implements Serializable {
     public String toObjectString() {
         return "UdpPackage{" +
                 "id=" + id +
-                ", x=" + ObsX +
-                ", y=" + ObsY +
-                ", obsID=" + ObsID +
+                ", x=" + obsX +
+                ", y=" + obsY +
+                ", obsID=" + obsID +
                 '}';
     }
 
