@@ -32,9 +32,6 @@ public class AnimationPlay extends Image {
 
         float aspectRatio = getImageHeight()/getImageWidth();
 
-        System.out.println(getImageWidth());
-        System.out.println(getImageHeight());
-
         //setSize(parentActor.getWidth(), parentActor.getWidth()*aspectRatio);
         setSize(parentActor.getWidth(), parentActor.getWidth());
         this.animation.setPlayMode(Animation.PlayMode.LOOP);

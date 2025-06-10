@@ -88,16 +88,13 @@ public class UDPClient {
     private void sendPlayerData() {
         try {
 
-            UdpPackage teste = selectPackType();s
+            UdpPackage teste = selectPackType();
 
             byte[] data = serialize(teste);
 
             DatagramPacket datagram = new DatagramPacket(data, data.length, address, Constants.UDP_PORT_SERVER);
 
             UDPsocket.send(datagram);
-
-            // System.out.println("Enviamos o player local");
-            // System.out.println(teste.toBallString());
 
         } catch (IOException e) {
 
@@ -152,19 +149,7 @@ public class UDPClient {
 
             packageList = deserialize(validData);
 
-            // System.out.println("Pacotes recebidos: " + packageList.size());
-
             PlayerManager.getInstance().updatePlayers(packageList);
-
-            // for (UdpPackage p : packageList) {
-
-            // // if (p.getId() != Constants.localP().getId())
-            // // System.out.println("jogador remoto: " + p.toBallString());
-
-            // System.out.println("Recebi pacote UDP do id: " + p.getId());
-            // System.out.println(p.toBallString());
-
-            // }
 
         } catch (IOException | ClassNotFoundException e) {
 

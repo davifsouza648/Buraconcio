@@ -7,7 +7,6 @@ import io.github.buraconcio.Utils.UdpPackage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.random.*;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
@@ -25,6 +24,7 @@ public class Player implements Serializable {
     private String avatarpath;
     private Obstacle selectedObstacle;
     private boolean canSelect = true;
+    private Vector2 startingPos = null;
 
     private transient ArrayList<Sound> strokeSounds = new ArrayList<>();
 
@@ -46,6 +46,17 @@ public class Player implements Serializable {
         selectedObstacle = null;
     }
 
+    public Ball createBall() {
+        if (startingPos == null) {
+            System.out.println("starting position not defined");
+            return null;
+        }
+
+        ball = new Ball(startingPos, Constants.BALL_RADIUS * 2, this);
+
+        return ball;
+    }
+
     public Ball createBall(Vector2 pos) {
         ball = new Ball(pos, Constants.BALL_RADIUS * 2, this);
 
@@ -57,9 +68,6 @@ public class Player implements Serializable {
     }
 
     public void update(Vector2 ballPos, Vector2 velocity, Vector2 obstaclePos) {
-
-        // System.out.println(getId());
-
         if (ball == null) {
             System.out.println("ball not yet created");
             return;
@@ -140,6 +148,10 @@ public class Player implements Serializable {
         return selectedObstacle;
     }
 
+    public void setStartingPos(Vector2 pos) {
+        this.startingPos = pos;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -196,4 +208,10 @@ public class Player implements Serializable {
         strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit7.wav")));
     }
 
+    public void dispose() {
+        if (ball != null) {
+            ball.destroy();
+            ball.clear();
+        }
+    }
 }

@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
 import io.github.buraconcio.Network.UDPClient;
@@ -22,6 +23,7 @@ import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.MapRenderer;
 import io.github.buraconcio.Utils.PhysicsManager;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
@@ -44,7 +46,6 @@ public class PhysicsTest implements Screen {
     private MapRenderer mapRenderer;
     float scale = 1 / 32f;
 
-    // server test
     private Client client;
 
     public PhysicsTest(Main game) {
@@ -60,18 +61,16 @@ public class PhysicsTest implements Screen {
         PhysicsManager.getInstance().setStage(stage);
 
         mapRenderer.createCollisions();
-        // System.out.println(p.getId());
 
-        float add = 0f;
         for (Player player : PlayerManager.getInstance().getAllPlayers()) {
-
-            if (player.getBall() == null) {
-                player.createBall(new Vector2(3f, 3f + add));
-                add += 0.5f;
-            }
+            player.createBall();
         }
 
         pBall = PlayerManager.getInstance().getLocalPlayer().getBall();
+
+        if (pBall == null) { // testing without server
+            pBall = PlayerManager.getInstance().getLocalPlayer().createBall(new Vector2(3f, 3f));
+        }
 
         camera = new BallCamera(pBall);
         stage.getViewport().setCamera(camera);
@@ -105,7 +104,7 @@ public class PhysicsTest implements Screen {
                 Vector2 mouse2 = new Vector2(unprojected.x, unprojected.y);
 
                 Runnable task = () -> {
-                    p.stroke(mouse1, mouse2); 
+                    p.stroke(mouse1, mouse2);
                 };
 
                 PhysicsManager.getInstance().schedule(task);

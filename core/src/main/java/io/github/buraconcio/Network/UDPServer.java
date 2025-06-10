@@ -98,10 +98,6 @@ public class UDPServer {
 
         if (pacote != null) {
             packageList.put(pacote.getId(), pacote);
-
-            // System.out.println("Pacote recebido do cliente:");
-            // System.out.println(pacote.toBallString());
-
         }
     }
 
@@ -127,8 +123,6 @@ public class UDPServer {
                 socket.send(sendPacket);
 
             }
-
-            // System.out.println("Pacotes enviados: " + packagesToSend.size());
 
         } catch (IOException e) {
 

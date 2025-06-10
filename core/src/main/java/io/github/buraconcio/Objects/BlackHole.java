@@ -37,12 +37,14 @@ public class BlackHole extends Obstacle {
         float dist2 = gravitational.len2();
 
         if (dist2 < killRadius*killRadius) {
-            System.out.println("dead");
+
             if (other instanceof Ball) {
                 Ball ball = (Ball) other;
                 ball.getPlayer().die();
-            } else
+
+            } else {
                 other.destroy();
+            }
 
             return true;
         } else {

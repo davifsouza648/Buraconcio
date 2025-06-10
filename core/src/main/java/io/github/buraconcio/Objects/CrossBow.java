@@ -37,7 +37,6 @@ public class CrossBow extends Obstacle {
     public void act(float delta) {
         super.act(delta);
 
-        System.out.println(animacao.isLastFrame());
         if (animacao.isLastFrame()) {
             if (canSpawn)
                 spawnArrow();

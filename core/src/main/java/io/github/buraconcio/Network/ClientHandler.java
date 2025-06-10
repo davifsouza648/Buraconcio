@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.List;
 
 import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Utils.PhysicsManager;
 import io.github.buraconcio.Utils.PlayerManager;
 
 public class ClientHandler implements Runnable {
@@ -80,6 +81,9 @@ public class ClientHandler implements Runnable {
         if (obj instanceof Player) {
             Player newPlayer = (Player) obj;
             this.currentPlayer = newPlayer;
+
+            PhysicsManager.getInstance().placePlayer(newPlayer);
+
             PlayerManager.getInstance().addPlayer(newPlayer);
             broadcastPlayerList();
 
@@ -89,13 +93,6 @@ public class ClientHandler implements Runnable {
             System.out.println("not a player");
         }
     }
-
-    // private void sendPlayers(ObjectOutputStream out) throws IOException {
-    // List<Player> players = PlayerManager.getInstance().getAllPlayers();
-    // out.writeObject(players);
-    // out.flush();
-    // System.out.println("Lista de jogadores enviada.");
-    // }
 
     public void broadcastPlayerList() {
         for (ClientHandler client : clients) {

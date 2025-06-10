@@ -1,38 +1,81 @@
 package io.github.buraconcio.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.lang.Runnable;
-import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Random;
+
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import io.github.buraconcio.Objects.PhysicsEntity;
+import io.github.buraconcio.Objects.Player;
 
 // singleton
 public class PhysicsManager {
     private static PhysicsManager instance;
     private static final float tickrate = 1/60f;
 
-    World world;
-    Stage stage;
-    ArrayList<Runnable> box2dScheduler;
-    ArrayList<Contact> contactList;
-    Hashtable<Integer, PhysicsEntity> entityList;
-    int id;
+    private World world;
+    private Stage stage;
+    private ArrayList<Runnable> box2dScheduler;
+    private ArrayList<Contact> contactList;
+    private HashMap<Integer, PhysicsEntity> entityList;
+    private int id;
+    private Random random;
+
+    private Vector2 startingAreaTop;
+    private Vector2 startingAreaBot;
+
+    private HashMap<Integer, Vector2> playerStartPosById;
 
     public PhysicsManager() {
         world = new World(new Vector2(0f, 0f), true);
         box2dScheduler = new ArrayList<Runnable> ();
-        entityList = new Hashtable<Integer, PhysicsEntity> ();
+        entityList = new HashMap<Integer, PhysicsEntity> ();
         id = 0;
         contactList = new ArrayList<Contact> ();
         stage = null;
+
+        Vector2 startingAreaSize = new Vector2(1f, 3f);
+        Vector2 startingAreaPos = new Vector2(3f, 3f);
+
+        startingAreaTop = new Vector2(
+            startingAreaPos.x - startingAreaSize.x/2,
+            startingAreaPos.y + startingAreaSize.y/2
+        );
+
+        startingAreaBot = new Vector2(
+            startingAreaPos.x + startingAreaSize.x/2,
+            startingAreaPos.y - startingAreaSize.y/2
+        );
+
+        BodyDef bd = new BodyDef();
+        bd.position.set(startingAreaPos);
+        Body startingArea = world.createBody(bd);
+
+        PolygonShape startingAreaShape = new PolygonShape();
+        startingAreaShape.setAsBox(startingAreaSize.x, startingAreaSize.y);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = startingAreaShape;
+        fixtureDef.isSensor = true;
+
+        startingArea.createFixture(fixtureDef);
+        startingAreaShape.dispose();
+
+        playerStartPosById = new HashMap<Integer, Vector2>();
+
+        random = new Random();
     }
 
     public static synchronized PhysicsManager getInstance() {
@@ -161,6 +204,52 @@ public class PhysicsManager {
         };
 
         schedule(task);
+    }
+
+    public boolean ballsCollide(Vector2 pos1, Vector2 pos2) {
+        return pos1.dst2(pos2) < 4 * Constants.BALL_RADIUS*Constants.BALL_RADIUS * 1.1; // 1.1 aumenta espacamento entre as bolas um pouco
+    }
+
+    public void placePlayer(Player player) {
+        if (player.getBall() != null) {
+            System.out.println("player already has ball");
+            return;
+        }
+
+        for (int i = 0; i < 1000; ++i) { // max 1000
+            boolean collides = false;
+
+             Vector2 pos = new Vector2(getRandomFloat(startingAreaTop.x, startingAreaBot.x),
+                getRandomFloat(startingAreaTop.y, startingAreaBot.y));
+
+            for (Vector2 otherBallPos : playerStartPosById.values()) {
+                if (ballsCollide(pos, otherBallPos)) {
+                    collides = true;
+                }
+            }
+
+            if (!collides) {
+                player.setStartingPos(pos);
+                playerStartPosById.put(player.getId(), pos);
+
+                return;
+            }
+        }
+
+        playerStartPosById.put(player.getId(), new Vector2(0f, 0f)); // ensurance
+        player.setStartingPos(new Vector2(0f, 0f));
+    }
+
+    public float getRandomFloat(float min, float max) {
+         return min + random.nextFloat() * (max - min);
+    }
+
+    public HashMap<Integer, Vector2> getPlayerStartPosList() {
+        return playerStartPosById;
+    }
+
+    public Vector2 getPlayerStartPosById(int id) {
+        return playerStartPosById.get(id);
     }
 
     public void resetContactList() {

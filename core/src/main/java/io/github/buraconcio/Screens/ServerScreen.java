@@ -425,7 +425,7 @@ public class ServerScreen implements Screen {
         Timer.schedule(countdownTask, 0, 1);
     }
 
-    @Override
+   @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0.1f, 0, 1, true);
         stage.act(delta);

@@ -1,6 +1,7 @@
 package io.github.buraconcio.Utils;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -29,15 +30,35 @@ public class PlayerManager {
     }
 
     public void addPlayer(Player player) {
+        removePlayerbyId(player.getId());
+
         players.add(player);
     }
 
-    public boolean removePlayerbyId(int id) {
-        return players.removeIf(p -> p.getId() == id);
+    public void removePlayerbyId(int id) {
+        Iterator<Player> it = players.iterator();
+
+        while(it.hasNext()) {
+            Player p = it.next();
+
+            if (p.getId() == id) {
+                p.dispose();
+                it.remove();
+            }
+        }
     }
 
-    public boolean removePlayerbyUser(String name) {
-        return players.removeIf(p -> p.getUsername() == name);
+    public void removePlayerbyUser(String name) {
+        Iterator<Player> it = players.iterator();
+
+        while(it.hasNext()) {
+            Player p = it.next();
+
+            if (p.getUsername() == name) {
+                p.dispose();
+                it.remove();
+            }
+        }
     }
 
     public Player getPlayer(int id) {
@@ -63,15 +84,16 @@ public class PlayerManager {
     }
 
     public void setPlayers(List<Player> newPlayers) {
+        for (Player player : players) {
+            player.dispose();
+        }
+
         players.clear();
         players.addAll(newPlayers);
     }
 
     public void updatePlayers(List<UdpPackage> update) {
         Runnable task = () -> {
-
-            // System.out.println("called update players");
-            // System.out.println();
 
             for (UdpPackage pack : update) { //modificar para comparar por PackType do UDPpackage e atualizar oq realmente importa
 
