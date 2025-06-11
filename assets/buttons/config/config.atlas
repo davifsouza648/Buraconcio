@@ -1,0 +1,27 @@
+
+config.png
+size: 512, 512
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+CONFIG1
+  rotate: false
+  xy: 1, 137
+  size: 132, 128
+  orig: 132, 128
+  offset: 0, 0
+  index: -1
+CONFIG2
+  rotate: false
+  xy: 1, 7
+  size: 132, 128
+  orig: 132, 128
+  offset: 0, 0
+  index: -1
+CONFIG3
+  rotate: false
+  xy: 135, 137
+  size: 132, 128
+  orig: 132, 128
+  offset: 0, 0
+  index: -1

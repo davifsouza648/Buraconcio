@@ -1,0 +1,9 @@
+{
+"com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {
+	"default": {
+		"imageUp": "GIVEUP1",
+		"imageDown": "GIVEUP2",
+		"imageOver": "GIVEUP3"
+	}
+}
+}
