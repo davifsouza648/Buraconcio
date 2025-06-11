@@ -102,6 +102,7 @@ public class PlayerManager {
                 // testing ball for now
                 int playerId = pack.getId();
                 PackType type = pack.getTypeP();
+
                 if (playerId != Constants.localP().getId()) {
 
                     if (type == PackType.BALL) {
@@ -109,14 +110,15 @@ public class PlayerManager {
                         Vector2 ballVel = new Vector2(pack.getBallVX(), pack.getBallVY());
 
                         PlayerManager.getInstance().getPlayer(playerId).update(ballPos, ballVel);
-                    
+
                     } else if (type == PackType.OBSTACLE) {
+
                         Vector2 obstaclePos = new Vector2(pack.getObsX(), pack.getObsY());
 
-                        PlayerManager.getInstance().getPlayer(playerId).update(obstaclePos, pack.getId());
+                        PlayerManager.getInstance().getPlayer(playerId).update(obstaclePos, pack.getObsId());
 
                     }else{
-                        return;   
+                        return;
                     }
                 }
             }

@@ -78,12 +78,19 @@ public class Player implements Serializable {
         ball.setVelocity(velocity);
     }
 
-    public void update(Vector2 obstaclePos, int obsId){
-        // selectObstacle(PhysicsManager.getInstance().getEntity(obsId));
-        
+    public void update(Vector2 obstaclePos, int obsId) {
+
+        Obstacle obstacle = (Obstacle) PhysicsManager.getInstance().getEntity(obsId);
+
+        if (obstacle == null) {
+            return;
+        }
+
+        selectObstacle(obstacle);
+
         if (selectedObstacle != null)
-            selectedObstacle.move(obstaclePos); 
-                   
+            selectedObstacle.move(obstaclePos);
+
     }
 
     public void stroke(Vector2 mouse1, Vector2 mouse2) {

@@ -78,7 +78,7 @@ public class UDPClient {
                 return createBallPackage(); // AUMENTAR AS INFORMACÇOES DO PACKAGE DA BOLA
             }
             case SELECT_OBJ: {
-                if(Constants.localP().getSelectedObstacle() != null){
+                if (Constants.localP().getSelectedObstacle() != null) {
                     return createObstaclePackage();
                 }
             }
@@ -122,9 +122,17 @@ public class UDPClient {
         float y = pos.y;
         // Vector2 velocity =
         // Constants.localP().getSelectedObstacle().getBody().getLinearVelocity();
-        int ObsID = Constants.localP().getSelectedObstacle().getId();
 
-        return new UdpPackage(id, x, y, ObsID, PackType.OBSTACLE);
+        int ObsID;
+
+        if (Constants.localP().getSelectedObstacle() != null) {
+             ObsID= Constants.localP().getSelectedObstacle().getId();
+             return new UdpPackage(id, x, y, ObsID, PackType.OBSTACLE);
+        }else{
+            return new UdpPackage(id, PackType.DEFAULT);
+        }
+
+
     }
 
     private UdpPackage createDefaultPackage() {

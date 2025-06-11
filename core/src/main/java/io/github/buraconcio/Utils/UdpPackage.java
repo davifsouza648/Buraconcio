@@ -14,9 +14,9 @@ public class UdpPackage implements Serializable {
         DEFAULT
     }
 
-    private int id;
+    private int id, obsID;
     private float ballX, ballY, ballVX, ballVY, isAlive, isInHole;
-    private float obsX, obsY, obsID, obsVel;
+    private float obsX, obsY, obsVel;
 
     private PackType typeP;
 
@@ -76,7 +76,7 @@ public class UdpPackage implements Serializable {
         return obsY;
     }
 
-    public float getObsId() {
+    public int getObsId() {
         return obsID;
     }
 
