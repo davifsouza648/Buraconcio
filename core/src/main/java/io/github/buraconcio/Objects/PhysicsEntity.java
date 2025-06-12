@@ -30,7 +30,7 @@ public class PhysicsEntity extends Actor {
     {
         super();
 
-        setPosition(pos.x, pos.y);
+        setPosition(pos.x - size.x/2, pos.y - size.y/2);
         setOrigin(Align.center);
 
         setSize(size.x, size.y);

@@ -1,10 +1,15 @@
 package io.github.buraconcio.Objects;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
 
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PhysicsManager;
@@ -56,9 +61,52 @@ public class Obstacle extends PhysicsEntity {
                 return false;
         }
 
-        // area de spawn / objetivo podem ser sensor fisico colisao ja seria detectada
+        if (getAABB().overlaps(PhysicsManager.getInstance().getStratingRect()))
+            return false;
 
+        System.out.println("can place");
         return true;
+    }
+
+    public Rectangle getAABB() {
+        Shape shape;
+        try {
+            shape = body.getFixtureList().get(0).getShape();
+        } catch (Exception e) {return null;}
+
+        if (shape instanceof CircleShape) {
+            CircleShape circle = (CircleShape) shape;
+            Vector2 position = body.getWorldPoint(circle.getPosition());
+            float radius = circle.getRadius();
+
+            return new Rectangle(
+                position.x - radius,
+                position.y - radius,
+                radius * 2,
+                radius * 2
+            );
+        }
+
+        if (shape instanceof PolygonShape) {
+            PolygonShape poly = (PolygonShape) shape;
+            Vector2 lower = new Vector2(Float.MAX_VALUE, Float.MAX_VALUE);
+            Vector2 upper = new Vector2(Float.MIN_VALUE, Float.MIN_VALUE);
+            Vector2 temp = new Vector2();
+
+            for (int i = 0; i < poly.getVertexCount(); i++) {
+                poly.getVertex(i, temp);
+                temp = new Vector2(body.getPosition()).add(temp);
+                if (temp.x < lower.x) lower.x = temp.x;
+                if (temp.y < lower.y) lower.y = temp.y;
+
+                if (temp.x > upper.x) upper.x = temp.x;
+                if (temp.y > upper.y) upper.y = temp.y;
+            }
+
+            return new Rectangle(lower.x, lower.y, upper.x - lower.x, upper.y - lower.y);
+        }
+
+        return null;
     }
 
     public void place() {

@@ -6,7 +6,7 @@ import java.lang.Runnable;
 import java.util.Iterator;
 import java.util.Random;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -34,12 +34,13 @@ public class PhysicsManager {
     private int id;
     private Random random;
 
-    private Vector2 startingAreaTop;
-    private Vector2 startingAreaBot;
+    private Rectangle startingAreaRect;
 
     private HashMap<Integer, Vector2> playerStartPosById;
 
     public PhysicsManager() {
+        instance = this;
+
         world = new World(new Vector2(0f, 0f), true);
         box2dScheduler = new ArrayList<Runnable>();
         entityList = new HashMap<Integer, PhysicsEntity>();
@@ -47,29 +48,26 @@ public class PhysicsManager {
         contactList = new ArrayList<Contact>();
         stage = null;
 
-        Vector2 startingAreaSize = new Vector2(1f, 3f);
-        Vector2 startingAreaPos = new Vector2(3f, 3f);
+        Vector2 startingAreaSize = new Vector2(4f, 6f);
+        Vector2 startingAreaPos = new Vector2(7f, 5f); // center of area
 
-        startingAreaTop = new Vector2(
-                startingAreaPos.x - startingAreaSize.x / 2,
-                startingAreaPos.y + startingAreaSize.y / 2);
+        startingAreaRect = new Rectangle(
+            startingAreaPos.x - startingAreaSize.x/2,
+            startingAreaPos.y - startingAreaSize.y/2,
+            startingAreaSize.x,
+            startingAreaSize.y
+                );
 
-        startingAreaBot = new Vector2(
-                startingAreaPos.x + startingAreaSize.x / 2,
-                startingAreaPos.y - startingAreaSize.y / 2);
-
-        BodyDef bd = new BodyDef();
-        bd.position.set(startingAreaPos);
-        Body startingArea = world.createBody(bd);
+        PhysicsEntity startingArea = new PhysicsEntity(startingAreaPos, startingAreaSize);
 
         PolygonShape startingAreaShape = new PolygonShape();
-        startingAreaShape.setAsBox(startingAreaSize.x, startingAreaSize.y);
+        startingAreaShape.setAsBox(startingAreaRect.width/2, startingAreaRect.height/2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = startingAreaShape;
         fixtureDef.isSensor = true;
 
-        startingArea.createFixture(fixtureDef);
+        startingArea.getBody().createFixture(fixtureDef);
         startingAreaShape.dispose();
 
         playerStartPosById = new HashMap<Integer, Vector2>();
@@ -79,7 +77,8 @@ public class PhysicsManager {
 
     public static synchronized PhysicsManager getInstance() {
         if (instance == null) {
-            instance = new PhysicsManager();
+            // instance = new PhysicsManager();
+            new PhysicsManager();
         }
 
         return instance;
@@ -221,8 +220,8 @@ public class PhysicsManager {
         for (int i = 0; i < 1000; ++i) { // max 1000
             boolean collides = false;
 
-            Vector2 pos = new Vector2(getRandomFloat(startingAreaTop.x, startingAreaBot.x),
-                    getRandomFloat(startingAreaTop.y, startingAreaBot.y));
+             Vector2 pos = new Vector2(getRandomFloat(startingAreaRect.x, startingAreaRect.x + startingAreaRect.width),
+                getRandomFloat(startingAreaRect.y, startingAreaRect.y + startingAreaRect.height));
 
             for (Vector2 otherBallPos : playerStartPosById.values()) {
                 if (ballsCollide(pos, otherBallPos)) {
@@ -244,6 +243,10 @@ public class PhysicsManager {
 
     public float getRandomFloat(float min, float max) {
         return min + random.nextFloat() * (max - min);
+    }
+
+    public Rectangle getStratingRect() {
+        return startingAreaRect;
     }
 
     public HashMap<Integer, Vector2> getPlayerStartPosList() {

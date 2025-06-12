@@ -69,7 +69,8 @@ public class PhysicsTest implements Screen {
         pBall = PlayerManager.getInstance().getLocalPlayer().getBall();
 
         if (pBall == null) { // testing without server
-            pBall = PlayerManager.getInstance().getLocalPlayer().createBall(new Vector2(3f, 3f));
+            PhysicsManager.getInstance().placePlayer(PlayerManager.getInstance().getLocalPlayer());
+            pBall = PlayerManager.getInstance().getLocalPlayer().createBall();
         }
 
         camera = new BallCamera(pBall);
@@ -180,7 +181,6 @@ public class PhysicsTest implements Screen {
             }
 
         });
-
     }
 
     @Override
