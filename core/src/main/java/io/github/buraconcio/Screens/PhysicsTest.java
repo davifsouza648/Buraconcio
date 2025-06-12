@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
@@ -23,11 +23,9 @@ import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.MapRenderer;
 import io.github.buraconcio.Utils.PhysicsManager;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 import java.lang.Runnable;
 
@@ -54,7 +52,7 @@ public class PhysicsTest implements Screen {
 
         debugRenderer = new Box2DDebugRenderer();
 
-        stage = new Stage(new FitViewport(23, 13));
+        stage = new Stage(new ExtendViewport(23, 13));
         Gdx.input.setInputProcessor(stage);
 
         stage.setDebugAll(true);
@@ -141,6 +139,7 @@ public class PhysicsTest implements Screen {
             public boolean mouseMoved(int x, int y) {
                 p = PlayerManager.getInstance().getLocalPlayer();
                 Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
+
                 if (p.getSelectedObstacle() != null)
                     p.getSelectedObstacle().move(new Vector2(unprojected.x, unprojected.y));
 
