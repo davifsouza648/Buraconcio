@@ -47,6 +47,8 @@ public class PhysicsEntity extends Actor {
 
         animacao = new AnimationPlay(texturePath, this);
         PhysicsManager.getInstance().addToStage(this); // choggs pq precisa ser posto dps da animacao
+
+        if (size.y == -1f || size.x == -1f) setSize(animacao.getWidth(), animacao.getHeight());
     }
 
     public PhysicsEntity(Vector2 pos, Vector2 size, Animation<TextureRegion> animacao) {
@@ -54,6 +56,8 @@ public class PhysicsEntity extends Actor {
 
         this.animacao = new AnimationPlay(animacao, this);
         PhysicsManager.getInstance().addToStage(this);
+
+        if (size.y == -1f || size.x == -1f) setSize(this.animacao.getWidth(), this.animacao.getHeight());
     }
 
     public PhysicsEntity(Vector2 pos, Vector2 size, AnimationPlay animacao) {
@@ -61,6 +65,8 @@ public class PhysicsEntity extends Actor {
 
         this.animacao = animacao;
         PhysicsManager.getInstance().addToStage(this);
+
+        if (size.y == -1f || size.x == -1f) setSize(animacao.getWidth(), animacao.getHeight());
     }
 
     // Método para destruir a entidade

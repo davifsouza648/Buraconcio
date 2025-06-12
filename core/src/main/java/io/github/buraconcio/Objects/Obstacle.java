@@ -64,7 +64,6 @@ public class Obstacle extends PhysicsEntity {
         if (getAABB().overlaps(PhysicsManager.getInstance().getStratingRect()))
             return false;
 
-        System.out.println("can place");
         return true;
     }
 

@@ -79,8 +79,9 @@ public class PhysicsTest implements Screen {
 
         new Obstacle(new Vector2(12.5f, 2f), new Vector2(1f, 1f),
             Auxiliaries.animationFromFiles("obstacles/star/star.png", "obstacles/star/star.json"));
-        new BoostPad(new Vector2(14.5f, 2f), new Vector2(3f, 3f));
-        new BlackHole(new Vector2(16.5f, 2f), new Vector2(3f, 3f));
+        new BoostPad(new Vector2(14.5f, 2f), new Vector2(3f, -1f));
+        new BlackHole(new Vector2(16.5f, 2f), new Vector2(3f, -1f));
+        new CircularSaw(new Vector2(12.5f, 7f), new Vector2(-1f, 1f));
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1 = new Vector2();
@@ -114,9 +115,10 @@ public class PhysicsTest implements Screen {
                 Vector2 stageCoords = stage.screenToStageCoordinates(new Vector2(x, y));
                 Actor hitActor = stage.hit(stageCoords.x, stageCoords.y, true);
 
-                if (p.getSelectedObstacle() != null && p.getSelectedObstacle().canPlace()) {
+                Obstacle obstacle = p.getSelectedObstacle();
+                if (obstacle != null && obstacle.canPlace()) {
                     p.placeObstacle();
-                    testObstacle.preRound();
+                    obstacle.preRound();
                 } else if (hitActor instanceof Obstacle) {
                     Obstacle hitObstacle = (Obstacle) hitActor;
                     if (!hitObstacle.claimed())

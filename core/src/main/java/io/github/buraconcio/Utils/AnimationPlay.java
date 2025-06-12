@@ -27,13 +27,11 @@ public class AnimationPlay extends Image {
         this.parentActor = parentActor;
         this.animation = animation;
 
-        //float aspectRatio = (animation.getKeyFrame(0f).getRegionHeight() /
-        //        animation.getKeyFrame(0f).getRegionWidth());
+        setSize(parentActor.getWidth(), parentActor.getWidth()*getSize().y/getSize().x);
 
-        float aspectRatio = getImageHeight()/getImageWidth();
+        if (parentActor.getWidth() == -1)
+            setSize(parentActor.getHeight()*getSize().x/getSize().y, parentActor.getHeight());
 
-        //setSize(parentActor.getWidth(), parentActor.getWidth()*aspectRatio);
-        setSize(parentActor.getWidth(), parentActor.getWidth());
         this.animation.setPlayMode(Animation.PlayMode.LOOP);
         PhysicsManager.getInstance().getStage().addActor(this);
     }
@@ -56,10 +54,6 @@ public class AnimationPlay extends Image {
         setSize(parentActor.getWidth(), parentActor.getWidth()*(sprite.getHeight()/sprite.getWidth()));
         this.animation.setPlayMode(Animation.PlayMode.LOOP);
         PhysicsManager.getInstance().getStage().addActor(this);
-    }
-
-    public void setAnimationSpeed(float speed) {
-        animation.setFrameDuration(speed);
     }
 
     public void pauseAnimation() {
@@ -97,5 +91,17 @@ public class AnimationPlay extends Image {
     public TextureRegion getCurrentFrame()
     {
         return animation.getKeyFrame(elapsedTime);
+    }
+
+    public Vector2 getSize() {
+        return new Vector2(getPrefWidth(), getPrefHeight());
+    }
+
+    public void setFrameDuration(float speed) {
+        animation.setFrameDuration(speed);
+    }
+
+    public float getFrameDuration() {
+        return animation.getFrameDuration();
     }
 }

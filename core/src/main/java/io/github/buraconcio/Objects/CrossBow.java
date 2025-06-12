@@ -19,7 +19,7 @@ public class CrossBow extends Obstacle {
     public CrossBow(Vector2 pos, Vector2 size) {
         super(pos, size,
             Auxiliaries.animationFromFiles("obstacles/crossbow/crossbow.png", "obstacles/crossbow/crossbow.json"));
-        animacao.setAnimationSpeed(frameDuration);
+        animacao.setFrameDuration(frameDuration);
         animacao.pauseAnimation();
 
         PolygonShape shape = new PolygonShape();
