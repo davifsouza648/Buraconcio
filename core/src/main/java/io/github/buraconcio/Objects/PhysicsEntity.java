@@ -71,11 +71,10 @@ public class PhysicsEntity extends Actor {
 
     // Método para destruir a entidade
     public void destroy() {
-        Runnable task = () -> {
-            PhysicsManager.getInstance().destroyBody(body);
-            remove();
-        };
-        PhysicsManager.getInstance().schedule(task);
+        PhysicsManager.getInstance().destroyBody(body);
+
+        remove();
+        animacao.remove();
     }
 
     // Método para setar o id

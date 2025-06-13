@@ -144,9 +144,8 @@ public class PhysicsManager {
     }
 
     public void destroyBody(Body body) {
-        // Runnable task = () -> {world.destroyBody(body);};
-        // schedule(task);
-        world.destroyBody(body);
+        Runnable task = () -> {world.destroyBody(body);};
+        schedule(task);
     }
 
     public ArrayList<Contact> getContactList() {
