@@ -82,6 +82,7 @@ public class PhysicsTest implements Screen {
         new BoostPad(new Vector2(14.5f, 2f), new Vector2(3f, -1f));
         new BlackHole(new Vector2(16.5f, 2f), new Vector2(3f, -1f));
         new CircularSaw(new Vector2(12.5f, 7f), new Vector2(-1f, 1f));
+        new Trampoline(new Vector2(14.5f, 7f), new Vector2(-1f, 1f));
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             private Vector2 mouse1 = new Vector2();

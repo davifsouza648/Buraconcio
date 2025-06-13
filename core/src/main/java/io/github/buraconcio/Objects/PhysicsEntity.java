@@ -94,12 +94,6 @@ public class PhysicsEntity extends Actor {
         return false;
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha)
-    {
-        //animacao.draw(batch, parentAlpha);
-    }
-
     // Método para atualizar animação e posição da entidade
     @Override
     public void act(float delta) {
@@ -108,8 +102,6 @@ public class PhysicsEntity extends Actor {
         setOrigin(Align.center);
         this.setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
         this.setRotation(body.getAngle() * 180f / 3.14f);
-
-        //animacao.act(delta);
     }
 
     // Método para obter o corpo físico

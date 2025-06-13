@@ -20,17 +20,26 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Ball extends PhysicsEntity {
     private Player player;
-
     private Group labelGroup;
-
     private Vector2 mouseMovement;
+
+    private float zSpeed = 0f;
+    private float z = 0f;
+    private static final float gravity = 9.8f;
+
+    private static final float angDamp = 1f;
+    private static final float linDamp = 0.5f;
+
+    private Sprite endSprite;
+    private Sprite segmentSprite;
+    private Sprite tipSprite;
 
     public Ball(Vector2 pos, float d, Player player) {
         super(pos, new Vector2(d, d), "ballteste.png");
 
         body.setType(BodyType.DynamicBody);
-        body.setLinearDamping(0.5f);
-        body.setAngularDamping(1f);
+        body.setLinearDamping(linDamp);
+        body.setAngularDamping(angDamp);
 
         CircleShape circle = new CircleShape();
         circle.setRadius(d/2);
@@ -58,6 +67,16 @@ public class Ball extends PhysicsEntity {
         this.player = player;
 
         mouseMovement = new Vector2(0, 0);
+
+        //shooting segment sprites
+        Texture texture = new Texture(Gdx.files.internal("shootingGuideEnd.png"));
+        endSprite = new Sprite(texture);
+
+        texture = new Texture(Gdx.files.internal("shootingGuideSegment.png"));
+        segmentSprite = new Sprite(texture);
+
+        texture = new Texture(Gdx.files.internal("shootingGuideTip.png"));
+        tipSprite = new Sprite(texture);
     }
 
     public boolean isStill()
@@ -81,6 +100,35 @@ public class Ball extends PhysicsEntity {
         return diff;
     }
 
+    public void jump(float impulse) {
+        // o que fazer se cai em um obstaculo / parede ?
+        zSpeed = impulse;
+
+        body.getFixtureList().forEach(fixture -> fixture.setSensor(true));
+        body.setAngularDamping(0f);
+        body.setLinearDamping(0f);
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        zSpeed -= gravity*delta;
+        z += zSpeed;
+
+        if (z <= 0) {
+            z = 0;
+            zSpeed = 0;
+
+            body.getFixtureList().forEach(fixture -> fixture.setSensor(false));
+            body.setAngularDamping(angDamp);
+            body.setLinearDamping(linDamp);
+        }
+
+        animacao.setOrigin(getWidth()/2, getHeight()/2);
+        animacao.setScale(1 + z/15);
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha)
     {
@@ -92,8 +140,6 @@ public class Ball extends PhysicsEntity {
         if (mouseMovement.len() > 0.01f) {
             final float segmentLength = 1f;
 
-            Texture texture = new Texture(Gdx.files.internal("shootingGuideEnd.png"));
-            Sprite endSprite = new Sprite(texture);
             endSprite.setSize(segmentLength, segmentLength);
             endSprite.setOriginCenter();
 
@@ -107,8 +153,6 @@ public class Ball extends PhysicsEntity {
             // prioritize positioning tip to represent actual impulse
             Vector2 impulse = calculateImpulse(new Vector2(0f, 0f), mouseMovement).scl(0.1f);
 
-            texture = new Texture(Gdx.files.internal("shootingGuideTip.png"));
-            Sprite tipSprite = new Sprite(texture);
             tipSprite.setSize(segmentLength, segmentLength);
             tipSprite.setOriginCenter();
 
@@ -116,8 +160,6 @@ public class Ball extends PhysicsEntity {
             tipSprite.setRotation(mouseMovement.angleDeg());
             tipSprite.draw(batch);
 
-            texture = new Texture(Gdx.files.internal("shootingGuideSegment.png"));
-            Sprite segmentSprite = new Sprite(texture);
 
             Vector2 seg = new Vector2(tipSprite.getX() - endSprite.getX(), tipSprite.getY() - endSprite.getY());
             segmentSprite.setSize(seg.len(), segmentLength);
