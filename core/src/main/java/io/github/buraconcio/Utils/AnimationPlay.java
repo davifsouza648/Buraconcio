@@ -104,4 +104,12 @@ public class AnimationPlay extends Image {
     public float getFrameDuration() {
         return animation.getFrameDuration();
     }
+
+    public int getFrameIndex() {
+        return animation.getKeyFrameIndex(elapsedTime);
+    }
+
+    public int getNumFrames() {
+        return (int) (animation.getAnimationDuration() / animation.getFrameDuration());
+    }
 }

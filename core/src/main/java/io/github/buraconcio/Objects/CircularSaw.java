@@ -15,13 +15,23 @@ import io.github.buraconcio.Utils.PhysicsManager;
 public class CircularSaw extends Obstacle {
     private float elapsedTime = 0f;
 
+    private static final int idleFrames = 4; // por favor ninguem troca a animacao velho tem mt hard code
+    private int animationDuration;
+    private int framesToMove;
+    private float circleRadius;
+
     public CircularSaw(Vector2 pos, Vector2 size) {
         super(pos, size,
             Auxiliaries.animationFromFiles("obstacles/circularSaw/circularSaw.png", "obstacles/circularSaw/circularSaw.json"));
 
+        circleRadius = getHeight()/2;
+
         animacao.pauseAnimation();
 
         createSawFixture(0f);
+
+        animationDuration = animacao.getNumFrames();
+        framesToMove = animationDuration/2 - idleFrames - 1;
     }
 
     @Override
@@ -32,15 +42,23 @@ public class CircularSaw extends Obstacle {
 
         if (!active) elapsedTime = 0f;
 
-        float sawPosition = ((float) Math.cos(0.25*elapsedTime/animacao.getFrameDuration())*getWidth()/2) * 0.7f;
-        System.out.println(sawPosition);
+        float sawPosition;
 
-        /*
-        Transform current = body.getTransform();
-        body.setTransform(sawPosition + current.getPosition().x, current.getPosition().y, current.getRotation());
+        float x0 = getWidth()/2 - circleRadius - 0.15f;
+        float xf = -x0;
 
-        animacao.setPosition(body.getPosition().x - sawPosition, body.getPosition().y);
-        */
+        int currentFrame = animacao.getFrameIndex();
+        float framesOfMovement = currentFrame - idleFrames;
+
+        if (currentFrame <= idleFrames ) {
+            sawPosition = x0;
+        } else if (currentFrame >= idleFrames + framesToMove && currentFrame <= framesToMove + 2*idleFrames) {
+            sawPosition = xf;
+        } else if (currentFrame > idleFrames && currentFrame < idleFrames + framesToMove) {
+            sawPosition = framesOfMovement * (xf - x0) / framesToMove + x0;
+        } else {
+            sawPosition = (framesOfMovement - 2*idleFrames - framesToMove + 3) * (x0 - xf) / framesToMove + xf;
+        }
 
         body.destroyFixture(body.getFixtureList().get(0));
 
@@ -83,7 +101,7 @@ public class CircularSaw extends Obstacle {
 
     private void createSawFixture(float sawPosition) {
         CircleShape circle = new CircleShape();
-        circle.setRadius(getHeight()/2);
+        circle.setRadius(circleRadius);
         circle.setPosition(new Vector2(sawPosition, 0));
 
         FixtureDef fixtureDef = new FixtureDef();
