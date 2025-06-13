@@ -26,6 +26,7 @@ public class Ball extends PhysicsEntity {
     private float zSpeed = 0f;
     private float z = 0f;
     private static final float gravity = 9.8f;
+    private boolean isAirborne = false;
 
     private static final float angDamp = 1f;
     private static final float linDamp = 0.5f;
@@ -103,6 +104,7 @@ public class Ball extends PhysicsEntity {
     public void jump(float impulse) {
         // o que fazer se cai em um obstaculo / parede ?
         zSpeed = impulse;
+        isAirborne = true;
 
         body.getFixtureList().forEach(fixture -> fixture.setSensor(true));
         body.setAngularDamping(0f);
@@ -123,6 +125,8 @@ public class Ball extends PhysicsEntity {
             body.getFixtureList().forEach(fixture -> fixture.setSensor(false));
             body.setAngularDamping(angDamp);
             body.setLinearDamping(linDamp);
+
+            isAirborne = false;
         }
 
         animacao.setOrigin(getWidth()/2, getHeight()/2);
@@ -190,12 +194,7 @@ public class Ball extends PhysicsEntity {
 
     @Override
     public boolean contact(PhysicsEntity entity) {
-        if (entity instanceof Arrow) {
-            if (PlayerManager.getInstance().getLocalPlayer().getId() == player.getId()) // player should only die if hit on his own screen
-                player.die();
-
-            return true;
-        } else if (entity instanceof Flag) {
+        if (entity instanceof Flag && !isAirborne) {
             player.score();
 
             return true;
@@ -228,5 +227,9 @@ public class Ball extends PhysicsEntity {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public boolean isAirborne() {
+        return isAirborne;
     }
 }
