@@ -191,6 +191,11 @@ public class LoadingScreen implements Screen {
             @Override
             public void ServerCancelMatch() {
             }
+
+            @Override
+            public void ServerChangeMap(String map){
+
+            }
         });
 
         cliente.startTCPClient();

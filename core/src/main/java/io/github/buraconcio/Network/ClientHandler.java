@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.List;
 
 import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Screens.ServerScreen;
 import io.github.buraconcio.Utils.PhysicsManager;
 import io.github.buraconcio.Utils.PlayerManager;
 
@@ -36,6 +37,9 @@ public class ClientHandler implements Runnable {
     public void run() {
         try {
             out.writeObject("Client connected");
+            out.flush();
+
+            out.writeObject(ServerScreen.mapIndex);
             out.flush();
 
             while (!socket.isClosed() && flagAccept) {

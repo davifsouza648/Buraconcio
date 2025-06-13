@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 // import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 import io.github.buraconcio.Main;
@@ -42,6 +44,14 @@ public class ServerScreen implements Screen {
     private Timer.Task countdownTask;
     private boolean firstIn = true;
 
+    private Image mapImage;
+    public static int mapIndex = 0;
+    private final String[] mapPaths = {
+            "maps-preview/teste.jpg",
+            "maps-preview/teste2.jpg"
+    };
+    private Texture[] mapTextures;
+
     public ServerScreen(Main game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -50,6 +60,11 @@ public class ServerScreen implements Screen {
         Button tempButton = new Button();
         this.startStyle = tempButton.createButtonStyle("start", "start");
         this.cancelStyle = tempButton.createButtonStyle("cancel", "cancel");
+
+        mapTextures = new Texture[mapPaths.length];
+        for (int i = 0; i < mapPaths.length; i++) {
+            mapTextures[i] = new Texture(Gdx.files.internal(mapPaths[i]));
+        }
     }
 
     @Override
@@ -117,6 +132,23 @@ public class ServerScreen implements Screen {
                 Gdx.app.postRunnable(() -> cancelMatch());
 
             }
+
+            @Override
+            public void ServerChangeMap(String message) {
+                Gdx.app.postRunnable(() -> {
+
+                    try {
+
+                        int receivedIndex = Integer.parseInt(message);
+                        mapIndex = receivedIndex;
+                        nextMap();
+
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+
+                });
+            }
         });
 
     }
@@ -146,7 +178,7 @@ public class ServerScreen implements Screen {
 
         Table bottomInfo = new Table();
         bottomInfo.bottom().left();
-        Image mapImage = new Image(new Texture("teste.jpg"));
+        mapImage = new Image(new Texture(mapPaths[mapIndex]));
 
         Button back = new Button();
         backButton = back.createButton("back", "back");
@@ -215,7 +247,12 @@ public class ServerScreen implements Screen {
         mapButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if (Constants.isHosting()) {
 
+                    mapIndex = (mapIndex - 1 + mapTextures.length) % mapTextures.length;
+                    server.sendString(Integer.toString(mapIndex));
+                    nextMap();
+                }
             }
         });
 
@@ -425,7 +462,12 @@ public class ServerScreen implements Screen {
         Timer.schedule(countdownTask, 0, 1);
     }
 
-   @Override
+    private void nextMap() {
+        mapImage.setDrawable(new TextureRegionDrawable(new TextureRegion(mapTextures[mapIndex])));
+
+    }
+
+    @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0.1f, 0, 1, true);
         stage.act(delta);
@@ -453,6 +495,10 @@ public class ServerScreen implements Screen {
     public void dispose() {
 
         stage.dispose();
+
+        for(Texture t : mapTextures){
+            t.dispose();
+        }
 
         if (server != null) {
             server.stop();
