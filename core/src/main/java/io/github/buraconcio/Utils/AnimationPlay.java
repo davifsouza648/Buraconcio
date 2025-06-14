@@ -18,6 +18,7 @@ public class AnimationPlay extends Image {
     private float elapsedTime = 0f;
     private Actor parentActor;
     private int running = 1;
+    private boolean playOnce = false;
 
 
     public AnimationPlay(Animation<TextureRegion> animation, Actor parentActor)
@@ -64,6 +65,11 @@ public class AnimationPlay extends Image {
         running = 1;
     }
 
+    public void playOnce() {
+        running = 1;
+        playOnce = true;
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         setOrigin(Align.center);
@@ -77,6 +83,11 @@ public class AnimationPlay extends Image {
     public void act(float delta)
     {
         super.act(delta);
+
+        if (playOnce && isLastFrame()) {
+            elapsedTime = 0f;
+            running = 0;
+        }
 
         elapsedTime += delta * running;
         setDrawable(new TextureRegionDrawable(animation.getKeyFrame(elapsedTime)));

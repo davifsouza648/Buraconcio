@@ -118,15 +118,18 @@ public class Ball extends PhysicsEntity {
         zSpeed -= gravity*delta;
         z += zSpeed;
 
+        if (z <= 2f) { // arbitrario
+            isAirborne = false;
+
+            body.getFixtureList().forEach(fixture -> fixture.setSensor(false));
+        }
+
         if (z <= 0) {
             z = 0;
             zSpeed = 0;
 
-            body.getFixtureList().forEach(fixture -> fixture.setSensor(false));
             body.setAngularDamping(angDamp);
             body.setLinearDamping(linDamp);
-
-            isAirborne = false;
         }
 
         animacao.setOrigin(getWidth()/2, getHeight()/2);

@@ -26,8 +26,6 @@ public class Trampoline extends Obstacle {
             Auxiliaries.animationFromFiles("obstacles/trampoline/trampoline.png", "obstacles/trampoline/trampoline.json"));
         animacao.pauseAnimation();
 
-
-
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(size.x/2, size.y/2);
 
@@ -42,6 +40,8 @@ public class Trampoline extends Obstacle {
     @Override
     public boolean contact(PhysicsEntity other) {
         if (other instanceof Ball) {
+            animacao.playOnce();
+
             Ball ball = (Ball) other;
 
             ball.jump(2f);
