@@ -77,8 +77,7 @@ public class PhysicsTest implements Screen {
         testObstacle = new CrossBow(new Vector2(10.5f, 2f), new Vector2(3f, 3f));
         testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
 
-        new Obstacle(new Vector2(12.5f, 2f), new Vector2(1f, 1f),
-            Auxiliaries.animationFromFiles("obstacles/star/star.png", "obstacles/star/star.json"));
+        new Star(new Vector2(12.5f, 2f), new Vector2(1f, 1f));
         new BoostPad(new Vector2(14.5f, 2f), new Vector2(3f, -1f));
         new BlackHole(new Vector2(16.5f, 2f), new Vector2(3f, -1f));
         new CircularSaw(new Vector2(12.5f, 7f), new Vector2(-1f, 1f));

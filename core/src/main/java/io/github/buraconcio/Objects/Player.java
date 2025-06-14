@@ -26,6 +26,7 @@ public class Player implements Serializable {
     private Obstacle selectedObstacle;
     private boolean canSelect = true;
     private Vector2 startingPos = null;
+    private boolean hasStar = false;
 
     private transient ArrayList<Sound> strokeSounds = new ArrayList<>();
 
@@ -122,6 +123,9 @@ public class Player implements Serializable {
     }
 
     public void rewardStar() {
+        if (hasStar)
+            stars += 1;
+
         if (strokes <= 2) {
             stars += 3;
         } else if (strokes <= 5) {
@@ -129,10 +133,11 @@ public class Player implements Serializable {
         }
     }
 
-    public void placeObstacle() {
-        // if (selectedObstacle == null)
-        // return;
+    public void collectStar() {
+        hasStar = true;
+    }
 
+    public void placeObstacle() {
         selectedObstacle.place();
         selectedObstacle = null;
     }
