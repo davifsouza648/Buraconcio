@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Align;
 
 import io.github.buraconcio.Objects.Obstacle;
 import io.github.buraconcio.Utils.AnimationPlay;
+import io.github.buraconcio.Utils.Auxiliaries;
 
 public class BlackHole extends Obstacle {
     public static final float ACTION_RADIUS = 4f;
@@ -15,8 +16,9 @@ public class BlackHole extends Obstacle {
     public static final float killRadius = 0.5f;
 
     public BlackHole(Vector2 pos, Vector2 size) {
-        super(pos, size, "obstacles/blackhole/blackhole.png");
-
+        // super(pos, size, "obstacles/blackhole/blackHole.png");
+        super(pos, size, 
+            Auxiliaries.animationFromFiles("obstacles/blackHole/blackHole.png", "obstacles/blackHole/blackHole.json"));
         CircleShape circle = new CircleShape();
         circle.setRadius(ACTION_RADIUS);
 
