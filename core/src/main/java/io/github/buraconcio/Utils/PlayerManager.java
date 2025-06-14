@@ -137,6 +137,18 @@ public class PlayerManager {
 
     }
 
+    public void setAllCanSelect(boolean flag){
+        for(Player p : players){
+            p.setCanSelect(flag);
+        }
+    }
+
+    public void setAllBallsInteractable(boolean flag){
+        for(Player p : players){
+            p.setBallInteractable(flag);
+        }
+    }
+
     public Player getLocalPlayer() {
         return localPlayer;
     }

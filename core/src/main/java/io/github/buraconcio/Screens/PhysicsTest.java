@@ -19,6 +19,7 @@ import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
+import io.github.buraconcio.Utils.Constants.PHASE;
 import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.MapRenderer;
 import io.github.buraconcio.Utils.PhysicsManager;
@@ -36,7 +37,7 @@ public class PhysicsTest implements Screen {
     private Obstacle testObstacle;
 
     private Box2DDebugRenderer debugRenderer;
-    private BallCamera camera;
+    private GameCamera camera;
 
     Player p;
     private Ball pBall;
@@ -71,14 +72,14 @@ public class PhysicsTest implements Screen {
             pBall = PlayerManager.getInstance().getLocalPlayer().createBall();
         }
 
-        camera = new BallCamera(pBall);
+        camera = new GameCamera();
         stage.getViewport().setCamera(camera);
 
         testObstacle = new CrossBow(new Vector2(10.5f, 2f), new Vector2(3f, 3f));
         testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
 
         new Obstacle(new Vector2(12.5f, 2f), new Vector2(1f, 1f),
-            Auxiliaries.animationFromFiles("obstacles/star/star.png", "obstacles/star/star.json"));
+                Auxiliaries.animationFromFiles("obstacles/star/star.png", "obstacles/star/star.json"));
         new BoostPad(new Vector2(14.5f, 2f), new Vector2(3f, -1f));
         new BlackHole(new Vector2(16.5f, 2f), new Vector2(3f, -1f));
         new CircularSaw(new Vector2(12.5f, 7f), new Vector2(-1f, 1f));
@@ -206,11 +207,21 @@ public class PhysicsTest implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0.1f, 0, 1, true);
 
+        stage.act(delta);
+
+        Obstacle selected = Constants.localP().getSelectedObstacle();
+        if (Constants.phase == PHASE.PLAY) {
+            camera.setTarget(Constants.localP().getBall().getPosition());
+        } else if (Constants.phase == PHASE.SELECT_OBJ && selected != null) {
+            camera.setTarget(selected.getPosition());
+        }
+
         camera.updateCamera();
+
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        stage.act(delta);
+        stage.getViewport().setCamera(camera);
         stage.draw();
 
         debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);

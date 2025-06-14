@@ -94,7 +94,7 @@ public class Player implements Serializable {
     }
 
     public void stroke(Vector2 mouse1, Vector2 mouse2) {
-        if (!ball.isStill())
+        if (!ball.isStill() || !ball.canInteract())
             return;
 
         if (mouse1.dst(mouse2) < 0.05f)
@@ -225,6 +225,12 @@ public class Player implements Serializable {
         if (ball != null) {
             ball.destroy();
             ball.clear();
+        }
+    }
+
+    public void setBallInteractable(boolean canInteract) {
+        if (ball != null) {
+            ball.setCanInteract(canInteract);
         }
     }
 }
