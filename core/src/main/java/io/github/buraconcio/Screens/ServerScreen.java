@@ -1,6 +1,7 @@
 package io.github.buraconcio.Screens;
 
 import java.io.IOException;
+// import java.lang.classfile.Label;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -29,6 +30,7 @@ import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.PlayerManager;
+import main.java.io.github.buraconcio.Utils.CountdownTimer;
 
 public class ServerScreen implements Screen {
     private final Main game;
@@ -43,6 +45,7 @@ public class ServerScreen implements Screen {
     private Server server = ConnectionManager.getInstance().getServer();
     private Timer.Task countdownTask;
     private boolean firstIn = true;
+    private CountdownTimer countdown;
 
     private Image mapImage;
     public static int mapIndex = 0;
@@ -232,9 +235,6 @@ public class ServerScreen implements Screen {
                     System.out.println("saiu da sala");
                 }
 
-                // PlayerManager.getInstance().clear();
-                // PlayerManager.getInstance().addPlayer(PlayerManager.getInstance().getLocalPlayer());
-
                 Auxiliaries.clearAddLocal();
                 game.setScreen(new MainMenu(game));
             }
@@ -282,18 +282,6 @@ public class ServerScreen implements Screen {
 
         topInfo.add(playersLabel).left().padBottom(10);
         topInfo.row();
-
-        // topInfo.add(createPlayerRow("Arthur",
-        // "user-icons/user1.png")).left().padBottom(5);
-        // topInfo.row();
-        // topInfo.add(createPlayerRow("Davi",
-        // "user-icons/user2.png")).left().padBottom(5);
-        // topInfo.row();
-        // topInfo.add(createPlayerRow("Mario",
-        // "user-icons/user3.png")).left().padBottom(5);
-        // topInfo.row();
-        // topInfo.add(createPlayerRow("Murilo",
-        // "user-icons/user4.png")).left().padBottom(5);
 
         for (Player p : PlayerManager.getInstance().getAllPlayers()) {
             topInfo.add(createPlayerRow(p.getUsername(), "user-icons/" + p.getAvatar())).left().padBottom(5);
@@ -409,9 +397,8 @@ public class ServerScreen implements Screen {
 
         started = false;
 
-        if (countdownTask != null) {
-            countdownTask.cancel();
-            countdownTask = null;
+        if (countdown != null) {
+            countdown.stop();
         }
 
         title.setText("MATCH LOBBY");
@@ -419,47 +406,48 @@ public class ServerScreen implements Screen {
     }
 
     private void startCountdown() {
-        final int[] count = { 10 };
+        countdown = new CountdownTimer(10, new CountdownTimer.TimerListener() {
 
-        countdownTask = new Timer.Task() {
             @Override
-            public void run() {
-                if (count[0] > 0) {
-                    title.setText("MATCH LOBBY - INICIANDO EM " + count[0] + "...");
-                    title.invalidate();
-                    count[0]--;
+            public void tick(int remainingSecs) {
+                title.setText("MATCH LOBBY - INICIANDO EM " + remainingSecs + "...");
+                title.invalidate();
+                flagBackButton = false;
+            }
 
-                    flagBackButton = false;
+            @Override
+            public void finish() {
 
-                } else {
+                title.setText("MATCH LOBBY - GO!");
+                title.invalidate();
 
-                    if (Constants.isHosting()) {
-                        server.stopAccepting();
-                    }
+                if (Constants.isHosting()) {
+                    server.stopAccepting();
+                }
 
-                    title.setText("MATCH LOBBY - GO!");
-                    title.invalidate();
-                    this.cancel();
-
-                    for (Player a : PlayerManager.getInstance().getAllPlayers()) {
-                        System.out.println(a.getUsername());
-
-                        if (a.getId() == PlayerManager.getInstance().getLocalPlayer().getId()) {
-                            PlayerManager.getInstance().setLocalPlayer(a);
-                        }
-
-                    }
-
-                    if (Constants.isHosting()) {
-                        game.setScreen(new PhysicsTest(game)); // TODO: LEMBRAR DA TELA DE GAME AQUI
-                    } else {
-                        game.setScreen(new PhysicsTest(game));
+                for (Player a : PlayerManager.getInstance().getAllPlayers()) {
+                    if (a.getId() == PlayerManager.getInstance().getLocalPlayer().getId()) {
+                        PlayerManager.getInstance().setLocalPlayer(a);
                     }
                 }
-            }
-        };
 
-        Timer.schedule(countdownTask, 0, 1);
+                CountdownTimer delay = new CountdownTimer(1, new CountdownTimer.TimerListener() {
+                    @Override
+                    public void tick(int remainingSecs) {}
+
+                    @Override
+                    public void finish() {
+                        game.setScreen(new PhysicsTest(game));
+                    }
+                });
+
+                delay.start();
+            }
+
+        });
+
+        countdown.start();
+
     }
 
     private void nextMap() {
@@ -496,7 +484,7 @@ public class ServerScreen implements Screen {
 
         stage.dispose();
 
-        for(Texture t : mapTextures){
+        for (Texture t : mapTextures) {
             t.dispose();
         }
 
