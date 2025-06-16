@@ -11,6 +11,7 @@ import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Screens.ServerScreen;
 
 public class Client {
 
@@ -38,7 +39,9 @@ public class Client {
 
             String serverMsg = (String) in.readObject();
             System.out.println("receive: " + serverMsg);
-            out.flush();
+
+            int index = (int) in.readObject();
+            ServerScreen.mapIndex = index;
 
             // server screen
             sendLocalPlayer(out);
@@ -51,9 +54,7 @@ public class Client {
 
         } catch (IOException | ClassNotFoundException e) {
 
-            if (listener != null) {
-                listener.ServerDisconnected();
-            }
+            dsListener();
 
             if ("Socket closed".equals(e.getMessage())) {
 
@@ -93,25 +94,25 @@ public class Client {
 
                     Constants.localP().setCanSelect(true);
 
-                    //decidir se vai ser em uma tela separada
+                    // decidir se vai ser em uma tela separada
 
-                }else if(Constants.phase == Constants.PHASE.PLAY){
+                } else if (Constants.phase == Constants.PHASE.PLAY) {
 
                     Constants.localP().setCanSelect(false);
 
-                }else if(Constants.phase == Constants.PHASE.SHOW_POINTS){
+                } else if (Constants.phase == Constants.PHASE.SHOW_POINTS) {
 
-                    //atualizar pontuações;
+                    // atualizar pontuações;
 
-                    if(listener != null){
+                    if (listener != null) {
                         listenerGame.showPoints();
                     }
 
-                }else if(Constants.phase == Constants.PHASE.SHOW_WIN){
+                } else if (Constants.phase == Constants.PHASE.SHOW_WIN) {
 
                     ConnectionManager.getInstance().setUDPRun(false);
 
-                    if(listener != null){
+                    if (listener != null) {
                         listenerGame.showWin();
                     }
 
@@ -157,10 +158,7 @@ public class Client {
 
                     disconnect();
 
-                    if (listener != null) {
-                        listener.ServerDisconnected();
-                    }
-
+                    dsListener();
                     svScreen = false;
 
                 } else if (msg.equals("tocancel")) {
@@ -173,8 +171,18 @@ public class Client {
                     if (listener != null) {
                         listener.ServerCancelMatch();
                     }
+                } else {
+                    if (listener != null) {
+                        listener.ServerChangeMap(msg);
+                    }
                 }
             }
+        }
+    }
+
+    public void dsListener() {
+        if (listener != null) {
+            listener.ServerDisconnected();
         }
     }
 
@@ -186,6 +194,8 @@ public class Client {
         void ServerStartMatch();
 
         void ServerCancelMatch();
+
+        void ServerChangeMap(String msg);
     }
 
     public void setServerListener(ServerListener listener) {

@@ -34,7 +34,6 @@ public class MainMenu implements Screen {
     private ImageButton imageButtonHost, imageButtonQuit, imageButtonJoin, imageButtonCredits;
     private Animation<TextureRegion> buraconcioAnimation, backAnimation;
     private float elapsedTimeName = 0f, elapsedTimeBack = 0f;
-    private Texture spriteSheet1, spriteSheet2;
     private Image buraconcioImage, backImage;
 
     public MainMenu(Main game) {
@@ -87,6 +86,7 @@ public class MainMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
 
                 // TODO: DAVI VAI FAZER A TELA;
+                game.setScreen(new CreditsScreen(game));
 
             }
         });
@@ -183,6 +183,5 @@ public class MainMenu implements Screen {
     public void dispose() {
         stage.dispose();
         skin.dispose();
-        spriteSheet2.dispose();
     }
 }

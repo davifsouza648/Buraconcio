@@ -1,6 +1,7 @@
 package io.github.buraconcio.Screens;
 
 import java.io.IOException;
+// import java.lang.classfile.Label;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -15,6 +16,8 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 // import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 import io.github.buraconcio.Main;
@@ -27,6 +30,7 @@ import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.PlayerManager;
+import main.java.io.github.buraconcio.Utils.CountdownTimer;
 
 public class ServerScreen implements Screen {
     private final Main game;
@@ -41,6 +45,15 @@ public class ServerScreen implements Screen {
     private Server server = ConnectionManager.getInstance().getServer();
     private Timer.Task countdownTask;
     private boolean firstIn = true;
+    private CountdownTimer countdown;
+
+    private Image mapImage;
+    public static int mapIndex = 0;
+    private final String[] mapPaths = {
+            "maps-preview/teste.jpg",
+            "maps-preview/teste2.jpg"
+    };
+    private Texture[] mapTextures;
 
     public ServerScreen(Main game) {
         this.game = game;
@@ -50,6 +63,11 @@ public class ServerScreen implements Screen {
         Button tempButton = new Button();
         this.startStyle = tempButton.createButtonStyle("start", "start");
         this.cancelStyle = tempButton.createButtonStyle("cancel", "cancel");
+
+        mapTextures = new Texture[mapPaths.length];
+        for (int i = 0; i < mapPaths.length; i++) {
+            mapTextures[i] = new Texture(Gdx.files.internal(mapPaths[i]));
+        }
     }
 
     @Override
@@ -117,6 +135,23 @@ public class ServerScreen implements Screen {
                 Gdx.app.postRunnable(() -> cancelMatch());
 
             }
+
+            @Override
+            public void ServerChangeMap(String message) {
+                Gdx.app.postRunnable(() -> {
+
+                    try {
+
+                        int receivedIndex = Integer.parseInt(message);
+                        mapIndex = receivedIndex;
+                        nextMap();
+
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+
+                });
+            }
         });
 
     }
@@ -146,7 +181,7 @@ public class ServerScreen implements Screen {
 
         Table bottomInfo = new Table();
         bottomInfo.bottom().left();
-        Image mapImage = new Image(new Texture("teste.jpg"));
+        mapImage = new Image(new Texture(mapPaths[mapIndex]));
 
         Button back = new Button();
         backButton = back.createButton("back", "back");
@@ -200,9 +235,6 @@ public class ServerScreen implements Screen {
                     System.out.println("saiu da sala");
                 }
 
-                // PlayerManager.getInstance().clear();
-                // PlayerManager.getInstance().addPlayer(PlayerManager.getInstance().getLocalPlayer());
-
                 Auxiliaries.clearAddLocal();
                 game.setScreen(new MainMenu(game));
             }
@@ -215,7 +247,12 @@ public class ServerScreen implements Screen {
         mapButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if (Constants.isHosting()) {
 
+                    mapIndex = (mapIndex - 1 + mapTextures.length) % mapTextures.length;
+                    server.sendString(Integer.toString(mapIndex));
+                    nextMap();
+                }
             }
         });
 
@@ -245,18 +282,6 @@ public class ServerScreen implements Screen {
 
         topInfo.add(playersLabel).left().padBottom(10);
         topInfo.row();
-
-        // topInfo.add(createPlayerRow("Arthur",
-        // "user-icons/user1.png")).left().padBottom(5);
-        // topInfo.row();
-        // topInfo.add(createPlayerRow("Davi",
-        // "user-icons/user2.png")).left().padBottom(5);
-        // topInfo.row();
-        // topInfo.add(createPlayerRow("Mario",
-        // "user-icons/user3.png")).left().padBottom(5);
-        // topInfo.row();
-        // topInfo.add(createPlayerRow("Murilo",
-        // "user-icons/user4.png")).left().padBottom(5);
 
         for (Player p : PlayerManager.getInstance().getAllPlayers()) {
             topInfo.add(createPlayerRow(p.getUsername(), "user-icons/" + p.getAvatar())).left().padBottom(5);
@@ -372,9 +397,8 @@ public class ServerScreen implements Screen {
 
         started = false;
 
-        if (countdownTask != null) {
-            countdownTask.cancel();
-            countdownTask = null;
+        if (countdown != null) {
+            countdown.stop();
         }
 
         title.setText("MATCH LOBBY");
@@ -382,50 +406,56 @@ public class ServerScreen implements Screen {
     }
 
     private void startCountdown() {
-        final int[] count = { 10 };
+        countdown = new CountdownTimer(10, new CountdownTimer.TimerListener() {
 
-        countdownTask = new Timer.Task() {
             @Override
-            public void run() {
-                if (count[0] > 0) {
-                    title.setText("MATCH LOBBY - INICIANDO EM " + count[0] + "...");
-                    title.invalidate();
-                    count[0]--;
+            public void tick(int remainingSecs) {
+                title.setText("MATCH LOBBY - INICIANDO EM " + remainingSecs + "...");
+                title.invalidate();
+                flagBackButton = false;
+            }
 
-                    flagBackButton = false;
+            @Override
+            public void finish() {
 
-                } else {
+                title.setText("MATCH LOBBY - GO!");
+                title.invalidate();
 
-                    if (Constants.isHosting()) {
-                        server.stopAccepting();
-                    }
+                if (Constants.isHosting()) {
+                    server.stopAccepting();
+                }
 
-                    title.setText("MATCH LOBBY - GO!");
-                    title.invalidate();
-                    this.cancel();
-
-                    for (Player a : PlayerManager.getInstance().getAllPlayers()) {
-                        System.out.println(a.getUsername());
-
-                        if (a.getId() == PlayerManager.getInstance().getLocalPlayer().getId()) {
-                            PlayerManager.getInstance().setLocalPlayer(a);
-                        }
-
-                    }
-
-                    if (Constants.isHosting()) {
-                        game.setScreen(new PhysicsTest(game)); // TODO: LEMBRAR DA TELA DE GAME AQUI
-                    } else {
-                        game.setScreen(new PhysicsTest(game));
+                for (Player a : PlayerManager.getInstance().getAllPlayers()) {
+                    if (a.getId() == PlayerManager.getInstance().getLocalPlayer().getId()) {
+                        PlayerManager.getInstance().setLocalPlayer(a);
                     }
                 }
-            }
-        };
 
-        Timer.schedule(countdownTask, 0, 1);
+                CountdownTimer delay = new CountdownTimer(1, new CountdownTimer.TimerListener() {
+                    @Override
+                    public void tick(int remainingSecs) {}
+
+                    @Override
+                    public void finish() {
+                        game.setScreen(new PhysicsTest(game));
+                    }
+                });
+
+                delay.start();
+            }
+
+        });
+
+        countdown.start();
+
     }
 
-   @Override
+    private void nextMap() {
+        mapImage.setDrawable(new TextureRegionDrawable(new TextureRegion(mapTextures[mapIndex])));
+
+    }
+
+    @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0.1f, 0, 1, true);
         stage.act(delta);
@@ -453,6 +483,10 @@ public class ServerScreen implements Screen {
     public void dispose() {
 
         stage.dispose();
+
+        for (Texture t : mapTextures) {
+            t.dispose();
+        }
 
         if (server != null) {
             server.stop();

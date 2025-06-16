@@ -90,7 +90,7 @@ public class Server {
 
     }
 
-    public void changePhaseState(String str){
+    public void sendString(String str){
 
         for(ClientHandler client : clients){
             client.broadcastString(str);

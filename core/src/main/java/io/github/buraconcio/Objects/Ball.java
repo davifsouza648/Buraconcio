@@ -35,6 +35,9 @@ public class Ball extends PhysicsEntity {
     private Sprite segmentSprite;
     private Sprite tipSprite;
 
+    // para a phase de select_obj
+    private boolean canInteract = true;
+
     public Ball(Vector2 pos, float d, Player player) {
         super(pos, new Vector2(d, d), "ballteste.png");
 
@@ -43,11 +46,11 @@ public class Ball extends PhysicsEntity {
         body.setAngularDamping(angDamp);
 
         CircleShape circle = new CircleShape();
-        circle.setRadius(d/2);
+        circle.setRadius(d / 2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
-        fixtureDef.density  = 1f;
+        fixtureDef.density = 1f;
         fixtureDef.friction = 0.4f;
         fixtureDef.restitution = 0.6f;
 
@@ -69,7 +72,7 @@ public class Ball extends PhysicsEntity {
 
         mouseMovement = new Vector2(0, 0);
 
-        //shooting segment sprites
+        // shooting segment sprites
         Texture texture = new Texture(Gdx.files.internal("shootingGuideEnd.png"));
         endSprite = new Sprite(texture);
 
@@ -80,13 +83,13 @@ public class Ball extends PhysicsEntity {
         tipSprite = new Sprite(texture);
     }
 
-    public boolean isStill()
-    {
+    public boolean isStill() {
         return body.getLinearVelocity().len() < Constants.STILL_TOLERANCE;
     }
 
-    public void applyImpulse(Vector2 impulse)
-    {
+    public void applyImpulse(Vector2 impulse) {
+        if (!canInteract) return;
+
         body.applyLinearImpulse(impulse, body.getWorldCenter(), true);
     }
 
@@ -94,7 +97,8 @@ public class Ball extends PhysicsEntity {
         Vector2 diff = mouse1.sub(mouse2);
 
         float magnitude = (diff.len() / Constants.MAX_IMPULSE_DISTANCE) * Constants.MAX_IMPULSE;
-        if (magnitude > Constants.MAX_IMPULSE) magnitude = Constants.MAX_IMPULSE;
+        if (magnitude > Constants.MAX_IMPULSE)
+            magnitude = Constants.MAX_IMPULSE;
 
         diff.setLength(magnitude);
 
@@ -115,7 +119,7 @@ public class Ball extends PhysicsEntity {
     public void act(float delta) {
         super.act(delta);
 
-        zSpeed -= gravity*delta;
+        zSpeed -= gravity * delta;
         z += zSpeed;
 
         if (z <= 2f) { // arbitrario
@@ -132,28 +136,27 @@ public class Ball extends PhysicsEntity {
             body.setLinearDamping(linDamp);
         }
 
-        animacao.setOrigin(getWidth()/2, getHeight()/2);
-        animacao.setScale(1 + z/15);
+        animacao.setOrigin(getWidth() / 2, getHeight() / 2);
+        animacao.setScale(1 + z / 15);
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha)
-    {
+    public void draw(Batch batch, float parentAlpha) {
         labelGroup.setPosition(
-            getX() - labelGroup.getWidth()/2,
-            getY() + getHeight() + 0.5f
-        );
+                getX() - labelGroup.getWidth() / 2,
+                getY() + getHeight() + 0.5f);
 
-        if (mouseMovement.len() > 0.01f) {
+        if (canInteract && mouseMovement.len() > 0.01f) {
             final float segmentLength = 1f;
 
             endSprite.setSize(segmentLength, segmentLength);
             endSprite.setOriginCenter();
 
             // prioritize positioning end sprite center at end of line seg
-            Vector2 center = new Vector2(getX() + getWidth()/2, getY() + getHeight()/2);
+            Vector2 center = new Vector2(getX() + getWidth() / 2, getY() + getHeight() / 2);
 
-            endSprite.setPosition(center.x - mouseMovement.x - endSprite.getWidth()/2, center.y - mouseMovement.y - endSprite.getHeight()/2);
+            endSprite.setPosition(center.x - mouseMovement.x - endSprite.getWidth() / 2,
+                    center.y - mouseMovement.y - endSprite.getHeight() / 2);
             endSprite.setRotation(mouseMovement.angleDeg());
             endSprite.draw(batch);
 
@@ -163,20 +166,20 @@ public class Ball extends PhysicsEntity {
             tipSprite.setSize(segmentLength, segmentLength);
             tipSprite.setOriginCenter();
 
-            tipSprite.setPosition(center.x - impulse.x - tipSprite.getWidth()/2, center.y - impulse.y - tipSprite.getHeight()/2);
+            tipSprite.setPosition(center.x - impulse.x - tipSprite.getWidth() / 2,
+                    center.y - impulse.y - tipSprite.getHeight() / 2);
             tipSprite.setRotation(mouseMovement.angleDeg());
             tipSprite.draw(batch);
-
 
             Vector2 seg = new Vector2(tipSprite.getX() - endSprite.getX(), tipSprite.getY() - endSprite.getY());
             segmentSprite.setSize(seg.len(), segmentLength);
             segmentSprite.setOriginCenter();
             segmentSprite.setRotation(mouseMovement.angleDeg());
 
-
-            Vector2 pos = new Vector2(endSprite.getX() + endSprite.getWidth()/2, endSprite.getY() + endSprite.getHeight()/2);
+            Vector2 pos = new Vector2(endSprite.getX() + endSprite.getWidth() / 2,
+                    endSprite.getY() + endSprite.getHeight() / 2);
             pos.add(seg.scl(0.5f));
-            pos.sub(new Vector2(segmentSprite.getWidth()*0.5f, segmentSprite.getHeight()*0.5f));
+            pos.sub(new Vector2(segmentSprite.getWidth() * 0.5f, segmentSprite.getHeight() * 0.5f));
             segmentSprite.setPosition(pos.x, pos.y);
             segmentSprite.draw(batch);
         }
@@ -194,7 +197,6 @@ public class Ball extends PhysicsEntity {
         setVisible(false);
     }
 
-
     @Override
     public boolean contact(PhysicsEntity entity) {
         if (entity instanceof Flag && !isAirborne) {
@@ -207,7 +209,7 @@ public class Ball extends PhysicsEntity {
     }
 
     public void setShootingGuide(Vector2 mouse1, Vector2 mouse2) {
-        //mouseMovement = mouse1.sub(mouse2);
+        // mouseMovement = mouse1.sub(mouse2);
         mouseMovement.x = mouse1.x - mouse2.x;
         mouseMovement.y = mouse1.y - mouse2.y;
     }
@@ -217,7 +219,7 @@ public class Ball extends PhysicsEntity {
     }
 
     public void setAngle(float angle) {
-        body.setTransform(body.getPosition(), body.getTransform().getRotation() + angle ); // 90 em rad
+        body.setTransform(body.getPosition(), body.getTransform().getRotation() + angle); // 90 em rad
     }
 
     public void setPos(Vector2 pos) {
@@ -234,5 +236,13 @@ public class Ball extends PhysicsEntity {
 
     public boolean isAirborne() {
         return isAirborne;
+    }
+
+    public void setCanInteract(boolean canInteract) {
+        this.canInteract = canInteract;
+    }
+
+    public boolean canInteract() {
+        return canInteract;
     }
 }
