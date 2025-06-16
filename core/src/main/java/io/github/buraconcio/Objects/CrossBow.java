@@ -4,21 +4,19 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 import io.github.buraconcio.Utils.Auxiliaries;
-import io.github.buraconcio.Objects.Arrow;
 
 import java.lang.Math;
 
 public class CrossBow extends Obstacle {
-    public static final float arrowSpeed = 3f;
+    public static final float arrowSpeed = 7.5f;
     public static final float frameDuration = 0.05f;
-    public static final float shootFrame = 0.05f;
 
     private boolean canSpawn = true;
-    private float timer;
 
     public CrossBow(Vector2 pos, Vector2 size) {
         super(pos, size,
             Auxiliaries.animationFromFiles("obstacles/crossbow/crossbow.png", "obstacles/crossbow/crossbow.json"));
+
         animacao.setFrameDuration(frameDuration);
         animacao.pauseAnimation();
 
@@ -29,8 +27,6 @@ public class CrossBow extends Obstacle {
         fixtureDef.isSensor = true;
         body.createFixture(fixtureDef);
         shape.dispose();
-
-        timer = 0f;
     }
 
     @Override
@@ -54,8 +50,8 @@ public class CrossBow extends Obstacle {
         float cos = (float) Math.cos(angle);
         float arrowLen = Arrow.arrowSize.x;
 
-        Vector2 arrowPos = new Vector2(getX() + getWidth()*(cos*0.5f + 0.5f) + arrowLen*cos*1.25f ,
-            getY() + getHeight()*(sin*0.5f + 0.5f) + arrowLen*sin*1.25f);
+        Vector2 arrowPos = new Vector2(getX() + getWidth()*(cos*0.5f + 0.5f) + arrowLen*cos*1.05f ,
+            getY() + getHeight()*(sin*0.5f + 0.5f) + arrowLen*sin*1.05f);
 
         getStage().addActor(new Arrow(arrowPos, arrowSpeed, angle));
     }

@@ -1,16 +1,10 @@
 package io.github.buraconcio.Objects;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.World;
 
 import io.github.buraconcio.Utils.Constants;
-import io.github.buraconcio.Objects.PhysicsEntity;
 
 public class Flag extends PhysicsEntity {
 
@@ -27,6 +21,20 @@ public class Flag extends PhysicsEntity {
         body.createFixture(fixtureDef);
 
         circle.dispose();
+    }
+
+    @Override
+    public boolean contact(PhysicsEntity entity) {
+        if (entity instanceof Ball) {
+            Ball ball = (Ball) entity;
+
+            if (!ball.isAirborne()) {
+                ball.getPlayer().score();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public Flag(Vector2 pos) {

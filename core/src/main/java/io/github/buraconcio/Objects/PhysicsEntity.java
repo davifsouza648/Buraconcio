@@ -1,23 +1,16 @@
 package io.github.buraconcio.Objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.World;
 
-import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PhysicsManager;
 import io.github.buraconcio.Utils.AnimationPlay;
-
-import java.lang.Runnable;
 
 public class PhysicsEntity extends Actor {
 
@@ -78,6 +71,7 @@ public class PhysicsEntity extends Actor {
     }
 
     // Método para setar o id
+    // uau muito obrigado nao sabia
     public void setId(int id) {
         body.setUserData(id);
         this.id = id;
