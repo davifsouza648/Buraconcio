@@ -95,6 +95,7 @@ public class Server {
         for(ClientHandler client : clients){
             client.broadcastString(str);
         }
+
     }
 
 }

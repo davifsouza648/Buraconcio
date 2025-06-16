@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 
 import io.github.buraconcio.Objects.Player;
@@ -48,7 +50,7 @@ public class Client {
             receivePlayerList(in);
 
             // game updates
-            receiveGamePhases(in);
+            receiveGamePhases(in, out);
 
             // receber estagios e outras atualizacoes por tcp
 
@@ -70,7 +72,8 @@ public class Client {
         }
     }
 
-    private void receiveGamePhases(ObjectInputStream in) throws ClassNotFoundException, IOException {
+    private void receiveGamePhases(ObjectInputStream in, ObjectOutputStream out)
+            throws ClassNotFoundException, IOException {
 
         while (gameScreen) {
 
@@ -93,16 +96,34 @@ public class Client {
                 if (Constants.phase == Constants.PHASE.SELECT_OBJ) {
 
                     Constants.localP().setCanSelect(true);
+                    Constants.localP().setBallInteractable(false);
 
                     // decidir se vai ser em uma tela separada
 
                 } else if (Constants.phase == Constants.PHASE.PLAY) {
 
                     Constants.localP().setCanSelect(false);
+                    Constants.localP().setBallInteractable(true);
 
                 } else if (Constants.phase == Constants.PHASE.SHOW_POINTS) {
 
                     // atualizar pontuações;
+
+                    Map<Integer, Integer> info = new HashMap<>();
+                    info.put(Constants.localP().getId(), Constants.localP().getStars());
+
+                    out.writeObject(info);
+                    out.flush();
+
+                    Object teste = in.readObject();
+
+                    if (teste instanceof Map<?, ?>) {
+
+                        @SuppressWarnings("unchecked")
+                        Map<Integer, Integer> starsList = (Map<Integer, Integer>) teste;
+
+                        PlayerManager.getInstance().updateStars(starsList);
+                    }
 
                     if (listener != null) {
                         listenerGame.showPoints();

@@ -5,10 +5,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
 
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Screens.ServerScreen;
+import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PhysicsManager;
 import io.github.buraconcio.Utils.PlayerManager;
 
@@ -57,12 +61,20 @@ public class ClientHandler implements Runnable {
 
             while (!socket.isClosed()) {
                 out.writeObject("enviar alguma outra coisa");
+
+                // na real acho que nao vai mandar nada mais por aqui, pois a troca de phases
+                // vai ser diretamente na screens
+
                 out.flush();
                 Thread.sleep(1000);
+
+                if (Constants.PHASE.SHOW_POINTS == Constants.phase) {
+                    receiveStars();
+                }
             }
 
         } catch (EOFException eof) {
-            //evitar exception ao desconectar
+            // evitar exception ao desconectar
         } catch (IOException | ClassNotFoundException | InterruptedException e) {
 
             if (e instanceof java.net.SocketException && e.getMessage().equals("Connection reset")) {
@@ -118,10 +130,50 @@ public class ClientHandler implements Runnable {
                 client.out.writeObject(x);
                 client.out.flush();
             } catch (IOException e) {
-                System.out.println("Erro ao enviar msg de disconnect");
+                System.out.println("Erro ao enviar msg");
             }
         }
 
+    }
+
+    public void broadcastStars() {
+        Map<Integer, Integer> starsMap = new HashMap<>();
+
+        for (Player p : PlayerManager.getInstance().getAllPlayers()) {
+            starsMap.put(p.getId(), p.getStars());
+        }
+
+        for (ClientHandler client : clients) {
+            try {
+                client.out.writeObject(starsMap);
+                client.out.flush();
+            } catch (IOException e) {
+                System.out.println("Erro ao enviar stars: " + e.getMessage());
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void receiveStars() {
+        try {
+            Object obj = in.readObject();
+
+            if (obj instanceof Map<?, ?>) {
+                Map<Integer, Integer> starsMap = (Map<Integer, Integer>) obj;
+
+                for (Player p : PlayerManager.getInstance().getAllPlayers()) {
+                    if (starsMap.containsKey(p.getId())) {
+                        p.setStars(starsMap.get(p.getId()));
+                    }
+                }
+
+                broadcastStars();
+            } else {
+                System.out.println("nao eh um map");
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("erro no recebimento da pontuacao: " + e.getMessage());
+        }
     }
 
     private void cleanup() {

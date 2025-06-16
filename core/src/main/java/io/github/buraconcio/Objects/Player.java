@@ -178,7 +178,7 @@ public class Player implements Serializable {
         return id;
     }
 
-    public double getStars() {
+    public int getStars() {
         return stars;
     }
 

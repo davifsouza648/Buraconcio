@@ -51,6 +51,7 @@ public class ServerScreen implements Screen {
     public static int mapIndex = 0;
     private final String[] mapPaths = {
             "maps-preview/teste.jpg",
+            "maps-preview/teste1.jpg",
             "maps-preview/teste2.jpg"
     };
     private Texture[] mapTextures;

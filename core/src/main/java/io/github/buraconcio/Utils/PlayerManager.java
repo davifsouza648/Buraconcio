@@ -3,6 +3,7 @@ package io.github.buraconcio.Utils;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.badlogic.gdx.math.Vector2;
@@ -117,7 +118,7 @@ public class PlayerManager {
 
                         PlayerManager.getInstance().getPlayer(playerId).update(obstaclePos, pack.getObsId());
 
-                    }else{
+                    } else {
                         return;
                     }
                 }
@@ -137,15 +138,23 @@ public class PlayerManager {
 
     }
 
-    public void setAllCanSelect(boolean flag){
-        for(Player p : players){
+    public void setAllCanSelect(boolean flag) {
+        for (Player p : players) {
             p.setCanSelect(flag);
         }
     }
 
-    public void setAllBallsInteractable(boolean flag){
-        for(Player p : players){
+    public void setAllBallsInteractable(boolean flag) {
+        for (Player p : players) {
             p.setBallInteractable(flag);
+        }
+    }
+
+    public void updateStars(Map<Integer, Integer> starsMap) {
+        for (Player p : players) {
+            if (starsMap.containsKey(p.getId())) {
+                p.setStars(starsMap.get(p.getId()));
+            }
         }
     }
 

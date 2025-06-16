@@ -49,7 +49,7 @@ public class PhysicsTest implements Screen {
 
     public PhysicsTest(Main game) {
 
-        mapRenderer = new MapRenderer("mapa1");
+        mapRenderer = new MapRenderer("mapa0");
 
         debugRenderer = new Box2DDebugRenderer();
 
@@ -204,7 +204,7 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0.1f, 0, 1, true);
+        ScreenUtils.clear(0, 0, 0, 0, true);
 
         stage.act(delta);
 
