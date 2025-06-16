@@ -3,21 +3,14 @@ package io.github.buraconcio.Objects;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 
-import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PhysicsManager;
 import io.github.buraconcio.Utils.AnimationPlay;
-import io.github.buraconcio.Objects.Player;
-import io.github.buraconcio.Objects.PhysicsEntity;
-
-import java.util.Iterator;
 
 public class Obstacle extends PhysicsEntity {
     public final static int CLOCKWISE = 0;
@@ -42,14 +35,10 @@ public class Obstacle extends PhysicsEntity {
         super(pos, size);
     }
 
-    public void applyEffect(Player player) {}
-
     public void preRound() {}
 
     public void postRound() {}
 
-    // not colliding
-    // not in spawn area
     // not in flag area
     public boolean canPlace() {
         if (body == null)

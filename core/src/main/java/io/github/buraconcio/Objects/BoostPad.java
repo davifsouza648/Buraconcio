@@ -14,8 +14,6 @@ public class BoostPad extends Obstacle {
         super(pos, size,
             Auxiliaries.animationFromFiles("obstacles/boostpad/boostpad.png", "obstacles/boostpad/boostpad.json"));
 
-        //super(pos, size, "obstacles/boostpad/boostpad.png");
-
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
         shape.setAsBox(size.x/2, size.y/2);

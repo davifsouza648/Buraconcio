@@ -10,15 +10,15 @@ import io.github.buraconcio.Utils.AnimationPlay;
 import io.github.buraconcio.Utils.Auxiliaries;
 
 public class BlackHole extends Obstacle {
-    public static final float ACTION_RADIUS = 4f;
+    public static final float ACTION_RADIUS = 7.5f;
     public static final float G = 0.09f;
     public static final float mass = 3000f;
     public static final float killRadius = 0.5f;
 
     public BlackHole(Vector2 pos, Vector2 size) {
-        // super(pos, size, "obstacles/blackhole/blackHole.png");
-        super(pos, size, 
-            Auxiliaries.animationFromFiles("obstacles/blackHole/blackHole.png", "obstacles/blackHole/blackHole.json"));
+        super(pos, size,
+            Auxiliaries.animationFromFiles("obstacles/blackhole/blackhole.png", "obstacles/blackhole/blackHole.json"));
+
         CircleShape circle = new CircleShape();
         circle.setRadius(ACTION_RADIUS);
 

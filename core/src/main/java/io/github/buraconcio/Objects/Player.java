@@ -1,10 +1,7 @@
 package io.github.buraconcio.Objects;
 
-import io.github.buraconcio.Objects.Ball;
-import io.github.buraconcio.Objects.Obstacle;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PhysicsManager;
-import io.github.buraconcio.Utils.UdpPackage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,13 +33,7 @@ public class Player implements Serializable {
         this.username = username;
         stars = 0;
 
-        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit1.wav")));
-        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit2.wav")));
-        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit3.wav")));
-        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit4.wav")));
-        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit5.wav")));
-        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit6.wav")));
-        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit7.wav")));
+        initSounds();
 
         ball = null;
         selectedObstacle = null;
@@ -152,8 +143,9 @@ public class Player implements Serializable {
 
     public void selectObstacle(Obstacle obstacle) {
 
-        if (!canSelect)
-            return;
+        // disable for testing
+        //if (!canSelect)
+        //    return;
 
         selectedObstacle = obstacle;
         obstacle.claim();

@@ -12,7 +12,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 
 import io.github.buraconcio.Utils.Constants;
-import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.PhysicsManager;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -195,17 +194,6 @@ public class Ball extends PhysicsEntity {
 
         // body.setTransform(new Vector2(-10f, -10f), 0f);
         setVisible(false);
-    }
-
-    @Override
-    public boolean contact(PhysicsEntity entity) {
-        if (entity instanceof Flag && !isAirborne) {
-            player.score();
-
-            return true;
-        }
-
-        return false;
     }
 
     public void setShootingGuide(Vector2 mouse1, Vector2 mouse2) {

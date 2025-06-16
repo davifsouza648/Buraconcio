@@ -4,17 +4,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-import io.github.buraconcio.Utils.Constants;
-import io.github.buraconcio.Utils.PhysicsManager;
-import io.github.buraconcio.Utils.PlayerManager;
-import io.github.buraconcio.Objects.Player;
-import io.github.buraconcio.Objects.Ball;
-import io.github.buraconcio.Objects.PhysicsEntity;
-
 import java.lang.Math;
 
 public class Arrow extends PhysicsEntity {
-    public static final Vector2 arrowSize = new Vector2(1.6f, 0.6f);
+    public static final Vector2 arrowSize = new Vector2(1.9f, 0.7f);
 
     public Arrow(Vector2 pos, float speed, float angle) {
         super(pos, arrowSize, "obstacles/arrow/arrow.png");
@@ -39,9 +32,6 @@ public class Arrow extends PhysicsEntity {
 
     @Override
     public boolean contact(PhysicsEntity entity) {
-        if (entity instanceof BlackHole)
-            return true;
-
         if (entity instanceof Ball) {
             Ball ball = (Ball) entity;
 
