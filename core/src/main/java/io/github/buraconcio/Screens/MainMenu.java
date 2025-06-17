@@ -133,7 +133,7 @@ public class MainMenu implements Screen {
         teste.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new PhysicsTest(game));
+                game.setScreen(new PhysicsTest(game, 0));
                 stage.dispose();
             }
         });

@@ -20,6 +20,7 @@ import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.Constants.PHASE;
+import io.github.buraconcio.Utils.CountdownTimer;
 import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.MapRenderer;
 import io.github.buraconcio.Utils.PhysicsManager;
@@ -33,6 +34,7 @@ import java.lang.Runnable;
 public class PhysicsTest implements Screen {
     private Stage stage;
     private Skin skin;
+    private final Main game;
 
     private Obstacle testObstacle;
 
@@ -47,9 +49,11 @@ public class PhysicsTest implements Screen {
 
     private Client client;
 
-    public PhysicsTest(Main game) {
+    public PhysicsTest(Main game, int mapIndex) {
 
-        mapRenderer = new MapRenderer("mapa0");
+        this.game = game;
+
+        mapRenderer = new MapRenderer("mapa" + mapIndex);
 
         debugRenderer = new Box2DDebugRenderer();
 
@@ -200,7 +204,25 @@ public class PhysicsTest implements Screen {
         ConnectionManager.getInstance().setUDPclient(udpClient);
         udpClient.startUDPClient();
 
+
+        CountdownTimer countdown = new CountdownTimer(20, new CountdownTimer.TimerListener(){
+
+            @Override
+            public void tick(int remainingSecs) {
+
+            }
+
+            @Override
+            public void finish() {
+
+                Gdx.app.postRunnable(() -> game.setScreen(new PointsScreen(game)));
+            }
+
+        });
+
+        countdown.start();
     }
+
 
     @Override
     public void render(float delta) {

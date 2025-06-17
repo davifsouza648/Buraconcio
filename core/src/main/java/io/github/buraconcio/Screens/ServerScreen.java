@@ -30,7 +30,7 @@ import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.PlayerManager;
-import main.java.io.github.buraconcio.Utils.CountdownTimer;
+import io.github.buraconcio.Utils.CountdownTimer;
 
 public class ServerScreen implements Screen {
     private final Main game;
@@ -43,7 +43,6 @@ public class ServerScreen implements Screen {
     private boolean started = false, flagBackButton = true;
     private Client cliente = ConnectionManager.getInstance().getClient();
     private Server server = ConnectionManager.getInstance().getServer();
-    private Timer.Task countdownTask;
     private boolean firstIn = true;
     private CountdownTimer countdown;
 
@@ -438,7 +437,11 @@ public class ServerScreen implements Screen {
 
                     @Override
                     public void finish() {
-                        game.setScreen(new PhysicsTest(game));
+
+                        //pass the mapIndex
+
+                        game.setScreen(new PhysicsTest(game, mapIndex));
+
                     }
                 });
 

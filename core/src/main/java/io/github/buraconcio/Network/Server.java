@@ -58,7 +58,13 @@ public class Server {
 
                 System.err.println("connection successfully closed");
 
+            } else if (e.getMessage() != null && e.getMessage().toLowerCase().contains("address already in use")) {
+
+                Constants.localP().setHosting(false);
+                System.out.println("entering as client");
+
             } else {
+
                 e.printStackTrace();
             }
         }
@@ -90,9 +96,9 @@ public class Server {
 
     }
 
-    public void sendString(String str){
+    public void sendString(String str) {
 
-        for(ClientHandler client : clients){
+        for (ClientHandler client : clients) {
             client.broadcastString(str);
         }
 
