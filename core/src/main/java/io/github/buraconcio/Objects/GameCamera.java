@@ -6,8 +6,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class GameCamera extends OrthographicCamera {
     private Vector2 targetPos;
+    private HUD hud;
 
-    public GameCamera() {
+    public GameCamera()
+    {
         super(23, 13);
         this.zoom = (float) 1.17;
     }

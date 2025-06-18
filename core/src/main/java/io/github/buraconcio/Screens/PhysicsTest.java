@@ -2,6 +2,7 @@ package io.github.buraconcio.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
@@ -22,6 +24,7 @@ import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.Constants.PHASE;
 import io.github.buraconcio.Utils.CountdownTimer;
 import io.github.buraconcio.Utils.CursorManager;
+import io.github.buraconcio.Utils.GameInputAdapter;
 import io.github.buraconcio.Utils.MapRenderer;
 import io.github.buraconcio.Utils.PhysicsManager;
 
@@ -33,6 +36,8 @@ import java.lang.Runnable;
 
 public class PhysicsTest implements Screen {
     private Stage stage;
+    private Stage hudStage;
+
     private Skin skin;
     private final Main game;
 
@@ -44,40 +49,48 @@ public class PhysicsTest implements Screen {
     Player p;
     private Ball pBall;
 
+    private HUD hud;
+
     private MapRenderer mapRenderer;
     float scale = 1 / 32f;
 
     private Client client;
 
-    public PhysicsTest(Main game, int mapIndex) {
+    public PhysicsTest(Main game, int mapIndex) 
+    {
 
         this.game = game;
 
         mapRenderer = new MapRenderer("mapa" + mapIndex);
 
-        debugRenderer = new Box2DDebugRenderer();
+        //debugRenderer = new Box2DDebugRenderer();
 
         stage = new Stage(new ExtendViewport(23, 13));
+        hudStage = new Stage(new FitViewport(800, 480));
         Gdx.input.setInputProcessor(stage);
 
-        stage.setDebugAll(true);
+        //stage.setDebugAll(true);
         PhysicsManager.getInstance().setStage(stage);
 
         mapRenderer.createCollisions();
 
-        for (Player player : PlayerManager.getInstance().getAllPlayers()) {
+        for (Player player : PlayerManager.getInstance().getAllPlayers()) 
+        {
             player.createBall();
         }
 
         pBall = PlayerManager.getInstance().getLocalPlayer().getBall();
 
-        if (pBall == null) { // testing without server
+        if (pBall == null) 
+        { // testing without server
             PhysicsManager.getInstance().placePlayer(PlayerManager.getInstance().getLocalPlayer());
             pBall = PlayerManager.getInstance().getLocalPlayer().createBall();
         }
 
         camera = new GameCamera();
         stage.getViewport().setCamera(camera);
+
+        hud = new HUD(hudStage, PlayerManager.getInstance().getLocalPlayer().getId());
 
         testObstacle = new CrossBow(new Vector2(10.5f, 2f), new Vector2(3f, 3f));
         testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
@@ -88,105 +101,13 @@ public class PhysicsTest implements Screen {
         new CircularSaw(new Vector2(12.5f, 7f), new Vector2(-1f, 1f));
         new Trampoline(new Vector2(14.5f, 7f), new Vector2(-1f, 1f));
 
-        Gdx.input.setInputProcessor(new InputAdapter() {
-            private Vector2 mouse1 = new Vector2();
+        InputMultiplexer multiplexerInput = new InputMultiplexer();
+        multiplexerInput.addProcessor(hudStage);
+        multiplexerInput.addProcessor(new GameInputAdapter(p, pBall, camera, stage));
+        
 
-            @Override
-            public boolean touchDown(int x, int y, int pointer, int button) {
-                mouse1.x = x;
-                mouse1.y = y;
+        Gdx.input.setInputProcessor(multiplexerInput);
 
-                return true;
-            }
-
-            @Override
-            public boolean touchUp(int x, int y, int pointer, int button) {
-                p = PlayerManager.getInstance().getLocalPlayer();
-                Vector3 unprojected = camera.unproject(new Vector3(mouse1.x, mouse1.y, 0));
-                mouse1 = new Vector2(unprojected.x, unprojected.y);
-
-                unprojected = camera.unproject(new Vector3(x, y, 0));
-                Vector2 mouse2 = new Vector2(unprojected.x, unprojected.y);
-
-                Runnable task = () -> {
-                    p.stroke(mouse1, mouse2);
-                };
-
-                PhysicsManager.getInstance().schedule(task);
-                pBall.resetShootingGuide();
-
-                // test
-
-                Vector2 stageCoords = stage.screenToStageCoordinates(new Vector2(x, y));
-                Actor hitActor = stage.hit(stageCoords.x, stageCoords.y, true);
-
-                Obstacle obstacle = p.getSelectedObstacle();
-                if (obstacle != null && obstacle.canPlace()) {
-                    p.placeObstacle();
-                    obstacle.preRound();
-                } else if (hitActor instanceof Obstacle) {
-                    Obstacle hitObstacle = (Obstacle) hitActor;
-                    if (!hitObstacle.claimed())
-                        p.selectObstacle(hitObstacle);
-                }
-
-                return true;
-            }
-
-            public boolean touchDragged(int x, int y, int pointer) {
-                Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
-                Vector2 currentMouse = new Vector2(unprojected.x, unprojected.y);
-
-                unprojected = camera.unproject(new Vector3(mouse1.x, mouse1.y, 0));
-                pBall.setShootingGuide(new Vector2(unprojected.x, unprojected.y), new Vector2(currentMouse));
-
-                return true;
-            }
-
-            public boolean mouseMoved(int x, int y) {
-                p = PlayerManager.getInstance().getLocalPlayer();
-                Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
-
-                if (p.getSelectedObstacle() != null)
-                    p.getSelectedObstacle().move(new Vector2(unprojected.x, unprojected.y));
-
-                return true;
-            }
-
-            @Override
-            public boolean keyDown(int keyCode) {
-                p = PlayerManager.getInstance().getLocalPlayer();
-                if (keyCode == Keys.Q && p.getSelectedObstacle() != null) {
-                    p.getSelectedObstacle().rotate(Obstacle.COUNTER_CLOCKWISE);
-                } else if (keyCode == Keys.E && p.getSelectedObstacle() != null) {
-                    p.getSelectedObstacle().rotate(Obstacle.CLOCKWISE);
-                }
-
-                return true;
-            }
-
-        });
-
-        PhysicsManager.getInstance().getWorld().setContactListener(new ContactListener() {
-            @Override
-            public void endContact(Contact contact) {
-                // PhysicsManager.getInstance().removeContact(contact);
-            }
-
-            @Override
-            public void beginContact(Contact contact) {
-                PhysicsManager.getInstance().addContact(contact);
-            }
-
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {
-            }
-
-            @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {
-            }
-
-        });
     }
 
     @Override
@@ -242,10 +163,12 @@ public class PhysicsTest implements Screen {
         mapRenderer.setView(camera);
         mapRenderer.render();
 
+        hud.render();
+
         stage.getViewport().setCamera(camera);
         stage.draw();
 
-        debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
+        //debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
 
         PhysicsManager.getInstance().tick();
     }
