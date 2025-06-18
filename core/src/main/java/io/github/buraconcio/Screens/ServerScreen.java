@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
+import io.github.buraconcio.Network.Message;
 import io.github.buraconcio.Network.Server;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Button;
@@ -251,7 +252,7 @@ public class ServerScreen implements Screen {
                 if (Constants.isHosting()) {
 
                     mapIndex = (mapIndex - 1 + mapTextures.length) % mapTextures.length;
-                    server.sendString(Integer.toString(mapIndex));
+                    server.sendString(Message.Type.MAP_CHANGE, Integer.toString(mapIndex));
                     nextMap();
                 }
             }
@@ -407,7 +408,7 @@ public class ServerScreen implements Screen {
     }
 
     private void startCountdown() {
-        countdown = new CountdownTimer(10, new CountdownTimer.TimerListener() {
+        countdown = new CountdownTimer(3, new CountdownTimer.TimerListener() {
 
             @Override
             public void tick(int remainingSecs) {

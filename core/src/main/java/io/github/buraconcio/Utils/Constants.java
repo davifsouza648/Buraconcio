@@ -22,6 +22,7 @@ public class Constants {
     public static PHASE phase = PHASE.PLAY;
 
     public enum PHASE {
+        LOOBY,
         PLAY,
         SELECT_OBJ,
         SHOW_POINTS,
@@ -57,8 +58,6 @@ public class Constants {
     public static void setIP(String newIP) {
         IP = newIP;
     }
-
-    public static PhysicsTest physicsScreen = null;
 
     // gambiarra infinita
 

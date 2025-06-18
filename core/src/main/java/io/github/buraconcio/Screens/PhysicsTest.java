@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
+import io.github.buraconcio.Network.Message;
 import io.github.buraconcio.Network.UDPClient;
 import io.github.buraconcio.Network.UDPServer;
 import io.github.buraconcio.Objects.*;
@@ -34,6 +35,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 
 import java.lang.Runnable;
+import java.sql.Connection;
 
 public class PhysicsTest implements Screen {
     private Stage stage;
@@ -126,19 +128,20 @@ public class PhysicsTest implements Screen {
             udpClient.startUDPClient();
         }
 
-        CountdownTimer countdown = new CountdownTimer(6, new CountdownTimer.TimerListener() {
+        setListeners();
+
+        CountdownTimer countdown = new CountdownTimer(3, new CountdownTimer.TimerListener() {
 
             @Override
-            public void tick(int remainingSecs) {}
+            public void tick(int remainingSecs) {
+            }
 
             @Override
             public void finish() {
 
-                Gdx.app.postRunnable(() -> {
-                    game.setScreen(new PointsScreen(game));
-                });
+                if (Constants.isHosting())
+                    ConnectionManager.getInstance().getServer().sendString(Message.Type.PHASE_CHANGE, "show_win");
             }
-
         });
 
         countdown.start();
@@ -146,7 +149,8 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void render(float delta) {
-        if (paused) return;
+        if (paused)
+            return;
 
         ScreenUtils.clear(0, 0, 0, 0, true);
 
@@ -198,4 +202,29 @@ public class PhysicsTest implements Screen {
         // stage.dispose();
         // skin.dispose();
     }
+
+    public void setListeners() {
+
+        Client client = ConnectionManager.getInstance().getClient();
+
+        client.setGameListener(new Client.GameStageListener() {
+
+            @Override
+            public void showWin() {
+
+                Gdx.app.postRunnable(() -> game.setScreen(new VictoryScreen(game)));
+
+            }
+
+            @Override
+            public void showPoints() {
+
+                Gdx.app.postRunnable(() -> game.setScreen(new PointsScreen(game)));
+
+            }
+
+        });
+
+    }
+
 }

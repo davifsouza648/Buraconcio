@@ -11,9 +11,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.buraconcio.Main;
+import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.CountdownTimer;
 import io.github.buraconcio.Utils.GameManager;
+import io.github.buraconcio.Utils.PlayerManager;
 
 public class PointsScreen implements Screen {
 
@@ -33,13 +35,17 @@ public class PointsScreen implements Screen {
     @Override
     public void show() {
 
-        Label points = new Label("Estrelas do jogador local: " + Constants.localP().getStars(), skinLabel, "labelPixelyWhite32");
-
         Table root = new Table();
         root.setFillParent(true);
         stage.addActor(root);
 
-        root.add(points);
+        for(Player p : PlayerManager.getInstance().getAllPlayers()){
+
+            Label points = new Label("Estrelas do jogador " + p.getUsername() + ": " + p.getStars(), skinLabel, "labelPixelyWhite32");
+            root.add(points);
+            root.row();
+
+        }
 
         Timer();
     }

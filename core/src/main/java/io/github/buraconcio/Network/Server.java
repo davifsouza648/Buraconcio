@@ -12,12 +12,12 @@ public class Server {
 
     private ServerSocket serverSocket;
 
-    private volatile boolean flagAccept = true;
+    public volatile static boolean flagAccept = true;
 
     private final List<ClientHandler> clients = new CopyOnWriteArrayList<>();
 
     public void stopAccepting() {
-        this.flagAccept = false;
+        Server.flagAccept = false;
     }
 
     public void startTCPServer() {
@@ -41,7 +41,7 @@ public class Server {
 
                 System.out.println("Server connected");
 
-                ClientHandler clientHandler = new ClientHandler(socket, flagAccept, clients);
+                ClientHandler clientHandler = new ClientHandler(socket, clients);
                 clients.add(clientHandler);
                 new Thread(clientHandler).start();
 
@@ -73,9 +73,10 @@ public class Server {
     public void stop() {
         if (serverSocket != null && !serverSocket.isClosed()) {
             try {
+                Message msg = new Message(Message.Type.DISCONNECT, "get out");
 
                 for (ClientHandler client : clients) {
-                    client.broadcastString("get out");
+                    client.broadcastMessage(msg);
                 }
 
                 serverSocket.close();
@@ -87,21 +88,16 @@ public class Server {
     }
 
     public void changeButton(boolean x) {
-
         String str = x ? "tostart" : "tocancel";
-
-        for (ClientHandler client : clients) {
-            client.broadcastString(str);
-        }
-
+        sendString(Message.Type.SERVER_NOTIFICATION, str);
     }
 
-    public void sendString(String str) {
+    public void sendString(Message.Type type, String str) {
+        Message msg = new Message(type, str);
 
         for (ClientHandler client : clients) {
-            client.broadcastString(str);
+            client.broadcastMessage(msg);
         }
-
     }
 
 }
