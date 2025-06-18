@@ -25,6 +25,8 @@ public class GameInputAdapter extends InputAdapter {
     private GameCamera camera;
     private Stage stage;
 
+    private static final float GRID_SIZE = 1f; // Tamanho da grid em unidades do mundo (não em pixels)
+
     public GameInputAdapter(Player p, Ball pBall, GameCamera camera, Stage stage) 
     {
         super();
@@ -51,20 +53,27 @@ public class GameInputAdapter extends InputAdapter {
             @Override
             public void postSolve(Contact contact, ContactImpulse impulse) {
             }
-
         });
     }
 
+    private Vector2 snapToGrid(Vector2 worldCoords) 
+    {
+        float snappedX = Math.round(worldCoords.x / GRID_SIZE) * GRID_SIZE;
+        float snappedY = Math.round(worldCoords.y / GRID_SIZE) * GRID_SIZE;
+        return new Vector2(snappedX, snappedY);
+    }
+
     @Override
-    public boolean touchDown(int x, int y, int pointer, int button) {
+    public boolean touchDown(int x, int y, int pointer, int button) 
+    {
         mouse1.x = x;
         mouse1.y = y;
-
         return true;
     }
 
     @Override
-    public boolean touchUp(int x, int y, int pointer, int button) {
+    public boolean touchUp(int x, int y, int pointer, int button) 
+    {
         p = PlayerManager.getInstance().getLocalPlayer();
         Vector3 unprojected = camera.unproject(new Vector3(mouse1.x, mouse1.y, 0));
         mouse1 = new Vector2(unprojected.x, unprojected.y);
@@ -72,32 +81,39 @@ public class GameInputAdapter extends InputAdapter {
         unprojected = camera.unproject(new Vector3(x, y, 0));
         Vector2 mouse2 = new Vector2(unprojected.x, unprojected.y);
 
-        Runnable task = () -> {
+        Runnable task = () -> 
+        {
             p.stroke(mouse1, mouse2);
         };
 
         PhysicsManager.getInstance().schedule(task);
         pBall.resetShootingGuide();
 
-        // test
-
         Vector2 stageCoords = stage.screenToStageCoordinates(new Vector2(x, y));
         Actor hitActor = stage.hit(stageCoords.x, stageCoords.y, true);
 
         Obstacle obstacle = p.getSelectedObstacle();
-        if (obstacle != null && obstacle.canPlace()) {
+        if (obstacle != null && obstacle.canPlace()) 
+        {
+            Vector2 snappedPos = snapToGrid(new Vector2(obstacle.getX(), obstacle.getY()));
+            obstacle.setPosition(snappedPos.x, snappedPos.y);
             p.placeObstacle();
             obstacle.preRound();
-        } else if (hitActor instanceof Obstacle) {
+        } 
+        else if (hitActor instanceof Obstacle) 
+        {
             Obstacle hitObstacle = (Obstacle) hitActor;
-            if (!hitObstacle.claimed())
+            if (!hitObstacle.claimed()) 
+            {
                 p.selectObstacle(hitObstacle);
+            }
         }
 
         return true;
     }
 
-    public boolean touchDragged(int x, int y, int pointer) {
+    public boolean touchDragged(int x, int y, int pointer) 
+    {
         Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
         Vector2 currentMouse = new Vector2(unprojected.x, unprojected.y);
 
@@ -107,12 +123,17 @@ public class GameInputAdapter extends InputAdapter {
         return true;
     }
 
-    public boolean mouseMoved(int x, int y) {
+    public boolean mouseMoved(int x, int y) 
+    {
         p = PlayerManager.getInstance().getLocalPlayer();
         Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
+        Vector2 worldCoords = new Vector2(unprojected.x, unprojected.y);
 
-        if (p.getSelectedObstacle() != null)
-            p.getSelectedObstacle().move(new Vector2(unprojected.x, unprojected.y));
+        if (p.getSelectedObstacle() != null) 
+        {
+            Vector2 snappedPos = snapToGrid(worldCoords);
+            p.getSelectedObstacle().move(snappedPos);
+        }
 
         return true;
     }
@@ -128,10 +149,19 @@ public class GameInputAdapter extends InputAdapter {
         else if (keyCode == Keys.E && p.getSelectedObstacle() != null) 
         {
             p.getSelectedObstacle().rotate(Obstacle.CLOCKWISE);
+        } 
+        else if (keyCode == Keys.NUM_1) 
+        {
+            camera.zoom = 3f;
+        } 
+        else if (keyCode == Keys.NUM_2) 
+        {
+            camera.zoom = 2f;
+        } 
+        else if (keyCode == Keys.NUM_3) 
+        {
+            camera.zoom = 1.16f;
         }
         return true;
     }
-
-
-
 }
