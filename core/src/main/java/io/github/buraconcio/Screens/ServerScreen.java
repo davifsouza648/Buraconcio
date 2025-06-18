@@ -29,6 +29,7 @@ import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.CursorManager;
+import io.github.buraconcio.Utils.GameManager;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.CountdownTimer;
 
@@ -440,7 +441,10 @@ public class ServerScreen implements Screen {
 
                         //pass the mapIndex
 
-                        game.setScreen(new PhysicsTest(game, mapIndex));
+                        GameManager.getInstance().setPhysicsScreen(new PhysicsTest(game));
+                        GameManager.getInstance().setMapIndex(mapIndex);
+
+                        game.setScreen(GameManager.getInstance().getPhysicsScreen());
 
                     }
                 });

@@ -25,6 +25,7 @@ import io.github.buraconcio.Utils.Constants.PHASE;
 import io.github.buraconcio.Utils.CountdownTimer;
 import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.GameInputAdapter;
+import io.github.buraconcio.Utils.GameManager;
 import io.github.buraconcio.Utils.MapRenderer;
 import io.github.buraconcio.Utils.PhysicsManager;
 
@@ -54,35 +55,32 @@ public class PhysicsTest implements Screen {
     private MapRenderer mapRenderer;
     float scale = 1 / 32f;
 
-    private Client client;
+    private boolean paused = false;
 
-    public PhysicsTest(Main game, int mapIndex) 
-    {
+    public PhysicsTest(Main game) {
 
         this.game = game;
 
-        mapRenderer = new MapRenderer("mapa" + mapIndex);
+        mapRenderer = new MapRenderer("mapa" + GameManager.getInstance().getMapIndex());
 
-        //debugRenderer = new Box2DDebugRenderer();
+        // debugRenderer = new Box2DDebugRenderer();
 
         stage = new Stage(new ExtendViewport(23, 13));
         hudStage = new Stage(new FitViewport(800, 480));
         Gdx.input.setInputProcessor(stage);
 
-        //stage.setDebugAll(true);
+        // stage.setDebugAll(true);
         PhysicsManager.getInstance().setStage(stage);
 
         mapRenderer.createCollisions();
 
-        for (Player player : PlayerManager.getInstance().getAllPlayers()) 
-        {
+        for (Player player : PlayerManager.getInstance().getAllPlayers()) {
             player.createBall();
         }
 
         pBall = PlayerManager.getInstance().getLocalPlayer().getBall();
 
-        if (pBall == null) 
-        { // testing without server
+        if (pBall == null) { // testing without server
             PhysicsManager.getInstance().placePlayer(PlayerManager.getInstance().getLocalPlayer());
             pBall = PlayerManager.getInstance().getLocalPlayer().createBall();
         }
@@ -104,7 +102,6 @@ public class PhysicsTest implements Screen {
         InputMultiplexer multiplexerInput = new InputMultiplexer();
         multiplexerInput.addProcessor(hudStage);
         multiplexerInput.addProcessor(new GameInputAdapter(p, pBall, camera, stage));
-        
 
         Gdx.input.setInputProcessor(multiplexerInput);
 
@@ -112,31 +109,34 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void show() {
+        paused = false;
         CursorManager.setGameCursor();
 
-        if (Constants.isHosting()) {
+        if (ConnectionManager.getInstance().getUdpClient() == null
+                || (ConnectionManager.getInstance().getUdpServer() == null && Constants.isHosting())) {
+            if (Constants.isHosting()) {
 
-            UDPServer udpServer = new UDPServer();
-            ConnectionManager.getInstance().setUDPserver(udpServer);
-            udpServer.startUDPServer();
+                UDPServer udpServer = new UDPServer();
+                ConnectionManager.getInstance().setUDPserver(udpServer);
+                udpServer.startUDPServer();
+            }
+
+            UDPClient udpClient = new UDPClient();
+            ConnectionManager.getInstance().setUDPclient(udpClient);
+            udpClient.startUDPClient();
         }
 
-        UDPClient udpClient = new UDPClient();
-        ConnectionManager.getInstance().setUDPclient(udpClient);
-        udpClient.startUDPClient();
-
-
-        CountdownTimer countdown = new CountdownTimer(20, new CountdownTimer.TimerListener(){
+        CountdownTimer countdown = new CountdownTimer(6, new CountdownTimer.TimerListener() {
 
             @Override
-            public void tick(int remainingSecs) {
-
-            }
+            public void tick(int remainingSecs) {}
 
             @Override
             public void finish() {
 
-                Gdx.app.postRunnable(() -> game.setScreen(new PointsScreen(game)));
+                Gdx.app.postRunnable(() -> {
+                    game.setScreen(new PointsScreen(game));
+                });
             }
 
         });
@@ -144,9 +144,10 @@ public class PhysicsTest implements Screen {
         countdown.start();
     }
 
-
     @Override
     public void render(float delta) {
+        if (paused) return;
+
         ScreenUtils.clear(0, 0, 0, 0, true);
 
         stage.act(delta);
@@ -168,7 +169,8 @@ public class PhysicsTest implements Screen {
         stage.getViewport().setCamera(camera);
         stage.draw();
 
-        //debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
+        // debugRenderer.render(PhysicsManager.getInstance().getWorld(),
+        // camera.combined);
 
         PhysicsManager.getInstance().tick();
     }
@@ -188,11 +190,12 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void hide() {
+        paused = true;
     }
 
     @Override
     public void dispose() {
-        stage.dispose();
-        skin.dispose();
+        // stage.dispose();
+        // skin.dispose();
     }
 }

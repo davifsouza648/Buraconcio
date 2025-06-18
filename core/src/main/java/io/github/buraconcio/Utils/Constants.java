@@ -1,6 +1,7 @@
 package io.github.buraconcio.Utils;
 
 import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Screens.PhysicsTest;
 
 public class Constants {
     public static final float BALL_RADIUS = 0.5f;
@@ -56,6 +57,8 @@ public class Constants {
     public static void setIP(String newIP) {
         IP = newIP;
     }
+
+    public static PhysicsTest physicsScreen = null;
 
     // gambiarra infinita
 

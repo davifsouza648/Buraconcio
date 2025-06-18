@@ -15,12 +15,14 @@ public class VictoryScreen implements Screen {
     private final Stage stage;
     private final Skin skinTextField, skinLabel;
 
-    public VictoryScreen(Main game){
+    public VictoryScreen(Main game ){
 
         this.game = game;
+
         this.stage = new Stage(new ScreenViewport());
         this.skinTextField = new Skin(Gdx.files.internal("fonts/pixely/textFields/textField.json"));
         this.skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
+
     }
 
     @Override

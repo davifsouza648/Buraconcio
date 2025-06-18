@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.CountdownTimer;
+import io.github.buraconcio.Utils.GameManager;
 
 public class PointsScreen implements Screen {
 
@@ -23,6 +24,7 @@ public class PointsScreen implements Screen {
     public PointsScreen(Main game) {
 
         this.game = game;
+
         this.stage = new Stage(new ScreenViewport());
         this.skinTextField = new Skin(Gdx.files.internal("fonts/pixely/textFields/textField.json"));
         this.skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
@@ -75,7 +77,7 @@ public class PointsScreen implements Screen {
     public void Timer(){
 
 
-        CountdownTimer countdown = new CountdownTimer(10, new CountdownTimer.TimerListener(){
+        CountdownTimer countdown = new CountdownTimer(2, new CountdownTimer.TimerListener(){
 
             @Override
             public void tick(int remainingSecs) {
@@ -85,7 +87,7 @@ public class PointsScreen implements Screen {
             @Override
             public void finish() {
 
-                Gdx.app.postRunnable(() -> game.setScreen(new PhysicsTest(game, 0)));
+                Gdx.app.postRunnable(() -> game.setScreen(GameManager.getInstance().getPhysicsScreen()));
             }
 
         });
