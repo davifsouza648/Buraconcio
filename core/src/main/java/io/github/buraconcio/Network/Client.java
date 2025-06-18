@@ -47,10 +47,8 @@ public class Client {
 
             // server screen
             sendLocalPlayer(out);
-            receivePlayerList(in);
 
-            // game updates
-            receiveGamePhases(in, out);
+            principalLoop(in, out);
 
             // receber estagios e outras atualizacoes por tcp
 
@@ -72,132 +70,138 @@ public class Client {
         }
     }
 
-    private void receiveGamePhases(ObjectInputStream in, ObjectOutputStream out)
-            throws ClassNotFoundException, IOException {
-
-        while (gameScreen) {
-
-            Object obj = in.readObject();
-
-            if (obj instanceof Boolean) {
-
-                Boolean msg = (Boolean) obj;
-
-                if (!msg) {
-                    gameScreen = false;
-                }
-
-            } else if (obj instanceof String) {
-
-                String msg = (String) obj;
-
-                Constants.setPhase(msg);
-
-                if (Constants.phase == Constants.PHASE.SELECT_OBJ) {
-
-                    Constants.localP().setCanSelect(true);
-                    Constants.localP().setBallInteractable(false);
-
-                    // decidir se vai ser em uma tela separada
-
-                } else if (Constants.phase == Constants.PHASE.PLAY) {
-
-                    Constants.localP().setCanSelect(false);
-                    Constants.localP().setBallInteractable(true);
-
-                } else if (Constants.phase == Constants.PHASE.SHOW_POINTS) {
-
-                    // atualizar pontuações;
-
-                    Map<Integer, Integer> info = new HashMap<>();
-                    info.put(Constants.localP().getId(), Constants.localP().getStars());
-
-                    out.writeObject(info);
-                    out.flush();
-
-                    Object teste = in.readObject();
-
-                    if (teste instanceof Map<?, ?>) {
-
-                        @SuppressWarnings("unchecked")
-                        Map<Integer, Integer> starsList = (Map<Integer, Integer>) teste;
-
-                        PlayerManager.getInstance().updateStars(starsList);
-                    }
-
-                    if (listener != null) {
-                        listenerGame.showPoints();
-                    }
-
-                } else if (Constants.phase == Constants.PHASE.SHOW_WIN) {
-
-                    ConnectionManager.getInstance().setUDPRun(false);
-
-                    if (listener != null) {
-                        listenerGame.showWin();
-                    }
-
-                }
-
-            }
-
-        }
-    }
 
     public void sendLocalPlayer(ObjectOutputStream out) throws IOException {
-        Player p = PlayerManager.getInstance().getLocalPlayer();
-        out.writeObject(p);
+
+        Message msg = new Message(Message.Type.PLAYER_UPDATE, PlayerManager.getInstance().getLocalPlayer());
+        out.writeObject(msg);
         out.flush();
+
     }
 
-    public void receivePlayerList(ObjectInputStream in) throws IOException, ClassNotFoundException {
+    public void principalLoop(ObjectInputStream in, ObjectOutputStream out) throws IOException, ClassNotFoundException {
 
-        while (svScreen) {
+         while (!socket.isClosed()) {
+
             Object obj = in.readObject();
 
-            if (obj instanceof Boolean) {
+            if (obj instanceof Message msg) {
 
-                Boolean msg = (Boolean) obj;
+                switch (msg.getType()) {
 
-                if (!msg) {
-                    svScreen = false;
-                }
+                    case PLAYER_LIST -> {
 
-            } else if (obj instanceof List<?>) {
+                        @SuppressWarnings("unchecked")
+                        List<Player> players = (List<Player>) msg.getPayload();
 
-                @SuppressWarnings("unchecked")
-                List<Player> players = (List<Player>) obj;
-                PlayerManager.getInstance().setPlayers(players);
+                        PlayerManager.getInstance().setPlayers(players);
 
-                if (listener != null) {
-                    listener.PlayerCon();
-                }
-            } else if (obj instanceof String) {
-                String msg = (String) obj;
+                        System.out.println("ANTES DE ATUALIZAR");
+                        if (listener != null) {
 
-                if (msg.equals("get out")) {
+                            listener.PlayerCon();
+                            System.out.println("ATUALIZAR");
+                        }
 
-                    disconnect();
-
-                    dsListener();
-                    svScreen = false;
-
-                } else if (msg.equals("tocancel")) {
-
-                    if (listener != null) {
-                        listener.ServerStartMatch();
                     }
 
-                } else if (msg.equals("tostart")) {
-                    if (listener != null) {
-                        listener.ServerCancelMatch();
+                    case SERVER_NOTIFICATION -> {
+                        String payload = (String) msg.getPayload();
+
+                        if (payload.equals("tocancel")) {
+
+                            if (listener != null) {
+                                listener.ServerStartMatch();
+                            }
+
+                        } else if (payload.equals("tostart")) {
+
+                            if (listener != null) {
+                                listener.ServerCancelMatch();
+                            }
+
+                        }
                     }
-                } else {
-                    if (listener != null) {
-                        listener.ServerChangeMap(msg);
+
+
+                    case MAP_CHANGE -> {
+
+                        String payload = (String) msg.getPayload();
+
+                        if (listener != null) {
+                            listener.ServerChangeMap(payload);
+                        }
+
+                    }
+
+                    case DISCONNECT -> {
+                        svScreen = false;
+                        disconnect();
+                        dsListener();
+                    }
+
+                    case PHASE_CHANGE -> {
+
+                        String phase = (String) msg.getPayload();
+
+                        Constants.setPhase(phase);
+
+                        if (Constants.phase == Constants.PHASE.SELECT_OBJ) {
+
+                            Constants.localP().setCanSelect(true);
+                            Constants.localP().setBallInteractable(false);
+
+                        } else if (Constants.phase == Constants.PHASE.PLAY) {
+
+                            Constants.localP().setCanSelect(false);
+                            Constants.localP().setBallInteractable(true);
+
+                        } else if (Constants.phase == Constants.PHASE.SHOW_POINTS) {
+
+                            Map<Integer, Integer> info = Map.of(Constants.localP().getId(),
+                                    Constants.localP().getStars());
+
+                            Message starsMsg = new Message(Message.Type.STARS_UPDATE, info);
+                            out.writeObject(starsMsg);
+                            out.flush();
+
+                            Object response = in.readObject();
+
+                            if (response instanceof Message respMsg && respMsg.getType() == Message.Type.STARS_UPDATE) {
+
+                                @SuppressWarnings("unchecked")
+                                Map<Integer, Integer> starsList = (Map<Integer, Integer>) respMsg.getPayload();
+
+                                PlayerManager.getInstance().updateStars(starsList);
+
+                                System.out.println("recebeu stars update");
+                            }
+
+                            if (listenerGame != null) {
+                                listenerGame.showPoints();
+                            }
+
+                        } else if (Constants.phase == Constants.PHASE.SHOW_WIN) {
+
+                            // ConnectionManager.getInstance().setUDPRun(false);
+
+                            if (listenerGame != null) {
+                                System.out.println("showWINNNN");
+                                listenerGame.showWin();
+                            }
+
+                        }
+                    }
+
+                    default -> {
+                        // Ignorar outros tipos
                     }
                 }
+
+            } else {
+                System.out.println("Invalid message");
             }
+
         }
     }
 

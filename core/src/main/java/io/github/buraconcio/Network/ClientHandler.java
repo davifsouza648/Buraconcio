@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -21,18 +20,16 @@ public class ClientHandler implements Runnable {
     private Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
-    private volatile boolean flagAccept;
     private List<ClientHandler> clients;
 
     private Player currentPlayer;
 
-    public ClientHandler(Socket socket, boolean flagAccept, List<ClientHandler> clients) throws IOException {
+    public ClientHandler(Socket socket, List<ClientHandler> clients) throws IOException {
 
         this.socket = socket;
         this.out = new ObjectOutputStream(socket.getOutputStream());
         out.flush();
         this.in = new ObjectInputStream(socket.getInputStream());
-        this.flagAccept = flagAccept;
         this.clients = clients;
 
     }
@@ -46,36 +43,43 @@ public class ClientHandler implements Runnable {
             out.writeObject(ServerScreen.mapIndex);
             out.flush();
 
-            while (!socket.isClosed() && flagAccept) {
-
-                receivePlayer(in);
-                // sendPlayers(out);
-
-                Thread.sleep(100);
-            }
-
-            if (!socket.isClosed()) {
-                out.writeObject(false);
-                out.flush();
-            }
-
             while (!socket.isClosed()) {
-                out.writeObject("enviar alguma outra coisa");
 
-                // na real acho que nao vai mandar nada mais por aqui, pois a troca de phases
-                // vai ser diretamente na screens
+                Object obj = in.readObject();
 
-                out.flush();
-                Thread.sleep(1000);
+                if (obj instanceof Message msg) {
 
-                if (Constants.PHASE.SHOW_POINTS == Constants.phase) {
-                    receiveStars();
+                    switch (msg.getType()) {
+
+                        case PLAYER_UPDATE:
+                            if (Server.flagAccept) {
+                                handlePlayerUpdate(msg);
+                            } else {
+                                System.out.println("Ignoring PLAYER_UPDATE");
+                            }
+
+                            break;
+
+                        case STARS_UPDATE:
+                            if (Constants.phase == Constants.PHASE.SHOW_POINTS) {
+                                handleStarsUpdate(msg);
+                            } else {
+                                System.out.println("Ignoring STARS_UPDATE");
+                            }
+                            break;
+
+                        default:
+                            System.out.println("Unknown message type: " + msg.getType());
+                            break;
+                    }
+
                 }
+
             }
 
         } catch (EOFException eof) {
             // evitar exception ao desconectar
-        } catch (IOException | ClassNotFoundException | InterruptedException e) {
+        } catch (IOException | ClassNotFoundException e) {
 
             if (e instanceof java.net.SocketException && e.getMessage().equals("Connection reset")) {
                 System.out.println("Cliente desconectou abruptamente.");
@@ -84,106 +88,106 @@ public class ClientHandler implements Runnable {
             }
 
         } finally {
-
             cleanup();
-
         }
     }
 
-    private void receivePlayer(ObjectInputStream in) throws IOException, ClassNotFoundException {
+    private void handlePlayerUpdate(Message msg) {
+        if (msg.getPayload() instanceof Player newPlayer) {
 
-        Object obj = in.readObject();
-
-        if (obj instanceof Player) {
-            Player newPlayer = (Player) obj;
             this.currentPlayer = newPlayer;
 
             PhysicsManager.getInstance().placePlayer(newPlayer);
-
             PlayerManager.getInstance().addPlayer(newPlayer);
+
             broadcastPlayerList();
 
             System.out.println("new player connected: " + newPlayer.getUsername());
-
         } else {
-            System.out.println("not a player");
+            System.out.println("Invalid payload for PLAYER_UPDATE");
         }
     }
 
     public void broadcastPlayerList() {
+        Message msg = new Message(Message.Type.PLAYER_LIST, PlayerManager.getInstance().getAllPlayers());
+
         for (ClientHandler client : clients) {
             try {
-                client.out.writeObject(PlayerManager.getInstance().getAllPlayers());
+
+                client.broadcastMessage(msg);
                 client.out.flush();
+
             } catch (IOException e) {
 
                 System.out.println("Erro ao enviar lista para cliente: "); /* + e.getMessage() */
-
             }
         }
     }
 
-    public void broadcastString(String x) {
-
-        for (ClientHandler client : clients) {
-            try {
-                client.out.writeObject(x);
-                client.out.flush();
-            } catch (IOException e) {
-                System.out.println("Erro ao enviar msg");
-            }
+    public void broadcastMessage(Message msg) {
+        try {
+            out.writeObject(msg);
+            out.flush();
+        } catch (IOException e) {
+            System.out.println("Erro ao enviar msg");
+            e.printStackTrace();
         }
-
     }
 
     public void broadcastStars() {
-        Map<Integer, Integer> starsMap = new HashMap<>();
-
-        for (Player p : PlayerManager.getInstance().getAllPlayers()) {
-            starsMap.put(p.getId(), p.getStars());
-        }
 
         for (ClientHandler client : clients) {
-            try {
-                client.out.writeObject(starsMap);
-                client.out.flush();
-            } catch (IOException e) {
-                System.out.println("Erro ao enviar stars: " + e.getMessage());
+
+            Map<Integer, Integer> starsMap = new HashMap<>();
+            for (Player p : PlayerManager.getInstance().getAllPlayers()) {
+                starsMap.put(p.getId(), p.getStars());
             }
+
+            Message msg = new Message(Message.Type.STARS_UPDATE, starsMap);
+
+            client.broadcastMessage(msg);
         }
     }
 
     @SuppressWarnings("unchecked")
-    public void receiveStars() {
+    private void handleStarsUpdate(Message msg) {
         try {
-            Object obj = in.readObject();
+            Map<Integer, Integer> starsMap = (Map<Integer, Integer>) msg.getPayload();
 
-            if (obj instanceof Map<?, ?>) {
-                Map<Integer, Integer> starsMap = (Map<Integer, Integer>) obj;
-
-                for (Player p : PlayerManager.getInstance().getAllPlayers()) {
-                    if (starsMap.containsKey(p.getId())) {
-                        p.setStars(starsMap.get(p.getId()));
-                    }
+            for (Player p : PlayerManager.getInstance().getAllPlayers()) {
+                if (starsMap.containsKey(p.getId())) {
+                    p.setStars(starsMap.get(p.getId()));
                 }
-
-                broadcastStars();
-            } else {
-                System.out.println("nao eh um map");
             }
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("erro no recebimento da pontuacao: " + e.getMessage());
+
+            Map<Integer, Integer> responseStars = new HashMap<>();
+            for (Player p : PlayerManager.getInstance().getAllPlayers()) {
+                responseStars.put(p.getId(), p.getStars());
+            }
+
+            Message responseMsg = new Message(Message.Type.STARS_UPDATE, responseStars);
+
+            broadcastMessage(responseMsg);
+
+            System.out.println("Stars received and sent back");
+
+        } catch (ClassCastException e) {
+            System.out.println("Invalid payload for STARS_UPDATE: " + e.getMessage());
         }
     }
 
     private void cleanup() {
         try {
+
             if (in != null)
                 in.close();
+
             if (out != null)
                 out.close();
+
             if (socket != null && !socket.isClosed())
                 socket.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

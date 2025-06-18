@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
+import io.github.buraconcio.Network.Message;
 import io.github.buraconcio.Network.Server;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Button;
@@ -29,8 +30,9 @@ import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.CursorManager;
+import io.github.buraconcio.Utils.GameManager;
 import io.github.buraconcio.Utils.PlayerManager;
-import main.java.io.github.buraconcio.Utils.CountdownTimer;
+import io.github.buraconcio.Utils.CountdownTimer;
 
 public class ServerScreen implements Screen {
     private final Main game;
@@ -43,7 +45,6 @@ public class ServerScreen implements Screen {
     private boolean started = false, flagBackButton = true;
     private Client cliente = ConnectionManager.getInstance().getClient();
     private Server server = ConnectionManager.getInstance().getServer();
-    private Timer.Task countdownTask;
     private boolean firstIn = true;
     private CountdownTimer countdown;
 
@@ -251,7 +252,7 @@ public class ServerScreen implements Screen {
                 if (Constants.isHosting()) {
 
                     mapIndex = (mapIndex - 1 + mapTextures.length) % mapTextures.length;
-                    server.sendString(Integer.toString(mapIndex));
+                    server.sendString(Message.Type.MAP_CHANGE, Integer.toString(mapIndex));
                     nextMap();
                 }
             }
@@ -407,7 +408,7 @@ public class ServerScreen implements Screen {
     }
 
     private void startCountdown() {
-        countdown = new CountdownTimer(10, new CountdownTimer.TimerListener() {
+        countdown = new CountdownTimer(3, new CountdownTimer.TimerListener() {
 
             @Override
             public void tick(int remainingSecs) {
@@ -438,7 +439,14 @@ public class ServerScreen implements Screen {
 
                     @Override
                     public void finish() {
-                        game.setScreen(new PhysicsTest(game));
+
+                        //pass the mapIndex
+
+                        GameManager.getInstance().setPhysicsScreen(new PhysicsTest(game));
+                        GameManager.getInstance().setMapIndex(mapIndex);
+
+                        game.setScreen(GameManager.getInstance().getPhysicsScreen());
+
                     }
                 });
 

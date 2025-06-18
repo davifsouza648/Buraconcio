@@ -1,6 +1,7 @@
 package io.github.buraconcio.Utils;
 
 import io.github.buraconcio.Objects.Player;
+import io.github.buraconcio.Screens.PhysicsTest;
 
 public class Constants {
     public static final float BALL_RADIUS = 0.5f;
@@ -21,6 +22,7 @@ public class Constants {
     public static PHASE phase = PHASE.PLAY;
 
     public enum PHASE {
+        LOOBY,
         PLAY,
         SELECT_OBJ,
         SHOW_POINTS,

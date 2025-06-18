@@ -8,8 +8,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.badlogic.gdx.math.Vector2;
 
-import io.github.buraconcio.Objects.PhysicsEntity;
-import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PlayerManager;

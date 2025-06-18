@@ -108,8 +108,8 @@ public class Player implements Serializable {
         rewardStar();
     }
 
-    public void die() {
-        // temporary
+    public void die()
+    {
         ball.enterHole();
     }
 
@@ -126,6 +126,7 @@ public class Player implements Serializable {
 
     public void collectStar() {
         hasStar = true;
+        stars += 12;
     }
 
     public void placeObstacle() {

@@ -1,4 +1,4 @@
-package main.java.io.github.buraconcio.Utils;
+package io.github.buraconcio.Utils;
 
 import com.badlogic.gdx.utils.Timer;
 
