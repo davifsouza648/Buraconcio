@@ -135,15 +135,16 @@ public class ClientHandler implements Runnable {
     }
 
     public void broadcastStars() {
-        Map<Integer, Integer> starsMap = new HashMap<>();
-
-        for (Player p : PlayerManager.getInstance().getAllPlayers()) {
-            starsMap.put(p.getId(), p.getStars());
-        }
-
-        Message msg = new Message(Message.Type.STARS_UPDATE, starsMap);
 
         for (ClientHandler client : clients) {
+
+            Map<Integer, Integer> starsMap = new HashMap<>();
+            for (Player p : PlayerManager.getInstance().getAllPlayers()) {
+                starsMap.put(p.getId(), p.getStars());
+            }
+
+            Message msg = new Message(Message.Type.STARS_UPDATE, starsMap);
+
             client.broadcastMessage(msg);
         }
     }
@@ -159,8 +160,16 @@ public class ClientHandler implements Runnable {
                 }
             }
 
-            broadcastStars();
-            System.out.println("Stars received and broadcasted");
+            Map<Integer, Integer> responseStars = new HashMap<>();
+            for (Player p : PlayerManager.getInstance().getAllPlayers()) {
+                responseStars.put(p.getId(), p.getStars());
+            }
+
+            Message responseMsg = new Message(Message.Type.STARS_UPDATE, responseStars);
+
+            broadcastMessage(responseMsg);
+
+            System.out.println("Stars received and sent back");
 
         } catch (ClassCastException e) {
             System.out.println("Invalid payload for STARS_UPDATE: " + e.getMessage());

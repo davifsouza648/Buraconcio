@@ -39,9 +39,10 @@ public class PointsScreen implements Screen {
         root.setFillParent(true);
         stage.addActor(root);
 
-        for(Player p : PlayerManager.getInstance().getAllPlayers()){
+        for (Player p : PlayerManager.getInstance().getAllPlayers()) {
 
-            Label points = new Label("Estrelas do jogador " + p.getUsername() + ": " + p.getStars(), skinLabel, "labelPixelyWhite32");
+            Label points = new Label("Estrelas do jogador " + p.getUsername() + ": " + p.getStars(), skinLabel,
+                    "labelPixelyWhite32");
             root.add(points);
             root.row();
 
@@ -79,11 +80,9 @@ public class PointsScreen implements Screen {
         stage.dispose();
     }
 
+    public void Timer() {
 
-    public void Timer(){
-
-
-        CountdownTimer countdown = new CountdownTimer(2, new CountdownTimer.TimerListener(){
+        CountdownTimer countdown = new CountdownTimer(2, new CountdownTimer.TimerListener() {
 
             @Override
             public void tick(int remainingSecs) {
@@ -93,7 +92,12 @@ public class PointsScreen implements Screen {
             @Override
             public void finish() {
 
-                Gdx.app.postRunnable(() -> game.setScreen(GameManager.getInstance().getPhysicsScreen()));
+                Gdx.app.postRunnable(() -> {
+
+                    Constants.setPhase("play");
+                    game.setScreen(GameManager.getInstance().getPhysicsScreen());
+
+                });
             }
 
         });

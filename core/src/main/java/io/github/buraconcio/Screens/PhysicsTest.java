@@ -130,6 +130,7 @@ public class PhysicsTest implements Screen {
 
         setListeners();
 
+        //teste
         CountdownTimer countdown = new CountdownTimer(3, new CountdownTimer.TimerListener() {
 
             @Override
@@ -139,8 +140,8 @@ public class PhysicsTest implements Screen {
             @Override
             public void finish() {
 
-                if (Constants.isHosting())
-                    ConnectionManager.getInstance().getServer().sendString(Message.Type.PHASE_CHANGE, "show_win");
+                if (Constants.isHosting() && Constants.localP().getStars() > 1)
+                    ConnectionManager.getInstance().getServer().sendString(Message.Type.PHASE_CHANGE, "show_points");
             }
         });
 
