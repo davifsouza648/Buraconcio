@@ -18,6 +18,7 @@ public class Obstacle extends PhysicsEntity {
 
     protected boolean claimed = false;
     protected boolean active = false;
+    protected boolean disabled = false;
 
     public Obstacle(Vector2 pos, Vector2 size, String texturePath) {
         super(pos, size, texturePath);
@@ -120,5 +121,15 @@ public class Obstacle extends PhysicsEntity {
 
     public void move(Vector2 pos) {
         body.setTransform(pos, body.getTransform().getRotation());
+    }
+
+    public void disable() {
+        disabled = true;
+        animacao.remove();
+    }
+
+    public void enable() {
+        disabled = false;
+        PhysicsManager.getInstance().addToStage(animacao);
     }
 }

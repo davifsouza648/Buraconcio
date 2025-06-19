@@ -8,8 +8,6 @@ import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.PhysicsManager;
 
 public class Star extends Obstacle {
-    private boolean disabled = false;
-
     public Star(Vector2 pos, Vector2 size) {
         super(pos, size,
             Auxiliaries.animationFromFiles("obstacles/star/star.png", "obstacles/star/star.json"));
@@ -40,16 +38,6 @@ public class Star extends Obstacle {
         }
 
         return true;
-    }
-
-    private void disable() {
-        disabled = true;
-        animacao.remove();
-    }
-
-    private void enable() {
-        disabled = false;
-        PhysicsManager.getInstance().addToStage(animacao);
     }
 
     @Override
