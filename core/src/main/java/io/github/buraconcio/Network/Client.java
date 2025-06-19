@@ -163,6 +163,8 @@ public class Client {
 
                         } else if (GameManager.getInstance().getCurrentPhase() == PHASE.PLAY) {
 
+                            PlayerManager.getInstance().setAllBallsAlive();
+
                             Constants.localP().setCanSelect(false);
                             Constants.localP().setBallInteractable(true);
 

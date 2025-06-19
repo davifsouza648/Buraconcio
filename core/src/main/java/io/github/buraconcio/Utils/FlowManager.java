@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Message;
+import io.github.buraconcio.Objects.Player;
 
 public class FlowManager {
 
@@ -54,6 +55,17 @@ public class FlowManager {
 
             @Override
             public void finish() {
+
+                for (Player p : PlayerManager.getInstance().getAllPlayers()) {
+
+                    if (p.getSelectedObstacle() != null && p.getSelectedObstacle().canPlace()) {
+
+                        p.placeObstacle();
+
+                    }
+
+                }
+
                 startPlayPhase();
                 PhysicsManager.getInstance().preRoundObstacles();
             }

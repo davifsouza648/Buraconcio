@@ -22,7 +22,7 @@ public class GameCamera extends OrthographicCamera {
     public void updateCamera() {
         if (targetPos != null) {
             Vector3 targetVector = new Vector3(targetPos.x, targetPos.y, 0);
-            this.position.lerp(targetVector, 0.11f);
+            this.position.lerp(targetVector, lerp);
             this.update();
         }
     }

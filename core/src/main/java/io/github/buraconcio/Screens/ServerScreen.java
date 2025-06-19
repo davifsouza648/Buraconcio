@@ -423,13 +423,6 @@ public class ServerScreen implements Screen {
                 if (Constants.isHosting()) {
                     server.stopAccepting();
                 }
-
-                for (Player a : PlayerManager.getInstance().getAllPlayers()) {
-                    if (a.getId() == PlayerManager.getInstance().getLocalPlayer().getId()) {
-                        PlayerManager.getInstance().setLocalPlayer(a);
-                    }
-                }
-
                 CountdownTimer delay = new CountdownTimer(1, new CountdownTimer.TimerListener() {
                     @Override
                     public void tick(int remainingSecs) {}

@@ -162,6 +162,21 @@ public class PlayerManager {
         return localPlayer;
     }
 
+    public void syncLocalPlayer() {
+        for (Player p : players) {
+            if (p.getId() == localPlayer.getId()) {
+                setLocalPlayer(p);
+                break;
+            }
+        }
+    }
+
+    public void setAllBallsAlive() {
+        for (Player p : players) {
+            p.getBall().setAlive(true);
+        }
+    }
+
     public void clear() {
         players.clear();
     }

@@ -27,7 +27,6 @@ import io.github.buraconcio.Utils.PhysicsManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-
 public class PhysicsTest implements Screen {
     private final Main game;
     private Stage stage;
@@ -48,6 +47,8 @@ public class PhysicsTest implements Screen {
     private FlowManager flow;
 
     public PhysicsTest(Main game) {
+        PlayerManager.getInstance().syncLocalPlayer();
+
         this.game = game;
         mapRenderer = new MapRenderer("mapa0");
 
@@ -75,7 +76,6 @@ public class PhysicsTest implements Screen {
         camera = new GameCamera();
         stage.getViewport().setCamera(camera);
         hud = new HUD(hudStage, PlayerManager.getInstance().getLocalPlayer().getId());
-
 
         new CrossBow(new Vector2(10.5f, 2f), new Vector2(3f, 3f));
         new Star(new Vector2(12.5f, 2f), new Vector2(1f, 1f));
@@ -123,14 +123,27 @@ public class PhysicsTest implements Screen {
         stage.act(delta);
 
         Obstacle selected = Constants.localP().getSelectedObstacle();
+        Ball selectedBall = pBall;
+
         if (GameManager.getInstance().getCurrentPhase() == PHASE.PLAY) {
-            camera.setTarget(Constants.localP().getBall().getPosition());
-            camera.setCameraLerpSpeed(0.05f);
+
+            if (pBall.isAlive() != true) {
+
+                for (Player p : PlayerManager.getInstance().getAllPlayers()) {
+
+                    if (p.getBall().isAlive()) {
+                        selectedBall = p.getBall();
+                    }
+                }
+            }
+
+            camera.setTarget(selectedBall.getPosition());
+            camera.setCameraLerpSpeed(0.11f);
+
         } else if (GameManager.getInstance().getCurrentPhase() == PHASE.SELECT_OBJ && selected != null) {
             camera.setTarget(selected.getPosition());
-            camera.setCameraLerpSpeed(0.11f);
+            camera.setCameraLerpSpeed(0.05f);
         }
-
 
         camera.updateCamera();
 
@@ -166,8 +179,8 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void dispose() {
-        //stage.dispose();
-        //skin.dispose();
+        // stage.dispose();
+        // skin.dispose();
     }
 
     public GameCamera getCamera() {
@@ -182,36 +195,37 @@ public class PhysicsTest implements Screen {
         return this.game;
     }
 
-
     public void setListeners() {
 
         try {
-        Client client = ConnectionManager.getInstance().getClient();
+            Client client = ConnectionManager.getInstance().getClient();
 
-        client.setGameListener(new Client.GameStageListener() {
+            client.setGameListener(new Client.GameStageListener() {
 
-            @Override
-            public void showWin() {
+                @Override
+                public void showWin() {
 
-                Gdx.app.postRunnable(() -> GameManager.getInstance().setCurrentScreen(game, new VictoryScreen(game)));
+                    Gdx.app.postRunnable(
+                            () -> GameManager.getInstance().setCurrentScreen(game, new VictoryScreen(game)));
 
-            }
+                }
 
-            @Override
-            public void showPoints() {
+                @Override
+                public void showPoints() {
 
-                Gdx.app.postRunnable(() -> GameManager.getInstance().setCurrentScreen(game, new PointsScreen(game)));
+                    Gdx.app.postRunnable(
+                            () -> GameManager.getInstance().setCurrentScreen(game, new PointsScreen(game)));
 
-            }
+                }
 
-            @Override
-            public void GameScreen() {
+                @Override
+                public void GameScreen() {
 
-                Gdx.app.postRunnable(() -> game.setScreen(GameManager.getInstance().getPhysicsScreen()));
+                    Gdx.app.postRunnable(() -> game.setScreen(GameManager.getInstance().getPhysicsScreen()));
 
-            }
+                }
 
-        });
+            });
 
         } catch (Exception e) {
             System.out.println("normal error if testing physics");

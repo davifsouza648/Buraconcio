@@ -241,4 +241,12 @@ public class Ball extends PhysicsEntity {
     public boolean isAlive(){
         return isAlive;
     }
+
+    public void setAlive(boolean flag){ //encaixar isso em uma funcao de renascer elas no spawn point
+
+        isAlive = flag;
+        labelGroup.setVisible(true);
+        setVisible(true);
+
+    }
 }
