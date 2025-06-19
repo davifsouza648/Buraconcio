@@ -1,5 +1,7 @@
 package io.github.buraconcio.Utils;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
@@ -19,10 +21,13 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
 {
     private static float scale = 1/32f;
     private static TiledMap map;
+    private Texture backgroundTexture;
+    private Rectangle spawnArea;
 
     public MapRenderer(String mapName)
     {
         super(map = new TmxMapLoader().load("maps/" + mapName + "/" + mapName + ".tmx"), scale);
+        backgroundTexture = new Texture("maps/" + mapName + "/background" + mapName + ".png");
     }
 
     public void createCollisions()
@@ -33,7 +38,11 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
 
         for (MapObject object : objects)
         {
-            if ("Box".equals(object.getName()))
+            if ("SpawnArea".equals(object.getName())) {
+                spawnArea = ((RectangleMapObject) object).getRectangle();
+            }
+            
+            else if ("Box".equals(object.getName()))
             {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
@@ -52,8 +61,18 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
             else if ("Buraco".equals(object.getName()))
             {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
-                Vector2 pos = new Vector2((rect.x + rect.width / 2f) / pixelsPerMeter, (rect.y + rect.height / 2f) / pixelsPerMeter);
-                new Flag(pos, rect.width / pixelsPerMeter);
+
+                float minX = rect.x / pixelsPerMeter;
+                float minY = rect.y / pixelsPerMeter;
+                float maxX = (rect.x + rect.width) / pixelsPerMeter;
+                float maxY = (rect.y + rect.height) / pixelsPerMeter;
+
+                float randomX = (float) (minX + Math.random() * (maxX - minX));
+                float randomY = (float) (minY + Math.random() * (maxY - minY));
+
+                Vector2 pos = new Vector2(randomX, randomY);
+
+                new Flag(pos, 1f);
             }
 
             else if (object.getName() != null && object.getName().startsWith("Curva"))
@@ -195,5 +214,51 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
             entity.getBody().createFixture(shape2, 0f);
             shape2.dispose();
         }
+    }
+
+    public void renderBackground() {
+        getBatch().begin();
+
+        float texWidth = backgroundTexture.getWidth() * scale;
+        float texHeight = backgroundTexture.getHeight() * scale;
+
+        float camLeft = getViewBounds().x;
+        float camBottom = getViewBounds().y;
+        float camRight = camLeft + getViewBounds().width;
+        float camTop = camBottom + getViewBounds().height;
+
+        for (float x = camLeft; x < camRight; x += texWidth) {
+            for (float y = camBottom; y < camTop; y += texHeight) {
+                getBatch().draw(backgroundTexture, x, y, texWidth, texHeight);
+            }
+        }
+
+        getBatch().end();
+    }
+
+    public Vector2 getRandomSpawnPosition() {
+        if (spawnArea == null) {
+            throw new RuntimeException("SpawnArea não definida no mapa!");
+        }
+
+        float pixelsPerMeter = 32f;
+
+        float minX = spawnArea.x / pixelsPerMeter;
+        float minY = spawnArea.y / pixelsPerMeter;
+        float maxX = (spawnArea.x + spawnArea.width) / pixelsPerMeter;
+        float maxY = (spawnArea.y + spawnArea.height) / pixelsPerMeter;
+
+        float randomX = (float) (minX + Math.random() * (maxX - minX));
+        float randomY = (float) (minY + Math.random() * (maxY - minY));
+
+        return new Vector2(randomX, randomY);
+    }
+
+    @Override
+    public void dispose() {
+        if (backgroundTexture != null) {
+            backgroundTexture.dispose();
+        }
+        map.dispose();
     }
 }

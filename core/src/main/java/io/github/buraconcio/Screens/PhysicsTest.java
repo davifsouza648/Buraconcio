@@ -1,5 +1,7 @@
 package io.github.buraconcio.Screens;
 
+import java.util.Vector;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -46,6 +48,7 @@ public class PhysicsTest implements Screen {
     private boolean paused = false;
     private FlowManager flow;
 
+
     public PhysicsTest(Main game) {
         PlayerManager.getInstance().syncLocalPlayer();
 
@@ -63,6 +66,8 @@ public class PhysicsTest implements Screen {
         mapRenderer.createCollisions();
 
         for (Player player : PlayerManager.getInstance().getAllPlayers()) {
+            Vector2 spawnPos = mapRenderer.getRandomSpawnPosition();
+            player.setStartingPos(spawnPos);
             player.createBall();
         }
 
@@ -118,8 +123,6 @@ public class PhysicsTest implements Screen {
         if (paused)
             return;
 
-        ScreenUtils.clear(0, 0, 0, 0, true);
-
         stage.act(delta);
 
         Obstacle selected = Constants.localP().getSelectedObstacle();
@@ -146,7 +149,7 @@ public class PhysicsTest implements Screen {
         }
 
         camera.updateCamera();
-
+        mapRenderer.renderBackground();
         mapRenderer.setView(camera);
         mapRenderer.render();
 
@@ -181,6 +184,10 @@ public class PhysicsTest implements Screen {
     public void dispose() {
         // stage.dispose();
         // skin.dispose();
+        mapRenderer.dispose();
+        hudStage.dispose();
+        stage.dispose();
+        debugRenderer.dispose();
     }
 
     public GameCamera getCamera() {
