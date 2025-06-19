@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 import java.util.*;
-import java.util.List;
 
 import de.tomgrill.gdxdialogs.core.GDXDialogs;
 import de.tomgrill.gdxdialogs.core.GDXDialogsSystem;
@@ -35,8 +34,6 @@ public class LoginMenu implements Screen {
     private Skin skinTextField, skinLabel;
     private String username;
     // private String password;
-
-    // String[] avatarVec = {"user1.png", "user2.png", "user3.png", "user3.png", "user4.png", "user5.png", "user6.png", "user7.png", "user8.png", "user9.png", "user10.png"};
 
     private GDXDialogs dialogs;
 

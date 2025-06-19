@@ -26,6 +26,7 @@ public class Ball extends PhysicsEntity {
     private float z = 0f;
     private static final float gravity = 9.8f;
     private boolean isAirborne = false;
+    private boolean isAlive = true;
 
     private static final float angDamp = 1f;
     private static final float linDamp = 0.5f;
@@ -80,6 +81,7 @@ public class Ball extends PhysicsEntity {
 
         texture = new Texture(Gdx.files.internal("shootingGuideTip.png"));
         tipSprite = new Sprite(texture);
+
     }
 
     public boolean isStill() {
@@ -187,6 +189,8 @@ public class Ball extends PhysicsEntity {
     }
 
     public void enterHole() {
+        isAlive = false;
+
         body.setLinearVelocity(new Vector2(0f, 0f));
         body.setAwake(false);
 
@@ -232,5 +236,9 @@ public class Ball extends PhysicsEntity {
 
     public boolean canInteract() {
         return canInteract;
+    }
+
+    public boolean isAlive(){
+        return isAlive;
     }
 }

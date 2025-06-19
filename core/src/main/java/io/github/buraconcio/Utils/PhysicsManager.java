@@ -52,16 +52,15 @@ public class PhysicsManager {
         Vector2 startingAreaPos = new Vector2(7f, 5f); // center of area
 
         startingAreaRect = new Rectangle(
-            startingAreaPos.x - startingAreaSize.x/2,
-            startingAreaPos.y - startingAreaSize.y/2,
-            startingAreaSize.x,
-            startingAreaSize.y
-                );
+                startingAreaPos.x - startingAreaSize.x / 2,
+                startingAreaPos.y - startingAreaSize.y / 2,
+                startingAreaSize.x,
+                startingAreaSize.y);
 
         PhysicsEntity startingArea = new PhysicsEntity(startingAreaPos, startingAreaSize);
 
         PolygonShape startingAreaShape = new PolygonShape();
-        startingAreaShape.setAsBox(startingAreaRect.width/2, startingAreaRect.height/2);
+        startingAreaShape.setAsBox(startingAreaRect.width / 2, startingAreaRect.height / 2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = startingAreaShape;
@@ -144,7 +143,9 @@ public class PhysicsManager {
     }
 
     public void destroyBody(Body body) {
-        Runnable task = () -> {world.destroyBody(body);};
+        Runnable task = () -> {
+            world.destroyBody(body);
+        };
         schedule(task);
     }
 
@@ -219,8 +220,8 @@ public class PhysicsManager {
         for (int i = 0; i < 1000; ++i) { // max 1000
             boolean collides = false;
 
-             Vector2 pos = new Vector2(getRandomFloat(startingAreaRect.x, startingAreaRect.x + startingAreaRect.width),
-                getRandomFloat(startingAreaRect.y, startingAreaRect.y + startingAreaRect.height));
+            Vector2 pos = new Vector2(getRandomFloat(startingAreaRect.x, startingAreaRect.x + startingAreaRect.width),
+                    getRandomFloat(startingAreaRect.y, startingAreaRect.y + startingAreaRect.height));
 
             for (Vector2 otherBallPos : playerStartPosById.values()) {
                 if (ballsCollide(pos, otherBallPos)) {
@@ -270,6 +271,22 @@ public class PhysicsManager {
 
     public void addToStage(Actor actor) {
         stage.addActor(actor);
+    }
+
+    public void preRoundObstacles() {
+        for (PhysicsEntity entity : entityList.values()) {
+            if (entity instanceof Obstacle) {
+                ((Obstacle) entity).preRound();
+            }
+        }
+    }
+
+    public void postRoundObstacles() {
+        for (PhysicsEntity entity : entityList.values()) {
+            if (entity instanceof Obstacle) {
+                ((Obstacle) entity).postRound();
+            }
+        }
     }
 
     // TODO: METODO PARA ATUALIZAR VETOR DE ENTIDADES

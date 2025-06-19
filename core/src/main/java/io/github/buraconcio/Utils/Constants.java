@@ -19,30 +19,6 @@ public class Constants {
     public static final int PORT = 5050, UDP_PORT_SERVER = 5565, UDP_PORT_CLIENT = 5566;
     public static String IP = "localhost";
 
-    public static PHASE phase = PHASE.PLAY;
-
-    public enum PHASE {
-        LOOBY,
-        PLAY,
-        SELECT_OBJ,
-        SHOW_POINTS,
-        SHOW_WIN,
-    }
-
-    public static void setPhase(String msg) {
-
-        try {
-
-            phase = PHASE.valueOf(msg.toUpperCase());
-
-        } catch (IllegalArgumentException e) {
-
-            e.printStackTrace();
-
-        }
-
-    }
-
     public static Player localP() {
         return PlayerManager.getInstance().getLocalPlayer();
     }

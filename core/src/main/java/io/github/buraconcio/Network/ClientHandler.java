@@ -12,6 +12,8 @@ import java.util.List;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Screens.ServerScreen;
 import io.github.buraconcio.Utils.Constants;
+import io.github.buraconcio.Utils.GameManager;
+import io.github.buraconcio.Utils.GameManager.PHASE;
 import io.github.buraconcio.Utils.PhysicsManager;
 import io.github.buraconcio.Utils.PlayerManager;
 
@@ -61,7 +63,7 @@ public class ClientHandler implements Runnable {
                             break;
 
                         case STARS_UPDATE:
-                            if (Constants.phase == Constants.PHASE.SHOW_POINTS) {
+                            if (GameManager.getInstance().getCurrentPhase() == PHASE.SHOW_POINTS) {
                                 handleStarsUpdate(msg);
                             } else {
                                 System.out.println("Ignoring STARS_UPDATE");

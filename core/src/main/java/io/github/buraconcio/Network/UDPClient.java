@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
+import io.github.buraconcio.Utils.GameManager;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.UdpPackage;
 import io.github.buraconcio.Utils.UdpPackage.PackType;
@@ -70,7 +71,7 @@ public class UDPClient {
 
     public UdpPackage selectPackType() {
 
-        switch (Constants.phase) {
+        switch (GameManager.getInstance().getCurrentPhase()) {
 
             case PLAY: {
                 return createBallPackage(); // AUMENTAR AS INFORMACÇOES DO PACKAGE DA BOLA
@@ -105,12 +106,13 @@ public class UDPClient {
 
     private UdpPackage createBallPackage() {
 
+        boolean ballState = Constants.localP().getBall().isAlive();
         Vector2 pos = Constants.localP().getBall().getWorldPosition();
         float x = pos.x;
         float y = pos.y;
         Vector2 velocity = Constants.localP().getBall().getBody().getLinearVelocity();
 
-        return new UdpPackage(id, x, y, velocity, PackType.BALL);
+        return new UdpPackage(id, x, y, velocity, ballState, PackType.BALL);
     }
 
     private UdpPackage createObstaclePackage() {

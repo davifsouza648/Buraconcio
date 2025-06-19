@@ -8,8 +8,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.buraconcio.Main;
-import io.github.buraconcio.Utils.CountdownTimer;
-import io.github.buraconcio.Utils.GameManager;
 
 public class VictoryScreen implements Screen {
 
@@ -29,7 +27,7 @@ public class VictoryScreen implements Screen {
 
     @Override
     public void show() {
-        Timer();
+
     }
 
     @Override
@@ -54,27 +52,6 @@ public class VictoryScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-    }
-
-    public void Timer(){
-
-
-        CountdownTimer countdown = new CountdownTimer(2, new CountdownTimer.TimerListener(){
-
-            @Override
-            public void tick(int remainingSecs) {
-
-            }
-
-            @Override
-            public void finish() {
-
-                Gdx.app.postRunnable(() -> game.setScreen(GameManager.getInstance().getPhysicsScreen()));
-            }
-
-        });
-
-        countdown.start();
     }
 
 }

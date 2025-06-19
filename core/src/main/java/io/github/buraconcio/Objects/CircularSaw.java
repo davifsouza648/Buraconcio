@@ -66,7 +66,7 @@ public class CircularSaw extends Obstacle {
         if (other instanceof Ball) {
             Ball ball = (Ball) other;
 
-            if (!ball.isAirborne())
+            if (!ball.isAirborne() && active) // coloquei um active aqui fds kkk
                 ball.getPlayer().die();
 
             return true;
@@ -94,6 +94,11 @@ public class CircularSaw extends Obstacle {
     @Override
     public void preRound() {
         animacao.resumeAnimation();
+    }
+
+    @Override
+    public void postRound(){
+        animacao.pauseAnimation();
     }
 
     private void createSawFixture(float sawPosition) {

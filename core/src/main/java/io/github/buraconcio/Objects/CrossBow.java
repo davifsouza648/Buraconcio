@@ -62,6 +62,11 @@ public class CrossBow extends Obstacle {
     }
 
     @Override
+    public void postRound(){
+        animacao.pauseAnimation();
+    }
+
+    @Override
     public void place() {
         super.place();
         body.getFixtureList().forEach(fixture -> {fixture.setSensor(false);});

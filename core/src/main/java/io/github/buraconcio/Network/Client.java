@@ -12,6 +12,8 @@ import java.util.List;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
+import io.github.buraconcio.Utils.GameManager;
+import io.github.buraconcio.Utils.GameManager.PHASE;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Screens.ServerScreen;
 
@@ -144,19 +146,27 @@ public class Client {
 
                         String phase = (String) msg.getPayload();
 
-                        Constants.setPhase(phase);
+                        GameManager.getInstance().setPhase(phase);
 
-                        if (Constants.phase == Constants.PHASE.SELECT_OBJ) {
+                        if (listenerGame != null) {
+                                listenerGame.GameScreen();
+                        }
+
+                        if (GameManager.getInstance().getCurrentPhase() == PHASE.SELECT_OBJ) {
 
                             Constants.localP().setCanSelect(true);
                             Constants.localP().setBallInteractable(false);
 
-                        } else if (Constants.phase == Constants.PHASE.PLAY) {
+                            if (listenerGame != null) {
+                                listenerGame.GameScreen();
+                            }
+
+                        } else if (GameManager.getInstance().getCurrentPhase() == PHASE.PLAY) {
 
                             Constants.localP().setCanSelect(false);
                             Constants.localP().setBallInteractable(true);
 
-                        } else if (Constants.phase == Constants.PHASE.SHOW_POINTS) {
+                        } else if (GameManager.getInstance().getCurrentPhase() == PHASE.SHOW_POINTS) {
 
                             Map<Integer, Integer> info = Map.of(Constants.localP().getId(),
                                     Constants.localP().getStars());
@@ -181,7 +191,7 @@ public class Client {
                                 listenerGame.showPoints();
                             }
 
-                        } else if (Constants.phase == Constants.PHASE.SHOW_WIN) {
+                        } else if (GameManager.getInstance().getCurrentPhase() == PHASE.SHOW_WIN) {
 
                             // ConnectionManager.getInstance().setUDPRun(false);
 
@@ -240,6 +250,8 @@ public class Client {
         void showWin();
 
         void showPoints();
+
+        void GameScreen();
     }
 
     public void setGameListener(GameStageListener listener) {
