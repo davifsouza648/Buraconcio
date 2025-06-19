@@ -4,7 +4,7 @@ import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Screens.PhysicsTest;
 
 public class Constants {
-    public static final float BALL_RADIUS = 0.5f;
+    public static final float BALL_RADIUS = 0.4f;
     public static final float MAX_IMPULSE = 25f;
     // quanto puxar o mouse pra ter forca maxima
     public static final float MAX_IMPULSE_DISTANCE = 5f;
