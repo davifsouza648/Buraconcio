@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 public class GameCamera extends OrthographicCamera {
     private Vector2 targetPos;
     private HUD hud;
+    private float lerp = 0.11f;
 
-    public GameCamera()
-    {
+    public GameCamera() {
         super(23, 13);
         this.zoom = (float) 1.17;
     }
@@ -30,5 +30,9 @@ public class GameCamera extends OrthographicCamera {
     public void teleportTo(Vector2 position) {
         this.position.set(position.x, position.y, 0);
         this.update();
+    }
+
+    public void setCameraLerpSpeed(float speed) {
+        this.lerp = speed;
     }
 }

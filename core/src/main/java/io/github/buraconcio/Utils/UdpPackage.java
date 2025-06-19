@@ -15,19 +15,24 @@ public class UdpPackage implements Serializable {
     }
 
     private int id, obsID;
-    private float ballX, ballY, ballVX, ballVY, isAlive, isInHole;
+
+    private float ballX, ballY, ballVX, ballVY;
+    private boolean isAlive, isInHole;
+
     private float obsX, obsY, obsVel;
+
 
     private PackType typeP;
 
     private boolean default_ = false;
 
-    public UdpPackage(int id, float x, float y, Vector2 vel, PackType p) {
+    public UdpPackage(int id, float x, float y, Vector2 vel, boolean isAlive, PackType p) {
         this.id = id;
         this.ballX = x;
         this.ballY = y;
         this.ballVX = vel.x;
         this.ballVY = vel.y;
+        this.isAlive = isAlive;
         this.typeP = p;
     }
 

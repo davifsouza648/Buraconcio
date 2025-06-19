@@ -6,15 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Objects.Player;
-import io.github.buraconcio.Utils.Constants;
-import io.github.buraconcio.Utils.CountdownTimer;
-import io.github.buraconcio.Utils.GameManager;
 import io.github.buraconcio.Utils.PlayerManager;
 
 public class PointsScreen implements Screen {
@@ -47,8 +43,6 @@ public class PointsScreen implements Screen {
             root.row();
 
         }
-
-        Timer();
     }
 
     @Override
@@ -78,31 +72,6 @@ public class PointsScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-    }
-
-    public void Timer() {
-
-        CountdownTimer countdown = new CountdownTimer(2, new CountdownTimer.TimerListener() {
-
-            @Override
-            public void tick(int remainingSecs) {
-
-            }
-
-            @Override
-            public void finish() {
-
-                Gdx.app.postRunnable(() -> {
-
-                    Constants.setPhase("play");
-                    game.setScreen(GameManager.getInstance().getPhysicsScreen());
-
-                });
-            }
-
-        });
-
-        countdown.start();
     }
 
 }

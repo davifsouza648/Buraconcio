@@ -1,11 +1,8 @@
 package io.github.buraconcio.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -14,28 +11,23 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
-import io.github.buraconcio.Network.Message;
 import io.github.buraconcio.Network.UDPClient;
 import io.github.buraconcio.Network.UDPServer;
 import io.github.buraconcio.Objects.*;
 import io.github.buraconcio.Utils.PlayerManager;
-import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
-import io.github.buraconcio.Utils.Constants.PHASE;
-import io.github.buraconcio.Utils.CountdownTimer;
 import io.github.buraconcio.Utils.CursorManager;
+import io.github.buraconcio.Utils.FlowManager;
 import io.github.buraconcio.Utils.GameInputAdapter;
 import io.github.buraconcio.Utils.GameManager;
+import io.github.buraconcio.Utils.GameManager.PHASE;
 import io.github.buraconcio.Utils.MapRenderer;
 import io.github.buraconcio.Utils.PhysicsManager;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 
-import java.lang.Runnable;
-import java.sql.Connection;
 
 public class PhysicsTest implements Screen {
     private Stage stage;
@@ -58,6 +50,7 @@ public class PhysicsTest implements Screen {
     float scale = 1 / 32f;
 
     private boolean paused = false;
+    private FlowManager flow;
 
     public PhysicsTest(Main game) {
 
@@ -107,6 +100,7 @@ public class PhysicsTest implements Screen {
 
         Gdx.input.setInputProcessor(multiplexerInput);
 
+        flow = new FlowManager(game);
     }
 
     @Override
@@ -130,22 +124,6 @@ public class PhysicsTest implements Screen {
 
         setListeners();
 
-        //teste
-        CountdownTimer countdown = new CountdownTimer(3, new CountdownTimer.TimerListener() {
-
-            @Override
-            public void tick(int remainingSecs) {
-            }
-
-            @Override
-            public void finish() {
-
-                if (Constants.isHosting() && Constants.localP().getStars() > 1)
-                    ConnectionManager.getInstance().getServer().sendString(Message.Type.PHASE_CHANGE, "show_points");
-            }
-        });
-
-        countdown.start();
     }
 
     @Override
@@ -158,11 +136,14 @@ public class PhysicsTest implements Screen {
         stage.act(delta);
 
         Obstacle selected = Constants.localP().getSelectedObstacle();
-        if (Constants.phase == PHASE.PLAY) {
+        if (GameManager.getInstance().getCurrentPhase() == PHASE.PLAY) {
             camera.setTarget(Constants.localP().getBall().getPosition());
-        } else if (Constants.phase == PHASE.SELECT_OBJ && selected != null) {
+            camera.setCameraLerpSpeed(0.05f);
+        } else if (GameManager.getInstance().getCurrentPhase() == PHASE.SELECT_OBJ && selected != null) {
             camera.setTarget(selected.getPosition());
+            camera.setCameraLerpSpeed(0.11f);
         }
+
 
         camera.updateCamera();
 
@@ -221,6 +202,13 @@ public class PhysicsTest implements Screen {
             public void showPoints() {
 
                 Gdx.app.postRunnable(() -> game.setScreen(new PointsScreen(game)));
+
+            }
+
+            @Override
+            public void GameScreen() {
+
+                Gdx.app.postRunnable(() -> game.setScreen(GameManager.getInstance().getPhysicsScreen()));
 
             }
 

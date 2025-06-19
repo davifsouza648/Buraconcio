@@ -18,7 +18,7 @@ import io.github.buraconcio.Objects.Ball;
 import io.github.buraconcio.Objects.GameCamera;
 
 public class GameInputAdapter extends InputAdapter {
-    
+
     private Vector2 mouse1 = new Vector2();
     private Player p;
     private Ball pBall;
@@ -27,7 +27,7 @@ public class GameInputAdapter extends InputAdapter {
 
     private static final float GRID_SIZE = 1f; // Tamanho da grid em unidades do mundo (não em pixels)
 
-    public GameInputAdapter(Player p, Ball pBall, GameCamera camera, Stage stage) 
+    public GameInputAdapter(Player p, Ball pBall, GameCamera camera, Stage stage)
     {
         super();
         this.p = p;
@@ -56,7 +56,7 @@ public class GameInputAdapter extends InputAdapter {
         });
     }
 
-    private Vector2 snapToGrid(Vector2 worldCoords) 
+    private Vector2 snapToGrid(Vector2 worldCoords)
     {
         float snappedX = Math.round(worldCoords.x / GRID_SIZE) * GRID_SIZE;
         float snappedY = Math.round(worldCoords.y / GRID_SIZE) * GRID_SIZE;
@@ -64,7 +64,7 @@ public class GameInputAdapter extends InputAdapter {
     }
 
     @Override
-    public boolean touchDown(int x, int y, int pointer, int button) 
+    public boolean touchDown(int x, int y, int pointer, int button)
     {
         mouse1.x = x;
         mouse1.y = y;
@@ -72,7 +72,7 @@ public class GameInputAdapter extends InputAdapter {
     }
 
     @Override
-    public boolean touchUp(int x, int y, int pointer, int button) 
+    public boolean touchUp(int x, int y, int pointer, int button)
     {
         p = PlayerManager.getInstance().getLocalPlayer();
         Vector3 unprojected = camera.unproject(new Vector3(mouse1.x, mouse1.y, 0));
@@ -81,7 +81,7 @@ public class GameInputAdapter extends InputAdapter {
         unprojected = camera.unproject(new Vector3(x, y, 0));
         Vector2 mouse2 = new Vector2(unprojected.x, unprojected.y);
 
-        Runnable task = () -> 
+        Runnable task = () ->
         {
             p.stroke(mouse1, mouse2);
         };
@@ -93,17 +93,17 @@ public class GameInputAdapter extends InputAdapter {
         Actor hitActor = stage.hit(stageCoords.x, stageCoords.y, true);
 
         Obstacle obstacle = p.getSelectedObstacle();
-        if (obstacle != null && obstacle.canPlace()) 
+        if (obstacle != null && obstacle.canPlace())
         {
             Vector2 snappedPos = snapToGrid(new Vector2(obstacle.getX(), obstacle.getY()));
             obstacle.setPosition(snappedPos.x, snappedPos.y);
             p.placeObstacle();
-            obstacle.preRound();
-        } 
-        else if (hitActor instanceof Obstacle) 
+            // obstacle.preRound();
+        }
+        else if (hitActor instanceof Obstacle)
         {
             Obstacle hitObstacle = (Obstacle) hitActor;
-            if (!hitObstacle.claimed()) 
+            if (!hitObstacle.claimed() && p.canSelect())
             {
                 p.selectObstacle(hitObstacle);
             }
@@ -112,7 +112,7 @@ public class GameInputAdapter extends InputAdapter {
         return true;
     }
 
-    public boolean touchDragged(int x, int y, int pointer) 
+    public boolean touchDragged(int x, int y, int pointer)
     {
         Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
         Vector2 currentMouse = new Vector2(unprojected.x, unprojected.y);
@@ -123,13 +123,13 @@ public class GameInputAdapter extends InputAdapter {
         return true;
     }
 
-    public boolean mouseMoved(int x, int y) 
+    public boolean mouseMoved(int x, int y)
     {
         p = PlayerManager.getInstance().getLocalPlayer();
         Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
         Vector2 worldCoords = new Vector2(unprojected.x, unprojected.y);
 
-        if (p.getSelectedObstacle() != null) 
+        if (p.getSelectedObstacle() != null)
         {
             Vector2 snappedPos = snapToGrid(worldCoords);
             p.getSelectedObstacle().move(snappedPos);
@@ -139,26 +139,26 @@ public class GameInputAdapter extends InputAdapter {
     }
 
     @Override
-    public boolean keyDown(int keyCode) 
+    public boolean keyDown(int keyCode)
     {
         p = PlayerManager.getInstance().getLocalPlayer();
-        if (keyCode == Keys.Q && p.getSelectedObstacle() != null) 
+        if (keyCode == Keys.Q && p.getSelectedObstacle() != null)
         {
             p.getSelectedObstacle().rotate(Obstacle.COUNTER_CLOCKWISE);
-        } 
-        else if (keyCode == Keys.E && p.getSelectedObstacle() != null) 
+        }
+        else if (keyCode == Keys.E && p.getSelectedObstacle() != null)
         {
             p.getSelectedObstacle().rotate(Obstacle.CLOCKWISE);
-        } 
-        else if (keyCode == Keys.NUM_1) 
+        }
+        else if (keyCode == Keys.NUM_1)
         {
             camera.zoom = 3f;
-        } 
-        else if (keyCode == Keys.NUM_2) 
+        }
+        else if (keyCode == Keys.NUM_2)
         {
             camera.zoom = 2f;
-        } 
-        else if (keyCode == Keys.NUM_3) 
+        }
+        else if (keyCode == Keys.NUM_3)
         {
             camera.zoom = 1.16f;
         }

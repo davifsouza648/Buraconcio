@@ -126,7 +126,6 @@ public class Player implements Serializable {
 
     public void collectStar() {
         hasStar = true;
-        stars += 12;
     }
 
     public void placeObstacle() {
