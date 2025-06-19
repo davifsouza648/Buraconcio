@@ -36,7 +36,7 @@ public class ServerScreen implements Screen {
     private final Stage stage;
     private final Skin skinTextField, skinLabel;
     private Table topInfo;
-    private ImageButton startButton, backButton;
+    private ImageButton startButton, backButton, mapButton;
     private ImageButtonStyle startStyle, cancelStyle;
     private Label title;
     private boolean started = false, flagBackButton = true;
@@ -170,7 +170,7 @@ public class ServerScreen implements Screen {
         startButton = start.createButton("start", "start");
 
         Button map = new Button();
-        ImageButton mapButton = map.createButton("map", "map");
+        mapButton = map.createButton("map", "map");
 
         topInfo.add(title).left().padBottom(20);
         topInfo.row();
@@ -361,6 +361,7 @@ public class ServerScreen implements Screen {
         if (!started) {
 
             startButton.setStyle(cancelStyle);
+            mapButton.setVisible(false);
 
             if (Constants.isHosting()) {
                 startButton.addListener(new ClickListener() {
@@ -381,6 +382,8 @@ public class ServerScreen implements Screen {
     private void cancelMatch() {
 
         startButton.setStyle(startStyle);
+        mapButton.setVisible(true);
+
         flagBackButton = true;
 
         if (Constants.isHosting()) {
@@ -456,7 +459,15 @@ public class ServerScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0.1f, 0, 1, true);
+        ScreenUtils.clear(0, 0, 0, 1, true);
+
+        // Desenha o mapa de fundo com opacidade reduzida
+        stage.getBatch().begin();
+        stage.getBatch().setColor(1, 1, 1, 0.25f); // Opacidade de 25%
+        stage.getBatch().draw(mapTextures[mapIndex], 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage.getBatch().setColor(1, 1, 1, 1);
+        stage.getBatch().end();
+
         stage.act(delta);
         stage.draw();
     }
