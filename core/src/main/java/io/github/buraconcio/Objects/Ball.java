@@ -242,6 +242,10 @@ public class Ball extends PhysicsEntity {
         return isAlive;
     }
 
+    public void resetLinearDamping() {
+        body.setLinearDamping(linDamp);
+    }
+
     public void setAlive(boolean flag){ //encaixar isso em uma funcao de renascer elas no spawn point
 
         isAlive = flag;
