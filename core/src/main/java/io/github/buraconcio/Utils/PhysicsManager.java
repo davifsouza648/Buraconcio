@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -290,4 +289,13 @@ public class PhysicsManager {
     }
 
     // TODO: METODO PARA ATUALIZAR VETOR DE ENTIDADES
+    public void dispose() {
+        while (world.isLocked());
+
+        world.dispose();
+        clearScheduler();
+        resetContactList();
+        entityList.clear();
+        playerStartPosById.clear();
+    }
 }

@@ -81,6 +81,11 @@ public class GameManager {
         inputs.addProcessor(processor);
     }
 
+    public void addProcessor(InputProcessor processor, int index) {
+        inputs.addProcessor(index, processor);
+    }
+
+
     public void setGameInputProcessor() {
         Gdx.input.setInputProcessor(inputs);
     }
@@ -137,6 +142,12 @@ public class GameManager {
 
     public void reloadPhysics() {
         physicsScreen = new PhysicsTest(physicsScreen.getGame());
+
+        setPhysicsScreen(physicsScreen);
+        setCurrentScreen(physicsScreen.getGame(), physicsScreen);
+
+        //PhysicsManager.getInstance().dispose();
+        //new PhysicsManager();
     }
 
     public GameCamera getPhysicsCamera() {

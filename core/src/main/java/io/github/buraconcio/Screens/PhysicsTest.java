@@ -91,7 +91,7 @@ public class PhysicsTest implements Screen {
 
         flow = new FlowManager(game);
 
-        GameManager.getInstance().addProcessor(hudStage);
+        GameManager.getInstance().addProcessor(hudStage, 0);
         GameManager.getInstance().setGameInputProcessor();
     }
 
@@ -182,8 +182,6 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void dispose() {
-        // stage.dispose();
-        // skin.dispose();
         mapRenderer.dispose();
         hudStage.dispose();
         stage.dispose();
