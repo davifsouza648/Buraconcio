@@ -38,7 +38,7 @@ public class ServerScreen implements Screen {
     private Table topInfo;
     private ImageButton startButton, backButton, mapButton;
     private ImageButtonStyle startStyle, cancelStyle;
-    private Label title;
+    private Label title, mapLabel;
     private boolean started = false, flagBackButton = true;
     private Client cliente = ConnectionManager.getInstance().getClient();
     private Server server = ConnectionManager.getInstance().getServer();
@@ -51,7 +51,15 @@ public class ServerScreen implements Screen {
             "maps-preview/teste.jpg",
             "maps-preview/teste1.jpg",
             "maps-preview/teste2.jpg"
-    };
+    },
+
+    mapNames = {
+        "TUTORIAL",
+        "test1",
+        "test2"
+    }
+    ;
+
     private Texture[] mapTextures;
 
     public ServerScreen(Main game) {
@@ -171,12 +179,15 @@ public class ServerScreen implements Screen {
 
         Button map = new Button();
         mapButton = map.createButton("map", "map");
-
+        mapLabel = new Label(mapNames[mapIndex], skinLabel, "labelPixelyWhite32");
         topInfo.add(title).left().padBottom(20);
         topInfo.row();
         topInfo.add(startButton).left().padBottom(10).size(280, 112);
         topInfo.row();
-        topInfo.add(mapButton).left().padBottom(20).size(140, 93);
+        topInfo.add(mapButton).left().size(140, 93);
+        topInfo.row();
+        topInfo.add(mapLabel).left().padTop(20);
+        topInfo.row();
 
         Table bottomInfo = new Table();
         bottomInfo.bottom().left();
@@ -454,7 +465,7 @@ public class ServerScreen implements Screen {
 
     private void nextMap() {
         mapImage.setDrawable(new TextureRegionDrawable(new TextureRegion(mapTextures[mapIndex])));
-
+        mapLabel.setText(mapNames[mapIndex]);
     }
 
     @Override

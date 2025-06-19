@@ -90,7 +90,7 @@ public class CreditsScreen implements Screen {
         table.row();
         table.add(nomes).padBottom(30);
         table.row();
-        table.add(backButtonImage).pad(10);
+        table.add(backButtonImage).pad(10).size(260, 104);
 
         table.setDebug(false);
 

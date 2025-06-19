@@ -102,7 +102,7 @@ public class MainMenu implements Screen {
 
         table.setFillParent(true);
         table.center();
-        table.add(buraconcioImage).padBottom(60).width(900).height(160).expandX().center().padRight(-22);
+        table.add(buraconcioImage).padBottom(60).width(1400).height(140).expandX().center().padRight(-22);
         table.row();
         table.add(imageButtonJoin).pad(15);
         table.row();
