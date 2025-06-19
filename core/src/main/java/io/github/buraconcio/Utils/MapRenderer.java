@@ -127,8 +127,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
         }
     }
 
-    private void createArcCollider(Ellipse ellipse, String name, float pixelsPerMeter, float thickness)
-    {
+    private void createArcCollider(Ellipse ellipse, String name, float pixelsPerMeter, float thickness) {
         float x = ellipse.x / pixelsPerMeter;
         float y = ellipse.y / pixelsPerMeter;
         float width = ellipse.width / pixelsPerMeter;
@@ -137,27 +136,45 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
         float centerX = x + width / 2f;
         float centerY = y + height / 2f;
 
-        int curvaIndex = 1;
-        try {
-            String indexString = name.replaceAll("[^0-9]", "");
-            if (!indexString.isEmpty()) curvaIndex = Integer.parseInt(indexString);
-        } catch (NumberFormatException ignored) {}
-
         float startAngle = 0f;
+        float sweepAngle = 0f;
 
-        switch (curvaIndex) {
-            case 1: // inferior esquerdo
-                startAngle = (float) Math.PI;
-                break;
-            case 2: // inferior direito
-                startAngle = (float) (3 * Math.PI / 2);
-                break;
-            case 3: // superior direito
-                startAngle = 0f;
-                break;
-            case 4: // superior esquerdo
-                startAngle = (float) (Math.PI / 2);
-                break;
+        if (name.equalsIgnoreCase("CurvaCompleta")) {
+            startAngle = 0f;
+            sweepAngle = (float) (2 * Math.PI);
+        } else if (name.startsWith("CurvaBaixo")) {
+            startAngle = (float) Math.PI;            
+            sweepAngle = (float) Math.PI;            
+        } else if (name.startsWith("CurvaCima")) {
+            startAngle = 0f;                        
+            sweepAngle = (float) Math.PI;           
+        } else if (name.startsWith("Curva")) {
+            // Verificar se é Curva1, 2, 3 ou 4
+            int curvaIndex = 1;
+            try {
+                String indexString = name.replaceAll("[^0-9]", "");
+                if (!indexString.isEmpty()) curvaIndex = Integer.parseInt(indexString);
+            } catch (NumberFormatException ignored) {}
+
+            sweepAngle = (float) (Math.PI / 2);
+
+            switch (curvaIndex) {
+                case 1: // inferior esquerdo
+                    startAngle = (float) Math.PI;
+                    break;
+                case 2: // inferior direito
+                    startAngle = (float) (3 * Math.PI / 2);
+                    break;
+                case 3: // superior direito
+                    startAngle = 0f;
+                    break;
+                case 4: // superior esquerdo
+                    startAngle = (float) (Math.PI / 2);
+                    break;
+                default:
+                    startAngle = 0f;
+                    break;
+            }
         }
 
         // Raios da elipse
@@ -166,26 +183,26 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
         float innerRadiusX = outerRadiusX - thickness;
         float innerRadiusY = outerRadiusY - thickness;
 
-        // Suavidade da curva (aumente para mais suave)
+        // Suavidade da curva (quanto mais segmentos, mais suave)
         int segments = 30;
 
         Vector2[] outerArc = new Vector2[segments + 1];
         Vector2[] innerArc = new Vector2[segments + 1];
 
         for (int i = 0; i <= segments; i++) {
-            float angle = startAngle + (float) (Math.PI / 2) * i / segments;
+            float angle = startAngle + sweepAngle * i / segments;
 
             outerArc[i] = new Vector2(
-                centerX + (float) Math.cos(angle) * outerRadiusX,
-                centerY + (float) Math.sin(angle) * outerRadiusY
+                    centerX + (float) Math.cos(angle) * outerRadiusX,
+                    centerY + (float) Math.sin(angle) * outerRadiusY
             );
             innerArc[i] = new Vector2(
-                centerX + (float) Math.cos(angle) * innerRadiusX,
-                centerY + (float) Math.sin(angle) * innerRadiusY
+                    centerX + (float) Math.cos(angle) * innerRadiusX,
+                    centerY + (float) Math.sin(angle) * innerRadiusY
             );
         }
 
-        // Cria entidade física com corpo para a curva
+        // Cria entidade física
         PhysicsEntity entity = new PhysicsEntity(new Vector2(centerX, centerY), new Vector2(width, height));
 
         for (int i = 0; i < segments; i++) {
@@ -197,9 +214,9 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
             // Triângulo 1
             PolygonShape shape1 = new PolygonShape();
             shape1.set(new Vector2[]{
-                new Vector2(p1.x - centerX, p1.y - centerY),
-                new Vector2(p2.x - centerX, p2.y - centerY),
-                new Vector2(p3.x - centerX, p3.y - centerY)
+                    new Vector2(p1.x - centerX, p1.y - centerY),
+                    new Vector2(p2.x - centerX, p2.y - centerY),
+                    new Vector2(p3.x - centerX, p3.y - centerY)
             });
             entity.getBody().createFixture(shape1, 0f);
             shape1.dispose();
@@ -207,9 +224,9 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
             // Triângulo 2
             PolygonShape shape2 = new PolygonShape();
             shape2.set(new Vector2[]{
-                new Vector2(p1.x - centerX, p1.y - centerY),
-                new Vector2(p3.x - centerX, p3.y - centerY),
-                new Vector2(p4.x - centerX, p4.y - centerY)
+                    new Vector2(p1.x - centerX, p1.y - centerY),
+                    new Vector2(p3.x - centerX, p3.y - centerY),
+                    new Vector2(p4.x - centerX, p4.y - centerY)
             });
             entity.getBody().createFixture(shape2, 0f);
             shape2.dispose();
