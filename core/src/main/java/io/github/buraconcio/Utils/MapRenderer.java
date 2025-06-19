@@ -61,6 +61,50 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
                 Ellipse ellipse = ((EllipseMapObject) object).getEllipse();
                 createArcCollider(ellipse, object.getName(), pixelsPerMeter, 0.005f);
             }
+
+            else if ("DiagonalPrincipal".equals(object.getName()) || "DiagonalSecundaria".equals(object.getName()))
+            {
+                Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+                float x = (rect.x + rect.width / 2) / pixelsPerMeter;
+                float y = (rect.y + rect.height / 2) / pixelsPerMeter;
+                float width = rect.width / pixelsPerMeter;
+                float height = rect.height / pixelsPerMeter;
+
+                PhysicsEntity entity = new PhysicsEntity(new Vector2(x, y), new Vector2(width, height));
+
+                Vector2 p1, p2;
+
+                if ("DiagonalSecundaria".equals(object.getName())) {
+                    // Da parte inferior esquerda para superior direita
+                    p1 = new Vector2((rect.x) / pixelsPerMeter, (rect.y) / pixelsPerMeter);
+                    p2 = new Vector2((rect.x + rect.width) / pixelsPerMeter, (rect.y + rect.height) / pixelsPerMeter);
+                } else {
+                    // Da parte superior esquerda para inferior direita
+                    p1 = new Vector2((rect.x) / pixelsPerMeter, (rect.y + rect.height) / pixelsPerMeter);
+                    p2 = new Vector2((rect.x + rect.width) / pixelsPerMeter, (rect.y) / pixelsPerMeter);
+                }
+
+                // Centraliza os pontos no corpo físico
+                p1.sub(x, y);
+                p2.sub(x, y);
+
+                // Cria um retângulo fino (linha com espessura)
+                Vector2 dir = new Vector2(p2).sub(p1).nor();
+                Vector2 normal = new Vector2(-dir.y, dir.x).scl(0.02f); // Espessura da linha (ajustável)
+
+                PolygonShape shape = new PolygonShape();
+                shape.set(new Vector2[]{
+                    p1.cpy().add(normal),
+                    p1.cpy().sub(normal),
+                    p2.cpy().sub(normal),
+                    p2.cpy().add(normal)
+                });
+
+                entity.getBody().createFixture(shape, 0f);
+                shape.dispose();
+            }
+
         }
     }
 
