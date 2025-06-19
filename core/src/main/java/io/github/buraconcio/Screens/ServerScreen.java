@@ -1,7 +1,6 @@
 package io.github.buraconcio.Screens;
 
 import java.io.IOException;
-// import java.lang.classfile.Label;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -17,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-// import com.badlogic.gdx.scenes.scene2d.Touchable;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Client;
@@ -441,11 +439,11 @@ public class ServerScreen implements Screen {
 
                         //pass the mapIndex
 
-                        GameManager.getInstance().setPhysicsScreen(new PhysicsTest(game));
+                        PhysicsTest screen = new PhysicsTest(game);
+                        GameManager.getInstance().setPhysicsScreen(screen);
                         GameManager.getInstance().setMapIndex(mapIndex);
 
-                        game.setScreen(GameManager.getInstance().getPhysicsScreen());
-
+                        GameManager.getInstance().setCurrentScreen(game, screen);
                     }
                 });
 

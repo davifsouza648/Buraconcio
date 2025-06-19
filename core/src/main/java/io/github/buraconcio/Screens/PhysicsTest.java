@@ -19,7 +19,6 @@ import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.FlowManager;
-import io.github.buraconcio.Utils.GameInputAdapter;
 import io.github.buraconcio.Utils.GameManager;
 import io.github.buraconcio.Utils.GameManager.PHASE;
 import io.github.buraconcio.Utils.MapRenderer;
@@ -30,18 +29,14 @@ import com.badlogic.gdx.physics.box2d.*;
 
 
 public class PhysicsTest implements Screen {
+    private final Main game;
     private Stage stage;
     private Stage hudStage;
-
-    private Skin skin;
-    private final Main game;
-
-    private Obstacle testObstacle;
 
     private Box2DDebugRenderer debugRenderer;
     private GameCamera camera;
 
-    Player p;
+    private Player p;
     private Ball pBall;
 
     private HUD hud;
@@ -53,18 +48,15 @@ public class PhysicsTest implements Screen {
     private FlowManager flow;
 
     public PhysicsTest(Main game) {
-
         this.game = game;
+        mapRenderer = new MapRenderer("mapa0");
 
-        mapRenderer = new MapRenderer("mapa" + GameManager.getInstance().getMapIndex());
-
-        // debugRenderer = new Box2DDebugRenderer();
+        debugRenderer = new Box2DDebugRenderer();
 
         stage = new Stage(new ExtendViewport(23, 13));
         hudStage = new Stage(new FitViewport(800, 480));
-        Gdx.input.setInputProcessor(stage);
 
-        // stage.setDebugAll(true);
+        stage.setDebugAll(true);
         PhysicsManager.getInstance().setStage(stage);
 
         mapRenderer.createCollisions();
@@ -82,25 +74,20 @@ public class PhysicsTest implements Screen {
 
         camera = new GameCamera();
         stage.getViewport().setCamera(camera);
-
         hud = new HUD(hudStage, PlayerManager.getInstance().getLocalPlayer().getId());
 
-        testObstacle = new CrossBow(new Vector2(10.5f, 2f), new Vector2(3f, 3f));
-        testObstacle.rotate(Obstacle.COUNTER_CLOCKWISE);
 
+        new CrossBow(new Vector2(10.5f, 2f), new Vector2(3f, 3f));
         new Star(new Vector2(12.5f, 2f), new Vector2(1f, 1f));
         new BoostPad(new Vector2(14.5f, 2f), new Vector2(3f, -1f));
         new BlackHole(new Vector2(16.5f, 2f), new Vector2(3f, -1f));
         new CircularSaw(new Vector2(12.5f, 7f), new Vector2(-1f, 1f));
         new Trampoline(new Vector2(14.5f, 7f), new Vector2(-1f, 1f));
 
-        InputMultiplexer multiplexerInput = new InputMultiplexer();
-        multiplexerInput.addProcessor(hudStage);
-        multiplexerInput.addProcessor(new GameInputAdapter(p, pBall, camera, stage));
-
-        Gdx.input.setInputProcessor(multiplexerInput);
-
         flow = new FlowManager(game);
+
+        GameManager.getInstance().addProcessor(hudStage);
+        GameManager.getInstance().setGameInputProcessor();
     }
 
     @Override
@@ -155,8 +142,7 @@ public class PhysicsTest implements Screen {
         stage.getViewport().setCamera(camera);
         stage.draw();
 
-        // debugRenderer.render(PhysicsManager.getInstance().getWorld(),
-        // camera.combined);
+        debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
 
         PhysicsManager.getInstance().tick();
     }
@@ -176,17 +162,30 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void hide() {
-        paused = true;
     }
 
     @Override
     public void dispose() {
-        // stage.dispose();
-        // skin.dispose();
+        //stage.dispose();
+        //skin.dispose();
     }
+
+    public GameCamera getCamera() {
+        return this.camera;
+    }
+
+    public Stage getStage() {
+        return this.stage;
+    }
+
+    public Main getGame() {
+        return this.game;
+    }
+
 
     public void setListeners() {
 
+        try {
         Client client = ConnectionManager.getInstance().getClient();
 
         client.setGameListener(new Client.GameStageListener() {
@@ -194,14 +193,14 @@ public class PhysicsTest implements Screen {
             @Override
             public void showWin() {
 
-                Gdx.app.postRunnable(() -> game.setScreen(new VictoryScreen(game)));
+                Gdx.app.postRunnable(() -> GameManager.getInstance().setCurrentScreen(game, new VictoryScreen(game)));
 
             }
 
             @Override
             public void showPoints() {
 
-                Gdx.app.postRunnable(() -> game.setScreen(new PointsScreen(game)));
+                Gdx.app.postRunnable(() -> GameManager.getInstance().setCurrentScreen(game, new PointsScreen(game)));
 
             }
 
@@ -214,6 +213,8 @@ public class PhysicsTest implements Screen {
 
         });
 
+        } catch (Exception e) {
+            System.out.println("normal error if testing physics");
+        }
     }
-
 }

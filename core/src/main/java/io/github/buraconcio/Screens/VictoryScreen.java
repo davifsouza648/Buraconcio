@@ -53,7 +53,6 @@ public class VictoryScreen implements Screen {
     public void dispose() {
         stage.dispose();
     }
-
 }
 
 

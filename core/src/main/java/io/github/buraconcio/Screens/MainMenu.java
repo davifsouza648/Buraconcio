@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Utils.CursorManager;
+import io.github.buraconcio.Utils.GameManager;
 import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Objects.Button;
@@ -60,7 +61,7 @@ public class MainMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 PlayerManager.getInstance().getLocalPlayer().setHosting(false);
 
-                // game.setScreen(new PhysicsTest(game));
+                // game.setScreen(new PhysicsTest());
 
                 game.setScreen(new LoadingScreen(game)); // arrumar loading screen
 
@@ -128,7 +129,10 @@ public class MainMenu implements Screen {
         teste.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new PhysicsTest(game));
+                PhysicsTest screen = new PhysicsTest(game);
+                GameManager.getInstance().setPhysicsScreen(screen);
+                GameManager.getInstance().setCurrentScreen(game, screen);
+
                 stage.dispose();
             }
         });
