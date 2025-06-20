@@ -11,8 +11,9 @@ import io.github.buraconcio.Utils.SoundManager;
 import java.lang.Math;
 
 public class BoostPad extends Obstacle {
+    private static final Vector2 size = new Vector2(3f, -1f);
 
-    public BoostPad (Vector2 pos, Vector2 size) {
+    public BoostPad (Vector2 pos) {
         super(pos, size,
             Auxiliaries.animationFromFiles("obstacles/boostpad/boostpad.png", "obstacles/boostpad/boostpad.json"));
 
@@ -20,7 +21,7 @@ public class BoostPad extends Obstacle {
 
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
-        shape.setAsBox(size.x/2, size.y/2);
+        shape.setAsBox(size.x/2, getHeight()/2);
         fixtureDef.shape = shape;
         fixtureDef.isSensor = true;
         body.createFixture(fixtureDef);

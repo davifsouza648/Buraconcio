@@ -78,19 +78,19 @@ public class PhysicsTest implements Screen {
         stage.getViewport().setCamera(camera);
         hud = new HUD(hudStage, PlayerManager.getInstance().getLocalPlayer().getId());
 
-        new CrossBow(new Vector2(10.5f, 2f), new Vector2(3f, 3f));
-        new Star(new Vector2(12.5f, 2f), new Vector2(1f, 1f));
-        new BoostPad(new Vector2(14.5f, 2f), new Vector2(3f, -1f));
-        new BlackHole(new Vector2(16.5f, 2f), new Vector2(3f, -1f));
-        new CircularSaw(new Vector2(12.5f, 7f), new Vector2(-1f, 1f));
-        new Trampoline(new Vector2(14.5f, 7f), new Vector2(-1f, 1f));
-        new Mine(new Vector2(16.5f, 7f), new Vector2(-1f, 1f));
-        new Honey(new Vector2(10.5f, 9f), new Vector2(-1f, 1f));
-        new WoodBox(new Vector2(12.5f, 9f));
-        new LongWoodBox(new Vector2(18.5f, 9f));
-        new MetalBox(new Vector2(10.5f, 12f));
-        new LongMetalBox(new Vector2(16.5f, 12f));
-        new LMetalBox(new Vector2(22.5f, 12f));
+        new CrossBow(new Vector2(9f, 35f));
+        new Star(new Vector2(12f, 35f));
+        new BoostPad(new Vector2(15f, 35f));
+        new BlackHole(new Vector2(19f, 35f));
+        new CircularSaw(new Vector2(9f, 30f));
+        new Trampoline(new Vector2(15f, 30f));
+        new Mine(new Vector2(17.5f, 30f));
+        new Honey(new Vector2(20f, 30f));
+        new WoodBox(new Vector2(5f, 25f));
+        new LongWoodBox(new Vector2(10f, 25f));
+        new MetalBox(new Vector2(15f, 25f));
+        new LongMetalBox(new Vector2(20f, 25f));
+        new LMetalBox(new Vector2(27f, 25f));
 
         flow = new FlowManager();
 

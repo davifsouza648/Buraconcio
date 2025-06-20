@@ -9,13 +9,15 @@ import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.SoundManager;
 
 public class Trampoline extends Obstacle {
-    public Trampoline(Vector2 pos, Vector2 size) {
+    private static final Vector2 size = new Vector2(2f, -1f);
+
+    public Trampoline(Vector2 pos) {
         super(pos, size,
         Auxiliaries.animationFromFiles("obstacles/trampoline/trampoline.png", "obstacles/trampoline/trampoline.json"));
         animacao.pauseAnimation();
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(size.x/2, size.y/2);
+        shape.setAsBox(size.x/2, size.x/2, new Vector2(0f, -getHeight()/2 + size.x/2), 0f);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;

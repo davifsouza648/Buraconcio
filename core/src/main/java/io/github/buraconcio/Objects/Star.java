@@ -5,12 +5,13 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 import io.github.buraconcio.Utils.Auxiliaries;
-import io.github.buraconcio.Utils.PhysicsManager;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.SoundManager;
 
 public class Star extends Obstacle {
-    public Star(Vector2 pos, Vector2 size) {
+    private static final Vector2 size = new Vector2(1f, 1f);
+
+    public Star(Vector2 pos) {
         super(pos, size,
             Auxiliaries.animationFromFiles("obstacles/star/star.png", "obstacles/star/star.json"));
 
@@ -30,7 +31,7 @@ public class Star extends Obstacle {
 
     @Override
     public boolean contact(PhysicsEntity other) {
-        if (disabled)
+        if (disabled || !active)
             return true;
 
         if (other instanceof Ball) {

@@ -12,6 +12,7 @@ import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.SoundManager;
 
 public class CircularSaw extends Obstacle {
+    private static final Vector2 size = new Vector2(-1f, 2f);
     private float elapsedTime = 0f;
 
     private static final int idleFrames = 4; // por favor ninguem troca a animacao velho tem mt hard code
@@ -19,7 +20,7 @@ public class CircularSaw extends Obstacle {
     private int framesToMove;
     private float circleRadius;
 
-    public CircularSaw(Vector2 pos, Vector2 size) {
+    public CircularSaw(Vector2 pos) {
         super(pos, size,
             Auxiliaries.animationFromFiles("obstacles/circularSaw/circularSaw.png", "obstacles/circularSaw/circularSaw.json"));
 

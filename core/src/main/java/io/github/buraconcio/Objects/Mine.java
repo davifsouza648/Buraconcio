@@ -11,12 +11,13 @@ import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.SoundManager;
 
 public class Mine extends Obstacle {
+    private static final Vector2 size = new Vector2(1f, 1f);
     private static final float detectionRadiusMultiplyer = 1.25f;
     private static final float ExplosionRadiusMultiplyer = 4f;
     private static final int explosionFrame = 10;
 
 
-    public Mine(Vector2 pos, Vector2 size) {
+    public Mine(Vector2 pos) {
         super(pos, size,
         Auxiliaries.animationFromFiles("obstacles/mine/mine.png", "obstacles/mine/mine.json"));
 
@@ -40,10 +41,16 @@ public class Mine extends Obstacle {
 
     @Override
     public boolean contact(PhysicsEntity entity) {
-        if (entity instanceof Ball) {
-            animacao.playOnce();
+        if (!active) return false;
 
-            return true;
+        if (entity instanceof Ball) {
+            Ball ball = (Ball) entity;
+
+            if (!ball.isAirborne()) {
+                animacao.playOnce();
+
+                return true;
+            }
         }
 
         return false;

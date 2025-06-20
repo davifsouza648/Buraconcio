@@ -40,6 +40,12 @@ public class Arrow extends PhysicsEntity {
 
     @Override
     public boolean contact(PhysicsEntity entity) {
+
+        Random rand = new Random();
+        int idHitSound = rand.nextInt(2) + 1;
+
+        SoundManager.getInstance().playProximity("arrowHit" + String.valueOf(idHitSound), this.getPosition(), PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
+
         if (entity instanceof Ball) {
             Ball ball = (Ball) entity;
 
@@ -49,11 +55,11 @@ public class Arrow extends PhysicsEntity {
 
                 return true;
             }
-        }
-        Random rand = new Random();
-        int idHitSound = rand.nextInt(2) + 1;
+        } else if (!(entity instanceof BlackHole)) {
+            this.destroy();
 
-        SoundManager.getInstance().playProximity("arrowHit" + String.valueOf(idHitSound), this.getPosition(), PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
+            return true;
+        }
 
         return false;
     }

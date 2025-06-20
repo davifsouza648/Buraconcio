@@ -37,6 +37,8 @@ public class WoodBox extends Obstacle {
 
     @Override
     public boolean contact(PhysicsEntity entity) {
+        if (!active) return false;
+
         animacao.playOnce();
 
         return true;

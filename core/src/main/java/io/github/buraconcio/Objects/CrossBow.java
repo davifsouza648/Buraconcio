@@ -13,9 +13,11 @@ public class CrossBow extends Obstacle {
     public static final float arrowSpeed = 7.5f;
     public static final float frameDuration = 0.05f;
 
+    private static final Vector2 size = new Vector2(3f, 3f);
+
     private boolean canSpawn = true;
 
-    public CrossBow(Vector2 pos, Vector2 size) {
+    public CrossBow(Vector2 pos) {
         super(pos, size,
             Auxiliaries.animationFromFiles("obstacles/crossbow/crossbow.png", "obstacles/crossbow/crossbow.json"));
 

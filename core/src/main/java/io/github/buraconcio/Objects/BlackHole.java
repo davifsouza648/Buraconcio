@@ -7,12 +7,13 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import io.github.buraconcio.Utils.Auxiliaries;
 
 public class BlackHole extends Obstacle {
+    public static final Vector2 size = new Vector2(3f, -1f);
     public static final float ACTION_RADIUS = 5f;
     public static final float G = 0.09f;
     public static final float mass = 3000f;
     public static final float killRadius = 0.5f;
 
-    public BlackHole(Vector2 pos, Vector2 size) {
+    public BlackHole(Vector2 pos) {
         super(pos, size,
             Auxiliaries.animationFromFiles("obstacles/blackhole/blackhole.png", "obstacles/blackhole/blackHole.json"));
 

@@ -14,17 +14,18 @@ import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.SoundManager;
 
 public class Honey extends Obstacle{
+    private static final Vector2 size = new Vector2(2f, -1f);
     private static final float damping = 1000f;
     private static final int effectDuration = 2000; //ms
 
     private boolean ballIsEffected = false;
 
-    public Honey(Vector2 pos, Vector2 size) {
+    public Honey(Vector2 pos) {
         super(pos, size,
         Auxiliaries.animationFromFiles("obstacles/honey/honey.png", "obstacles/honey/honey.json"));
 
         PolygonShape polygonShape = new PolygonShape();
-        polygonShape.setAsBox(size.x/2, size.y/2);
+        polygonShape.setAsBox(size.x/2, getHeight()/2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
@@ -41,6 +42,8 @@ public class Honey extends Obstacle{
 
     @Override
     public boolean contact(PhysicsEntity entity) {
+        if (!active) return false;
+
         if (ballIsEffected) return false;
 
         if (entity instanceof Ball) {
