@@ -1,0 +1,86 @@
+{ "frames": [
+   {
+    "filename": "train 0.ase",
+    "frame": { "x": 0, "y": 0, "w": 64, "h": 371 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 371 },
+    "sourceSize": { "w": 64, "h": 371 },
+    "duration": 100
+   },
+   {
+    "filename": "train 1.ase",
+    "frame": { "x": 64, "y": 0, "w": 64, "h": 371 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 371 },
+    "sourceSize": { "w": 64, "h": 371 },
+    "duration": 100
+   },
+   {
+    "filename": "train 2.ase",
+    "frame": { "x": 128, "y": 0, "w": 64, "h": 371 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 371 },
+    "sourceSize": { "w": 64, "h": 371 },
+    "duration": 100
+   },
+   {
+    "filename": "train 3.ase",
+    "frame": { "x": 192, "y": 0, "w": 64, "h": 371 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 371 },
+    "sourceSize": { "w": 64, "h": 371 },
+    "duration": 100
+   },
+   {
+    "filename": "train 4.ase",
+    "frame": { "x": 256, "y": 0, "w": 64, "h": 371 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 371 },
+    "sourceSize": { "w": 64, "h": 371 },
+    "duration": 100
+   },
+   {
+    "filename": "train 5.ase",
+    "frame": { "x": 320, "y": 0, "w": 64, "h": 371 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 371 },
+    "sourceSize": { "w": 64, "h": 371 },
+    "duration": 100
+   },
+   {
+    "filename": "train 6.ase",
+    "frame": { "x": 384, "y": 0, "w": 64, "h": 371 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 371 },
+    "sourceSize": { "w": 64, "h": 371 },
+    "duration": 100
+   },
+   {
+    "filename": "train 7.ase",
+    "frame": { "x": 448, "y": 0, "w": 64, "h": 371 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 64, "h": 371 },
+    "sourceSize": { "w": 64, "h": 371 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "https://github.com/LibreSprite/LibreSprite/",
+  "version": "1.1-dev",
+  "image": "C:\\Users\\Masao\\Downloads\\Pixel UI pack 1\\train\\train.png",
+  "format": "RGBA8888",
+  "size": { "w": 512, "h": 371 },
+  "scale": "1",
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}
