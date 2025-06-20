@@ -20,7 +20,7 @@ public class UdpPackage implements Serializable {
     private boolean isAlive, isInHole;
 
     private float obsX, obsY, obsVel;
-
+    private boolean obsPlaced, obsOrientation;
 
     private PackType typeP;
 
@@ -36,17 +36,20 @@ public class UdpPackage implements Serializable {
         this.typeP = p;
     }
 
-    public UdpPackage(int id, float x, float y, /*Vector2 obsVel,*/ int ObsId, PackType p) {
+    public UdpPackage(int id, float x, float y, int ObsId, PackType p) {
         this.id = id;
         this.obsX = x;
         this.obsY = y;
         this.obsID = ObsId;
         this.typeP = p;
+
     }
 
-    public UdpPackage(int id, PackType p) {
+
+    public UdpPackage(int id, boolean obsPlaced, PackType p) {
         this.id = id;
         this.typeP = p;
+        this.obsPlaced = obsPlaced;
     }
 
     public boolean getDefault(){
@@ -87,6 +90,10 @@ public class UdpPackage implements Serializable {
 
     public PackType getTypeP(){
         return typeP;
+    }
+
+    public boolean getObsPlaced(){
+        return obsPlaced;
     }
 
     public String toBallString() {

@@ -41,7 +41,6 @@ public class FlowManager {
     }
 
     public void startSelectObstaclePhase() {
-
         changePhase("select_obj");
 
         timer = new CountdownTimer(GameManager.getInstance().getSelectTime(), new CountdownTimer.TimerListener() {
@@ -49,7 +48,12 @@ public class FlowManager {
             @Override
             public void tick(int remainingSecs) {
 
-                //verificar se todos já colocaram seus obstaculos
+                //verificar se todos já colocaram seus obstaculos e puxar a finish()
+
+                if(PlayerManager.getInstance().hasEveryonePlaced()){
+                    System.out.println("TODOS COLOCARAM");
+                    finish();
+                }
 
             }
 
@@ -61,10 +65,10 @@ public class FlowManager {
                     if (p.getSelectedObstacle() != null && p.getSelectedObstacle().canPlace()) {
 
                         p.placeObstacle();
-
                     }
-
                 }
+
+                PlayerManager.getInstance().setEveryonePlaced(false);
 
                 startPlayPhase();
                 PhysicsManager.getInstance().preRoundObstacles();

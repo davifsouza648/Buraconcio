@@ -79,6 +79,8 @@ public class UDPClient {
             case SELECT_OBJ: {
                 if (Constants.localP().getSelectedObstacle() != null) {
                     return createObstaclePackage();
+                }else{
+                    return createDefaultPackage();
                 }
             }
             default:
@@ -120,6 +122,7 @@ public class UDPClient {
         Vector2 pos = Constants.localP().getSelectedObstacle().getWorldPosition();
         float x = pos.x;
         float y = pos.y;
+        boolean placed = Constants.localP().hasPlacedObstacle();
         // Vector2 velocity =
         // Constants.localP().getSelectedObstacle().getBody().getLinearVelocity();
 
@@ -129,14 +132,16 @@ public class UDPClient {
              ObsID= Constants.localP().getSelectedObstacle().getId();
              return new UdpPackage(id, x, y, ObsID, PackType.OBSTACLE);
         }else{
-            return new UdpPackage(id, PackType.DEFAULT);
+            return new UdpPackage(id, placed, PackType.DEFAULT);
         }
 
 
     }
 
     private UdpPackage createDefaultPackage() {
-        return new UdpPackage(id, PackType.DEFAULT);
+        boolean placed = Constants.localP().hasPlacedObstacle();
+
+        return new UdpPackage(id, placed, PackType.DEFAULT);
     }
 
     private byte[] serialize(UdpPackage packet) throws IOException {

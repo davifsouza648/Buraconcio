@@ -21,8 +21,8 @@ public class GameManager {
     private PhysicsTest physicsScreen;
     private Screen currentScreen;
 
-    private int play_time = 5;
-    private int select_time = 5;
+    private int play_time = 10;
+    private int select_time = 20;
     private int points_time = 5;
     private int win_time = 55;
 

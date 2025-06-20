@@ -24,6 +24,7 @@ public class Player implements Serializable {
     private boolean canSelect = true;
     private Vector2 startingPos = null;
     private boolean hasStar = false;
+    private boolean hasPlacedObstacle;
 
     private transient ArrayList<Sound> strokeSounds = new ArrayList<>();
 
@@ -82,7 +83,11 @@ public class Player implements Serializable {
 
         if (selectedObstacle != null)
             selectedObstacle.move(obstaclePos);
+    }
 
+    public void update(boolean placed) {
+        System.out.println("atualizando o placed para: " + placed);
+        setHasPlacedObstacle(placed);
     }
 
     public void stroke(Vector2 mouse1, Vector2 mouse2) {
@@ -131,6 +136,8 @@ public class Player implements Serializable {
     public void placeObstacle() {
         selectedObstacle.place();
         selectedObstacle = null;
+
+        hasPlacedObstacle = true;
     }
 
     public void setCanSelect(boolean canSelect) {
@@ -151,7 +158,6 @@ public class Player implements Serializable {
         obstacle.claim();
 
         canSelect = false;
-
     }
 
     public Obstacle getSelectedObstacle() {
@@ -205,6 +211,14 @@ public class Player implements Serializable {
 
     public int getStrokes() {
         return this.strokes;
+    }
+
+    public Boolean hasPlacedObstacle(){
+        return hasPlacedObstacle;
+    }
+
+    public void setHasPlacedObstacle(boolean flag){
+        hasPlacedObstacle = flag;
     }
 
     private void initSounds() {

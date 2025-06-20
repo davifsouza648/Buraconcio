@@ -45,7 +45,9 @@ public class ObstacleInputAdapter extends InputAdapter {
             Vector2 snappedPos = snapToGrid(new Vector2(obstacle.getX(), obstacle.getY()));
             obstacle.setPosition(snappedPos.x, snappedPos.y);
             p.placeObstacle();
-            obstacle.preRound();
+
+            //desativar para que o preround seja feito no flowmanager
+            // obstacle.preRound();
         }
         else if (hitActor instanceof Obstacle)
         {

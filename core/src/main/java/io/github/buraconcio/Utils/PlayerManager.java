@@ -104,6 +104,8 @@ public class PlayerManager {
                 int playerId = pack.getId();
                 PackType type = pack.getTypeP();
 
+
+
                 if (playerId != Constants.localP().getId()) {
 
                     if (type == PackType.BALL) {
@@ -119,6 +121,7 @@ public class PlayerManager {
                         PlayerManager.getInstance().getPlayer(playerId).update(obstaclePos, pack.getObsId());
 
                     } else {
+                        PlayerManager.getInstance().getPlayer(playerId).update(pack.getObsPlaced());
                         return;
                     }
                 }
@@ -173,7 +176,24 @@ public class PlayerManager {
 
     public void setAllBallsAlive() {
         for (Player p : players) {
-            p.getBall().setAlive(true);
+            if (p.getBall() != null)
+                p.getBall().setAlive(true);
+        }
+    }
+
+    public boolean hasEveryonePlaced() {
+        for (Player p : players) {
+            if (!p.hasPlacedObstacle()) {
+                // System.out.println("ainda nao coloquei");
+                return false;
+            }
+        }
+        return true;
+    }
+
+     public void setEveryonePlaced(boolean flag) {
+        for (Player p : players) {
+            p.setHasPlacedObstacle(flag);
         }
     }
 
