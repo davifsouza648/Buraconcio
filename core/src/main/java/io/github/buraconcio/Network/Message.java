@@ -12,7 +12,8 @@ public class Message implements Serializable {
         DISCONNECT,
         MAP_CHANGE,
         SERVER_NOTIFICATION,
-        TIMER_STOP
+        TIMER_STOP,
+        CLEAR_UNCLAIMED
     }
 
     private Type type;

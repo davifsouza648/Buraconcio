@@ -20,6 +20,7 @@ public class GameManager {
 
     private PhysicsTest physicsScreen;
     private Screen currentScreen;
+    private ObstacleSpawner obstacleSpawner;
 
     //gestao de tempo
     private int play_time = 50;
@@ -70,6 +71,8 @@ public class GameManager {
             public void postSolve(Contact contact, ContactImpulse impulse) {
             }
         });
+
+        obstacleSpawner = new ObstacleSpawner();
     }
 
     public static GameManager getInstance() {
@@ -200,4 +203,5 @@ public class GameManager {
     public void setPointsToWin(int x){
         pointsToWin = x;
     }
+
 }

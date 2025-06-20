@@ -165,8 +165,6 @@ public class Client {
                                 listenerGame.GameScreen();
                             }
 
-
-
                         } else if (GameManager.getInstance().getCurrentPhase() == PHASE.PLAY) {
 
                             //TODO: empactar tudo e um mmetodo do gameManager

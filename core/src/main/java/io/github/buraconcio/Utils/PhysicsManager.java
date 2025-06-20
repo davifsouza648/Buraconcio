@@ -3,6 +3,7 @@ package io.github.buraconcio.Utils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.lang.Runnable;
+import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -299,4 +300,34 @@ public class PhysicsManager {
         entityList.clear();
         playerStartPosById.clear();
     }
+
+    public void clearUnclaimedObstacles(){
+
+        ArrayList<Integer> toRemove = new ArrayList<>();
+
+        for(PhysicsEntity entity : entityList.values()){
+
+            if(entity instanceof Obstacle) {
+
+                Obstacle obs = (Obstacle) entity;
+
+                if(!obs.claimed()){
+                    toRemove.add(entity.getId());
+                }
+            }
+        }
+
+        for(int id : toRemove) {
+
+            PhysicsEntity entity = entityList.get(id);
+
+            if(entity != null){
+
+                entity.destroy();
+                entityList.remove(id);
+
+            }
+        }
+    }
+
 }

@@ -125,6 +125,9 @@ public class Player implements Serializable {
     }
 
     public void rewardStar() {
+
+        stars++;
+
         if (hasStar)
             stars += 1;
 
