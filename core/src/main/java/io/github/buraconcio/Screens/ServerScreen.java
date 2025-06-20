@@ -52,13 +52,15 @@ public class ServerScreen implements Screen {
             "maps-preview/teste1.jpg",
             "maps-preview/teste2.jpg",
             "maps-preview/teste3.jpg",
+            "maps-preview/teste4.jpg"
     },
 
     mapNames = {
         "TUTORIAL",
         "test1",
         "test2",
-        "FLORESTINHA SEM ARVORE"
+        "FLORESTINHA SEM ARVORE",
+        "TREM"
     }
     ;
 
