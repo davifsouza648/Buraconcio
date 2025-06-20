@@ -80,6 +80,7 @@ public class LoadingScreen implements Screen {
         setupTitle();
         setupLogo();
         createTable();
+        createBackButton();
     }
 
     private void setupTitle() {
@@ -136,6 +137,26 @@ public class LoadingScreen implements Screen {
         table.add(ipField).width(500).pad(10);
         table.row();
         table.add(confirmButton).size(200, 80).colspan(2).padTop(10);
+    }
+
+    void createBackButton(){
+        Button back = new Button();
+        ImageButton backButton = back.createButton("back", "back");
+
+        backButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.setScreen(new MainMenu(game));
+            }
+
+        });
+
+        Table bTable = new Table();
+        bTable.top().left();
+        bTable.setFillParent(true);
+
+        bTable.add(backButton).size(64, 64).pad(10);
+        stage.addActor(bTable);
     }
 
     private boolean isIpvalid(TextField ipField) {
