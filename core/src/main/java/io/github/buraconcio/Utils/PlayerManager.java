@@ -104,7 +104,6 @@ public class PlayerManager {
                 int playerId = pack.getId();
                 PackType type = pack.getTypeP();
 
-
                 if (playerId != Constants.localP().getId()) {
 
                     if (type == PackType.BALL) {
@@ -117,7 +116,8 @@ public class PlayerManager {
 
                         Vector2 obstaclePos = new Vector2(pack.getObsX(), pack.getObsY());
 
-                        PlayerManager.getInstance().getPlayer(playerId).update(obstaclePos, pack.getObsId(), pack.getObsRotationIndex());
+                        PlayerManager.getInstance().getPlayer(playerId).update(obstaclePos, pack.getObsId(),
+                                pack.getObsRotationIndex());
 
                     } else {
                         PlayerManager.getInstance().getPlayer(playerId).update(pack.getObsPlaced());
@@ -180,8 +180,8 @@ public class PlayerManager {
         }
     }
 
-    public boolean areAllBallsAlive(){
-        for(Player p : players){
+    public boolean areAllBallsAlive() {
+        for (Player p : players) {
             if (p.getBall() != null && !p.getBall().isAlive())
                 return false;
         }
@@ -190,13 +190,13 @@ public class PlayerManager {
     }
 
     public boolean areAllBallsDead() {
-    for (Player p : players) {
-        if (p.getBall() != null && p.getBall().isAlive()) {
-            return false;
+        for (Player p : players) {
+            if (p.getBall() != null && p.getBall().isAlive()) {
+                return false;
+            }
         }
+        return true;
     }
-    return true;
-}
 
     public boolean hasEveryonePlaced() {
         for (Player p : players) {
@@ -216,5 +216,16 @@ public class PlayerManager {
 
     public void clear() {
         players.clear();
+    }
+
+    public boolean hasEveryoneClaimed() {
+
+        for (Player p : players) {
+            if (p.canSelect()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

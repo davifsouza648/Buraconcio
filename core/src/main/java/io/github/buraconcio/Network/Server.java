@@ -3,6 +3,7 @@ package io.github.buraconcio.Network;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -96,6 +97,14 @@ public class Server {
         Message msg = new Message(type, str);
 
         for (ClientHandler client : clients) {
+            client.broadcastMessage(msg);
+        }
+    }
+
+    public void sendArray(Message.Type type, ArrayList<String> list){
+        Message msg = new Message(type, list);
+
+        for(ClientHandler client : clients){
             client.broadcastMessage(msg);
         }
     }

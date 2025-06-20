@@ -6,6 +6,10 @@ import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.Map;
+
+import com.badlogic.gdx.Gdx;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -154,12 +158,9 @@ public class Client {
 
                         if (GameManager.getInstance().getCurrentPhase() == PHASE.SELECT_OBJ) {
 
-                            //TODO: empactar tudo e um mmetodo do gameManager
+                            // TODO: empactar tudo e um mmetodo do gameManager
 
-                            PhysicsManager.getInstance().postRoundObstacles();
-
-                            Constants.localP().setCanSelect(true);
-                            Constants.localP().setBallInteractable(false);
+                            GameManager.getInstance().setupSelectObstaclePhase();
 
                             if (listenerGame != null) {
                                 listenerGame.GameScreen();
@@ -167,17 +168,9 @@ public class Client {
 
                         } else if (GameManager.getInstance().getCurrentPhase() == PHASE.PLAY) {
 
-                            //TODO: empactar tudo e um mmetodo do gameManager
+                            // TODO: empactar tudo e um mmetodo do gameManager
 
-                            PhysicsManager.getInstance().preRoundObstacles();
-
-                            PlayerManager.getInstance().setEveryonePlaced(false);
-
-                            PlayerManager.getInstance().setAllBallsAlive(); // setar como vivas as a ideia principal é fazer um respawn
-
-                            Constants.localP().setCanSelect(false);
-                            Constants.localP().setBallInteractable(true);
-
+                            GameManager.getInstance().setupPlayPhase();
 
                         } else if (GameManager.getInstance().getCurrentPhase() == PHASE.SHOW_POINTS) {
 
@@ -219,6 +212,22 @@ public class Client {
                     case TIMER_STOP -> {
                         System.out.println("Recebeu TIMER_STOP, finalizando timer...");
                         FlowManager.getInstance().onReceiveTimerStop();
+                    }
+
+                    case SPAWN_OBSTACLES -> {
+
+                        @SuppressWarnings("unchecked")
+                        ArrayList<String> obsArray = (ArrayList<String>) msg.getPayload();
+
+                        for (String type : obsArray)
+                            Gdx.app.postRunnable(() -> {
+                                GameManager.getInstance().spawnObstacle(type, null);
+                            });
+
+                    }
+
+                    case CLEAR_UNCLAIMED -> {
+                        PhysicsManager.getInstance().clearUnclaimedObstacles();
                     }
 
                     default -> {

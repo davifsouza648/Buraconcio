@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -11,7 +12,9 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import io.github.buraconcio.Main;
+import io.github.buraconcio.Network.Message;
 import io.github.buraconcio.Objects.GameCamera;
+import io.github.buraconcio.Objects.Obstacle;
 import io.github.buraconcio.Screens.PhysicsTest;
 
 public class GameManager {
@@ -22,12 +25,16 @@ public class GameManager {
     private Screen currentScreen;
     private ObstacleSpawner obstacleSpawner;
 
-    //gestao de tempo
+    // gestao de tempo
     private int play_time = 50;
     private int select_time = 30;
     private int points_time = 5;
     private int win_time = 55;
     private int pointsToWin = 10;
+    private int timeToClear = 7; //limpar os obstaculos nao selecionados
+
+    // num de obstaculos
+    private int obstacleNum = 6;
 
     private int mapIndex;
     public PHASE phase = PHASE.LOOBY;
@@ -90,7 +97,6 @@ public class GameManager {
         inputs.addProcessor(index, processor);
     }
 
-
     public void setGameInputProcessor() {
         Gdx.input.setInputProcessor(inputs);
     }
@@ -140,7 +146,6 @@ public class GameManager {
         this.phase = phase;
     }
 
-
     public PHASE getCurrentPhase() {
         return phase;
     }
@@ -151,8 +156,8 @@ public class GameManager {
         setPhysicsScreen(physicsScreen);
         setCurrentScreen(physicsScreen.getGame(), physicsScreen);
 
-        //PhysicsManager.getInstance().dispose();
-        //new PhysicsManager();
+        // PhysicsManager.getInstance().dispose();
+        // new PhysicsManager();
     }
 
     public GameCamera getPhysicsCamera() {
@@ -196,12 +201,47 @@ public class GameManager {
         return points_time;
     }
 
-    public int getPointsToWin(){
+    public int getPointsToWin() {
         return pointsToWin;
     }
 
-    public void setPointsToWin(int x){
+    public void setPointsToWin(int x) {
         pointsToWin = x;
+    }
+
+    public int getTimeToClear(){
+        return timeToClear;
+    }
+
+    public void setTimeToClear(int x){
+        timeToClear = x;
+    }
+
+    public void setupPlayPhase() {
+        PhysicsManager.getInstance().preRoundObstacles();
+
+        PlayerManager.getInstance().setEveryonePlaced(false);
+
+        PlayerManager.getInstance().setAllBallsAlive(); // setar como vivas as a ideia principal é fazer um respawn
+
+        Constants.localP().setCanSelect(false);
+        Constants.localP().setBallInteractable(true);
+    }
+
+    public void setupSelectObstaclePhase() {
+        PhysicsManager.getInstance().postRoundObstacles();
+
+        if (Constants.isHosting()) {
+            ConnectionManager.getInstance().getServer().sendArray(Message.Type.SPAWN_OBSTACLES,
+                    obstacleSpawner.selectRandomObstacles(6));
+        }
+
+        Constants.localP().setCanSelect(true);
+        Constants.localP().setBallInteractable(false);
+    }
+
+    public Obstacle spawnObstacle(String type, Vector2 pos) {
+        return obstacleSpawner.spawnObstacle(type, pos);
     }
 
 }

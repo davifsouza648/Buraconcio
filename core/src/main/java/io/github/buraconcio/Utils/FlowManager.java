@@ -7,8 +7,9 @@ import io.github.buraconcio.Objects.Player;
 public class FlowManager {
 
     private CountdownTimer timer;
-    private boolean isHost;
+    private boolean isHost, flag;
     private static FlowManager instance;
+    int delayToClear = 0; //delay para limpar os obstaculos nao selecionados
 
     public FlowManager() {
         this.isHost = Constants.isHosting();
@@ -48,10 +49,21 @@ public class FlowManager {
 
     private void startSelectObstaclePhase() {
         changePhase("select_obj");
+
+        flag = true;
+
+        delayToClear = 0;
         startHostTimer(GameManager.getInstance().getSelectTime(), new CountdownTimer.TimerListener() {
 
             @Override
             public void tick(int remainingSecs) {
+
+                delayToClear++;
+
+                if((PlayerManager.getInstance().hasEveryoneClaimed() || delayToClear >= GameManager.getInstance().getTimeToClear())&& flag){
+                    ConnectionManager.getInstance().getServer().sendString(Message.Type.CLEAR_UNCLAIMED, "");
+                    flag = false;
+                }
 
                 if (PlayerManager.getInstance().hasEveryonePlaced()) {
                     stopAndNotify();

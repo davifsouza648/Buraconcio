@@ -13,7 +13,8 @@ public class Message implements Serializable {
         MAP_CHANGE,
         SERVER_NOTIFICATION,
         TIMER_STOP,
-        CLEAR_UNCLAIMED
+        CLEAR_UNCLAIMED,
+        SPAWN_OBSTACLES
     }
 
     private Type type;
