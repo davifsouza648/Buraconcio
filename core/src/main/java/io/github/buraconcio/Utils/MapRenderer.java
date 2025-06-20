@@ -184,7 +184,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
         float innerRadiusY = outerRadiusY - thickness;
 
         // Suavidade da curva (quanto mais segmentos, mais suave)
-        int segments = 30;
+        int segments = 50;
 
         Vector2[] outerArc = new Vector2[segments + 1];
         Vector2[] innerArc = new Vector2[segments + 1];

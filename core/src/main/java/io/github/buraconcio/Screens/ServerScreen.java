@@ -50,13 +50,15 @@ public class ServerScreen implements Screen {
     private final String[] mapPaths = {
             "maps-preview/teste.jpg",
             "maps-preview/teste1.jpg",
-            "maps-preview/teste2.jpg"
+            "maps-preview/teste2.jpg",
+            "maps-preview/teste3.jpg",
     },
 
     mapNames = {
         "TUTORIAL",
         "test1",
-        "test2"
+        "test2",
+        "FLORESTINHA SEM ARVORE"
     }
     ;
 
