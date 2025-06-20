@@ -85,7 +85,12 @@ public class PhysicsTest implements Screen {
         new CircularSaw(new Vector2(12.5f, 7f), new Vector2(-1f, 1f));
         new Trampoline(new Vector2(14.5f, 7f), new Vector2(-1f, 1f));
         new Mine(new Vector2(16.5f, 7f), new Vector2(-1f, 1f));
-        new Honey(new Vector2(10.5f, 9f), new Vector2(-2f, 2f));
+        new Honey(new Vector2(10.5f, 9f), new Vector2(-1f, 1f));
+        new WoodBox(new Vector2(12.5f, 9f));
+        new LongWoodBox(new Vector2(18.5f, 9f));
+        new MetalBox(new Vector2(10.5f, 12f));
+        new LongMetalBox(new Vector2(16.5f, 12f));
+        new LMetalBox(new Vector2(22.5f, 12f));
 
         flow = new FlowManager();
 

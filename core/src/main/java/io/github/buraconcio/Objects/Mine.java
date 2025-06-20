@@ -53,7 +53,7 @@ public class Mine extends Obstacle {
     public void act(float delta) {
         super.act(delta);
 
-        if (animacao.getFrameIndex() == explosionFrame) 
+        if (animacao.getFrameIndex() == explosionFrame)
         {
             animacao.setScale(ExplosionRadiusMultiplyer);
             SoundManager.getInstance().playProximity("explosion", this.getPosition(), PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
@@ -61,8 +61,6 @@ public class Mine extends Obstacle {
 
 
         if (animacao.getFrameIndex() == explosionFrame + 1) { // explodiu
-            System.out.println("killing");
-            System.out.println(animacao.getScaleX()*animacao.getScaleX()*animacao.getWidth()*animacao.getWidth()/4);
             List<Player> players = PlayerManager.getInstance().getAllPlayers();
 
             for (Player p : players) {

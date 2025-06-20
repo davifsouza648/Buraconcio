@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import io.github.buraconcio.Utils.Constants;
 
-public class SoundManager 
+public class SoundManager
 {
     private static SoundManager instance;
 
@@ -34,19 +34,19 @@ public class SoundManager
         music = new HashMap<>();
         loopSounds = new HashMap<>();
         loopsTocando = new TreeSet<>();
-        loopSoundIds = new HashMap<>(); 
+        loopSoundIds = new HashMap<>();
 
     }
 
-    public synchronized static SoundManager getInstance() 
+    public synchronized static SoundManager getInstance()
     {
         if (instance == null)
             new SoundManager();
         return instance;
     }
-    
 
-    public void loadSound(String id, String path) 
+
+    public void loadSound(String id, String path)
     {
         if(sounds.get(id) != null) return;
         sounds.put(id, Gdx.audio.newSound(Gdx.files.internal(path)));
@@ -58,7 +58,7 @@ public class SoundManager
         loopSounds.put(id, Gdx.audio.newSound(Gdx.files.internal(path)));
     }
 
-    public void loadMusic(String id, String path) 
+    public void loadMusic(String id, String path)
     {
         if(music.get(id) != null) return;
         Music m = Gdx.audio.newMusic(Gdx.files.internal(path));
@@ -74,7 +74,7 @@ public class SoundManager
         float volume = Math.max(0f, 1f - dist / Constants.MAX_DISTANCE_AUDIBLE) * masterVolume;
 
         Long soundId = loopSoundIds.get(id);
-        
+
         if (soundId == null) {
             // Se não está tocando, inicia o loop
             long newSoundId = sound.loop(volume);
@@ -85,10 +85,10 @@ public class SoundManager
         }
     }
 
-    public void playProximity(String id, Vector2 source, Vector2 listener) 
+    public void playProximity(String id, Vector2 source, Vector2 listener)
     {
         Sound sound = sounds.get(id);
-        if (sound != null) 
+        if (sound != null)
         {
             float dist = source.dst(listener);
             float volume = Math.max(0f, 1f - dist / Constants.MAX_DISTANCE_AUDIBLE);
