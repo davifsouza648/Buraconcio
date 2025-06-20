@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -19,6 +20,8 @@ public class AnimationPlay extends Image {
     private Actor parentActor;
     private int running = 1;
     private boolean playOnce = false;
+    private float flashDuration = 0.2f;
+    private float flashTime = -1f;
 
 
     public AnimationPlay(Animation<TextureRegion> animation, Actor parentActor)
@@ -89,8 +92,25 @@ public class AnimationPlay extends Image {
             running = 0;
         }
 
+        if (flashTime != -1f) {
+            flashTime += delta;
+            float scl = 1.75f * Math.abs(flashTime - 0.5f) + 0.125f;
+
+            setColor(new Color(1f, scl, scl, 1f));
+
+            if (flashTime - delta >= flashDuration) {
+                flashTime = -1f;
+
+                setColor(Color.WHITE);
+            }
+        }
+
         elapsedTime += delta * running;
         setDrawable(new TextureRegionDrawable(animation.getKeyFrame(elapsedTime)));
+    }
+
+    public void flashRed() {
+        flashTime = 0f;
     }
 
     public boolean isLastFrame() {

@@ -147,6 +147,10 @@ public class Obstacle extends PhysicsEntity {
         body.setTransform(pos, body.getTransform().getRotation());
     }
 
+    public void flashRed() {
+        animacao.flashRed();
+    }
+
     public void disable() {
         disabled = true;
         animacao.remove();

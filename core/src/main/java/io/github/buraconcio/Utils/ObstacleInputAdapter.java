@@ -43,14 +43,17 @@ public class ObstacleInputAdapter extends InputAdapter {
         Obstacle obstacle = p.getSelectedObstacle();
         if (obstacle != null)
         {
+            Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
+            Vector2 worldCoords = new Vector2(unprojected.x, unprojected.y);
+
+            Vector2 snappedPos = snapToGrid(worldCoords);
+
+            obstacle.teleport(snappedPos);
+
             if (obstacle.canPlace()) {
-                Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
-                Vector2 worldCoords = new Vector2(unprojected.x, unprojected.y);
-
-                Vector2 snappedPos = snapToGrid(worldCoords);
-
-                obstacle.teleport(snappedPos);
                 p.placeObstacle();
+            } else {
+                obstacle.flashRed();
             }
 
             //desativar para que o preround seja feito no flowmanager
