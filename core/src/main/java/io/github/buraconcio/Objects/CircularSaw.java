@@ -1,5 +1,6 @@
 package io.github.buraconcio.Objects;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -7,6 +8,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.PhysicsManager;
+import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.SoundManager;
 
 public class CircularSaw extends Obstacle {
     private float elapsedTime = 0f;
@@ -23,6 +26,7 @@ public class CircularSaw extends Obstacle {
         circleRadius = getHeight()/2;
 
         animacao.pauseAnimation();
+        SoundManager.getInstance().loadLoopSound("saw", "sounds/obstacle-sounds/saw/saw.wav");
 
         createSawFixture(0f);
 
@@ -45,6 +49,8 @@ public class CircularSaw extends Obstacle {
 
         int currentFrame = animacao.getFrameIndex();
         float framesOfMovement = currentFrame - idleFrames;
+
+        SoundManager.getInstance().loopProximity("saw", this.getPosition(), PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
 
         if (currentFrame <= idleFrames ) {
             sawPosition = x0;

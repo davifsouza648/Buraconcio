@@ -6,6 +6,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.PhysicsManager;
+import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.SoundManager;
 
 public class Star extends Obstacle {
     public Star(Vector2 pos, Vector2 size) {
@@ -18,6 +20,8 @@ public class Star extends Obstacle {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.isSensor = true;
         fixtureDef.shape = polygonShape;
+
+        SoundManager.getInstance().loadSound("starPickUp", "sounds/obstacle-sounds/star/startPickUp.wav");
 
         body.createFixture(fixtureDef);
 
@@ -33,7 +37,7 @@ public class Star extends Obstacle {
             Ball ball = (Ball) other;
 
             ball.getPlayer().collectStar();
-
+            SoundManager.getInstance().playProximity("starPickUp", this.getPosition(), PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
             this.disable();
         }
 

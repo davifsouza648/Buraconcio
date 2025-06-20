@@ -22,6 +22,7 @@ import io.github.buraconcio.Utils.GameManager;
 import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Objects.Button;
+import io.github.buraconcio.Utils.SoundManager;
 
 public class MainMenu implements Screen {
 
@@ -40,6 +41,8 @@ public class MainMenu implements Screen {
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("uiskin.json")); // usa fonte padrão
+        SoundManager.getInstance().loadMusic("menu", "sounds/songs/menuTheme.mp3");
+        SoundManager.getInstance().playMusic("menu");
 
         backAnimation = Auxiliaries.animationFromFiles("backgroundMenu.png", "backgroundMenu.json");
         backImage = new Image(new TextureRegionDrawable(backAnimation.getKeyFrame(0)));

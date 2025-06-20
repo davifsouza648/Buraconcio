@@ -5,6 +5,8 @@ import com.badlogic.gdx.physics.box2d.*;
 
 import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.Constants;
+import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.SoundManager;
 
 import java.lang.Math;
 
@@ -13,6 +15,8 @@ public class BoostPad extends Obstacle {
     public BoostPad (Vector2 pos, Vector2 size) {
         super(pos, size,
             Auxiliaries.animationFromFiles("obstacles/boostpad/boostpad.png", "obstacles/boostpad/boostpad.json"));
+
+        SoundManager.getInstance().loadSound("boostPad", "sounds/obstacle-sounds/boostpad/boostPad.wav");
 
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
@@ -30,6 +34,7 @@ public class BoostPad extends Obstacle {
             ball.applyImpulse(
                 new Vector2(Constants.BOOST_IMPULSE * (float) Math.cos(body.getAngle()),
                     Constants.BOOST_IMPULSE * (float) Math.sin(body.getAngle())));
+            SoundManager.getInstance().playProximity("boostPad", this.getPosition(), PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
         }
 
         return true;

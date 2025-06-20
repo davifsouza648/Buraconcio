@@ -1,10 +1,15 @@
 package io.github.buraconcio.Objects;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-import java.lang.Math;
+import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.SoundManager;
+
+import java.util.Random;
+
 
 public class Arrow extends PhysicsEntity {
     public static final Vector2 arrowSize = new Vector2(1.9f, 0.7f);
@@ -13,6 +18,9 @@ public class Arrow extends PhysicsEntity {
         super(pos, arrowSize, "obstacles/arrow/arrow.png");
 
         body.setType(BodyType.DynamicBody);
+
+        SoundManager.getInstance().loadSound("arrowHit1", "sounds/obstacle-sounds/crossbow/arrow-hits/hit1.wav");
+        SoundManager.getInstance().loadSound("arrowHit2", "sounds/obstacle-sounds/crossbow/arrow-hits/hit2.wav");
 
         PolygonShape shapeDef = new PolygonShape();
         shapeDef.setAsBox(arrowSize.x/2, arrowSize.y/2);
@@ -42,6 +50,10 @@ public class Arrow extends PhysicsEntity {
                 return true;
             }
         }
+        Random rand = new Random();
+        int idHitSound = rand.nextInt(2) + 1;
+
+        SoundManager.getInstance().playProximity("arrowHit" + String.valueOf(idHitSound), this.getPosition(), PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
 
         return false;
     }

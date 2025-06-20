@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 import io.github.buraconcio.Utils.Auxiliaries;
+import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.SoundManager;
 
 import java.lang.Math;
 
@@ -20,6 +22,8 @@ public class CrossBow extends Obstacle {
         animacao.setFrameDuration(frameDuration);
         animacao.pauseAnimation();
 
+        SoundManager.getInstance().loadSound("flechada", "sounds/obstacle-sounds/crossbow/arrowshot.wav");
+
         PolygonShape shape = new PolygonShape();
         FixtureDef fixtureDef = new FixtureDef();
         shape.setAsBox(size.x/2, size.y/2);
@@ -35,8 +39,10 @@ public class CrossBow extends Obstacle {
 
         if (animacao.isLastFrame()) {
             if (canSpawn)
+            {
                 spawnArrow();
-
+                SoundManager.getInstance().playProximity("flechada", this.getPosition(), PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
+            }
             canSpawn = false;
         } else {
             canSpawn = true;

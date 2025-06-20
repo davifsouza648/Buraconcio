@@ -5,11 +5,13 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 import io.github.buraconcio.Utils.Auxiliaries;
+import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.SoundManager;
 
 public class Trampoline extends Obstacle {
     public Trampoline(Vector2 pos, Vector2 size) {
         super(pos, size,
-            Auxiliaries.animationFromFiles("obstacles/trampoline/trampoline.png", "obstacles/trampoline/trampoline.json"));
+        Auxiliaries.animationFromFiles("obstacles/trampoline/trampoline.png", "obstacles/trampoline/trampoline.json"));
         animacao.pauseAnimation();
 
         PolygonShape shape = new PolygonShape();
@@ -18,6 +20,8 @@ public class Trampoline extends Obstacle {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.isSensor = true;
+
+        SoundManager.getInstance().loadSound("trampoline", "sounds/obstacle-sounds/trampoline/trampoline.mp3");
 
         body.createFixture(fixtureDef);
         shape.dispose();
@@ -32,8 +36,9 @@ public class Trampoline extends Obstacle {
             animacao.playOnce();
 
             Ball ball = (Ball) other;
-
+            SoundManager.getInstance().playProximity("trampoline", this.getPosition(), PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
             ball.jump(2f);
+
 
             return true;
         }

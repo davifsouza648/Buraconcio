@@ -15,6 +15,10 @@ public class Constants {
 
     public static final float BOOST_IMPULSE = 20f;
 
+    public static final float MAX_DISTANCE_AUDIBLE = 10f;
+
+    public static final float VELOCITY_HONEY = 1f;
+
     // usar no server e client
     public static final int PORT = 5050, UDP_PORT_SERVER = 5565, UDP_PORT_CLIENT = 5566;
     public static String IP = "localhost";
