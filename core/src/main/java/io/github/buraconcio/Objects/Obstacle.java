@@ -108,6 +108,7 @@ public class Obstacle extends PhysicsEntity {
         active = true;
         body.setLinearVelocity(new Vector2(0f, 0f));
         body.setBullet(false);
+        body.setType(BodyType.KinematicBody);
     }
 
     public void claim() {
