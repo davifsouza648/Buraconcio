@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import io.github.buraconcio.Utils.PhysicsManager;
 import io.github.buraconcio.Utils.AnimationPlay;
@@ -23,18 +24,22 @@ public class Obstacle extends PhysicsEntity {
 
     public Obstacle(Vector2 pos, Vector2 size, String texturePath) {
         super(pos, size, texturePath);
+        body.setType(BodyType.DynamicBody);
     }
 
     public Obstacle(Vector2 pos, Vector2 size, Animation<TextureRegion> animation) {
         super(pos, size, animation);
+        body.setType(BodyType.DynamicBody);
     }
 
     public Obstacle(Vector2 pos, Vector2 size, AnimationPlay animation) {
         super(pos, size, animation);
+        body.setType(BodyType.DynamicBody);
     }
 
     public Obstacle(Vector2 pos, Vector2 size) {
         super(pos, size);
+        body.setType(BodyType.DynamicBody);
     }
 
     public void preRound() {}
@@ -101,10 +106,13 @@ public class Obstacle extends PhysicsEntity {
 
     public void place() {
         active = true;
+        body.setLinearVelocity(new Vector2(0f, 0f));
+        body.setBullet(false);
     }
 
     public void claim() {
         claimed = true;
+        body.setBullet(true);
     }
 
     public void unclaim() {
@@ -124,6 +132,17 @@ public class Obstacle extends PhysicsEntity {
     }
 
     public void move(Vector2 pos) {
+        Vector2 v = new Vector2(pos).sub(body.getPosition());
+        if (v.len2() < 0.001f) {
+            body.setLinearVelocity(v.scl(new Vector2(0f, 0f)));
+        } else if (v.len2() > 25f) {
+            body.setLinearVelocity(v.nor().scl(5f));
+        } else {
+            body.setLinearVelocity(v.scl(10f));
+        }
+    }
+
+    public void teleport(Vector2 pos) {
         body.setTransform(pos, body.getTransform().getRotation());
     }
 

@@ -32,7 +32,7 @@ public class Star extends Obstacle {
     @Override
     public boolean contact(PhysicsEntity other) {
         if (disabled || !active)
-            return true;
+            return false;
 
         if (other instanceof Ball) {
             Ball ball = (Ball) other;

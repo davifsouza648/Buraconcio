@@ -19,10 +19,10 @@ public class CursorManager {
     public static void loadCursors() {
         if (loaded) return;
 
-        arrowCursor = createCursor("cursor/arrowCursor.png", 15, 15);
-        handCursor = createCursor("cursor/handCursor.png", 15, 15);
-        ibeamCursor = createCursor("cursor/ibeamCursor.png", 15, 15);
-        gameCursor = createCursor("cursor/gameCursor.png", 15, 15);
+        arrowCursor = createCursor("cursor/arrowCursor.png", 5, 0);
+        handCursor = createCursor("cursor/handCursor.png", 14, 1);
+        ibeamCursor = createCursor("cursor/ibeamCursor.png", 2, 15);
+        gameCursor = createCursor("cursor/gameCursor.png", 5, 0);
 
         loaded = true;
     }

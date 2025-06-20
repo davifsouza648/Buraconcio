@@ -11,6 +11,7 @@ import io.github.buraconcio.Network.Client;
 import io.github.buraconcio.Network.UDPClient;
 import io.github.buraconcio.Network.UDPServer;
 import io.github.buraconcio.Objects.*;
+import io.github.buraconcio.Objects.GameCamera.Mode;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Utils.SoundManager;
 import io.github.buraconcio.Utils.ConnectionManager;
@@ -128,8 +129,6 @@ public class PhysicsTest implements Screen {
 
         stage.act(delta);
 
-        // System.out.println("AAAA :" + GameManager.getInstance().getCurrentPhase());
-
         Obstacle selected = Constants.localP().getSelectedObstacle();
         Ball selectedBall = pBall;
 
@@ -147,8 +146,10 @@ public class PhysicsTest implements Screen {
 
             camera.setTarget(selectedBall.getPosition());
             camera.setCameraLerpSpeed(0.11f);
+            camera.setMode(Mode.ball);
 
         } else if (GameManager.getInstance().getCurrentPhase() == PHASE.SELECT_OBJ && selected != null) {
+            camera.setMode(Mode.obstacle);
             camera.setTarget(selected.getPosition());
             camera.setCameraLerpSpeed(0.05f);
         }

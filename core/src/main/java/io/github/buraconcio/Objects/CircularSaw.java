@@ -70,10 +70,12 @@ public class CircularSaw extends Obstacle {
 
     @Override
     public boolean contact(PhysicsEntity other) {
+        if (!active) return false;
+
         if (other instanceof Ball) {
             Ball ball = (Ball) other;
 
-            if (!ball.isAirborne() && active) // coloquei um active aqui fds kkk
+            if (!ball.isAirborne()) // coloquei um active aqui fds kkk
                 ball.getPlayer().die();
 
             return true;

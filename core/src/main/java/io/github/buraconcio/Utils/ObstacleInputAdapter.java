@@ -22,8 +22,8 @@ public class ObstacleInputAdapter extends InputAdapter {
 
     private Vector2 snapToGrid(Vector2 worldCoords)
     {
-        float snappedX = Math.round(worldCoords.x / GRID_SIZE) * GRID_SIZE;
-        float snappedY = Math.round(worldCoords.y / GRID_SIZE) * GRID_SIZE;
+        float snappedX = Math.round((worldCoords.x - 0.5f) / GRID_SIZE) * GRID_SIZE + 0.5f;
+        float snappedY = Math.round((worldCoords.y - 0.5f) / GRID_SIZE) * GRID_SIZE + 0.5f;
         return new Vector2(snappedX, snappedY);
     }
 
@@ -38,13 +38,20 @@ public class ObstacleInputAdapter extends InputAdapter {
 
         Vector2 stageCoords = stage.screenToStageCoordinates(new Vector2(x, y));
         Actor hitActor = stage.hit(stageCoords.x, stageCoords.y, true);
+        GameCamera camera = GameManager.getInstance().getPhysicsCamera();
 
         Obstacle obstacle = p.getSelectedObstacle();
-        if (obstacle != null && obstacle.canPlace())
+        if (obstacle != null)
         {
-            Vector2 snappedPos = snapToGrid(new Vector2(obstacle.getX(), obstacle.getY()));
-            obstacle.setPosition(snappedPos.x, snappedPos.y);
-            p.placeObstacle();
+            if (obstacle.canPlace()) {
+                Vector3 unprojected = camera.unproject(new Vector3(x, y, 0));
+                Vector2 worldCoords = new Vector2(unprojected.x, unprojected.y);
+
+                Vector2 snappedPos = snapToGrid(worldCoords);
+
+                obstacle.teleport(snappedPos);
+                p.placeObstacle();
+            }
 
             //desativar para que o preround seja feito no flowmanager
             // obstacle.preRound();

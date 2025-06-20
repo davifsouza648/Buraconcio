@@ -38,6 +38,7 @@ public class WoodBox extends Obstacle {
     @Override
     public boolean contact(PhysicsEntity entity) {
         if (!active) return false;
+        if (disabled) return true;
 
         animacao.playOnce();
 
@@ -52,6 +53,19 @@ public class WoodBox extends Obstacle {
             disable();
         }
     }
+
+    @Override
+    public void disable() {
+        super.disable();
+        body.getFixtureList().forEach(fixture -> fixture.setSensor(true));
+    }
+
+    @Override
+    public void enable() {
+        super.enable();
+        body.getFixtureList().forEach(fixture -> fixture.setSensor(false));
+    }
+
 
     @Override
     public void place() {

@@ -32,7 +32,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
 
     public void createCollisions()
     {
-        float pixelsPerMeter = 32f;
+        float pixelsPerMeter = 1/scale;
 
         MapObjects objects = getMap().getLayers().get("Objetos").getObjects();
 
@@ -41,7 +41,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
             if ("SpawnArea".equals(object.getName())) {
                 spawnArea = ((RectangleMapObject) object).getRectangle();
             }
-            
+
             else if ("Box".equals(object.getName()))
             {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -143,11 +143,11 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
             startAngle = 0f;
             sweepAngle = (float) (2 * Math.PI);
         } else if (name.startsWith("CurvaBaixo")) {
-            startAngle = (float) Math.PI;            
-            sweepAngle = (float) Math.PI;            
+            startAngle = (float) Math.PI;
+            sweepAngle = (float) Math.PI;
         } else if (name.startsWith("CurvaCima")) {
-            startAngle = 0f;                        
-            sweepAngle = (float) Math.PI;           
+            startAngle = 0f;
+            sweepAngle = (float) Math.PI;
         } else if (name.startsWith("Curva")) {
             // Verificar se é Curva1, 2, 3 ou 4
             int curvaIndex = 1;
