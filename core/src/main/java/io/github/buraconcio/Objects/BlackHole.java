@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import io.github.buraconcio.Utils.Auxiliaries;
 
 public class BlackHole extends Obstacle {
-    public static final float ACTION_RADIUS = 7.5f;
+    public static final float ACTION_RADIUS = 5f;
     public static final float G = 0.09f;
     public static final float mass = 3000f;
     public static final float killRadius = 0.5f;

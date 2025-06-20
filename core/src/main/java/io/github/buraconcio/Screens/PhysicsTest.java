@@ -1,13 +1,8 @@
 package io.github.buraconcio.Screens;
 
-import java.util.Vector;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -37,7 +32,6 @@ public class PhysicsTest implements Screen {
     private Box2DDebugRenderer debugRenderer;
     private GameCamera camera;
 
-    private Player p;
     private Ball pBall;
 
     private HUD hud;
@@ -47,7 +41,6 @@ public class PhysicsTest implements Screen {
 
     private boolean paused = false;
     private FlowManager flow;
-
 
     public PhysicsTest(Main game) {
         PlayerManager.getInstance().syncLocalPlayer();
@@ -90,6 +83,11 @@ public class PhysicsTest implements Screen {
         new Trampoline(new Vector2(14.5f, 7f), new Vector2(-1f, 1f));
         new Mine(new Vector2(16.5f, 7f), new Vector2(-1f, 1f));
         new Honey(new Vector2(10.5f, 9f), new Vector2(-1f, 1f));
+        new WoodBox(new Vector2(12.5f, 9f));
+        new LongWoodBox(new Vector2(18.5f, 9f));
+        new MetalBox(new Vector2(10.5f, 12f));
+        new LongMetalBox(new Vector2(16.5f, 12f));
+        new LMetalBox(new Vector2(22.5f, 12f));
 
         new Mine(new Vector2(20.5f, 7f), new Vector2(-1f, 1f));
 

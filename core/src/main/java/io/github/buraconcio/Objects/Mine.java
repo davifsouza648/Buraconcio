@@ -54,15 +54,12 @@ public class Mine extends Obstacle {
         }
 
         if (animacao.getFrameIndex() == explosionFrame + 1) { // explodiu
-            System.out.println("killing");
-            System.out.println(animacao.getScaleX()*animacao.getScaleX()*animacao.getWidth()*animacao.getWidth()/4);
             List<Player> players = PlayerManager.getInstance().getAllPlayers();
 
             for (Player p : players) {
                 float dist2 = new Vector2(p.getBall().getWorldCenter()).sub(body.getWorldCenter()).len2();
                 float animacaoRadius = animacao.getScaleX()*animacao.getWidth();
-                System.out.println();
-                System.out.println(dist2);
+
                 if (dist2 < animacaoRadius*animacaoRadius/4 * 1.25f) {
                     p.die();
                 }
