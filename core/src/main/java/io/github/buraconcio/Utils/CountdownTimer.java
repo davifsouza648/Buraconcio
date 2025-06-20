@@ -21,7 +21,6 @@ public class CountdownTimer {
 
     public void start() {
         stop();
-
         task = new Timer.Task() {
 
             int last = time;
@@ -53,16 +52,19 @@ public class CountdownTimer {
 
     }
 
-
-    public void stop(){
-        if(task != null){
+    public void stop() {
+        if (task != null) {
             task.cancel();
             task = null;
         }
     }
 
-    public boolean isRunning(){
-        return task != null;
+    public void finish() {
+        stop();
+
+        if (listener != null) {
+            listener.finish();
+        }
     }
 
 }

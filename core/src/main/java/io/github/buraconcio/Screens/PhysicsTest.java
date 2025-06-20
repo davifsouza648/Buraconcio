@@ -91,7 +91,11 @@ public class PhysicsTest implements Screen {
         new Mine(new Vector2(16.5f, 7f), new Vector2(-1f, 1f));
         new Honey(new Vector2(10.5f, 9f), new Vector2(-1f, 1f));
 
-        flow = new FlowManager(game);
+        new Mine(new Vector2(20.5f, 7f), new Vector2(-1f, 1f));
+
+         new Mine(new Vector2(18.5f, 7f), new Vector2(-1f, 1f));
+
+        flow = new FlowManager();
 
         GameManager.getInstance().addProcessor(hudStage, 0);
         GameManager.getInstance().setGameInputProcessor();
@@ -126,6 +130,8 @@ public class PhysicsTest implements Screen {
             return;
 
         stage.act(delta);
+
+        // System.out.println("AAAA :" + GameManager.getInstance().getCurrentPhase());
 
         Obstacle selected = Constants.localP().getSelectedObstacle();
         Ball selectedBall = pBall;
@@ -222,7 +228,6 @@ public class PhysicsTest implements Screen {
 
                     Gdx.app.postRunnable(
                             () -> GameManager.getInstance().setCurrentScreen(game, new PointsScreen(game)));
-
                 }
 
                 @Override

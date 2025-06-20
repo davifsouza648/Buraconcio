@@ -15,6 +15,7 @@ import io.github.buraconcio.Utils.AnimationPlay;
 public class Obstacle extends PhysicsEntity {
     public final static int CLOCKWISE = 0;
     public final static int COUNTER_CLOCKWISE = 1;
+    private int rotationIndex = 0;
 
     protected boolean claimed = false;
     protected boolean active = false;
@@ -116,6 +117,9 @@ public class Obstacle extends PhysicsEntity {
 
     // 0 clock 1 counter
     public void rotate(int direction) {
+
+        rotationIndex = (rotationIndex + (direction == CLOCKWISE ? 1 : 3)) % 4;
+
         body.setTransform(body.getPosition(), body.getTransform().getRotation() + (direction * 2 - 1) * 1.5708f ); // 90 em rad
     }
 
@@ -131,5 +135,9 @@ public class Obstacle extends PhysicsEntity {
     public void enable() {
         disabled = false;
         PhysicsManager.getInstance().addToStage(animacao);
+    }
+
+    public int getRotationIndex(){
+        return rotationIndex;
     }
 }

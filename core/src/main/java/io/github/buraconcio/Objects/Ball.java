@@ -247,10 +247,9 @@ public class Ball extends PhysicsEntity {
     }
 
     public void setAlive(boolean flag){ //encaixar isso em uma funcao de renascer elas no spawn point
-
         isAlive = flag;
-        labelGroup.setVisible(true);
-        setVisible(true);
-
+        canInteract = flag;
+        labelGroup.setVisible(flag);
+        setVisible(flag);
     }
 }

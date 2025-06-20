@@ -21,13 +21,15 @@ public class GameManager {
     private PhysicsTest physicsScreen;
     private Screen currentScreen;
 
-    private int play_time = 10;
-    private int select_time = 20;
+    //gestao de tempo
+    private int play_time = 50;
+    private int select_time = 30;
     private int points_time = 5;
     private int win_time = 55;
+    private int pointsToWin = 10;
 
     private int mapIndex;
-    public PHASE phase = PHASE.PLAY;
+    public PHASE phase = PHASE.LOOBY;
 
     public enum PHASE {
         LOOBY,
@@ -189,5 +191,13 @@ public class GameManager {
 
     public int getPointsTime() {
         return points_time;
+    }
+
+    public int getPointsToWin(){
+        return pointsToWin;
+    }
+
+    public void setPointsToWin(int x){
+        pointsToWin = x;
     }
 }

@@ -171,7 +171,7 @@ public class ClientHandler implements Runnable {
 
             broadcastMessage(responseMsg);
 
-            System.out.println("Stars received and sent back");
+            // System.out.println("Stars received and sent back");
 
         } catch (ClassCastException e) {
             System.out.println("Invalid payload for STARS_UPDATE: " + e.getMessage());

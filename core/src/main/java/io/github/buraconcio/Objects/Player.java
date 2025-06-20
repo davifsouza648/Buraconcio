@@ -61,17 +61,18 @@ public class Player implements Serializable {
         return ball;
     }
 
-    public void update(Vector2 ballPos, Vector2 velocity) {
+    public void update(Vector2 ballPos, Vector2 velocity, boolean state) {
         if (ball == null) {
             System.out.println("ball not yet created");
             return;
         }
 
+        ball.setAlive(state);
         ball.setPos(ballPos);
         ball.setVelocity(velocity);
     }
 
-    public void update(Vector2 obstaclePos, int obsId) {
+    public void update(Vector2 obstaclePos, int obsId, int obsRotationIndex) {
 
         Obstacle obstacle = (Obstacle) PhysicsManager.getInstance().getEntity(obsId);
 
@@ -81,12 +82,18 @@ public class Player implements Serializable {
 
         selectObstacle(obstacle);
 
-        if (selectedObstacle != null)
+        if (selectedObstacle != null) {
+
             selectedObstacle.move(obstaclePos);
+
+            if(obsRotationIndex != selectedObstacle.getRotationIndex())
+                selectedObstacle.rotate(obsRotationIndex);
+
+        }
     }
 
     public void update(boolean placed) {
-        System.out.println("atualizando o placed para: " + placed);
+        // System.out.println("atualizando o placed para: " + placed);
         setHasPlacedObstacle(placed);
     }
 
@@ -113,8 +120,7 @@ public class Player implements Serializable {
         rewardStar();
     }
 
-    public void die()
-    {
+    public void die() {
         ball.enterHole();
     }
 
@@ -151,8 +157,8 @@ public class Player implements Serializable {
     public void selectObstacle(Obstacle obstacle) {
 
         // disable for testing
-        //if (!canSelect)
-        //    return;
+        // if (!canSelect)
+        // return;
 
         selectedObstacle = obstacle;
         obstacle.claim();
@@ -213,11 +219,11 @@ public class Player implements Serializable {
         return this.strokes;
     }
 
-    public Boolean hasPlacedObstacle(){
+    public Boolean hasPlacedObstacle() {
         return hasPlacedObstacle;
     }
 
-    public void setHasPlacedObstacle(boolean flag){
+    public void setHasPlacedObstacle(boolean flag) {
         hasPlacedObstacle = flag;
     }
 

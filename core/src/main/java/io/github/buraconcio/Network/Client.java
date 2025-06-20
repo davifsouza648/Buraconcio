@@ -12,8 +12,10 @@ import java.util.List;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Utils.ConnectionManager;
 import io.github.buraconcio.Utils.Constants;
+import io.github.buraconcio.Utils.FlowManager;
 import io.github.buraconcio.Utils.GameManager;
 import io.github.buraconcio.Utils.GameManager.PHASE;
+import io.github.buraconcio.Utils.PhysicsManager;
 import io.github.buraconcio.Utils.PlayerManager;
 import io.github.buraconcio.Screens.ServerScreen;
 
@@ -21,7 +23,7 @@ public class Client {
 
     private Socket socket;
     private ServerListener listener;
-    private boolean svScreen = true, gameScreen = true;
+    private boolean firstTime = true;
     private GameStageListener listenerGame;
 
     public void startTCPClient() {
@@ -72,7 +74,6 @@ public class Client {
         }
     }
 
-
     public void sendLocalPlayer(ObjectOutputStream out) throws IOException {
 
         Message msg = new Message(Message.Type.PLAYER_UPDATE, PlayerManager.getInstance().getLocalPlayer());
@@ -83,7 +84,7 @@ public class Client {
 
     public void principalLoop(ObjectInputStream in, ObjectOutputStream out) throws IOException, ClassNotFoundException {
 
-         while (!socket.isClosed()) {
+        while (!socket.isClosed()) {
 
             Object obj = in.readObject();
 
@@ -98,11 +99,11 @@ public class Client {
 
                         PlayerManager.getInstance().setPlayers(players);
 
-                        System.out.println("ANTES DE ATUALIZAR");
+                        // System.out.println("ANTES DE ATUALIZAR");
                         if (listener != null) {
 
                             listener.PlayerCon();
-                            System.out.println("ATUALIZAR");
+                            // System.out.println("ATUALIZAR");
                         }
 
                     }
@@ -125,7 +126,6 @@ public class Client {
                         }
                     }
 
-
                     case MAP_CHANGE -> {
 
                         String payload = (String) msg.getPayload();
@@ -137,7 +137,6 @@ public class Client {
                     }
 
                     case DISCONNECT -> {
-                        svScreen = false;
                         disconnect();
                         dsListener();
                     }
@@ -146,13 +145,18 @@ public class Client {
 
                         String phase = (String) msg.getPayload();
 
+                        FlowManager.getInstance().onReceivePhaseChange(phase);
                         GameManager.getInstance().setPhase(phase);
 
                         if (listenerGame != null) {
-                                listenerGame.GameScreen();
+                            listenerGame.GameScreen();
                         }
 
                         if (GameManager.getInstance().getCurrentPhase() == PHASE.SELECT_OBJ) {
+
+                            //TODO: empactar tudo e um mmetodo do gameManager
+
+                            PhysicsManager.getInstance().postRoundObstacles();
 
                             Constants.localP().setCanSelect(true);
                             Constants.localP().setBallInteractable(false);
@@ -161,12 +165,21 @@ public class Client {
                                 listenerGame.GameScreen();
                             }
 
+
+
                         } else if (GameManager.getInstance().getCurrentPhase() == PHASE.PLAY) {
 
-                            PlayerManager.getInstance().setAllBallsAlive();
+                            //TODO: empactar tudo e um mmetodo do gameManager
+
+                            PhysicsManager.getInstance().preRoundObstacles();
+
+                            PlayerManager.getInstance().setEveryonePlaced(false);
+
+                            PlayerManager.getInstance().setAllBallsAlive(); // setar como vivas as a ideia principal é fazer um respawn
 
                             Constants.localP().setCanSelect(false);
                             Constants.localP().setBallInteractable(true);
+
 
                         } else if (GameManager.getInstance().getCurrentPhase() == PHASE.SHOW_POINTS) {
 
@@ -186,7 +199,7 @@ public class Client {
 
                                 PlayerManager.getInstance().updateStars(starsList);
 
-                                System.out.println("recebeu stars update");
+                                // System.out.println("recebeu stars update");
                             }
 
                             if (listenerGame != null) {
@@ -203,6 +216,11 @@ public class Client {
                             }
 
                         }
+                    }
+
+                    case TIMER_STOP -> {
+                        System.out.println("Recebeu TIMER_STOP, finalizando timer...");
+                        FlowManager.getInstance().onReceiveTimerStop();
                     }
 
                     default -> {

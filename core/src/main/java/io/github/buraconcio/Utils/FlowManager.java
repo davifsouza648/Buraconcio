@@ -1,58 +1,61 @@
 package io.github.buraconcio.Utils;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
-
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.Message;
 import io.github.buraconcio.Objects.Player;
 
 public class FlowManager {
 
-    private Main game;
+    private CountdownTimer timer;
+    private boolean isHost;
+    private static FlowManager instance;
 
-    private CountdownTimer timer, delayTimer;
-
-    public FlowManager(Main game) {
-        this.game = game;
-        startPlayPhase();
+    public FlowManager() {
+        this.isHost = Constants.isHosting();
+        if (isHost) {
+            startPlayPhase();
+        }
     }
 
-    public void startPlayPhase() {
+    public static synchronized FlowManager getInstance() {
+        if (instance == null) {
+            instance = new FlowManager();
+        }
+
+        return instance;
+    }
+
+    private void startPlayPhase() {
         changePhase("play");
-
-        timer = new CountdownTimer(GameManager.getInstance().getPlayTime(), new CountdownTimer.TimerListener() {
-
+        startHostTimer(GameManager.getInstance().getPlayTime(), new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {
 
-                // checar se as bolas estao mortas;
+                if (PlayerManager.getInstance().areAllBallsDead()) {
+                    stopAndNotify();
+
+                    startPointsPhase();
+                }
 
             }
 
             @Override
             public void finish() {
                 startPointsPhase();
-                PhysicsManager.getInstance().postRoundObstacles();
             }
-
         });
-
-        timer.start();
     }
 
-    public void startSelectObstaclePhase() {
+    private void startSelectObstaclePhase() {
         changePhase("select_obj");
-
-        timer = new CountdownTimer(GameManager.getInstance().getSelectTime(), new CountdownTimer.TimerListener() {
+        startHostTimer(GameManager.getInstance().getSelectTime(), new CountdownTimer.TimerListener() {
 
             @Override
             public void tick(int remainingSecs) {
 
-                //verificar se todos já colocaram seus obstaculos e puxar a finish()
-
-                if(PlayerManager.getInstance().hasEveryonePlaced()){
-                    System.out.println("TODOS COLOCARAM");
-                    finish();
+                if (PlayerManager.getInstance().hasEveryonePlaced()) {
+                    stopAndNotify();
+                    startPlayPhase();
                 }
 
             }
@@ -68,23 +71,14 @@ public class FlowManager {
                     }
                 }
 
-                PlayerManager.getInstance().setEveryonePlaced(false);
-
                 startPlayPhase();
-                PhysicsManager.getInstance().preRoundObstacles();
             }
-
         });
-
-        timer.start();
     }
 
-    public void startPointsPhase() {
-
+    private void startPointsPhase() {
         changePhase("show_points");
-
-        timer = new CountdownTimer(GameManager.getInstance().getPointsTime(), new CountdownTimer.TimerListener() {
-
+        startHostTimer(GameManager.getInstance().getPointsTime(), new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {
             }
@@ -93,22 +87,84 @@ public class FlowManager {
             public void finish() {
                 startSelectObstaclePhase();
             }
-
         });
+    }
 
+    private void winPhase() {
+        changePhase("show_win");
+        stopTimer();
+    }
+
+    private void startHostTimer(int seconds, CountdownTimer.TimerListener listener) {
+        stopTimer();
+        timer = new CountdownTimer(seconds, listener);
         timer.start();
     }
 
-    public void winPhase() {
-        changePhase("show_win");
-    }
-
-    public void changePhase(String str) {
-
+    private void sendTimerStopMessage() {
         if (Constants.isHosting()) {
-            ConnectionManager.getInstance().getServer().sendString(Message.Type.PHASE_CHANGE, str);
+            ConnectionManager.getInstance().getServer().sendString(Message.Type.TIMER_STOP, "");
         }
-
     }
 
+    public void onReceivePhaseChange(String phaseStr) {
+        stopTimer();
+
+        int phaseTime = switch (phaseStr) {
+
+            case "play" -> GameManager.getInstance().getPlayTime();
+
+            case "select_obj" -> GameManager.getInstance().getSelectTime();
+
+            case "show_points" -> GameManager.getInstance().getPointsTime();
+
+            case "show_win" -> GameManager.getInstance().getWinTime();
+
+            default -> 0;
+        };
+
+        if (phaseTime > 0) {
+            startClientTimer(phaseTime);
+        }
+    }
+
+    private void startClientTimer(int seconds) {
+        stopTimer();
+
+        System.out.println("timando");
+        timer = new CountdownTimer(seconds, new CountdownTimer.TimerListener() {
+            @Override
+            public void tick(int remainingSecs) {
+                // se quisermos fazer uma label mudando no topo da tela usando os segundos é
+                // aqui
+            }
+
+            @Override
+            public void finish() {
+            }
+        });
+        timer.start();
+    }
+
+    private void changePhase(String phase) {
+        if (Constants.isHosting()) {
+            ConnectionManager.getInstance().getServer().sendString(Message.Type.PHASE_CHANGE, phase);
+        }
+    }
+
+    private void stopAndNotify() {
+        stopTimer();
+        sendTimerStopMessage();
+    }
+
+    public void onReceiveTimerStop() {
+        stopTimer();
+    }
+
+    private void stopTimer() {
+        if (timer != null) {
+            timer.stop();
+            timer = null;
+        }
+    }
 }

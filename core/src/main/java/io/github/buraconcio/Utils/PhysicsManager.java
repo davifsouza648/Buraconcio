@@ -290,7 +290,8 @@ public class PhysicsManager {
 
     // TODO: METODO PARA ATUALIZAR VETOR DE ENTIDADES
     public void dispose() {
-        while (world.isLocked());
+        while (world.isLocked())
+            ;
 
         world.dispose();
         clearScheduler();

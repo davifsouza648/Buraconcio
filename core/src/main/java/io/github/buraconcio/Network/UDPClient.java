@@ -123,14 +123,14 @@ public class UDPClient {
         float x = pos.x;
         float y = pos.y;
         boolean placed = Constants.localP().hasPlacedObstacle();
-        // Vector2 velocity =
-        // Constants.localP().getSelectedObstacle().getBody().getLinearVelocity();
+
+        int rotIndex = Constants.localP().getSelectedObstacle().getRotationIndex();
 
         int ObsID;
 
         if (Constants.localP().getSelectedObstacle() != null) {
              ObsID= Constants.localP().getSelectedObstacle().getId();
-             return new UdpPackage(id, x, y, ObsID, PackType.OBSTACLE);
+             return new UdpPackage(id, x, y, ObsID, rotIndex, PackType.OBSTACLE);
         }else{
             return new UdpPackage(id, placed, PackType.DEFAULT);
         }
