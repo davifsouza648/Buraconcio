@@ -257,7 +257,11 @@ public class ServerScreen implements Screen {
 
         if (!Constants.isHosting()) {
             startButton.clearListeners();
+            mapButton.clearListeners();
+            startButton.setVisible(false);
+            mapButton.setVisible(false);
         }
+
 
         mapButton.addListener(new ClickListener() {
             @Override
