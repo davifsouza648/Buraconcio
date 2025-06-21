@@ -85,7 +85,7 @@ public class ObstacleInputAdapter extends InputAdapter {
         if (p.getSelectedObstacle() != null)
         {
             Vector2 snappedPos = snapToGrid(worldCoords);
-            p.getSelectedObstacle().move(snappedPos);
+            p.getSelectedObstacle().setTargetPos(snappedPos);
         }
 
         return true;

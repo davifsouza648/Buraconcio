@@ -17,6 +17,7 @@ public class Obstacle extends PhysicsEntity {
     public final static int CLOCKWISE = 0;
     public final static int COUNTER_CLOCKWISE = 1;
     private int rotationIndex = 0;
+    private Vector2 targetPos = null;
 
     protected boolean claimed = false;
     protected boolean active = false;
@@ -45,6 +46,18 @@ public class Obstacle extends PhysicsEntity {
     public void preRound() {}
 
     public void postRound() {}
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        if (targetPos != null) {
+            move(targetPos);
+
+            if (body.getPosition().cpy().sub(targetPos).len2() < 0.01f)
+                targetPos = null;
+        }
+    }
 
     // not in flag area
     public boolean canPlace() {
@@ -132,15 +145,14 @@ public class Obstacle extends PhysicsEntity {
         body.setTransform(body.getPosition(), body.getTransform().getRotation() + (direction * 2 - 1) * 1.5708f ); // 90 em rad
     }
 
+    public void setTargetPos(Vector2 pos) {
+        targetPos = pos;
+    }
+
     public void move(Vector2 pos) {
         Vector2 v = new Vector2(pos).sub(body.getPosition());
-        if (v.len2() < 0.001f) {
-            body.setLinearVelocity(v.scl(new Vector2(0f, 0f)));
-        } else if (v.len2() > 25f) {
-            body.setLinearVelocity(v.nor().scl(5f));
-        } else {
-            body.setLinearVelocity(v.scl(10f));
-        }
+
+        body.setLinearVelocity(v.scl(10f));
     }
 
     public void flashRed() {
