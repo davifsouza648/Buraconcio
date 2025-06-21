@@ -79,12 +79,15 @@ public class UDPClient {
             case SELECT_OBJ: {
                 if (Constants.localP().getSelectedObstacle() != null) {
                     return createObstaclePackage();
+
+                }else if(Constants.localP().hasPlacedObstacle()){
+                    return createDefaultPackage(true);
                 }else{
-                    return createDefaultPackage();
+                    return createDefaultPackage(false);
                 }
             }
             default:
-                return createDefaultPackage();
+                return createDefaultPackage(false);
         }
     }
 
@@ -132,17 +135,23 @@ public class UDPClient {
              ObsID= Constants.localP().getSelectedObstacle().getId();
              return new UdpPackage(id, x, y, ObsID, rotIndex, PackType.OBSTACLE);
         }else{
-            return new UdpPackage(id, placed, PackType.DEFAULT);
+            return new UdpPackage(id, placed, true, PackType.DEFAULT);
         }
 
-
     }
 
-    private UdpPackage createDefaultPackage() {
+    private UdpPackage createDefaultPackage(boolean flag) {
         boolean placed = Constants.localP().hasPlacedObstacle();
 
-        return new UdpPackage(id, placed, PackType.DEFAULT);
+        return new UdpPackage(id, placed, flag, PackType.DEFAULT);
+
     }
+
+
+    // private UdpPackage createPlacedPackage() {
+    //     int lastId = Constants.localP().getLastObsId();
+    //     return new UdpPackage(id, true, lastId, PackType.OBSTACLE_PLACED);
+    // }
 
     private byte[] serialize(UdpPackage packet) throws IOException {
 

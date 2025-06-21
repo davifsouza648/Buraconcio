@@ -4,6 +4,7 @@ import io.github.buraconcio.Objects.BlackHole;
 import io.github.buraconcio.Objects.BoostPad;
 import io.github.buraconcio.Objects.CircularSaw;
 import io.github.buraconcio.Objects.CrossBow;
+import io.github.buraconcio.Objects.Eraser;
 import io.github.buraconcio.Objects.Honey;
 import io.github.buraconcio.Objects.LMetalBox;
 import io.github.buraconcio.Objects.LongMetalBox;
@@ -52,6 +53,7 @@ public class ObstacleSpawner {
         obstacleFactory.put("star", pos -> new Star(new Vector2(12f, 35f)));
         obstacleFactory.put("woodbox", pos -> new WoodBox(new Vector2(5f, 25f)));
         obstacleFactory.put("trampoline", pos -> new Trampoline(new Vector2(15f, 30f)));
+        obstacleFactory.put("eraser", pos -> new Eraser(new Vector2(15f, 36f)));
     }
 
     // ObstacleSpawner() {
@@ -82,7 +84,7 @@ public class ObstacleSpawner {
         return types[index];
     }
 
-    public ArrayList<String> selectRandomObstacles(int count) 
+    public ArrayList<String> selectRandomObstacles(int count)
     {
 
         ArrayList<String> pool = new ArrayList<>(List.of(types));

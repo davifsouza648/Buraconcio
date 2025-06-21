@@ -27,6 +27,7 @@ public class Player implements Serializable {
     private Vector2 startingPos = null;
     private boolean hasStar = false;
     private boolean hasPlacedObstacle;
+    private int lastObsId = -1;
 
     private transient Ball ball;
 
@@ -36,14 +37,11 @@ public class Player implements Serializable {
 
         initSounds();
 
-
-
         ball = null;
         selectedObstacle = null;
     }
 
-    public Ball createBall() 
-    {
+    public Ball createBall() {
         if (startingPos == null) {
             System.out.println("starting position not defined");
             return null;
@@ -85,19 +83,29 @@ public class Player implements Serializable {
 
         selectObstacle(obstacle);
 
-        if (selectedObstacle != null) {
+        lastObsId = obsId;
 
+        if (selectedObstacle != null) {
             selectedObstacle.move(obstaclePos);
 
-            if(obsRotationIndex != selectedObstacle.getRotationIndex())
+            if (obsRotationIndex != selectedObstacle.getRotationIndex())
                 selectedObstacle.rotate(obsRotationIndex);
-
         }
     }
 
-    public void update(boolean placed) {
+    public void update(boolean placed, boolean flag) {
         // System.out.println("atualizando o placed para: " + placed);
         setHasPlacedObstacle(placed);
+
+        if (flag) {
+            Obstacle obstacle = (Obstacle) PhysicsManager.getInstance().getEntity(lastObsId);
+
+            if (obstacle == null)
+                return;
+
+            obstacle.place();
+        }
+
     }
 
     public void stroke(Vector2 mouse1, Vector2 mouse2) {
@@ -108,7 +116,8 @@ public class Player implements Serializable {
             return;
 
         int sound = (int) (Math.random() * 7) + 1;
-        SoundManager.getInstance().playProximity("ballhit" + sound, this.getBall().getPosition(), PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
+        SoundManager.getInstance().playProximity("ballhit" + sound, this.getBall().getPosition(),
+                PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
         ball.applyImpulse(ball.calculateImpulse(mouse1, mouse2));
 
         strokes += 1;
@@ -144,6 +153,9 @@ public class Player implements Serializable {
 
     public void placeObstacle() {
         selectedObstacle.place();
+
+        lastObsId = selectedObstacle.getId();
+
         selectedObstacle = null;
 
         hasPlacedObstacle = true;
@@ -197,6 +209,10 @@ public class Player implements Serializable {
         return id;
     }
 
+    public int getLastObsId() {
+        return lastObsId;
+    }
+
     public int getStars() {
         return stars;
     }
@@ -210,7 +226,7 @@ public class Player implements Serializable {
         avatarpath = "user" + num + ".png";
     }
 
-    public void setSkinBall(String path){
+    public void setSkinBall(String path) {
         this.skinBallPath = path;
     }
 

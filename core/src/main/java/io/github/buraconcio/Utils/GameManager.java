@@ -36,7 +36,7 @@ public class GameManager {
     private int points_time = 5;
     private int win_time = 55;
     private int pointsToWin = 10;
-    private int timeToClear = 7; //limpar os obstaculos nao selecionados
+    private int timeToClear = 15; //limpar os obstaculos nao selecionados
 
     // num de obstaculos
     private int obstacleNum = 6;
@@ -248,11 +248,11 @@ public class GameManager {
     public void setupSelectObstaclePhase() {
         PhysicsManager.getInstance().postRoundObstacles();
 
-        if (Constants.isHosting()) 
+        if (Constants.isHosting())
         {
             int qtd = MathUtils.random(4, 7);
             ArrayList<String> blueprintObstacles = obstacleSpawner.selectRandomObstacles(qtd);
-            ConnectionManager.getInstance().getServer().sendArray(Message.Type.BLUEPRINT_OBSTACLES,
+            ConnectionManager.getInstance().getServer().sendArray(Message.Type.SPAWN_OBSTACLES,
                     blueprintObstacles);
         }
 

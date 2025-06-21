@@ -20,7 +20,7 @@ public class UdpPackage implements Serializable {
     private boolean isAlive, isInHole;
 
     private float obsX, obsY, obsVel;
-    private boolean obsPlaced;
+    private boolean obsPlaced, flagPlaced;
     private int obsRotationIndex;
 
     private PackType typeP;
@@ -48,10 +48,11 @@ public class UdpPackage implements Serializable {
     }
 
 
-    public UdpPackage(int id, boolean obsPlaced, PackType p) {
+    public UdpPackage(int id, boolean obsPlaced, boolean flagPlaced, PackType p) {
         this.id = id;
         this.typeP = p;
         this.obsPlaced = obsPlaced;
+        this.flagPlaced = flagPlaced;
     }
 
     public boolean getDefault(){
@@ -60,6 +61,10 @@ public class UdpPackage implements Serializable {
 
     public int getId() {
         return id;
+    }
+
+    public boolean getflagPlaced(){
+        return flagPlaced;
     }
 
     public float getBallX() {

@@ -120,7 +120,7 @@ public class PlayerManager {
                                 pack.getObsRotationIndex());
 
                     } else {
-                        PlayerManager.getInstance().getPlayer(playerId).update(pack.getObsPlaced());
+                        PlayerManager.getInstance().getPlayer(playerId).update(pack.getObsPlaced(), pack.getflagPlaced());
                         return;
                     }
                 }
