@@ -63,35 +63,34 @@ public class PhysicsTest implements Screen {
         mapRenderer.createCollisions();
 
         for (Player player : PlayerManager.getInstance().getAllPlayers()) {
-            Vector2 spawnPos = mapRenderer.getRandomSpawnPosition();
-            player.setStartingPos(spawnPos);
             player.createBall();
         }
 
         pBall = PlayerManager.getInstance().getLocalPlayer().getBall();
 
-        if (pBall == null) { // testing without server
-            PhysicsManager.getInstance().placePlayer(PlayerManager.getInstance().getLocalPlayer());
-            pBall = PlayerManager.getInstance().getLocalPlayer().createBall();
-        }
-
         camera = new GameCamera();
         stage.getViewport().setCamera(camera);
         hud = new HUD(hudStage, PlayerManager.getInstance().getLocalPlayer().getId(), game);
 
-        new CrossBow(new Vector2(9f, 35f));
-        new Star(new Vector2(12f, 35f));
-        // new BoostPad(new Vector2(15f, 35f));
-        // new BlackHole(new Vector2(19f, 35f));
-        // new CircularSaw(new Vector2(9f, 30f));
-        // new Trampoline(new Vector2(15f, 30f));
-        // new Mine(new Vector2(17.5f, 30f));
-        // new Honey(new Vector2(20f, 30f));
-        // new WoodBox(new Vector2(5f, 25f));
-        // new LongWoodBox(new Vector2(10f, 25f));
-        // new MetalBox(new Vector2(15f, 25f));
-        // new LongMetalBox(new Vector2(20f, 25f));
-        // new LMetalBox(new Vector2(27f, 25f));
+        if (pBall == null) { // testing without server
+            PhysicsManager.getInstance().placePlayer(PlayerManager.getInstance().getLocalPlayer());
+            pBall = PlayerManager.getInstance().getLocalPlayer().createBall();
+
+            new CrossBow(new Vector2(9f, 35f));
+            new Star(new Vector2(12f, 35f));
+            new BoostPad(new Vector2(15f, 35f));
+            new BlackHole(new Vector2(19f, 35f));
+            new CircularSaw(new Vector2(9f, 30f));
+            new Trampoline(new Vector2(15f, 30f));
+            new Mine(new Vector2(17.5f, 30f));
+            new Honey(new Vector2(20f, 30f));
+            new WoodBox(new Vector2(5f, 25f));
+            new LongWoodBox(new Vector2(10f, 25f));
+            new MetalBox(new Vector2(15f, 25f));
+            new LongMetalBox(new Vector2(20f, 25f));
+            new LMetalBox(new Vector2(27f, 25f));
+            new Eraser(new Vector2(9f, 30f));
+        }
 
         flow = new FlowManager();
 
