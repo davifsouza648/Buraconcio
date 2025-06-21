@@ -65,8 +65,18 @@ public class Obstacle extends PhysicsEntity {
             return false;
 
         for (Contact contact : PhysicsManager.getInstance().getContactList()) {
-            if (PhysicsManager.getInstance().getEntity(contact.getFixtureA().getBody().getUserData()).getId() == getId()
-                || PhysicsManager.getInstance().getEntity(contact.getFixtureB().getBody().getUserData()).getId() == getId())
+            Object fixtureA = contact.getFixtureA().getBody().getUserData();
+            Object fixtureB = contact.getFixtureB().getBody().getUserData();
+
+            if (fixtureA == null || fixtureB == null)
+                continue;
+
+            PhysicsEntity entityA = PhysicsManager.getInstance().getEntity(fixtureA);
+            PhysicsEntity entityB = PhysicsManager.getInstance().getEntity(fixtureB);
+            if (entityA == null || entityB == null)
+                continue;
+
+            if (entityA.getId() == getId() || entityB.getId() == getId())
                 return false;
         }
 
@@ -152,7 +162,11 @@ public class Obstacle extends PhysicsEntity {
     public void move(Vector2 pos) {
         Vector2 v = new Vector2(pos).sub(body.getPosition());
 
-        body.setLinearVelocity(v.scl(10f));
+        if (v.len2() < 0.01f) {
+            body.setLinearVelocity(new Vector2(0f, 0f));
+        } else {
+            body.setLinearVelocity(v.scl(10f));
+        }
     }
 
     public void flashRed() {
