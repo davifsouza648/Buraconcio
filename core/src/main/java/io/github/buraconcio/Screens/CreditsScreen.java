@@ -102,19 +102,19 @@ public class CreditsScreen implements Screen {
 
     public Table createNames(){
 
-        String[] nomes = {"Arthur", "Davi", "Mario", "Murilo"};
-        Table row = new Table();
+    String[] nomes = {"Arthur", "Davi", "Mario", "Murilo"};
+    Table row = new Table();
 
-        TextField nameField;
+    for(String str : nomes){
+        TextField nameField = new TextField(str, skinTextField, "labelPixelyWhite32");
+        nameField.setAlignment(Align.center);
+        nameField.setDisabled(true);
 
-        for(String str : nomes){
-            nameField = new TextField(str, skinTextField, "labelPixelyWhite32");
-            nameField.setAlignment(Align.center);
-            row.add(nameField).width(200).padRight(10);
-        }
-
-        return row;
+        row.add(nameField).width(200).padRight(10);
     }
+
+    return row;
+}
 
     @Override
     public void show() {
