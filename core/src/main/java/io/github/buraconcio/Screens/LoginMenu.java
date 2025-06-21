@@ -37,6 +37,16 @@ public class LoginMenu implements Screen {
     // private String password;
 
     private GDXDialogs dialogs;
+    private String[] skinBallpaths ={
+        "balls/blackBall.png",
+        "balls/blueBall.png",
+        "balls/cianBall.png",
+        "balls/grayBall.png",
+        "balls/greenBall.png",
+        "balls/orangeBall.png",
+        "balls/pinkBall.png",
+        "balls/purpleBall.png",
+    };
 
     public LoginMenu(Main game) {
         this.game = game;
@@ -101,6 +111,8 @@ public class LoginMenu implements Screen {
                     player.setId(username.hashCode()); // + random.nextInt(25));
 
                     player.setAvatar(random.nextInt(1, 32));
+                    int skinBall = random.nextInt(0, 7);
+                    player.setSkinBall(skinBallpaths[skinBall]);
 
                     PlayerManager.getInstance().setLocalPlayer(player);
 

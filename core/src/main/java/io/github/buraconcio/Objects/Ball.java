@@ -38,8 +38,8 @@ public class Ball extends PhysicsEntity {
     // para a phase de select_obj
     private boolean canInteract = true;
 
-    public Ball(Vector2 pos, float d, Player player) {
-        super(pos, new Vector2(d, d), "ballteste.png");
+    public Ball(Vector2 pos, float d, Player player, String skinBall) {
+        super(pos, new Vector2(d, d), skinBall);
 
         body.setType(BodyType.DynamicBody);
         body.setLinearDamping(linDamp);

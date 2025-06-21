@@ -21,7 +21,7 @@ public class Player implements Serializable {
     private int id;
     private int strokes;
     private boolean hosting;
-    private String avatarpath;
+    private String avatarpath, skinBallPath;
     private Obstacle selectedObstacle;
     private boolean canSelect = true;
     private Vector2 startingPos = null;
@@ -49,13 +49,13 @@ public class Player implements Serializable {
             return null;
         }
 
-        ball = new Ball(startingPos, Constants.BALL_RADIUS * 2, this);
+        ball = new Ball(startingPos, Constants.BALL_RADIUS * 2, this, skinBallPath);
 
         return ball;
     }
 
     public Ball createBall(Vector2 pos) {
-        ball = new Ball(pos, Constants.BALL_RADIUS * 2, this);
+        ball = new Ball(pos, Constants.BALL_RADIUS * 2, this, skinBallPath);
 
         return ball;
     }
@@ -208,6 +208,10 @@ public class Player implements Serializable {
     public void setAvatar(int num) {
 
         avatarpath = "user" + num + ".png";
+    }
+
+    public void setSkinBall(String path){
+        this.skinBallPath = path;
     }
 
     public String getAvatar() {
