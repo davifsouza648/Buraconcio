@@ -23,11 +23,11 @@ import de.tomgrill.gdxdialogs.core.dialogs.*;
 import de.tomgrill.gdxdialogs.core.listener.ButtonClickListener;
 
 import io.github.buraconcio.Main;
-import io.github.buraconcio.Network.Client;
-import io.github.buraconcio.Objects.Button;
-import io.github.buraconcio.Utils.ConnectionManager;
-import io.github.buraconcio.Utils.Constants;
-import io.github.buraconcio.Utils.CursorManager;
+import io.github.buraconcio.Network.TCP.Client;
+import io.github.buraconcio.Objects.UI.Button;
+import io.github.buraconcio.Utils.Managers.ConnectionManager;
+import io.github.buraconcio.Utils.Common.Constants;
+import io.github.buraconcio.Utils.Managers.CursorManager;
 
 public class LoadingScreen implements Screen {
     private final Main game;

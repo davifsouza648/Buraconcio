@@ -19,10 +19,10 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.buraconcio.Main;
-import io.github.buraconcio.Objects.Button;
-import io.github.buraconcio.Utils.Auxiliaries;
-import io.github.buraconcio.Utils.CursorManager;
-import io.github.buraconcio.Utils.SoundManager;
+import io.github.buraconcio.Objects.UI.Button;
+import io.github.buraconcio.Utils.Common.Auxiliaries;
+import io.github.buraconcio.Utils.Managers.CursorManager;
+import io.github.buraconcio.Utils.Managers.SoundManager;
 
 public class CreditsScreen implements Screen {
     private Main game;

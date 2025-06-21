@@ -17,12 +17,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.buraconcio.Main;
-import io.github.buraconcio.Utils.CursorManager;
-import io.github.buraconcio.Utils.GameManager;
-import io.github.buraconcio.Utils.Auxiliaries;
-import io.github.buraconcio.Utils.PlayerManager;
-import io.github.buraconcio.Objects.Button;
-import io.github.buraconcio.Utils.SoundManager;
+import io.github.buraconcio.Utils.Managers.CursorManager;
+import io.github.buraconcio.Utils.Managers.GameManager;
+import io.github.buraconcio.Utils.Common.Auxiliaries;
+import io.github.buraconcio.Utils.Managers.PlayerManager;
+import io.github.buraconcio.Objects.UI.Button;
+import io.github.buraconcio.Utils.Managers.SoundManager;
 
 public class MainMenu implements Screen {
 
@@ -44,10 +44,10 @@ public class MainMenu implements Screen {
         SoundManager.getInstance().loadMusic("menu", "sounds/songs/menuTheme.mp3");
         SoundManager.getInstance().playMusic("menu");
 
-        backAnimation = Auxiliaries.animationFromFiles("backgroundMenu.png", "backgroundMenu.json");
+        backAnimation = Auxiliaries.animationFromFiles("backgrounds/backgroundMenu.png", "backgrounds/backgroundMenu.json");
         backImage = new Image(new TextureRegionDrawable(backAnimation.getKeyFrame(0)));
 
-        buraconcioAnimation = Auxiliaries.animationFromFiles("nomeMenu.png", "nomeMenu.json");
+        buraconcioAnimation = Auxiliaries.animationFromFiles("backgrounds/nomeMenu.png", "backgrounds/nomeMenu.json");
         buraconcioImage = new Image(new TextureRegionDrawable(buraconcioAnimation.getKeyFrame(0)));
 
         Button join = new Button();

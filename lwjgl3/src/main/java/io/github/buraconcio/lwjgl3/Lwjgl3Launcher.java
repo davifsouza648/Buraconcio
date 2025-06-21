@@ -36,7 +36,7 @@ public class Lwjgl3Launcher {
         //configuration.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
         //// You can change these files; they are in lwjgl3/src/main/resources/ .
         //// They can also be loaded from the root of assets/ .
-        configuration.setWindowIcon("Logo16x16.png","Logo.png");
+        configuration.setWindowIcon("logo/Logo16x16.png", "logo/Logo.png");
         return configuration;
     }
 }

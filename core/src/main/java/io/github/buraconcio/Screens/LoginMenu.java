@@ -8,11 +8,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.buraconcio.Main;
-import io.github.buraconcio.Objects.Player;
-import io.github.buraconcio.Objects.Button;
-import io.github.buraconcio.Utils.CursorManager;
-import io.github.buraconcio.Utils.PlayerManager;
-import io.github.buraconcio.Utils.SoundManager;
+import io.github.buraconcio.Objects.Game.Player;
+import io.github.buraconcio.Objects.UI.Button;
+import io.github.buraconcio.Utils.Managers.CursorManager;
+import io.github.buraconcio.Utils.Managers.PlayerManager;
+import io.github.buraconcio.Utils.Managers.SoundManager;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;

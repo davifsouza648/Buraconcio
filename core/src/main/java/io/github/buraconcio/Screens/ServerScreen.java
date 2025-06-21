@@ -18,19 +18,19 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import io.github.buraconcio.Main;
-import io.github.buraconcio.Network.Client;
-import io.github.buraconcio.Network.Message;
-import io.github.buraconcio.Network.Server;
-import io.github.buraconcio.Objects.Player;
-import io.github.buraconcio.Objects.Button;
-import io.github.buraconcio.Utils.Auxiliaries;
-import io.github.buraconcio.Utils.ConnectionManager;
-import io.github.buraconcio.Utils.Constants;
-import io.github.buraconcio.Utils.CursorManager;
-import io.github.buraconcio.Utils.GameManager;
-import io.github.buraconcio.Utils.PlayerManager;
-import io.github.buraconcio.Utils.SoundManager;
-import io.github.buraconcio.Utils.CountdownTimer;
+import io.github.buraconcio.Network.TCP.Client;
+import io.github.buraconcio.Network.TCP.Message;
+import io.github.buraconcio.Network.TCP.Server;
+import io.github.buraconcio.Objects.Game.Player;
+import io.github.buraconcio.Objects.UI.Button;
+import io.github.buraconcio.Utils.Common.Auxiliaries;
+import io.github.buraconcio.Utils.Managers.ConnectionManager;
+import io.github.buraconcio.Utils.Common.Constants;
+import io.github.buraconcio.Utils.Managers.CursorManager;
+import io.github.buraconcio.Utils.Managers.GameManager;
+import io.github.buraconcio.Utils.Managers.PlayerManager;
+import io.github.buraconcio.Utils.Managers.SoundManager;
+import io.github.buraconcio.Utils.Common.CountdownTimer;
 
 public class ServerScreen implements Screen {
     private final Main game;
