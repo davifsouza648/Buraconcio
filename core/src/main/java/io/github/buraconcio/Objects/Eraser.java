@@ -11,7 +11,7 @@ import io.github.buraconcio.Utils.PhysicsManager;
 
 public class Eraser extends Obstacle {
     private static final Vector2 size = new Vector2(1.5f, 1.5f);
-    private static final int WHITEOUT_FRAME = 17;
+    private static final int WHITEOUT_FRAME = 16;
 
     private Obstacle toErase = null;
     AnimationPlay eraseAnimation = null;
