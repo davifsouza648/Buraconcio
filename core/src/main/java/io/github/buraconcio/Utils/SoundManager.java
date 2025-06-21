@@ -100,6 +100,21 @@ public class SoundManager
     {
         if(volume < 0 || volume > 1) return;
         this.masterVolume = volume;
+
+        for(Sound s: loopSounds.values())
+        {
+            s.setVolume(0, volume);
+        }
+        
+        for(Sound s: sounds.values())
+        {
+            s.setVolume(0, volume);
+        }
+
+        for(Music m: music.values())
+        {
+            m.setVolume(volume);
+        }
     }
 
     public void playSound(String id)
@@ -117,6 +132,7 @@ public class SoundManager
         if(currentMusicID != id && currentMusic != null){currentMusic.stop();}
         currentMusic = m;
         currentMusicID = id;
+        m.setVolume(masterVolume - 0.4f);
         m.play();
 
     }

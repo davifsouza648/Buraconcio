@@ -2,6 +2,8 @@ package io.github.buraconcio.Objects;
 
 import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.PhysicsManager;
+import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.SoundManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,8 +28,6 @@ public class Player implements Serializable {
     private boolean hasStar = false;
     private boolean hasPlacedObstacle;
 
-    private transient ArrayList<Sound> strokeSounds = new ArrayList<>();
-
     private transient Ball ball;
 
     public Player(String username) {
@@ -36,11 +36,14 @@ public class Player implements Serializable {
 
         initSounds();
 
+
+
         ball = null;
         selectedObstacle = null;
     }
 
-    public Ball createBall() {
+    public Ball createBall() 
+    {
         if (startingPos == null) {
             System.out.println("starting position not defined");
             return null;
@@ -104,11 +107,8 @@ public class Player implements Serializable {
         if (mouse1.dst(mouse2) < 0.05f)
             return;
 
-        if (strokeSounds == null || strokeSounds.isEmpty()) {
-            initSounds();
-        }
-
-        strokeSounds.get((int) (Math.random() * strokeSounds.size())).play(1f);
+        int sound = (int) (Math.random() * 7) + 1;
+        SoundManager.getInstance().playProximity("ballhit" + sound, this.getBall().getPosition(), PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
         ball.applyImpulse(ball.calculateImpulse(mouse1, mouse2));
 
         strokes += 1;
@@ -235,14 +235,13 @@ public class Player implements Serializable {
     }
 
     private void initSounds() {
-        strokeSounds = new ArrayList<>();
-        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit1.wav")));
-        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit2.wav")));
-        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit3.wav")));
-        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit4.wav")));
-        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit5.wav")));
-        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit6.wav")));
-        strokeSounds.add(Gdx.audio.newSound(Gdx.files.internal("sounds/hits/hit7.wav")));
+        SoundManager.getInstance().loadSound("ballhit1", "sounds/hits/hit1.wav");
+        SoundManager.getInstance().loadSound("ballhit2", "sounds/hits/hit2.wav");
+        SoundManager.getInstance().loadSound("ballhit3", "sounds/hits/hit3.wav");
+        SoundManager.getInstance().loadSound("ballhit4", "sounds/hits/hit4.wav");
+        SoundManager.getInstance().loadSound("ballhit5", "sounds/hits/hit5.wav");
+        SoundManager.getInstance().loadSound("ballhit6", "sounds/hits/hit6.wav");
+        SoundManager.getInstance().loadSound("ballhit7", "sounds/hits/hit7.wav");
     }
 
     public void dispose() {

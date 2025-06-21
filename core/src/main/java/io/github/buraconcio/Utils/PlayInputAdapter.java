@@ -8,14 +8,22 @@ import com.badlogic.gdx.math.Vector3;
 import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Utils.GameManager.PHASE;
 import io.github.buraconcio.Objects.GameCamera;
+import io.github.buraconcio.Objects.HUD;
 
 public class PlayInputAdapter extends InputAdapter {
 
     private Vector2 mouse1 = new Vector2();
+    private HUD hud;
 
     public PlayInputAdapter() {
         super();
     }
+
+    public void setHud(HUD hud)
+    {
+        this.hud = hud;
+    }
+
 
     @Override
     public boolean touchDown(int x, int y, int pointer, int button)
@@ -33,6 +41,11 @@ public class PlayInputAdapter extends InputAdapter {
     {
         if (GameManager.getInstance().getCurrentPhase() != PHASE.PLAY)
             return false;
+
+        if(hud != null)
+        {
+            if(hud.isPaused()){return false;}
+        }
 
         GameCamera camera = GameManager.getInstance().getPhysicsCamera();
         Player p = PlayerManager.getInstance().getLocalPlayer();
@@ -57,6 +70,10 @@ public class PlayInputAdapter extends InputAdapter {
     @Override
     public boolean touchDragged(int x, int y, int pointer)
     {
+        if(hud != null)
+            if(hud.isPaused()){return false;}
+        
+
         if (GameManager.getInstance().getCurrentPhase() != PHASE.PLAY)
             return false;
 
@@ -69,6 +86,8 @@ public class PlayInputAdapter extends InputAdapter {
 
         return true;
     }
+
+    
 
     @Override
     public boolean keyDown(int keyCode)
@@ -85,6 +104,11 @@ public class PlayInputAdapter extends InputAdapter {
         else if (keyCode == Keys.NUM_3)
         {
             camera.zoom = 1.16f;
+        }
+        else if(keyCode == Keys.ESCAPE)
+        {
+            if(hud!=null)
+                hud.togglePaused();
         }
 
         return false;

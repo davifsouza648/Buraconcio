@@ -25,6 +25,9 @@ import io.github.buraconcio.Utils.PhysicsManager;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class PhysicsTest implements Screen {
     private final Main game;
@@ -97,6 +100,7 @@ public class PhysicsTest implements Screen {
 
         GameManager.getInstance().addProcessor(hudStage, 0);
         GameManager.getInstance().setGameInputProcessor();
+        GameManager.getInstance().getInputAdapter().setHud(hud);
     }
 
     @Override
@@ -159,10 +163,10 @@ public class PhysicsTest implements Screen {
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        hud.render();
-
         stage.getViewport().setCamera(camera);
         stage.draw();
+
+        hud.render();
 
         //debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
 

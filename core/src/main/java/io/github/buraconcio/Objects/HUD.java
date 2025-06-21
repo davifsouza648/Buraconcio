@@ -2,6 +2,8 @@ package io.github.buraconcio.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,19 +14,38 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+import io.github.buraconcio.Utils.GameManager;
 import io.github.buraconcio.Utils.PlayerManager;
 
-public class HUD {
+public class HUD
+{
     private Stage stage;
     private Viewport viewport;
     private int playerId;
 
+    //Coisas do hud normal
     private Button giveUp;
     private Label countdownLabel;
+    private Image pauseOverlay;
+    private Table mainTable;
+    
+
+    //Coisas do hud pausado
+    private Table pausedTable;
+    private Button resume;
+    private Button quit;
+    private Button config;
+
     private Timer.Task countdownTask;
     private int remainingSeconds;
     private boolean isButtonPressed;
+    
+
+    private boolean isPaused = false;
 
     public HUD(Stage stage, int playerId) 
     {
@@ -34,7 +55,22 @@ public class HUD {
         viewport = new FitViewport(800, 480, hudCamera);
         this.stage = stage;
 
-        Table mainTable = new Table();
+        //Borrado no fundo
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0, 0, 0, 0.5f); 
+        pixmap.fill();
+
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+
+        pauseOverlay = new Image(texture);
+        pauseOverlay.setFillParent(true);
+        pauseOverlay.setVisible(false);
+
+        stage.addActor(pauseOverlay); // Adicione antes do pauseMenuTable
+
+        //Hud fora do pause
+        mainTable = new Table();
         mainTable.setFillParent(true);
         mainTable.setDebug(false); 
 
@@ -51,9 +87,11 @@ public class HUD {
         giveUp = new Button();
         ImageButton giveUpButton = giveUp.createButton("giveUp", "giveup");
 
+
         giveUpButton.addListener(new InputListener() 
         {
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) 
+            {
                 startCountdown();
                 return true;
             }
@@ -70,14 +108,86 @@ public class HUD {
                     cancelCountdown();
                 }
             }
+
         });
         
         buttonTable.add(giveUpButton).pad(10).size(100, 50);
 
         mainTable.row(); 
         mainTable.add(buttonTable).bottom().left().padBottom(20).padLeft(20);
-
+       
         stage.addActor(mainTable);
+
+        //Hud pausada
+
+        pausedTable = new Table();
+        pausedTable.setFillParent(true);
+        pausedTable.setVisible(false); 
+
+        resume = new Button();
+        quit = new Button();
+        config = new Button();
+
+        ImageButton resumeButton = resume.createButton("start", "start");
+        ImageButton quitButton = quit.createButton("quit", "quit");
+        ImageButton configButton = config.createButton("config", "config");
+
+        resumeButton.addListener(new InputListener() 
+        {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                togglePaused();
+                return true;
+            }
+        });
+
+        quitButton.addListener(new InputListener()
+        {
+            @Override
+            public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
+            {
+                return true;
+            }
+        });
+
+        configButton.addListener(new InputListener()
+        {
+            @Override
+            public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
+            {
+                return true;
+            }
+        });
+
+        Table pausedButtonTable = new Table();
+        pausedButtonTable.center();
+        pausedButtonTable.add(resumeButton).size(100,50).pad(10);
+        pausedButtonTable.row();
+        pausedButtonTable.add(quitButton).size(100,50).pad(10);
+
+        Table configButtonTable = new Table();
+        configButtonTable.bottom().left();
+        configButtonTable.add(configButton).size(50,50).pad(10);
+
+        pausedTable.add(pausedButtonTable).expand().center();
+        pausedTable.row();
+        pausedTable.add(configButtonTable).expandX().fillX().bottom().left();
+
+        stage.addActor(pausedTable);
+
+    }
+
+    public boolean isPaused()
+    {
+        return isPaused;
+    }
+
+    public void togglePaused()
+    {
+        isPaused = !isPaused;
+        pauseOverlay.setVisible(isPaused);
+        pausedTable.setVisible(isPaused);
+        mainTable.setVisible(!isPaused);
     }
 
     private void startCountdown() 
@@ -131,11 +241,10 @@ public class HUD {
         {
             countdownLabel.setColor(1,0,0,1);
         }
-        // countdownLabel.setColor(1, 0, 0, 1); // Texto vermelho
-        // countdownLabel.setFontScale(1.5f); // Aumenta o tamanho
     }
 
-    public void render() {
+    public void render()
+    {
         stage.act();
         stage.draw();
     }

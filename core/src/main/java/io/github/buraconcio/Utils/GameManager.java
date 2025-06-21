@@ -25,6 +25,8 @@ public class GameManager {
     private Screen currentScreen;
     private ObstacleSpawner obstacleSpawner;
 
+    private PlayInputAdapter playInput;
+
     // gestao de tempo
     private int play_time = 50;
     private int select_time = 30;
@@ -54,7 +56,8 @@ public class GameManager {
     private GameManager() {
         inputs = new InputMultiplexer();
 
-        inputs.addProcessor(new PlayInputAdapter()); // bem gambiarra por enquanto
+        playInput = new PlayInputAdapter();
+        inputs.addProcessor(playInput); // bem gambiarra por enquanto
         inputs.addProcessor(new ObstacleInputAdapter());
         inputs.addProcessor(new DebugInputAdapter());
 
@@ -118,6 +121,11 @@ public class GameManager {
 
     public Screen getCurrentScreen() {
         return currentScreen;
+    }
+
+    public PlayInputAdapter getInputAdapter()
+    {
+        return this.playInput;
     }
 
     public void setMapIndex(int index) {
