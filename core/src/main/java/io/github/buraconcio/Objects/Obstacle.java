@@ -143,10 +143,6 @@ public class Obstacle extends PhysicsEntity {
         }
     }
 
-    public void teleport(Vector2 pos) {
-        body.setTransform(pos, body.getTransform().getRotation());
-    }
-
     public void flashRed() {
         animacao.flashRed();
     }

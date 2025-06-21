@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -224,6 +225,21 @@ public class Client {
                                 GameManager.getInstance().spawnObstacle(type, null);
                             });
 
+                        GameManager.getInstance().moveCamera(new Vector2(10f, 30f)); // temporary
+                    }
+
+                    case PLAYERS_START_POS -> {
+                        @SuppressWarnings("unchecked")
+                        HashMap<Integer, Vector2> startPosById = (HashMap<Integer, Vector2>) msg.getPayload();
+
+                        for (Player p : PlayerManager.getInstance().getAllPlayers()) {
+                            Vector2 pos = startPosById.get(p.getId());
+
+                            if (pos != null) {
+                                p.setStartingPos(pos);
+                                p.teleportToStartingPos();
+                            }
+                        }
                     }
 
                     case CLEAR_UNCLAIMED -> {

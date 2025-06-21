@@ -223,6 +223,12 @@ public class GameManager {
         PlayerManager.getInstance().setEveryonePlaced(false);
 
         PlayerManager.getInstance().setAllBallsAlive(); // setar como vivas as a ideia principal é fazer um respawn
+        PhysicsManager.getInstance().randomizePlayerPositions();
+
+        if (Constants.isHosting()) {
+            ConnectionManager.getInstance().getServer().sendMessage(Message.Type.PLAYERS_START_POS,
+                PhysicsManager.getInstance().getPlayerStartPosList());
+        }
 
         Constants.localP().setCanSelect(false);
         Constants.localP().setBallInteractable(true);
@@ -244,4 +250,7 @@ public class GameManager {
         return obstacleSpawner.spawnObstacle(type, pos);
     }
 
+    public void moveCamera(Vector2 pos) {
+        camera.setTarget(pos);
+    }
 }

@@ -109,4 +109,11 @@ public class Server {
         }
     }
 
+    public void sendMessage(Message.Type type, Object payload) {
+        Message msg = new Message(type, payload);
+
+        for(ClientHandler client : clients){
+            client.broadcastMessage(msg);
+        }
+    }
 }

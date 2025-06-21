@@ -177,6 +177,10 @@ public class Player implements Serializable {
         this.startingPos = pos;
     }
 
+    public void teleportToStartingPos() {
+        ball.teleport(startingPos);
+    }
+
     public String getUsername() {
         return username;
     }

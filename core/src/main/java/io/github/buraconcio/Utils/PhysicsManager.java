@@ -212,11 +212,6 @@ public class PhysicsManager {
     }
 
     public void placePlayer(Player player) {
-        if (player.getBall() != null) {
-            System.out.println("player already has ball");
-            return;
-        }
-
         for (int i = 0; i < 1000; ++i) { // max 1000
             boolean collides = false;
 
@@ -239,6 +234,14 @@ public class PhysicsManager {
 
         playerStartPosById.put(player.getId(), new Vector2(0f, 0f)); // ensurance
         player.setStartingPos(new Vector2(0f, 0f));
+    }
+
+    public void randomizePlayerPositions() {
+        playerStartPosById.clear();
+
+        for (Player p : PlayerManager.getInstance().getAllPlayers()) {
+            placePlayer(p);
+        }
     }
 
     public float getRandomFloat(float min, float max) {

@@ -117,5 +117,9 @@ public class PhysicsEntity extends Actor {
     public void applyForce(Vector2 force) {
         body.applyForceToCenter(force, true);
     }
+
+    public void teleport(Vector2 pos) {
+        body.setTransform(pos, body.getTransform().getRotation());
+    }
 }
 

@@ -14,7 +14,8 @@ public class Message implements Serializable {
         SERVER_NOTIFICATION,
         TIMER_STOP,
         CLEAR_UNCLAIMED,
-        SPAWN_OBSTACLES
+        SPAWN_OBSTACLES,
+        PLAYERS_START_POS,
     }
 
     private Type type;

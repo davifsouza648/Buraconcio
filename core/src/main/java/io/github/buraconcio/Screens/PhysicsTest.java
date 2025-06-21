@@ -57,7 +57,7 @@ public class PhysicsTest implements Screen {
 
         SoundManager.getInstance().stopMusic();
 
-        stage.setDebugAll(true);
+        //stage.setDebugAll(true);
         PhysicsManager.getInstance().setStage(stage);
 
         mapRenderer.createCollisions();
@@ -164,7 +164,7 @@ public class PhysicsTest implements Screen {
         stage.getViewport().setCamera(camera);
         stage.draw();
 
-        debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
+        //debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
 
         PhysicsManager.getInstance().tick();
     }
