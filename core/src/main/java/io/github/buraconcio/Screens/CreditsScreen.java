@@ -12,8 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.github.buraconcio.Main;
@@ -24,7 +26,7 @@ import io.github.buraconcio.Utils.CursorManager;
 public class CreditsScreen implements Screen {
     private Main game;
     private Stage stage;
-    private Skin skinLabel;
+    private Skin skinLabel, skinTextField;
     private Animation<TextureRegion> backAnimation;
     private float elapsedTimeBack = 0f;
     private Image backImage;
@@ -36,7 +38,7 @@ public class CreditsScreen implements Screen {
 
         stage = new Stage(new ScreenViewport());
         skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
-
+        this.skinTextField = new Skin(Gdx.files.internal("fonts/pixely/textFields/textField.json"));
         CursorManager.resetToArrow();
 
         backAnimation = Auxiliaries.animationFromFiles("backgroundMenu.png", "backgroundMenu.json");
@@ -58,7 +60,8 @@ public class CreditsScreen implements Screen {
         Texture titleTextute = new Texture(Gdx.files.internal("credits/developers.png"));
         titleImage = new Image(titleTextute);
 
-        Texture texture = new Texture(Gdx.files.internal("credits/teste.jpg"));
+        // Texture texture = new Texture(Gdx.files.internal("credits/teste.jpg"));
+        Texture texture = new Texture(Gdx.files.internal("credits/time.jpg"));
         fotoImage = new Image(texture);
 
         float originalWidth = texture.getWidth();
@@ -71,8 +74,6 @@ public class CreditsScreen implements Screen {
 
         fotoImage.setSize(originalWidth * scale, originalHeight * scale);
 
-
-
         Label nomes = new Label("Arthur, Davi, Mario e Murilo", skinLabel, "labelPixelyWhite64");
         nomes.setFontScale(1f);
 
@@ -84,11 +85,11 @@ public class CreditsScreen implements Screen {
         table.setFillParent(true);
         table.center();
 
-        table.add(titleImage).padBottom(50);
+        table.add(titleImage).padBottom(20).size(800, 120).padTop(10);
         table.row();
         table.add(fotoImage).size(fotoImage.getWidth(), fotoImage.getHeight()).padBottom(20);
         table.row();
-        table.add(nomes).padBottom(30);
+        table.add(createNames()).padBottom(26);
         table.row();
         table.add(backButtonImage).pad(10).size(260, 104);
 
@@ -97,6 +98,22 @@ public class CreditsScreen implements Screen {
 
         stage.addActor(backgroundTable);
         stage.addActor(table);
+    }
+
+    public Table createNames(){
+
+        String[] nomes = {"Arthur", "Davi", "Mario", "Murilo"};
+        Table row = new Table();
+
+        TextField nameField;
+
+        for(String str : nomes){
+            nameField = new TextField(str, skinTextField, "labelPixelyWhite32");
+            nameField.setAlignment(Align.center);
+            row.add(nameField).width(200).padRight(10);
+        }
+
+        return row;
     }
 
     @Override
