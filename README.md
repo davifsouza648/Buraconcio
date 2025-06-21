@@ -2,7 +2,7 @@
 
 ## TODO
 
-### ❗ Erros
+### Erros
 
 - [ ] "Camera is null" acontece quando inicia o game e os players jogam muito "rápido"
   - [ ] Colocar um timer na pré primeira rodada
@@ -10,7 +10,7 @@
 - [ ] Sobreposição da bola sobre o mel e boostpad
 - [ ] Nukar o mapa1
 
-### 🚧 Implementações
+### Implementações
 
 - [ ] Hud de vitória (Screen)
 - [ ] Hud de configuração
@@ -22,3 +22,18 @@
 - [ ] Verificar se a borracha funciona no server/client
 - [ ] TREM + tempo de cada e etc
 - [ ] Organizar o vetor de mapas
+- [ ] Ventilador
+- [ ] MOLDURAAAAAA
+
+
+### ASSETS
+
+- [ ] Hud de vitória
+- [ ] Hud de configuração - slider  
+- [ ] FUN - talvez eu faça
+- [ ] Hud de Pontuação (Screen)
+- [ ] Background do LoginScreen
+- [ ] Fake Hole BORDINHA
+- [ ] VENTILADOR 😢😢😭😭😭😭😭😭😭😭😭😭😭😭😭😭
+- [ ] botao de resume talvez eu faça
+- [ ] 
