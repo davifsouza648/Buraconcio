@@ -1,5 +1,6 @@
 package io.github.buraconcio.Objects;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -18,14 +19,19 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+import io.github.buraconcio.Main;
+import io.github.buraconcio.Screens.MainMenu;
 import io.github.buraconcio.Utils.GameManager;
 import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.SoundManager;
+import io.github.buraconcio.Screens.MainMenu;
 
 public class HUD
 {
     private Stage stage;
     private Viewport viewport;
     private int playerId;
+    private Main game;
 
     //Coisas do hud normal
     private Button giveUp;
@@ -33,7 +39,6 @@ public class HUD
     private Image pauseOverlay;
     private Table mainTable;
     
-
     //Coisas do hud pausado
     private Table pausedTable;
     private Button resume;
@@ -43,19 +48,19 @@ public class HUD
     private Timer.Task countdownTask;
     private int remainingSeconds;
     private boolean isButtonPressed;
-    
+
 
     private boolean isPaused = false;
 
-    public HUD(Stage stage, int playerId) 
+    public HUD(Stage stage, int playerId, Main game) 
     {
         this.playerId = playerId;
+        this.game = game;
 
         OrthographicCamera hudCamera = new OrthographicCamera();
         viewport = new FitViewport(800, 480, hudCamera);
         this.stage = stage;
 
-        //Borrado no fundo
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0, 0, 0, 0.5f); 
         pixmap.fill();
@@ -67,7 +72,7 @@ public class HUD
         pauseOverlay.setFillParent(true);
         pauseOverlay.setVisible(false);
 
-        stage.addActor(pauseOverlay); // Adicione antes do pauseMenuTable
+        stage.addActor(pauseOverlay); 
 
         //Hud fora do pause
         mainTable = new Table();
@@ -135,8 +140,10 @@ public class HUD
         resumeButton.addListener(new InputListener() 
         {
             @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                togglePaused();
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) 
+            {
+                if(isPaused()) togglePaused();
+                SoundManager.getInstance().playSound("buttonClick");
                 return true;
             }
         });
@@ -146,6 +153,13 @@ public class HUD
             @Override
             public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
             {
+                if(isPaused)
+                {
+                    GameManager.getInstance().setCurrentScreen(game, new MainMenu(game));
+                    SoundManager.getInstance().playMusic("menu");
+                    SoundManager.getInstance().playSound("buttonClick");
+                    dispose();
+                }
                 return true;
             }
         });

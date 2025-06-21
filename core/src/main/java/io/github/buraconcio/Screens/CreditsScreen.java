@@ -22,6 +22,7 @@ import io.github.buraconcio.Main;
 import io.github.buraconcio.Objects.Button;
 import io.github.buraconcio.Utils.Auxiliaries;
 import io.github.buraconcio.Utils.CursorManager;
+import io.github.buraconcio.Utils.SoundManager;
 
 public class CreditsScreen implements Screen {
     private Main game;
@@ -53,6 +54,7 @@ public class CreditsScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 Auxiliaries.clearAddLocal();
                 game.setScreen(new MainMenu(game));
+                SoundManager.getInstance().playSound("buttonClick");
                 dispose();
             }
         });

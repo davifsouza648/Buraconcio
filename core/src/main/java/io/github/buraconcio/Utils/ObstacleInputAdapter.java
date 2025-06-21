@@ -18,6 +18,7 @@ public class ObstacleInputAdapter extends InputAdapter {
 
     public ObstacleInputAdapter() {
         super();
+        SoundManager.getInstance().loadSound("invalidPosition", "sounds/obstacle-sounds/errorPlacing.wav");
     }
 
     private Vector2 snapToGrid(Vector2 worldCoords)
@@ -53,6 +54,7 @@ public class ObstacleInputAdapter extends InputAdapter {
             if (obstacle.canPlace()) {
                 p.placeObstacle();
             } else {
+                SoundManager.getInstance().playSound("invalidPosition");
                 obstacle.flashRed();
             }
 

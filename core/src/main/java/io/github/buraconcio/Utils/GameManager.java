@@ -1,9 +1,12 @@
 package io.github.buraconcio.Utils;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -245,9 +248,12 @@ public class GameManager {
     public void setupSelectObstaclePhase() {
         PhysicsManager.getInstance().postRoundObstacles();
 
-        if (Constants.isHosting()) {
-            ConnectionManager.getInstance().getServer().sendArray(Message.Type.SPAWN_OBSTACLES,
-                    obstacleSpawner.selectRandomObstacles(6));
+        if (Constants.isHosting()) 
+        {
+            int qtd = MathUtils.random(4, 7);
+            ArrayList<String> blueprintObstacles = obstacleSpawner.selectRandomObstacles(qtd);
+            ConnectionManager.getInstance().getServer().sendArray(Message.Type.BLUEPRINT_OBSTACLES,
+                    blueprintObstacles);
         }
 
         Constants.localP().setCanSelect(true);

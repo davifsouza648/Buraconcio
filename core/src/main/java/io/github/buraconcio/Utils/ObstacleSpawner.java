@@ -17,6 +17,7 @@ import io.github.buraconcio.Objects.WoodBox;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Function;
@@ -26,7 +27,7 @@ import com.badlogic.gdx.math.Vector2;
 public class ObstacleSpawner {
 
     private static final String[] types = { "circularsaw", "blackhole", "boostpad", "crossbow", "honey", "lmetalbox",
-            "longmetalbox", "longwoodbox", "metalbox", "mine", "star", "woodbox", "trampoline" };
+            "longmetalbox", "longwoodbox", "metalbox", "mine", "star", "woodbox", "trampoline", "eraser" };
 
     private Random random;
 
@@ -81,16 +82,20 @@ public class ObstacleSpawner {
         return types[index];
     }
 
-    public ArrayList<String> selectRandomObstacles(int count) {
+    public ArrayList<String> selectRandomObstacles(int count) 
+    {
 
+        ArrayList<String> pool = new ArrayList<>(List.of(types));
         ArrayList<String> selected = new ArrayList<>();
 
         for (int i = 0; i < count; i++) {
-            selected.add(randomObstacleType());
+            int index = random.nextInt(pool.size());
+            selected.add(pool.remove(index));
         }
 
         return selected;
     }
+
 
     public Obstacle spawnObstacle(String type, Vector2 pos) {
 

@@ -16,6 +16,7 @@ public class Message implements Serializable {
         CLEAR_UNCLAIMED,
         SPAWN_OBSTACLES,
         PLAYERS_START_POS,
+        BLUEPRINT_OBSTACLES,
     }
 
     private Type type;

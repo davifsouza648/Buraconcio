@@ -77,10 +77,10 @@ public class PhysicsTest implements Screen {
 
         camera = new GameCamera();
         stage.getViewport().setCamera(camera);
-        hud = new HUD(hudStage, PlayerManager.getInstance().getLocalPlayer().getId());
+        hud = new HUD(hudStage, PlayerManager.getInstance().getLocalPlayer().getId(), game);
 
-        // new CrossBow(new Vector2(9f, 35f));
-        // new Star(new Vector2(12f, 35f));
+        new CrossBow(new Vector2(9f, 35f));
+        new Star(new Vector2(12f, 35f));
         // new BoostPad(new Vector2(15f, 35f));
         // new BlackHole(new Vector2(19f, 35f));
         // new CircularSaw(new Vector2(9f, 30f));

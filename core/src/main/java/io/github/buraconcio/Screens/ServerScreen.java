@@ -29,6 +29,7 @@ import io.github.buraconcio.Utils.Constants;
 import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.GameManager;
 import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.SoundManager;
 import io.github.buraconcio.Utils.CountdownTimer;
 
 public class ServerScreen implements Screen {
@@ -210,7 +211,7 @@ public class ServerScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
 
                 System.out.println("Start Match pressionado!");
-
+                SoundManager.getInstance().playSound("buttonClick");
                 if (Constants.isHosting()) {
                     server.changeButton(false);
                 }
@@ -220,7 +221,7 @@ public class ServerScreen implements Screen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                SoundManager.getInstance().playSound("buttonClick");
                 if (!flagBackButton) {
                     return;
                 }
@@ -262,7 +263,7 @@ public class ServerScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (Constants.isHosting()) {
-
+                    SoundManager.getInstance().playSound("buttonClick");
                     mapIndex = (mapIndex - 1 + mapTextures.length) % mapTextures.length;
                     server.sendString(Message.Type.MAP_CHANGE, Integer.toString(mapIndex));
                     nextMap();
@@ -383,6 +384,7 @@ public class ServerScreen implements Screen {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         cancelMatch();
+                        SoundManager.getInstance().playSound("buttonClick");
                         server.changeButton(true);
                     }
                 });
@@ -407,6 +409,7 @@ public class ServerScreen implements Screen {
                 public void clicked(InputEvent event, float x, float y) {
                     if (Constants.isHosting()) {
                         server.changeButton(false);
+                        SoundManager.getInstance().playSound("buttonClick");
                     }
                 }
             });

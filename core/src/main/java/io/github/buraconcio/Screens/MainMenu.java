@@ -67,7 +67,7 @@ public class MainMenu implements Screen {
                 // game.setScreen(new PhysicsTest());
 
                 game.setScreen(new LoadingScreen(game)); // arrumar loading screen
-
+                SoundManager.getInstance().playSound("buttonClick");
                 // game.setScreen(new ServerScreen(game));
 
             }
@@ -78,6 +78,7 @@ public class MainMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 PlayerManager.getInstance().getLocalPlayer().setHosting(true);
                 game.setScreen(new ServerScreen(game));
+                SoundManager.getInstance().playSound("buttonClick");
             }
         });
 
@@ -86,13 +87,14 @@ public class MainMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
 
                 game.setScreen(new CreditsScreen(game));
-
+                SoundManager.getInstance().playSound("buttonClick");
             }
         });
 
         imageButtonQuit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                SoundManager.getInstance().playSound("buttonClick");
                 Gdx.app.exit();
             }
         });

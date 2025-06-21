@@ -12,6 +12,7 @@ import io.github.buraconcio.Objects.Player;
 import io.github.buraconcio.Objects.Button;
 import io.github.buraconcio.Utils.CursorManager;
 import io.github.buraconcio.Utils.PlayerManager;
+import io.github.buraconcio.Utils.SoundManager;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -42,6 +43,8 @@ public class LoginMenu implements Screen {
 
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+
+        SoundManager.getInstance().loadSound("buttonClick", "sounds/UI/buttonClick.wav");
 
         //Se clicar fora do textField ele perde o foco
         stage.addListener(new InputListener() {
@@ -88,7 +91,7 @@ public class LoginMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 username = userField.getText();
-
+                SoundManager.getInstance().playSound("buttonClick");
                 if(isUsernameValid(username))
                 {
                     Player player = new Player(username);

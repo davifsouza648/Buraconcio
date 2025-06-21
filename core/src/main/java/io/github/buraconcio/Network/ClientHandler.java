@@ -69,6 +69,8 @@ public class ClientHandler implements Runnable {
                                 System.out.println("Ignoring STARS_UPDATE");
                             }
                             break;
+                        case BLUEPRINT_OBSTACLES:
+                            System.out.println("ta aqui");
 
                         default:
                             System.out.println("Unknown message type: " + msg.getType());
@@ -177,6 +179,7 @@ public class ClientHandler implements Runnable {
             System.out.println("Invalid payload for STARS_UPDATE: " + e.getMessage());
         }
     }
+
 
     private void cleanup() {
         try {
