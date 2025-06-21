@@ -1,33 +1,26 @@
 # Buraconcio
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
 
-## Platforms
+## TODO
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+- Erros:
+    -"Camera is null" acontece quando inicia o game e os players jogam muito "rápido";
+        -colocar um timer na pré primeira rodada;
+    -Tratar erros ao quitar no meio do game - PRIORIDADE BAIXA;
+    -Sobreposição da bola sobre o mel e boostpad;
+    -Nukar o mapa1
+- Implementação:
+    -Hud de vitória - Screen;
+    -Hud de configuração;
+        - Em jogo - Overlay;
+        - No menu - Screen;
+    -Hud de Pontuação - Screen;
+        -Ideia: Bolas se mexendo;
+    -Caso use a borracha no vazio perde a borracha;
+    -verificar se a borracha funciona no sevrer/client;
+    -TREM + tempo de cada e etc;
+    -Organizar o vetor de mapas;
+    
+- 
 
-## Gradle
-
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
-
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
-
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.

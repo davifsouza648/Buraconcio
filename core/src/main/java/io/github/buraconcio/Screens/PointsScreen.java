@@ -41,7 +41,6 @@ public class PointsScreen implements Screen {
                     "labelPixelyWhite32");
             root.add(points);
             root.row();
-
         }
     }
 
