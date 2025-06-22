@@ -15,9 +15,9 @@
 ### Implementações
 
 - [ ] Hud de vitória (Screen)
-- [ ] Hud de configuração
+- [X] Hud de configuração
   - [X] Em jogo (Overlay)
-  - [ ] No menu (Screen)
+  - [X] No menu (Screen)
 - [ ] Hud de Pontuação (Screen)
   - [ ] Ideia: Bolas se mexendo
 - [x] Caso use a borracha no vazio, perde a borracha
