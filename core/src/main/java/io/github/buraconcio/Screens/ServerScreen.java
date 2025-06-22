@@ -58,12 +58,9 @@ public class ServerScreen implements Screen {
 
     mapNames = {
         "TUTORIAL",
-        "test1",
-        "test2",
         "FLORESTINHA SEM ARVORE",
         "TREM"
-    }
-    ;
+    };
 
     private Texture[] mapTextures;
 
@@ -218,9 +215,11 @@ public class ServerScreen implements Screen {
             }
         });
 
-        backButton.addListener(new ClickListener() {
+        backButton.addListener(new ClickListener() 
+        {
             @Override
-            public void clicked(InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) 
+            {
                 SoundManager.getInstance().playSound("buttonClick");
                 if (!flagBackButton) {
                     return;

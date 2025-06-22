@@ -16,7 +16,7 @@
 
 - [ ] Hud de vitória (Screen)
 - [ ] Hud de configuração
-  - [ ] Em jogo (Overlay)
+  - [X] Em jogo (Overlay)
   - [ ] No menu (Screen)
 - [ ] Hud de Pontuação (Screen)
   - [ ] Ideia: Bolas se mexendo

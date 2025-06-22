@@ -54,6 +54,7 @@ public class FlowManager {
         changePhase("select_obj");
 
         flag = true;
+        PlayerManager.getInstance().getLocalPlayer().resetStrokes();
 
         delayToClear = 0;
         startHostTimer(GameManager.getInstance().getSelectTime(), new CountdownTimer.TimerListener() {
@@ -93,6 +94,7 @@ public class FlowManager {
 
     private void startPointsPhase() {
         changePhase("show_points");
+        PlayerManager.getInstance().getLocalPlayer().resetStrokes();
         startHostTimer(GameManager.getInstance().getPointsTime(), new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {

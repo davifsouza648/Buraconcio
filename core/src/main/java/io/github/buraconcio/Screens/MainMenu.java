@@ -29,7 +29,7 @@ public class MainMenu implements Screen {
     private Main game;
     private Stage stage;
     private Skin skin;
-    private ImageButton imageButtonHost, imageButtonQuit, imageButtonJoin, imageButtonCredits;
+    private ImageButton imageButtonHost, imageButtonQuit, imageButtonJoin, imageButtonCredits, imageButtonConfig;
     private Animation<TextureRegion> buraconcioAnimation, backAnimation;
     private float elapsedTimeName = 0f, elapsedTimeBack = 0f;
     private Image buraconcioImage, backImage;
@@ -54,10 +54,13 @@ public class MainMenu implements Screen {
         Button host = new Button();
         Button credits = new Button();
         Button quit = new Button();
+        Button config = new Button();
+
         imageButtonJoin = join.createButton("join", "join");
         imageButtonHost = host.createButton("host", "host");
         imageButtonCredits = credits.createButton("credits", "credits");
         imageButtonQuit = quit.createButton("quit", "quit");
+        imageButtonConfig = config.createButton("config", "config");
 
         imageButtonJoin.addListener(new ClickListener() {
             @Override
@@ -98,6 +101,16 @@ public class MainMenu implements Screen {
                 Gdx.app.exit();
             }
         });
+        
+        imageButtonConfig.addListener(new ClickListener()
+        {
+            @Override
+            public void clicked(InputEvent event, float x, float y) 
+            {
+                SoundManager.getInstance().playSound("buttonClick");
+                game.setScreen(new ConfigScreen(game));
+            }
+        });
 
         Table backgroundTable = new Table();
         backgroundTable.setFillParent(true);
@@ -115,15 +128,23 @@ public class MainMenu implements Screen {
         table.row();
         table.add(imageButtonCredits).pad(15);
 
-        createTestButton(table);
+        //createTestButton(table);
 
         table.row();
         table.add(imageButtonQuit).pad(15);
+
+        table.row();
+
+        Table tableConfigButton = new Table();
+        tableConfigButton.setFillParent(true);
+        tableConfigButton.bottom().left();
+        tableConfigButton.add(imageButtonConfig).pad(15);
 
         table.setDebug(false);
 
         stage.addActor(backgroundTable);
         stage.addActor(table);
+        stage.addActor(tableConfigButton);
 
     }
 
