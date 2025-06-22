@@ -93,7 +93,7 @@ public class LoadingScreen implements Screen {
     }
 
     private void setupLogo() {
-        texture = new Texture(Gdx.files.internal("Logo64x64.png"));
+        texture = new Texture(Gdx.files.internal("logo/Logo64x64.png"));
         x = 0;
         y = stage.getHeight() / 2f - texture.getHeight() / 2f;
     }
