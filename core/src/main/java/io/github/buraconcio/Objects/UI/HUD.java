@@ -1,7 +1,6 @@
 package io.github.buraconcio.Objects.UI;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -54,11 +53,9 @@ public class HUD {
     {
         this.playerId = playerId;
         this.game = game;
-
-        OrthographicCamera hudCamera = new OrthographicCamera();
-        viewport = new FitViewport(800, 480, hudCamera);
         this.stage = stage;
-
+        this.viewport = stage.getViewport();
+    
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0, 0, 0, 0.5f);
         pixmap.fill();

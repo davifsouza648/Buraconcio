@@ -148,7 +148,7 @@ public class Ball extends PhysicsEntity {
                 getX() - labelGroup.getWidth() / 2,
                 getY() + getHeight() + 0.5f);
 
-        if (canInteract && mouseMovement.len() > 0.01f) {
+        if (canInteract && mouseMovement.len() > 0.01f && isStill()) {
             final float segmentLength = 1f;
 
             endSprite.setSize(segmentLength, segmentLength);

@@ -118,7 +118,7 @@ public class CircularSaw extends Obstacle {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
-        fixtureDef.isSensor = true;
+        fixtureDef.isSensor = false;
         body.createFixture(fixtureDef);
 
         circle.dispose();

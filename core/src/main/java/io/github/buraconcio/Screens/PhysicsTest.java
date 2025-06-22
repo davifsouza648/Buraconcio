@@ -57,7 +57,7 @@ public class PhysicsTest implements Screen {
         debugRenderer = new Box2DDebugRenderer();
 
         stage = new Stage(new ExtendViewport(23, 13));
-        hudStage = new Stage(new FitViewport(800, 480));
+        hudStage = new Stage(new FitViewport(1280, 720));
 
         SoundManager.getInstance().stopMusic();
 
