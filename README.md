@@ -10,6 +10,7 @@
 - [ ] Sobreposição da bola sobre o mel e boostpad
 - [ ] Nukar o mapa1
 - [ ] Index do mapa esta indo errado no host
+- [ ] HUD de configuração tudo quebrado os botoes
 
 ### Implementações
 
@@ -31,11 +32,8 @@
 ### ASSETS
 
 - [X] Hud de vitória
-- [ ] Hud de configuração - slider  
-- [ ] FUN - talvez eu faça
+- [ ] Hud de configuração - slider - botao de resume
 - [X] Hud de Pontuação (Screen)
 - [X] Background do LoginScreen
 - [X] Fake Hole BORDINHA
 - [ ] VENTILADOR 😢😢😭😭😭😭😭😭😭😭😭😭😭😭😭😭
-- [ ] botao de resume talvez eu faça
-- [ ] 

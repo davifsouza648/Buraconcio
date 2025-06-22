@@ -1,0 +1,12 @@
+{
+"com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle": {
+	"default-horizontal": {
+		"backgroundOver": "backgroundover",
+		"backgroundDown": "backgrounddown",
+		"knobOver": "knobover",
+		"knobDown": "knobdown",
+		"background": "background",
+		"knob": "knob"
+	}
+}
+}

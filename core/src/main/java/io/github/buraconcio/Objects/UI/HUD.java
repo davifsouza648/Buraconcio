@@ -131,7 +131,7 @@ public class HUD
         quit = new Button();
         config = new Button();
 
-        ImageButton resumeButton = resume.createButton("start", "start");
+        ImageButton resumeButton = resume.createButton("resume", "resume");
         ImageButton quitButton = quit.createButton("quit", "quit");
         ImageButton configButton = config.createButton("config", "config");
 
