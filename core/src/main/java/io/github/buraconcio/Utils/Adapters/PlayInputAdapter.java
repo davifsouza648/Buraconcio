@@ -63,6 +63,7 @@ public class PlayInputAdapter extends InputAdapter {
         Runnable task = () ->
         {
             p.stroke(mouse1, mouse2);
+            hud.updateStrokes();
         };
 
         PhysicsManager.getInstance().schedule(task);

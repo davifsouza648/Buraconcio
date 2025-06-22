@@ -15,7 +15,7 @@ public class Constants {
 
     public static final float BOOST_IMPULSE = 20f;
 
-    public static final float MAX_DISTANCE_AUDIBLE = 10f;
+    public static final float MAX_DISTANCE_AUDIBLE = 25f;
 
     public static final float VELOCITY_HONEY = 1f;
 

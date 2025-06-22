@@ -29,6 +29,8 @@ public class FlowManager {
 
     private void startPlayPhase() {
         changePhase("play");
+        PlayerManager.getInstance().getLocalPlayer().resetStrokes();
+        
         startHostTimer(GameManager.getInstance().getPlayTime(), new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {

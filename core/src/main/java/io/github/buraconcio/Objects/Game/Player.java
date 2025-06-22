@@ -1,6 +1,7 @@
 package io.github.buraconcio.Objects.Game;
 
 import io.github.buraconcio.Objects.Obstacles.Obstacle;
+import io.github.buraconcio.Objects.UI.HUD;
 import io.github.buraconcio.Utils.Common.Constants;
 import io.github.buraconcio.Utils.Managers.PhysicsManager;
 import io.github.buraconcio.Utils.Managers.PlayerManager;
@@ -29,7 +30,8 @@ public class Player implements Serializable {
 
     private transient Ball ball;
 
-    public Player(String username) {
+    public Player(String username) 
+    {
         this.username = username;
         stars = 0;
 
@@ -39,8 +41,10 @@ public class Player implements Serializable {
         selectedObstacle = null;
     }
 
-    public Ball createBall() {
-        if (startingPos == null) {
+    public Ball createBall() 
+    {
+        if (startingPos == null) 
+        {
             System.out.println("starting position not defined");
             return null;
         }
@@ -242,6 +246,12 @@ public class Player implements Serializable {
 
     public int getStrokes() {
         return this.strokes;
+    }
+
+    public void resetStrokes()
+    {
+        this.strokes = 0;
+        
     }
 
     public Boolean hasPlacedObstacle() {

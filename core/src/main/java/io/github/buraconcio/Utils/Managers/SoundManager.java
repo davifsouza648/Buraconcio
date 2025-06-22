@@ -21,7 +21,9 @@ public class SoundManager {
     private Map<String, Long> soundsIds;
     private TreeSet<String> loopsTocando;
 
-    private float masterVolume = 0.7f;
+    private float masterVolumeSounds = 1f;
+    private float masterVolumeMusic = 1f;
+
     private String currentMusicID;
     private Music currentMusic;
 
@@ -71,7 +73,7 @@ public class SoundManager {
         if (sound == null) return;
 
         float dist = source.dst(listener);
-        float volume = Math.max(0f, 1f - dist / Constants.MAX_DISTANCE_AUDIBLE) * masterVolume;
+        float volume = Math.max(0f, 1f - dist / Constants.MAX_DISTANCE_AUDIBLE) * masterVolumeSounds;
 
         Long soundId = loopSoundIds.get(id);
         if (soundId == null)
@@ -92,16 +94,16 @@ public class SoundManager {
         if (sound == null) return;
 
         float dist = source.dst(listener);
-        float volume = Math.max(0f, 1f - dist / Constants.MAX_DISTANCE_AUDIBLE) * masterVolume;
+        float volume = Math.max(0f, 1f - dist / Constants.MAX_DISTANCE_AUDIBLE) * masterVolumeSounds;
 
         long soundId = sound.play(volume);
         soundsIds.put(id, soundId);
     }
 
-    public void setMasterVolume(float volume)
+    public void setMasterVolumeSounds(float volume)
     {
         if (volume < 0 || volume > 1) return;
-        this.masterVolume = volume;
+        this.masterVolumeSounds = volume;
 
         for (Map.Entry<String, Long> entry : loopSoundIds.entrySet())
         {
@@ -117,10 +119,26 @@ public class SoundManager {
                 s.setVolume(entry.getValue(), volume);
         }
 
+    }
+
+    public void setMasterVolumeMusic(float volume)
+    {
+        this.masterVolumeMusic = volume;
+
         for (Music m : music.values())
         {
             m.setVolume(volume);
         }
+    }
+
+    public float getMasterVolumeSounds()
+    {
+        return this.masterVolumeSounds;
+    }
+    
+    public float getMasterVolumeMusic()
+    {
+        return this.masterVolumeMusic;
     }
 
     public void playSound(String id)
@@ -128,7 +146,7 @@ public class SoundManager {
         Sound s = sounds.get(id);
         if (s != null)
         {
-            long soundId = s.play(masterVolume);
+            long soundId = s.play(masterVolumeSounds);
             soundsIds.put(id, soundId);
         }
     }
@@ -140,13 +158,14 @@ public class SoundManager {
 
         if (id.equals(currentMusicID) && currentMusic != null) return;
 
-        if (!id.equals(currentMusicID) && currentMusic != null) {
+        if (!id.equals(currentMusicID) && currentMusic != null) 
+        {
             currentMusic.stop();
         }
 
         currentMusic = m;
         currentMusicID = id;
-        m.setVolume(masterVolume - 0.4f);
+        m.setVolume(masterVolumeMusic);
         m.play();
     }
 
