@@ -42,7 +42,7 @@ public class CreditsScreen implements Screen {
         this.skinTextField = new Skin(Gdx.files.internal("fonts/pixely/textFields/textField.json"));
         CursorManager.resetToArrow();
 
-        backAnimation = Auxiliaries.animationFromFiles("backgroundMenu.png", "backgroundMenu.json");
+        backAnimation = Auxiliaries.animationFromFiles("backgrounds/backgroundMenu.png", "backgrounds/backgroundMenu.json");
         backImage = new Image(new TextureRegionDrawable(backAnimation.getKeyFrame(0)));
 
         // Botão back

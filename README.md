@@ -9,6 +9,7 @@
 - [ ] Tratar erros ao quitar no meio do game (**prioridade baixa**)
 - [ ] Sobreposição da bola sobre o mel e boostpad
 - [ ] Nukar o mapa1
+- [ ] Index do mapa esta indo errado no host
 
 ### Implementações
 
@@ -24,6 +25,7 @@
 - [ ] Organizar o vetor de mapas
 - [ ] Ventilador
 - [ ] MOLDURAAAAAA
+- [ ] Slow pad nao sei se ja implementou
 
 
 ### ASSETS
