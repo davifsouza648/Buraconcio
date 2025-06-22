@@ -18,7 +18,7 @@
   - [ ] No menu (Screen)
 - [ ] Hud de Pontuação (Screen)
   - [ ] Ideia: Bolas se mexendo
-- [ ] Caso use a borracha no vazio, perde a borracha
+- [x] Caso use a borracha no vazio, perde a borracha
 - [ ] Verificar se a borracha funciona no server/client
 - [ ] TREM + tempo de cada e etc
 - [ ] Organizar o vetor de mapas

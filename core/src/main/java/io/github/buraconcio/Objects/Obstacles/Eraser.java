@@ -33,27 +33,31 @@ public class Eraser extends Obstacle {
 
     @Override
     public boolean canPlace() {
+        return true;
+    }
+
+    @Override
+    public void place() {
         for (Contact contact : PhysicsManager.getInstance().getContactList()) {
             PhysicsEntity entityA = PhysicsManager.getInstance().getEntity(contact.getFixtureA().getBody().getUserData());
             PhysicsEntity entityB = PhysicsManager.getInstance().getEntity(contact.getFixtureB().getBody().getUserData());
 
             if (entityA.getId() == getId() && entityB instanceof Obstacle) {
                 toErase = (Obstacle) entityB;
-                return true;
+                break;
             } else if (entityB.getId() == getId() && entityA instanceof Obstacle) {
                 toErase = (Obstacle) entityA;
-                return true;
+                break;
             }
         }
 
-        return false;
-    }
-
-    @Override
-    public void place() {
         if (toErase != null) {
             eraseAnimation = new AnimationPlay(
                 Auxiliaries.animationFromFiles("obstacles/eraser/eraserEffect.png", "obstacles/eraser/eraserEffect.json"), toErase);
+            this.disable();
+        } else {
+            eraseAnimation = new AnimationPlay(
+                Auxiliaries.animationFromFiles("obstacles/eraser/eraserEffect.png", "obstacles/eraser/eraserEffect.json"), this);
             this.disable();
         }
     }
