@@ -30,12 +30,12 @@
 
 ### ASSETS
 
-- [ ] Hud de vitória
+- [X] Hud de vitória
 - [ ] Hud de configuração - slider  
 - [ ] FUN - talvez eu faça
-- [ ] Hud de Pontuação (Screen)
-- [ ] Background do LoginScreen
-- [ ] Fake Hole BORDINHA
+- [X] Hud de Pontuação (Screen)
+- [X] Background do LoginScreen
+- [X] Fake Hole BORDINHA
 - [ ] VENTILADOR 😢😢😭😭😭😭😭😭😭😭😭😭😭😭😭😭
 - [ ] botao de resume talvez eu faça
 - [ ] 
