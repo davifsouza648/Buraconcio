@@ -128,7 +128,7 @@ public class MainMenu implements Screen {
         table.row();
         table.add(imageButtonCredits).pad(15);
 
-        //createTestButton(table);
+        createTestButton(table);
 
         table.row();
         table.add(imageButtonQuit).pad(15);

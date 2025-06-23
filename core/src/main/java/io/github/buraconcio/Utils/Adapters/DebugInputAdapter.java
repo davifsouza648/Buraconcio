@@ -2,6 +2,9 @@ package io.github.buraconcio.Utils.Adapters;
 
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.Vector2;
+
+import io.github.buraconcio.Objects.Obstacles.Train;
 import io.github.buraconcio.Utils.Managers.GameManager;
 import io.github.buraconcio.Utils.Managers.GameManager.PHASE;
 
@@ -24,6 +27,10 @@ public class DebugInputAdapter extends InputAdapter {
             GameManager.getInstance().setPhase(PHASE.SELECT_OBJ);
         } else if (keyCode == Keys.R) {
             GameManager.getInstance().reloadPhysics();
+        }
+        else if(keyCode == Keys.T)
+        {
+            new Train(new Vector2(5f,5f),1);
         }
 
 
