@@ -37,7 +37,7 @@ public class Train extends Obstacle {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shapeDef;
-        fixtureDef.isSensor = true;
+        fixtureDef.isSensor = false;
 
         body.createFixture(fixtureDef);
         shapeDef.dispose();
@@ -82,7 +82,8 @@ public class Train extends Obstacle {
     {
 
 
-        if (entity instanceof Ball) {
+        if (entity instanceof Ball) 
+        {
             Ball ball = (Ball) entity;
 
             if (!ball.isAirborne()) 
@@ -91,11 +92,12 @@ public class Train extends Obstacle {
                 return true;
             }
         }
-        else if(!(entity instanceof BlackHole))
+        else if(!(entity instanceof Obstacle))
         {
             this.destroy();
             return true;
         }
+        
 
         return false;
     }
