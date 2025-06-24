@@ -206,8 +206,10 @@ public class ServerScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
 
                 System.out.println("Start Match pressionado!");
+                System.out.println("LOCAL HOSTING" + Constants.isHosting());
                 SoundManager.getInstance().playSound("buttonClick");
                 if (Constants.isHosting()) {
+                    System.out.println("entei aqio");
                     server.changeButton(false);
                 }
             }
@@ -472,6 +474,7 @@ public class ServerScreen implements Screen {
     }
 
     private void nextMap() {
+        System.out.println("AAAAAAAAAAAASASSAAS");
         mapImage.setDrawable(new TextureRegionDrawable(new TextureRegion(mapTextures[mapIndex])));
         mapLabel.setText(mapNames[mapIndex]);
     }

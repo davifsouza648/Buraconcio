@@ -63,4 +63,11 @@ public class ConnectionManager {
     public boolean getUDPRun(){
         return udpRun;
     }
+
+    public void closeUDPS(){
+        if(getUdpServer() != null){
+            getUdpServer().getSocket().close();
+        }
+        getUdpClient().getSocket().close();
+    }
 }

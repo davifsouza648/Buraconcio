@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.TCP.Message;
 import io.github.buraconcio.Screens.MainMenu;
+import io.github.buraconcio.Utils.Common.Constants;
 import io.github.buraconcio.Utils.Managers.ConnectionManager;
 import io.github.buraconcio.Utils.Managers.GameManager;
 import io.github.buraconcio.Utils.Managers.PlayerManager;
@@ -149,10 +150,11 @@ public class HUD {
             {
                 if (isPaused) 
                 {
-                    if (ConnectionManager.getInstance().getServer() != null) 
+                    if (Constants.isHosting()) 
                     {
-                        ConnectionManager.getInstance().getServer().sendString(Message.Type.DISCONNECT, "get out");
+                        ConnectionManager.getInstance().getServer().stop();
                     }
+
                     GameManager.getInstance().setCurrentScreen(game, new MainMenu(game));
                     SoundManager.getInstance().playMusic("menu");
                     SoundManager.getInstance().playSound("buttonClick");

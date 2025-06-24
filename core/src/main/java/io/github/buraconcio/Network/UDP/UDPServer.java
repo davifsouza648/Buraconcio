@@ -130,4 +130,8 @@ public class UDPServer {
         }
     }
 
+    public DatagramSocket getSocket(){
+        return socket;
+    }
+
 }

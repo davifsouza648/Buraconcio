@@ -201,4 +201,8 @@ public class UDPClient {
 
     }
 
+    public DatagramSocket getSocket(){
+        return UDPsocket;
+    }
+
 }

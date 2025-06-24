@@ -37,6 +37,8 @@ public class Server {
             serverSocket = new ServerSocket(Constants.PORT);
             System.out.println("server TCP CRIADO");
 
+            flagAccept = true;
+            
             while (flagAccept) {
                 Socket socket = serverSocket.accept();
 

@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.sql.Connection;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
@@ -14,13 +15,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.github.buraconcio.Main;
 import io.github.buraconcio.Objects.Game.Player;
+import io.github.buraconcio.Utils.Common.Auxiliaries;
 import io.github.buraconcio.Utils.Common.Constants;
+import io.github.buraconcio.Utils.Managers.ConnectionManager;
 import io.github.buraconcio.Utils.Managers.FlowManager;
 import io.github.buraconcio.Utils.Managers.GameManager;
 import io.github.buraconcio.Utils.Managers.GameManager.PHASE;
 import io.github.buraconcio.Utils.Managers.PhysicsManager;
 import io.github.buraconcio.Utils.Managers.PlayerManager;
+import io.github.buraconcio.Screens.MainMenu;
 import io.github.buraconcio.Screens.ServerScreen;
 
 public class Client {
@@ -141,8 +146,31 @@ public class Client {
                     }
 
                     case DISCONNECT -> {
-                        disconnect();
-                        dsListener();
+
+                        String payload = (String) msg.getPayload();
+
+                        if (payload.equals("get out")) {
+                            disconnect();
+                            dsListener();
+
+                            if (ConnectionManager.getInstance().getUDPRun()) {
+
+                                ConnectionManager.getInstance().setUDPRun(false);
+                                Auxiliaries.clearAddLocal();
+                                Main game = GameManager.getInstance().getPhysicsScreen().getGame();
+
+                                //nao apenas no connection manager, setar udpclient close
+                                // ConnectionManager.getInstance().closeUDPS(); arrumar isso aqui
+                                
+                                ConnectionManager.getInstance().setUDPclient(null);
+                                ConnectionManager.getInstance().setUDPserver(null);
+                                
+                                Gdx.app.postRunnable(() -> {
+                                    game.setScreen(new MainMenu(game));
+                                });
+                            }
+
+                        }
                     }
 
                     case PHASE_CHANGE -> {
