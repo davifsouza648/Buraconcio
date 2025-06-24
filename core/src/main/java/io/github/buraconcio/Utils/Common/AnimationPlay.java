@@ -18,7 +18,7 @@ import io.github.buraconcio.Utils.Managers.PhysicsManager;
 public class AnimationPlay extends Image {
     private Animation<TextureRegion> animation;
     private float elapsedTime = 0f;
-    private Actor parentActor;
+    protected Actor parentActor;
     private int running = 1;
     private boolean playOnce = false;
     private float flashDuration = 0.2f;

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import io.github.buraconcio.Utils.Common.PhysicsEntity;
 import io.github.buraconcio.Utils.Common.AnimationPlay;
@@ -12,7 +13,6 @@ import io.github.buraconcio.Utils.Managers.PhysicsManager;
 
 public class Eraser extends Obstacle {
     private static final Vector2 size = new Vector2(1.5f, 1.5f);
-    private static final int WHITEOUT_FRAME = 16;
 
     private Obstacle toErase = null;
     AnimationPlay eraseAnimation = null;
@@ -52,27 +52,41 @@ public class Eraser extends Obstacle {
         }
 
         if (toErase != null) {
-            eraseAnimation = new AnimationPlay(
-                Auxiliaries.animationFromFiles("obstacles/eraser/eraserEffect.png", "obstacles/eraser/eraserEffect.json"), toErase);
+            new EraserAnimation(toErase);
             this.disable();
         } else {
-            eraseAnimation = new AnimationPlay(
-                Auxiliaries.animationFromFiles("obstacles/eraser/eraserEffect.png", "obstacles/eraser/eraserEffect.json"), this);
+            new EraserAnimation(this);
             this.disable();
         }
+    }
+}
+
+class EraserAnimation extends AnimationPlay {
+    private static final int WHITEOUT_FRAME = 16;
+
+    public EraserAnimation(Actor parentActor) {
+            super( Auxiliaries.animationFromFiles("obstacles/eraser/eraserEffect.png",
+                "obstacles/eraser/eraserEffect.json"), parentActor);
+
+            pauseAnimation();
+            playOnce();
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
 
-        if (eraseAnimation != null) {
-            if (toErase != null && eraseAnimation.getFrameIndex() == WHITEOUT_FRAME) {
-                toErase.destroy();
-            } else if (eraseAnimation.isLastFrame()) {
-                eraseAnimation.remove();
-                this.destroy();
+        if (getFrameIndex() == WHITEOUT_FRAME) {
+            if (parentActor instanceof PhysicsEntity) {
+                PhysicsEntity p = (PhysicsEntity) parentActor;
+                try {
+                    p.destroy();
+                } catch (Error e) {}
             }
+        } else if (isLastFrame()) {
+            try {
+                this.remove();
+            } catch (Error e) {}
         }
     }
 }
