@@ -26,10 +26,10 @@ public class TrainSpawner {
             public void run() 
             {
                 spawnTrain();
-                Timer.schedule(this, 5f + (float) Math.random() * 5f);
+                Timer.schedule(this, 10f + (float) Math.random() * 5f);
             }
         };
-        Timer.schedule(spawnTask, 0f);
+        Timer.schedule(spawnTask, 15f);
     }
 
     private void spawnTrain() 

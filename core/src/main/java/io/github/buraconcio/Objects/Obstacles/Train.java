@@ -82,17 +82,7 @@ public class Train extends Obstacle {
     {
 
 
-        if (entity instanceof Ball) 
-        {
-            Ball ball = (Ball) entity;
-
-            if (!ball.isAirborne()) 
-            {
-                ball.getPlayer().die();
-                return true;
-            }
-        }
-        else
+        if (!(entity instanceof Ball)) 
         {
             this.destroy();
             return true;
