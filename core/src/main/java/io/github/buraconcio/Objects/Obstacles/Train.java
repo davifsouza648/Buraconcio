@@ -92,7 +92,7 @@ public class Train extends Obstacle {
                 return true;
             }
         }
-        else if(!(entity instanceof Obstacle))
+        else
         {
             this.destroy();
             return true;

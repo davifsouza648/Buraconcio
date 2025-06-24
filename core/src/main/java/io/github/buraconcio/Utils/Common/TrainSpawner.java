@@ -3,6 +3,7 @@ package io.github.buraconcio.Utils.Common;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import io.github.buraconcio.Objects.Obstacles.Train;
+import io.github.buraconcio.Utils.Managers.GameManager;
 
 public class TrainSpawner {
 
@@ -33,7 +34,7 @@ public class TrainSpawner {
 
     private void spawnTrain() 
     {
-        new Train(new Vector2(spawnPos), direction);
+        GameManager.getInstance().getPhysicsStage().addActor(new Train(new Vector2(spawnPos), direction));
     }
 
     public void stop() 

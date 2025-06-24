@@ -52,7 +52,7 @@ public class PhysicsTest implements Screen {
         PlayerManager.getInstance().syncLocalPlayer();
 
         this.game = game;
-        mapRenderer = new MapRenderer("mapa2");
+        mapRenderer = new MapRenderer("mapa" + GameManager.getInstance().getMapIndex());
 
         debugRenderer = new Box2DDebugRenderer();
 

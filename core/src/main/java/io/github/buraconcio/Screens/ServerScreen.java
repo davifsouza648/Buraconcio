@@ -50,8 +50,6 @@ public class ServerScreen implements Screen {
     public static int mapIndex = 0;
     private final String[] mapPaths = {
             "maps-preview/teste.jpg",
-            "maps-preview/teste1.jpg",
-            "maps-preview/teste2.jpg",
             "maps-preview/teste3.jpg",
             "maps-preview/teste4.jpg"
     },
@@ -267,7 +265,7 @@ public class ServerScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if (Constants.isHosting()) {
                     SoundManager.getInstance().playSound("buttonClick");
-                    mapIndex = (mapIndex - 1 + mapTextures.length) % mapTextures.length;
+                    mapIndex = (mapIndex + 1) % mapTextures.length;
                     server.sendString(Message.Type.MAP_CHANGE, Integer.toString(mapIndex));
                     nextMap();
                 }
@@ -455,10 +453,10 @@ public class ServerScreen implements Screen {
                     public void finish() {
 
                         //pass the mapIndex
-
+                        GameManager.getInstance().setMapIndex(mapIndex);
                         PhysicsTest screen = new PhysicsTest(game);
                         GameManager.getInstance().setPhysicsScreen(screen);
-                        GameManager.getInstance().setMapIndex(mapIndex);
+                       
 
                         GameManager.getInstance().setCurrentScreen(game, screen);
                     }

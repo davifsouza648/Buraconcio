@@ -36,7 +36,8 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
 
         for (MapObject object : objects)
         {
-            if ("SpawnArea".equals(object.getName())) {
+            if(object.getName() == null) continue;
+            else if ("SpawnArea".equals(object.getName())) {
                 spawnArea = ((RectangleMapObject) object).getRectangle();
             }
 
