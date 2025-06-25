@@ -23,6 +23,8 @@
 - [x] Caso use a borracha no vazio, perde a borracha
 - [ ] Verificar se a borracha funciona no server/client
 - [ ] TREM + tempo de cada e etc
+  - [x] Colisão
+  - [ ] Agora eles morrem logo quando spawna
 - [ ] Organizar o vetor de mapas
 - [ ] Ventilador
 - [ ] MOLDURAAAAAA

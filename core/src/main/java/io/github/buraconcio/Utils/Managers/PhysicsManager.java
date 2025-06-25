@@ -144,7 +144,13 @@ public class PhysicsManager {
 
     public void destroyBody(Body body) {
         Runnable task = () -> {
+            if (body == null || !entityList.containsKey((Integer) body.getUserData())) {
+                System.out.println("could not destroy body");
+                return;
+            }
+
             world.destroyBody(body);
+            entityList.remove((Integer) body.getUserData());
         };
         schedule(task);
     }

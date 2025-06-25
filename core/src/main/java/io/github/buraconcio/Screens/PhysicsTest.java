@@ -169,6 +169,7 @@ public class PhysicsTest implements Screen {
         hud.render();
 
         //debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
+        debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
 
         PhysicsManager.getInstance().tick();
     }

@@ -124,7 +124,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
             }
             else if(object.getName().startsWith("Trem"))
             {
-                
+
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
                 String sufix = object.getName().substring(4, object.getName().length());
 

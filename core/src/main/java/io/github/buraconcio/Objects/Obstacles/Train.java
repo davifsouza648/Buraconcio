@@ -1,36 +1,23 @@
 package io.github.buraconcio.Objects.Obstacles;
 
-import java.util.Random;
-
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
-import io.github.buraconcio.Utils.Common.AnimationPlay;
 import io.github.buraconcio.Utils.Common.Auxiliaries;
-import io.github.buraconcio.Utils.Managers.PhysicsManager;
 import io.github.buraconcio.Utils.Common.PhysicsEntity;
-import io.github.buraconcio.Utils.Managers.PlayerManager;
-import io.github.buraconcio.Utils.Managers.SoundManager;
 import io.github.buraconcio.Objects.Game.Ball;
-import io.github.buraconcio.Objects.Game.Player;
 
 public class Train extends Obstacle {
-
     private final Vector2 direction;
     private static final Vector2 size = new Vector2(2f, 11.59f);
 
-    public Train(Vector2 pos, int directionIndex) 
+    private TrainCollider trainCollider;
+
+    public Train(Vector2 pos, int directionIndex)
     {
         super(pos, size, Auxiliaries.animationFromFiles("obstacles/train/train.png", "obstacles/train/train.json"));
-
-        body.setType(BodyType.KinematicBody);
-        this.direction = getDirectionFromIndex(directionIndex).nor().scl(8f);
-        body.setLinearVelocity(this.direction);
-        body.setBullet(true); 
 
         PolygonShape shapeDef = new PolygonShape();
         shapeDef.setAsBox(size.x/2, size.y/2);
@@ -42,23 +29,31 @@ public class Train extends Obstacle {
         body.createFixture(fixtureDef);
         shapeDef.dispose();
 
-        switch (directionIndex) 
+        body.setType(BodyType.KinematicBody);
+        body.setBullet(true);
+
+        this.direction = getDirectionFromIndex(directionIndex).nor().scl(8f);
+        body.setLinearVelocity(this.direction);
+
+        trainCollider = new TrainCollider(pos, size, this.direction, directionIndex, this);
+
+        switch (directionIndex)
         {
-            case 0: 
+            case 0:
                 body.setTransform(body.getPosition(), (float) (-Math.PI / 2)); // -90°
                 break;
-            case 1: 
+            case 1:
                 body.setTransform(body.getPosition(), 0f);
                 break;
-            case 2: 
-                body.setTransform(body.getPosition(), (float) (Math.PI / 2)); 
+            case 2:
+                body.setTransform(body.getPosition(), (float) (Math.PI / 2));
                 break;
-            case 3: 
-                body.setTransform(body.getPosition(), (float) Math.PI); 
+            case 3:
+                body.setTransform(body.getPosition(), (float) Math.PI);
                 break;
         }
 
-        act(0f); 
+        act(0f);
     }
 
     private Vector2 getDirectionFromIndex(int dir) {
@@ -72,23 +67,66 @@ public class Train extends Obstacle {
     }
 
     @Override
-    public void act(float delta) 
-    {
+    public void act(float delta) {
         super.act(delta);
     }
 
     @Override
     public boolean contact(PhysicsEntity entity)
     {
-
-
-        if (!(entity instanceof Ball)) 
+        if (!(entity instanceof Ball))
         {
             this.destroy();
             return true;
         }
-        
+
 
         return false;
+    }
+}
+
+class TrainCollider extends Obstacle {
+    private Train parent;
+
+    public TrainCollider(Vector2 pos, Vector2 size, Vector2 vel, int directionIndex, Train parent) {
+        super(pos, size);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(size.x/2, size.y/2);
+
+        FixtureDef def = new FixtureDef();
+        def.isSensor = true;
+        def.shape = shape;
+
+        body.createFixture(def);
+        shape.dispose();
+
+        body.setType(BodyType.DynamicBody);
+        body.setLinearVelocity(vel);
+
+        this.parent = parent;
+
+        switch (directionIndex)
+        {
+            case 0:
+                body.setTransform(body.getPosition(), (float) (-Math.PI / 2)); // -90°
+                break;
+            case 1:
+                body.setTransform(body.getPosition(), 0f);
+                break;
+            case 2:
+                body.setTransform(body.getPosition(), (float) (Math.PI / 2));
+                break;
+            case 3:
+                body.setTransform(body.getPosition(), (float) Math.PI);
+                break;
+        }
+
+        act(0f);
+    }
+
+    @Override
+    public boolean contact(PhysicsEntity entity) {
+        return parent.contact(entity);
     }
 }

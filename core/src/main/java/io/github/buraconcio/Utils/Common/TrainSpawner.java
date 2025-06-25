@@ -11,19 +11,19 @@ public class TrainSpawner {
     private int direction;
     private Timer.Task spawnTask;
 
-    public TrainSpawner(Vector2 spawnPos, int direction) 
+    public TrainSpawner(Vector2 spawnPos, int direction)
     {
         this.spawnPos = spawnPos;
         this.direction = direction;
         startSpawning();
     }
 
-    private void startSpawning() 
+    private void startSpawning()
     {
-        spawnTask = new Timer.Task() 
+        spawnTask = new Timer.Task()
         {
             @Override
-            public void run() 
+            public void run()
             {
                 spawnTrain();
                 Timer.schedule(this, 10f + (float) Math.random() * 5f);
@@ -32,14 +32,15 @@ public class TrainSpawner {
         Timer.schedule(spawnTask, 15f);
     }
 
-    private void spawnTrain() 
+    private void spawnTrain()
     {
-        GameManager.getInstance().getPhysicsStage().addActor(new Train(new Vector2(spawnPos), direction));
+        //GameManager.getInstance().getPhysicsStage().addActor(new Train(new Vector2(spawnPos), direction));
+        new Train(new Vector2(spawnPos), direction);
     }
 
-    public void stop() 
+    public void stop()
     {
-        if (spawnTask != null) 
+        if (spawnTask != null)
         {
             spawnTask.cancel();
             spawnTask = null;
