@@ -24,7 +24,8 @@
 - [ ] Verificar se a borracha funciona no server/client
 - [ ] TREM + tempo de cada e etc
   - [x] Colisão
-  - [ ] Agora eles morrem logo quando spawna
+  - [x] Agora eles morrem logo quando spawna
+  - [ ] Timing de cada trem
 - [ ] Organizar o vetor de mapas
 - [ ] Ventilador
 - [ ] MOLDURAAAAAA
@@ -39,3 +40,4 @@
 - [X] Background do LoginScreen
 - [X] Fake Hole BORDINHA
 - [ ] VENTILADOR 😢😢😭😭😭😭😭😭😭😭😭😭😭😭😭😭
+- [ ] animacao de morte do trem?

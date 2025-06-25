@@ -2,6 +2,8 @@ package io.github.buraconcio.Objects.Obstacles;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
@@ -13,6 +15,7 @@ public class Train extends Obstacle {
     private final Vector2 direction;
     private static final Vector2 size = new Vector2(2f, 11.59f);
 
+    private boolean invincible = true;
     private TrainCollider trainCollider;
 
     public Train(Vector2 pos, int directionIndex)
@@ -36,6 +39,12 @@ public class Train extends Obstacle {
         body.setLinearVelocity(this.direction);
 
         trainCollider = new TrainCollider(pos, size, this.direction, directionIndex, this);
+
+        Timer.schedule(new Task() {
+            public void run() {
+                invincible = false;
+            }
+        }, 0.5f);
 
         switch (directionIndex)
         {
@@ -67,16 +76,15 @@ public class Train extends Obstacle {
     }
 
     @Override
-    public void act(float delta) {
-        super.act(delta);
-    }
-
-    @Override
     public boolean contact(PhysicsEntity entity)
     {
-        if (!(entity instanceof Ball))
+        if (invincible) return false;
+
+        if (!(entity instanceof Ball || entity instanceof Train ||
+            entity instanceof BlackHole || entity instanceof TrainCollider))
         {
             this.destroy();
+            trainCollider.destroy();
             return true;
         }
 
@@ -92,7 +100,7 @@ class TrainCollider extends Obstacle {
         super(pos, size);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(size.x/2, size.y/2);
+        shape.setAsBox(size.x/4, 1f, new Vector2(0f, size.y/2 - 1f), 0f);
 
         FixtureDef def = new FixtureDef();
         def.isSensor = true;

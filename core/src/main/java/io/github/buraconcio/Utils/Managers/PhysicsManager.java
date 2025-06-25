@@ -145,7 +145,7 @@ public class PhysicsManager {
     public void destroyBody(Body body) {
         Runnable task = () -> {
             if (body == null || !entityList.containsKey((Integer) body.getUserData())) {
-                System.out.println("could not destroy body");
+                //System.out.println("could not destroy body");
                 return;
             }
 
@@ -196,7 +196,7 @@ public class PhysicsManager {
                 Contact exContact = it.next();
                 PhysicsEntity entityA, entityB, exentityA, exentityB;
                 try
-                {                
+                {
                     entityA = getEntity(contact.getFixtureA().getBody().getUserData());
                     entityB = getEntity(contact.getFixtureB().getBody().getUserData());
 
