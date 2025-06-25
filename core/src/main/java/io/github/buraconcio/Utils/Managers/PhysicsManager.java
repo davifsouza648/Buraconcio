@@ -194,13 +194,18 @@ public class PhysicsManager {
             Iterator<Contact> it = contactList.iterator();
             while (it.hasNext()) {
                 Contact exContact = it.next();
-
                 PhysicsEntity entityA, entityB, exentityA, exentityB;
-                entityA = getEntity(contact.getFixtureA().getBody().getUserData());
-                entityB = getEntity(contact.getFixtureB().getBody().getUserData());
+                try
+                {                
+                    entityA = getEntity(contact.getFixtureA().getBody().getUserData());
+                    entityB = getEntity(contact.getFixtureB().getBody().getUserData());
 
-                exentityA = getEntity(exContact.getFixtureA().getBody().getUserData());
-                exentityB = getEntity(exContact.getFixtureB().getBody().getUserData());
+                    exentityA = getEntity(exContact.getFixtureA().getBody().getUserData());
+                    exentityB = getEntity(exContact.getFixtureB().getBody().getUserData());
+
+                }catch(Exception e){return;}
+
+                if(entityA == null || entityB == null || exentityA == null || exentityB == null) return;
 
                 if (entityA.getId() == exentityA.getId() && entityB.getId() == exentityB.getId()) {
                     it.remove();

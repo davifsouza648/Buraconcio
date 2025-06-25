@@ -65,9 +65,15 @@ public class Obstacle extends PhysicsEntity {
         if (body == null)
             return false;
 
-        for (Contact contact : PhysicsManager.getInstance().getContactList()) {
-            Object fixtureA = contact.getFixtureA().getBody().getUserData();
-            Object fixtureB = contact.getFixtureB().getBody().getUserData();
+        for (Contact contact : PhysicsManager.getInstance().getContactList()) 
+        {
+            Object fixtureA,fixtureB;
+            try
+            {
+                fixtureA = contact.getFixtureA().getBody().getUserData();
+                fixtureB = contact.getFixtureB().getBody().getUserData();
+            }catch(Exception e){return false;} 
+
 
             if (fixtureA == null || fixtureB == null)
                 continue;
