@@ -1,6 +1,7 @@
 package io.github.buraconcio.Screens;
 
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -23,6 +24,7 @@ import io.github.buraconcio.Utils.Common.Auxiliaries;
 import io.github.buraconcio.Utils.Managers.PlayerManager;
 import io.github.buraconcio.Objects.UI.Button;
 import io.github.buraconcio.Utils.Managers.SoundManager;
+import io.github.buraconcio.Utils.Managers.GameManager.PHASE;
 
 public class MainMenu implements Screen {
 
@@ -36,6 +38,8 @@ public class MainMenu implements Screen {
 
     public MainMenu(Main game) {
         this.game = game;
+
+        GameManager.getInstance().phase = PHASE.LOBBY;
 
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
@@ -101,11 +105,11 @@ public class MainMenu implements Screen {
                 Gdx.app.exit();
             }
         });
-        
+
         imageButtonConfig.addListener(new ClickListener()
         {
             @Override
-            public void clicked(InputEvent event, float x, float y) 
+            public void clicked(InputEvent event, float x, float y)
             {
                 SoundManager.getInstance().playSound("buttonClick");
                 game.setScreen(new ConfigScreen(game));
@@ -145,6 +149,7 @@ public class MainMenu implements Screen {
         stage.addActor(backgroundTable);
         stage.addActor(table);
         stage.addActor(tableConfigButton);
+
 
     }
 

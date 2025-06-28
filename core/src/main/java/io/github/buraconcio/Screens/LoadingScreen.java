@@ -28,6 +28,7 @@ import io.github.buraconcio.Objects.UI.Button;
 import io.github.buraconcio.Utils.Managers.ConnectionManager;
 import io.github.buraconcio.Utils.Common.Constants;
 import io.github.buraconcio.Utils.Managers.CursorManager;
+import io.github.buraconcio.Utils.Managers.GameManager;
 
 public class LoadingScreen implements Screen {
     private final Main game;

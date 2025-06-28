@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import io.github.buraconcio.Utils.Managers.ConnectionManager;
 import io.github.buraconcio.Utils.Common.Constants;
 
 public class UDPServer {
@@ -17,7 +16,7 @@ public class UDPServer {
 
     private final ConcurrentHashMap<Integer, UdpPackage> packageList = new ConcurrentHashMap<>();
     private final List<InetSocketAddress> clientAddressList = new CopyOnWriteArrayList<>();
-    private boolean run = ConnectionManager.getInstance().getUDPRun();
+    private volatile boolean run = true;
 
     public void startUDPServer() {
         Thread thread = new Thread(this::runUDPServer);
@@ -130,8 +129,16 @@ public class UDPServer {
         }
     }
 
-    public DatagramSocket getSocket(){
+    public DatagramSocket getSocket() {
         return socket;
+    }
+
+    public void stopUDPServer() {
+        run = false;
+
+        if (socket != null && !socket.isClosed()) {
+            socket.close();
+        }
     }
 
 }

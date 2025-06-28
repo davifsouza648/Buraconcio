@@ -63,7 +63,7 @@ public class CreditsScreen implements Screen {
         titleImage = new Image(titleTextute);
 
         // Texture texture = new Texture(Gdx.files.internal("credits/teste.jpg"));
-        Texture texture = new Texture(Gdx.files.internal("credits/time.jpg"));
+        Texture texture = new Texture(Gdx.files.internal("credits/foto_final.jpg"));
         fotoImage = new Image(texture);
 
         float originalWidth = texture.getWidth();
@@ -104,7 +104,7 @@ public class CreditsScreen implements Screen {
 
     public Table createNames(){
 
-    String[] nomes = {"Arthur", "Davi", "Mario", "Murilo"};
+    String[] nomes = {"Arthur", "Mario", "Davi", "Murilo"};
     Table row = new Table();
 
     for(String str : nomes){

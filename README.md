@@ -6,10 +6,10 @@
 
 - [ ] "Camera is null" acontece quando inicia o game e os players jogam muito "rápido"
   - [ ] Colocar um timer na pré primeira rodada
-- [ ] Tratar erros ao quitar no meio do game (**prioridade baixa**)
+- [x] Tratar erros ao quitar no meio do game (**prioridade baixa**)
 - [ ] Sobreposição da bola sobre o mel e boostpad
 - [ ] Nukar o mapa1
-- [ ] Index do mapa esta indo errado no host
+- [x] Index do mapa esta indo errado no host
 - [ ] HUD de configuração tudo quebrado os botoes
 
 ### Implementações

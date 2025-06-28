@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import io.github.buraconcio.Screens.*;
 import io.github.buraconcio.Utils.Managers.CursorManager;
 import io.github.buraconcio.Utils.Managers.GameManager;
+import io.github.buraconcio.Utils.Managers.GameManager.PHASE;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.Box2D;

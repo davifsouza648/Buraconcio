@@ -54,7 +54,7 @@ public class GameManager {
         PLAY,
         SELECT_OBJ,
         SHOW_POINTS,
-        SHOW_WIN,
+        SHOW_WIN, LOBBY,
     }
 
     InputMultiplexer inputs = new InputMultiplexer();
@@ -261,7 +261,8 @@ public class GameManager {
                     blueprintObstacles);
         }
 
-        Constants.localP().setCanSelect(true);
+        // Constants.localP().setCanSelect(true);
+        PlayerManager.getInstance().setAllCanSelect(true);
         Constants.localP().setBallInteractable(false);
     }
 

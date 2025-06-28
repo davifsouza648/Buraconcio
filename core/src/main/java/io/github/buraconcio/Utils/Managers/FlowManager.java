@@ -64,7 +64,7 @@ public class FlowManager {
 
                 delayToClear++;
 
-                if((PlayerManager.getInstance().hasEveryoneClaimed() || delayToClear >= GameManager.getInstance().getTimeToClear())&& flag){
+                if((PlayerManager.getInstance().hasEveryoneClaimed() || delayToClear >= GameManager.getInstance().getTimeToClear()) && flag){
                     ConnectionManager.getInstance().getServer().sendString(Message.Type.CLEAR_UNCLAIMED, "");
                     flag = false;
                 }

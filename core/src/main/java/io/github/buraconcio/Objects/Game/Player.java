@@ -192,7 +192,8 @@ public class Player implements Serializable {
     }
 
     public void teleportToStartingPos() {
-        ball.teleport(startingPos);
+        if(ball != null)
+            ball.teleport(startingPos);
     }
 
     public String getUsername() {

@@ -21,8 +21,8 @@ public class SoundManager {
     private Map<String, Long> soundsIds;
     private TreeSet<String> loopsTocando;
 
-    private float masterVolumeSounds = 1f;
-    private float masterVolumeMusic = 1f;
+    private float masterVolumeSounds = 0f;
+    private float masterVolumeMusic = 0f;
 
     private String currentMusicID;
     private Music currentMusic;
@@ -135,7 +135,7 @@ public class SoundManager {
     {
         return this.masterVolumeSounds;
     }
-    
+
     public float getMasterVolumeMusic()
     {
         return this.masterVolumeMusic;
@@ -158,7 +158,7 @@ public class SoundManager {
 
         if (id.equals(currentMusicID) && currentMusic != null) return;
 
-        if (!id.equals(currentMusicID) && currentMusic != null) 
+        if (!id.equals(currentMusicID) && currentMusic != null)
         {
             currentMusic.stop();
         }

@@ -91,7 +91,9 @@ public class ClientHandler implements Runnable {
             }
 
         } finally {
-            cleanup();
+            //dar cleanup ao entrar em uma tela diferente
+                cleanup();
+            System.out.println("KKKKKKKKKKKKKKK");
         }
     }
 

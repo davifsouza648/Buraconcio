@@ -45,7 +45,7 @@ public class PlayerManager {
             Player p = it.next();
 
             if (p.getId() == id) {
-                p.dispose();
+                // p.dispose();
                 it.remove();
             }
         }
@@ -105,26 +105,32 @@ public class PlayerManager {
                 int playerId = pack.getId();
                 PackType type = pack.getTypeP();
 
-                if (playerId != Constants.localP().getId()) {
+                if (playerId == Constants.localP().getId())
+                    continue;
 
-                    if (type == PackType.BALL) {
-                        Vector2 ballPos = new Vector2(pack.getBallX(), pack.getBallY());
-                        Vector2 ballVel = new Vector2(pack.getBallVX(), pack.getBallVY());
+                Player p = PlayerManager.getInstance().getPlayer(playerId);
 
-                        PlayerManager.getInstance().getPlayer(playerId).update(ballPos, ballVel, pack.getBallState());
+                if (p == null)
+                    continue;
 
-                    } else if (type == PackType.OBSTACLE) {
+                if (type == PackType.BALL) {
+                    Vector2 ballPos = new Vector2(pack.getBallX(), pack.getBallY());
+                    Vector2 ballVel = new Vector2(pack.getBallVX(), pack.getBallVY());
 
-                        Vector2 obstaclePos = new Vector2(pack.getObsX(), pack.getObsY());
+                    p.update(ballPos, ballVel, pack.getBallState());
 
-                        PlayerManager.getInstance().getPlayer(playerId).update(obstaclePos, pack.getObsId(),
-                                pack.getObsRotationIndex());
+                } else if (type == PackType.OBSTACLE) {
 
-                    } else {
-                        PlayerManager.getInstance().getPlayer(playerId).update(pack.getObsPlaced(), pack.getflagPlaced());
-                        return;
-                    }
+                    Vector2 obstaclePos = new Vector2(pack.getObsX(), pack.getObsY());
+
+                    p.update(obstaclePos, pack.getObsId(),
+                            pack.getObsRotationIndex());
+
+                } else {
+                    p.update(pack.getObsPlaced(), pack.getflagPlaced());
+                    continue;
                 }
+
             }
         };
         PhysicsManager.getInstance().schedule(task);

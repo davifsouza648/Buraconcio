@@ -8,7 +8,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.badlogic.gdx.math.Vector2;
 
-import io.github.buraconcio.Utils.Managers.ConnectionManager;
 import io.github.buraconcio.Utils.Common.Constants;
 import io.github.buraconcio.Utils.Managers.GameManager;
 import io.github.buraconcio.Utils.Managers.PlayerManager;
@@ -20,7 +19,7 @@ public class UDPClient {
     private UdpPackage teste;
     InetAddress address;
 
-    private boolean run = ConnectionManager.getInstance().getUDPRun(), flag = true;
+    private volatile boolean run = true;
     private final int id = Constants.localP().getId();
 
     private final byte[] receivedData = new byte[4096];
@@ -79,9 +78,9 @@ public class UDPClient {
                 if (Constants.localP().getSelectedObstacle() != null) {
                     return createObstaclePackage();
 
-                }else if(Constants.localP().hasPlacedObstacle()){
+                } else if (Constants.localP().hasPlacedObstacle()) {
                     return createDefaultPackage(true);
-                }else{
+                } else {
                     return createDefaultPackage(false);
                 }
             }
@@ -131,9 +130,9 @@ public class UDPClient {
         int ObsID;
 
         if (Constants.localP().getSelectedObstacle() != null) {
-             ObsID= Constants.localP().getSelectedObstacle().getId();
-             return new UdpPackage(id, x, y, ObsID, rotIndex, PackType.OBSTACLE);
-        }else{
+            ObsID = Constants.localP().getSelectedObstacle().getId();
+            return new UdpPackage(id, x, y, ObsID, rotIndex, PackType.OBSTACLE);
+        } else {
             return new UdpPackage(id, placed, true, PackType.DEFAULT);
         }
 
@@ -146,10 +145,9 @@ public class UDPClient {
 
     }
 
-
     // private UdpPackage createPlacedPackage() {
-    //     int lastId = Constants.localP().getLastObsId();
-    //     return new UdpPackage(id, true, lastId, PackType.OBSTACLE_PLACED);
+    // int lastId = Constants.localP().getLastObsId();
+    // return new UdpPackage(id, true, lastId, PackType.OBSTACLE_PLACED);
     // }
 
     private byte[] serialize(UdpPackage packet) throws IOException {
@@ -201,8 +199,15 @@ public class UDPClient {
 
     }
 
-    public DatagramSocket getSocket(){
+    public DatagramSocket getSocket() {
         return UDPsocket;
     }
 
+    public void stopUDPClient() {
+        run = false;
+
+        if (UDPsocket != null && !UDPsocket.isClosed()) {
+            UDPsocket.close();
+        }
+    }
 }

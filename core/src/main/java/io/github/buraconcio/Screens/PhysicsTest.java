@@ -193,6 +193,7 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void dispose() {
+        flow.onReceiveTimerStop();
         mapRenderer.dispose();
         hudStage.dispose();
         stage.dispose();

@@ -102,19 +102,45 @@ public class Client {
                 switch (msg.getType()) {
 
                     case PLAYER_LIST -> {
-
                         @SuppressWarnings("unchecked")
                         List<Player> players = (List<Player>) msg.getPayload();
 
-                        PlayerManager.getInstance().setPlayers(players);
+                        System.out.println("PHASE" + GameManager.getInstance().phase);
 
-                        // System.out.println("ANTES DE ATUALIZAR");
-                        if (listener != null) {
+                        if (GameManager.getInstance().phase == PHASE.LOBBY) {
+                            PlayerManager.getInstance().setPlayers(players);
 
-                            listener.PlayerCon();
-                            // System.out.println("ATUALIZAR");
+                            System.out.println("ENTRIIIIIII");
+
+                            if (listener != null) {
+                                listener.PlayerCon();
+                            }
+
+                        } else {
+
+                            List<Integer> toRemove = new ArrayList<>();
+
+                            for (Player p : PlayerManager.getInstance().getAllPlayers()) {
+
+                                boolean found = false;
+
+                                for (Player received : players) {
+                                    if (p.getId() == received.getId()) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+
+                                if (!found) {
+                                    toRemove.add(p.getId());
+                                }
+                            }
+
+                            for (int id : toRemove) {
+                                PlayerManager.getInstance().removePlayerbyId(id);
+                            }
+
                         }
-
                     }
 
                     case SERVER_NOTIFICATION -> {
@@ -150,26 +176,7 @@ public class Client {
                         String payload = (String) msg.getPayload();
 
                         if (payload.equals("get out")) {
-                            disconnect();
-                            dsListener();
-
-                            if (ConnectionManager.getInstance().getUDPRun()) {
-
-                                ConnectionManager.getInstance().setUDPRun(false);
-                                Auxiliaries.clearAddLocal();
-                                Main game = GameManager.getInstance().getPhysicsScreen().getGame();
-
-                                //nao apenas no connection manager, setar udpclient close
-                                // ConnectionManager.getInstance().closeUDPS(); arrumar isso aqui
-                                
-                                ConnectionManager.getInstance().setUDPclient(null);
-                                ConnectionManager.getInstance().setUDPserver(null);
-                                
-                                Gdx.app.postRunnable(() -> {
-                                    game.setScreen(new MainMenu(game));
-                                });
-                            }
-
+                            quitFunction();
                         }
                     }
 
@@ -282,6 +289,31 @@ public class Client {
                 System.out.println("Invalid message");
             }
 
+        }
+    }
+
+    public void quitFunction() {
+
+        try {
+            disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        dsListener();
+
+        if (ConnectionManager.getInstance().getUdpClient() != null) {
+
+            Auxiliaries.clearAddLocal();
+            PlayerManager.getInstance().syncLocalPlayer();
+            Main game = GameManager.getInstance().getPhysicsScreen().getGame();
+
+            ConnectionManager.getInstance().closeUDPS();
+            Constants.localP().setHosting(false);
+
+            Gdx.app.postRunnable(() -> {
+                game.setScreen(new MainMenu(game));
+            });
         }
     }
 

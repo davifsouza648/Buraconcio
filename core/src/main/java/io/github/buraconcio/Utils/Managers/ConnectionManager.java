@@ -11,10 +11,10 @@ public class ConnectionManager {
     private Server server;
     private UDPClient clientUDP;
     private UDPServer serverUDP;
-    private boolean udpRun = true;
 
     private ConnectionManager() {
     }
+
     public static ConnectionManager getInstance() {
 
         if (instance == null) {
@@ -40,34 +40,32 @@ public class ConnectionManager {
         this.server = server;
     }
 
-    public UDPClient getUdpClient(){
+    public UDPClient getUdpClient() {
         return clientUDP;
     }
 
-    public void setUDPclient(UDPClient clientUDP){
+    public void setUDPclient(UDPClient clientUDP) {
         this.clientUDP = clientUDP;
     }
 
-    public UDPServer getUdpServer(){
+    public UDPServer getUdpServer() {
         return serverUDP;
     }
 
-    public void setUDPserver(UDPServer serverUDP){
+    public void setUDPserver(UDPServer serverUDP) {
         this.serverUDP = serverUDP;
     }
 
-    public void setUDPRun(boolean flag){
-        this.udpRun = flag;
-    }
+    public void closeUDPS() {
 
-    public boolean getUDPRun(){
-        return udpRun;
-    }
-
-    public void closeUDPS(){
-        if(getUdpServer() != null){
-            getUdpServer().getSocket().close();
+        if (getUdpServer() != null) {
+            getUdpServer().stopUDPServer();
+            setUDPserver(null);
         }
-        getUdpClient().getSocket().close();
+
+        if (getUdpClient() != null) {
+            getUdpClient().stopUDPClient();
+            setUDPclient(null);
+        }
     }
 }

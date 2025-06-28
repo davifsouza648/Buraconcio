@@ -50,13 +50,13 @@ public class HUD {
     private boolean isPaused = false;
     private boolean isConfig = false;
 
-    public HUD(Stage stage, int playerId, Main game) 
+    public HUD(Stage stage, int playerId, Main game)
     {
         this.playerId = playerId;
         this.game = game;
         this.stage = stage;
         this.viewport = stage.getViewport();
-    
+
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0, 0, 0, 0.5f);
         pixmap.fill();
@@ -97,20 +97,20 @@ public class HUD {
         giveUp = new Button();
         ImageButton giveUpButton = giveUp.createButton("giveUp", "giveup");
 
-        giveUpButton.addListener(new InputListener() 
+        giveUpButton.addListener(new InputListener()
         {
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) 
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
             {
                 startCountdown();
                 return true;
             }
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) 
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button)
             {
                 cancelCountdown();
             }
-            public void touchDragged(InputEvent event, float x, float y, int pointer) 
+            public void touchDragged(InputEvent event, float x, float y, int pointer)
             {
-                if (x < 0 || x > giveUpButton.getWidth() || y < 0 || y > giveUpButton.getHeight()) 
+                if (x < 0 || x > giveUpButton.getWidth() || y < 0 || y > giveUpButton.getHeight())
                 {
                     cancelCountdown();
                 }
@@ -134,9 +134,9 @@ public class HUD {
         ImageButton quitButton = quit.createButton("quit", "quit");
         ImageButton configButton = config.createButton("config", "config");
 
-        resumeButton.addListener(new InputListener() 
+        resumeButton.addListener(new InputListener()
         {
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) 
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button)
             {
                 if (isPaused()) togglePaused();
                 SoundManager.getInstance().playSound("buttonClick");
@@ -144,15 +144,17 @@ public class HUD {
             }
         });
 
-        quitButton.addListener(new InputListener() 
+        quitButton.addListener(new InputListener()
         {
-            public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) 
+            public boolean touchDown(InputEvent e, float x, float y, int pointer, int button)
             {
-                if (isPaused) 
+                if (isPaused)
                 {
-                    if (Constants.isHosting()) 
+                    if (Constants.isHosting())
                     {
                         ConnectionManager.getInstance().getServer().stop();
+                    }else{
+                        ConnectionManager.getInstance().getClient().quitFunction();
                     }
 
                     GameManager.getInstance().setCurrentScreen(game, new MainMenu(game));
@@ -164,7 +166,7 @@ public class HUD {
             }
         });
 
-        configButton.addListener(new InputListener() 
+        configButton.addListener(new InputListener()
         {
             public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
                 toggleConfig();
@@ -204,22 +206,22 @@ public class HUD {
         backConfig = new Button();
         ImageButton backConfigButton = backConfig.createButton("back", "backc");
 
-        sliderVolumeMusic.addListener(new ChangeListener() 
+        sliderVolumeMusic.addListener(new ChangeListener()
         {
-            public void changed(ChangeEvent event, Actor actor) 
+            public void changed(ChangeEvent event, Actor actor)
             {
                 SoundManager.getInstance().setMasterVolumeMusic(sliderVolumeMusic.getValue());
             }
         });
-        sliderVolumeSounds.addListener(new ChangeListener() 
+        sliderVolumeSounds.addListener(new ChangeListener()
         {
-            public void changed(ChangeEvent event, Actor actor) 
+            public void changed(ChangeEvent event, Actor actor)
             {
                 SoundManager.getInstance().setMasterVolumeSounds(sliderVolumeSounds.getValue());
             }
         });
 
-        backConfigButton.addListener(new InputListener() 
+        backConfigButton.addListener(new InputListener()
         {
             public boolean touchDown(InputEvent e, float x, float y, int pointer, int button) {
                 toggleConfig();
@@ -239,7 +241,7 @@ public class HUD {
         stage.addActor(volumeMainTable);
     }
 
-    public boolean isPaused() 
+    public boolean isPaused()
     {
         return isPaused;
     }
@@ -249,10 +251,10 @@ public class HUD {
         strokeLabel.setText("Strokes: " + PlayerManager.getInstance().getLocalPlayer().getStrokes());
     }
 
-    public void togglePaused() 
+    public void togglePaused()
     {
         isPaused = !isPaused;
-        if (!isPaused) 
+        if (!isPaused)
         {
             isConfig = false;
             volumeMainTable.setVisible(false);
@@ -262,15 +264,15 @@ public class HUD {
         mainTable.setVisible(!isPaused);
     }
 
-    public void toggleConfig() 
+    public void toggleConfig()
     {
         isConfig = !isConfig;
-        if (isConfig) 
+        if (isConfig)
         {
             pausedTable.setVisible(false);
             volumeMainTable.setVisible(true);
-        } 
-        else 
+        }
+        else
         {
             pausedTable.setVisible(true);
             volumeMainTable.setVisible(false);
@@ -279,20 +281,20 @@ public class HUD {
         mainTable.setVisible(!isPaused);
     }
 
-    private void startCountdown() 
+    private void startCountdown()
     {
         isButtonPressed = true;
         remainingSeconds = 3;
         countdownLabel.setVisible(true);
         updateCountdownText();
         if (countdownTask != null) countdownTask.cancel();
-        countdownTask = new Timer.Task() 
+        countdownTask = new Timer.Task()
         {
-            public void run() 
+            public void run()
             {
                 remainingSeconds--;
                 updateCountdownText();
-                if (remainingSeconds <= 0) 
+                if (remainingSeconds <= 0)
                 {
                     PlayerManager.getInstance().getPlayer(playerId).die();
                     cancelCountdown();
@@ -316,24 +318,24 @@ public class HUD {
         if (remainingSeconds < 2) countdownLabel.setColor(1, 0, 0, 1);
     }
 
-    public void render() 
+    public void render()
     {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
         updateStrokes();
     }
 
-    public void resize(int width, int height) 
+    public void resize(int width, int height)
     {
         viewport.update(width, height, true);
     }
 
-    public Stage getStage() 
+    public Stage getStage()
     {
         return stage;
     }
 
-    public void dispose() 
+    public void dispose()
     {
         if (countdownTask != null) countdownTask.cancel();
         stage.dispose();
