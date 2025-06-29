@@ -93,6 +93,8 @@ public class PhysicsTest implements Screen {
             new LongMetalBox(new Vector2(20f, 25f));
             new LMetalBox(new Vector2(27f, 25f));
             new Eraser(new Vector2(9f, 30f));
+
+            pBall.setCanInteract(true);
         }
 
         FlowManager.getInstance();

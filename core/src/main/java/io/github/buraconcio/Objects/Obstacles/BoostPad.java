@@ -37,6 +37,7 @@ public class BoostPad extends Obstacle {
             ball.applyImpulse(
                 new Vector2(Constants.BOOST_IMPULSE * (float) Math.cos(body.getAngle()),
                     Constants.BOOST_IMPULSE * (float) Math.sin(body.getAngle())));
+
             SoundManager.getInstance().playProximity("boostPad", this.getPosition(), PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
         }
 

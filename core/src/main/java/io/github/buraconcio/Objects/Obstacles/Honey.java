@@ -1,7 +1,6 @@
 package io.github.buraconcio.Objects.Obstacles;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.HashMap;
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
@@ -17,10 +16,10 @@ import io.github.buraconcio.Utils.Managers.SoundManager;
 
 public class Honey extends Obstacle {
     private static final Vector2 size = new Vector2(2f, -1f);
-    private static final float damping = 1000f;
-    private static final int effectDuration = 2000; //ms
+    private static final float damping = 30f;
+    private static final float effectDuration = 2000f; //ms
 
-    private boolean ballIsEffected = false;
+    private HashMap<Integer, Float> playersHoneyTimer;
 
     public Honey(Vector2 pos) {
         super(pos, size,
@@ -40,19 +39,20 @@ public class Honey extends Obstacle {
         body.createFixture(fixtureDef);
 
         polygonShape.dispose();
+
+        playersHoneyTimer = new HashMap<Integer, Float>();
     }
 
     @Override
     public boolean contact(PhysicsEntity entity) {
         if (!active) return false;
 
-        if (ballIsEffected) return false;
-
         if (entity instanceof Ball) {
             Ball ball = (Ball) entity;
 
             ball.getBody().setLinearDamping(damping);
-            ballIsEffected = true;
+
+            playersHoneyTimer.put(ball.getPlayer().getId(), effectDuration);
 
             if(ball.getBody().getLinearVelocity().len() > Constants.VELOCITY_HONEY)
             {
@@ -63,20 +63,21 @@ public class Honey extends Obstacle {
 
             }
 
-            new Timer().schedule(
-                new TimerTask() {
-                    @Override
-                    public void run() {
-                        ball.resetLinearDamping();
-                        ballIsEffected = false;
-
-                        cancel();
-                    }
-                }, effectDuration);
-
             return false;
         }
 
         return false;
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        playersHoneyTimer.forEach((Integer key, Float value) -> {
+            if (value > -1f) value -= delta;
+
+            if (delta < 0f)
+                PlayerManager.getInstance().getPlayer(key).getBall().resetLinearDamping();
+        });
     }
 }

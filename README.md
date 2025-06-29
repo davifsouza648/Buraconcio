@@ -7,7 +7,7 @@
 - [x] "Camera is null" acontece quando inicia o game e os players jogam muito "rápido"
   - [x] Colocar um timer na pré primeira rodada
 - [x] Tratar erros ao quitar no meio do game (**prioridade baixa**)
-- [ ] Sobreposição da bola sobre o mel e boostpad
+- [x] Sobreposição da bola sobre o mel e boostpad
 - [ ] Nukar o mapa1
 - [x] Index do mapa esta indo errado no host
 - [ ] HUD de configuração tudo quebrado os botoes
@@ -29,7 +29,6 @@
 - [ ] Organizar o vetor de mapas
 - [ ] Ventilador
 - [ ] MOLDURAAAAAA
-- [ ] Slow pad nao sei se ja implementou
 
 
 ### ASSETS
