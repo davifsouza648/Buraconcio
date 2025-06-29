@@ -65,14 +65,14 @@ public class Obstacle extends PhysicsEntity {
         if (body == null)
             return false;
 
-        for (Contact contact : PhysicsManager.getInstance().getContactList()) 
+        for (Contact contact : PhysicsManager.getInstance().getContactList())
         {
             Object fixtureA,fixtureB;
             try
             {
                 fixtureA = contact.getFixtureA().getBody().getUserData();
                 fixtureB = contact.getFixtureB().getBody().getUserData();
-            }catch(Exception e){return false;} 
+            }catch(Exception e){return false;}
 
 
             if (fixtureA == null || fixtureB == null)
@@ -87,7 +87,8 @@ public class Obstacle extends PhysicsEntity {
                 return false;
         }
 
-        if (getAABB().overlaps(PhysicsManager.getInstance().getStratingRect()))
+        Rectangle boundingBox = getAABB();
+        if (boundingBox != null && boundingBox.overlaps(PhysicsManager.getInstance().getStratingRect()))
             return false;
 
         return true;

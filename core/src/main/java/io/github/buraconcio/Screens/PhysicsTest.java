@@ -46,7 +46,6 @@ public class PhysicsTest implements Screen {
     float scale = 1 / 32f;
 
     private boolean paused = false;
-    private FlowManager flow;
 
     public PhysicsTest(Main game) {
         PlayerManager.getInstance().syncLocalPlayer();
@@ -96,7 +95,7 @@ public class PhysicsTest implements Screen {
             new Eraser(new Vector2(9f, 30f));
         }
 
-        flow = new FlowManager();
+        FlowManager.getInstance();
 
         GameManager.getInstance().addProcessor(hudStage, 0);
         GameManager.getInstance().setGameInputProcessor();
@@ -138,7 +137,7 @@ public class PhysicsTest implements Screen {
 
         if (GameManager.getInstance().getCurrentPhase() == PHASE.PLAY) {
 
-            if (pBall.isAlive() != true) {
+            if (!pBall.isAlive()) {
 
                 for (Player p : PlayerManager.getInstance().getAllPlayers()) {
 
@@ -149,13 +148,11 @@ public class PhysicsTest implements Screen {
             }
 
             camera.setTarget(selectedBall.getPosition());
-            camera.setCameraLerpSpeed(0.11f);
             camera.setMode(Mode.ball);
 
         } else if (GameManager.getInstance().getCurrentPhase() == PHASE.SELECT_OBJ && selected != null) {
             camera.setMode(Mode.obstacle);
             camera.setTarget(selected.getPosition());
-            camera.setCameraLerpSpeed(0.05f);
         }
 
         camera.updateCamera();
@@ -163,12 +160,10 @@ public class PhysicsTest implements Screen {
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        stage.getViewport().setCamera(camera);
         stage.draw();
 
         hud.render();
 
-        //debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
         debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
 
         PhysicsManager.getInstance().tick();
@@ -193,7 +188,7 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void dispose() {
-        flow.onReceiveTimerStop();
+        FlowManager.getInstance().onReceiveTimerStop();
         mapRenderer.dispose();
         hudStage.dispose();
         stage.dispose();

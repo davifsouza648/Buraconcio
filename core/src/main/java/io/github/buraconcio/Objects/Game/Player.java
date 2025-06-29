@@ -30,7 +30,7 @@ public class Player implements Serializable {
 
     private transient Ball ball;
 
-    public Player(String username) 
+    public Player(String username)
     {
         this.username = username;
         stars = 0;
@@ -41,9 +41,9 @@ public class Player implements Serializable {
         selectedObstacle = null;
     }
 
-    public Ball createBall() 
+    public Ball createBall()
     {
-        if (startingPos == null) 
+        if (startingPos == null)
         {
             System.out.println("starting position not defined");
             return null;
@@ -252,7 +252,7 @@ public class Player implements Serializable {
     public void resetStrokes()
     {
         this.strokes = 0;
-        
+
     }
 
     public Boolean hasPlacedObstacle() {

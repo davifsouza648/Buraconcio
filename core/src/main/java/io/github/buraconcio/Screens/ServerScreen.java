@@ -215,10 +215,10 @@ public class ServerScreen implements Screen {
             }
         });
 
-        backButton.addListener(new ClickListener() 
+        backButton.addListener(new ClickListener()
         {
             @Override
-            public void clicked(InputEvent event, float x, float y) 
+            public void clicked(InputEvent event, float x, float y)
             {
                 SoundManager.getInstance().playSound("buttonClick");
                 if (!flagBackButton) {
@@ -458,7 +458,7 @@ public class ServerScreen implements Screen {
                         GameManager.getInstance().setMapIndex(mapIndex);
                         PhysicsTest screen = new PhysicsTest(game);
                         GameManager.getInstance().setPhysicsScreen(screen);
-                       
+
 
                         GameManager.getInstance().setCurrentScreen(game, screen);
                     }
@@ -474,7 +474,6 @@ public class ServerScreen implements Screen {
     }
 
     private void nextMap() {
-        System.out.println("AAAAAAAAAAAASASSAAS");
         mapImage.setDrawable(new TextureRegionDrawable(new TextureRegion(mapTextures[mapIndex])));
         mapLabel.setText(mapNames[mapIndex]);
     }

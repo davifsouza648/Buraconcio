@@ -4,8 +4,8 @@
 
 ### Erros
 
-- [ ] "Camera is null" acontece quando inicia o game e os players jogam muito "rápido"
-  - [ ] Colocar um timer na pré primeira rodada
+- [x] "Camera is null" acontece quando inicia o game e os players jogam muito "rápido"
+  - [x] Colocar um timer na pré primeira rodada
 - [x] Tratar erros ao quitar no meio do game (**prioridade baixa**)
 - [ ] Sobreposição da bola sobre o mel e boostpad
 - [ ] Nukar o mapa1

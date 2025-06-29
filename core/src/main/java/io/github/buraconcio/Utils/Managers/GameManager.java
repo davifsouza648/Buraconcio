@@ -13,10 +13,13 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.TCP.Message;
 import io.github.buraconcio.Utils.Common.GameCamera;
+import io.github.buraconcio.Objects.Game.Flag;
 import io.github.buraconcio.Objects.Obstacles.Obstacle;
 import io.github.buraconcio.Screens.PhysicsTest;
 import io.github.buraconcio.Utils.Adapters.DebugInputAdapter;
@@ -32,6 +35,7 @@ public class GameManager {
     private PhysicsTest physicsScreen;
     private Screen currentScreen;
     private ObstacleSpawner obstacleSpawner;
+    private Flag flag;
 
     private PlayInputAdapter playInput;
 
@@ -247,7 +251,31 @@ public class GameManager {
         }
 
         Constants.localP().setCanSelect(false);
-        Constants.localP().setBallInteractable(true);
+
+        float normalLerpSpeed = camera.setCameraLerpSpeed(0f); // freeze camera to show hole
+
+        Timer.schedule(new Task() {
+            @Override
+            public void run() {
+                camera.teleportTo(flag.getPosition());
+            }
+        }, 0.01f); // se rodar instantaneamente nao funciona nao sei por que mas desisto fds
+
+        Timer.schedule(new Task() {
+            @Override
+            public void run() {
+                camera.setCameraLerpSpeed(0.02f);
+            }
+        }, 1f); // show hole for 1 second
+
+        System.out.println(normalLerpSpeed);
+
+        Runnable whenReached = () -> {
+            camera.setCameraLerpSpeed(normalLerpSpeed);
+            Constants.localP().setBallInteractable(true);
+        };
+
+        camera.onReachTarget(whenReached);
     }
 
     public void setupSelectObstaclePhase() {
@@ -272,5 +300,13 @@ public class GameManager {
 
     public void moveCamera(Vector2 pos) {
         camera.setTarget(pos);
+    }
+
+    public void setFlag(Flag flag) {
+        this.flag = flag;
+    }
+
+    public Flag getFlag() {
+        return this.flag;
     }
 }

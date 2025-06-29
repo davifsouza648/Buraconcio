@@ -181,7 +181,6 @@ public class Client {
                     }
 
                     case PHASE_CHANGE -> {
-
                         String phase = (String) msg.getPayload();
 
                         FlowManager.getInstance().onReceivePhaseChange(phase);
@@ -258,8 +257,6 @@ public class Client {
                             Gdx.app.postRunnable(() -> {
                                 GameManager.getInstance().spawnObstacle(type, null);
                             });
-
-                        GameManager.getInstance().moveCamera(new Vector2(10f, 30f)); // temporary
                     }
 
                     case PLAYERS_START_POS -> {

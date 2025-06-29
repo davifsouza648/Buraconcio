@@ -66,7 +66,7 @@ public class PhysicsEntity extends Actor {
         PhysicsManager.getInstance().destroyBody(body);
 
         remove();
-        animacao.remove();
+        if (animacao != null) animacao.remove();
     }
 
     // Método para setar o id

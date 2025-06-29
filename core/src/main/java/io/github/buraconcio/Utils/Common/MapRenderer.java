@@ -14,6 +14,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 import io.github.buraconcio.Objects.Game.Flag;
+import io.github.buraconcio.Screens.PhysicsTest;
+import io.github.buraconcio.Utils.Managers.GameManager;
 
 public class MapRenderer extends OrthogonalTiledMapRenderer
 {
@@ -71,7 +73,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
 
                 Vector2 pos = new Vector2(randomX, randomY);
 
-                new Flag(pos, 1f);
+                GameManager.getInstance().setFlag(new Flag(pos, 1f));
             }
 
             else if (object.getName() != null && object.getName().startsWith("Curva"))

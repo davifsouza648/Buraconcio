@@ -85,7 +85,11 @@ public class PhysicsManager {
 
     public synchronized void tick() {
         ArrayList<Runnable> copy = new ArrayList<>(box2dScheduler);
-        copy.forEach(Runnable::run);
+
+        try {
+            copy.forEach(Runnable::run);
+        } catch (Exception e) {}
+
         clearScheduler();
 
         // collisions

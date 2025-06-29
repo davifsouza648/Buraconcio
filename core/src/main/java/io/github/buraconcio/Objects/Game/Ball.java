@@ -37,7 +37,7 @@ public class Ball extends PhysicsEntity {
     private Sprite tipSprite;
 
     // para a phase de select_obj
-    private boolean canInteract = true;
+    private boolean canInteract = false;
 
     public Ball(Vector2 pos, float d, Player player, String skinBall) {
         super(pos, new Vector2(d, d), skinBall);
