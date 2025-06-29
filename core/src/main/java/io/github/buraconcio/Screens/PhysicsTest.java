@@ -12,6 +12,7 @@ import io.github.buraconcio.Network.UDP.UDPClient;
 import io.github.buraconcio.Network.UDP.UDPServer;
 import io.github.buraconcio.Objects.Game.Ball;
 import io.github.buraconcio.Objects.Game.Player;
+import io.github.buraconcio.Objects.Game.Podium;
 import io.github.buraconcio.Utils.Common.GameCamera;
 import io.github.buraconcio.Utils.Common.GameCamera.Mode;
 import io.github.buraconcio.Objects.Obstacles.*;
@@ -93,6 +94,8 @@ public class PhysicsTest implements Screen {
             new LongMetalBox(new Vector2(20f, 25f));
             new LMetalBox(new Vector2(27f, 25f));
             new Eraser(new Vector2(9f, 30f));
+
+            new Podium(new Vector2(7f, 0f), Podium.Type.gold);
 
             pBall.setCanInteract(true);
         }
