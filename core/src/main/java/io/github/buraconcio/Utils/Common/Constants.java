@@ -19,7 +19,7 @@ public class Constants {
 
     public static final float VELOCITY_HONEY = 1f;
 
-    public static final int POINTS_TO_WIN = 1;
+    public static final int POINTS_TO_WIN = 10;
 
     // usar no server e client
     public static final int PORT = 5050, UDP_PORT_SERVER = 5565, UDP_PORT_CLIENT = 5566;

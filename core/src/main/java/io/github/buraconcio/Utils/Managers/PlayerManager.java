@@ -197,8 +197,10 @@ public class PlayerManager {
     }
 
     public boolean areAllBallsDead() {
-        for (Player p : players) {
-            if (p.getBall() != null && p.getBall().isAlive()) {
+        for (Player p : players) 
+        {
+            if (p.getBall() != null && p.getBall().isAlive()) 
+            {
                 return false;
             }
         }

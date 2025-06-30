@@ -233,6 +233,11 @@ public class Player implements Serializable {
         this.skinBallPath = path;
     }
 
+    public String getSkinBallPath()
+    {
+        return this.skinBallPath;
+    }
+
     public String getAvatar() {
         return avatarpath;
     }

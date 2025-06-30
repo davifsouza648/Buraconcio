@@ -130,8 +130,6 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
                 String sufix = object.getName().substring(4, object.getName().length());
 
-                System.out.println(sufix);
-
                 float x = (rect.x + rect.width / 2f) / pixelsPerMeter;
                 float y = (rect.y + rect.height / 2f) / pixelsPerMeter;
                 Vector2 pos = new Vector2(x, y);

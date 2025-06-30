@@ -11,6 +11,7 @@ public class FlowManager {
     private boolean isHost, flag;
     private static FlowManager instance;
     int delayToClear = 0; //delay para limpar os obstaculos nao selecionados
+    private int round = 0;
 
     public FlowManager() {
         this.isHost = Constants.isHosting();
@@ -29,22 +30,23 @@ public class FlowManager {
 
     private void startPlayPhase() {
         changePhase("play");
+        round++;
         PlayerManager.getInstance().getLocalPlayer().resetStrokes();
         
         startHostTimer(GameManager.getInstance().getPlayTime(), new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {
-
                 if (PlayerManager.getInstance().areAllBallsDead()) {
                     stopAndNotify();
-
+                    
                     startPointsPhase();
                 }
 
             }
 
             @Override
-            public void finish() {
+            public void finish() 
+            {
                 startPointsPhase();
             }
         });
@@ -92,13 +94,17 @@ public class FlowManager {
         });
     }
 
-    private void startPointsPhase() 
+    public void startPointsPhase() 
     {
+        System.out.println("Get win: " + PlayerManager.getInstance().getWin());
+        System.out.println("Player: " + PlayerManager.getInstance().getLocalPlayer().getStars());
         if(PlayerManager.getInstance().getWin()) //Checa se alguém ganhou para ir para a victory screen
         {
             winPhase();
             return;
         }
+        
+        
         changePhase("show_points");
         PlayerManager.getInstance().getLocalPlayer().resetStrokes();
 
@@ -191,5 +197,10 @@ public class FlowManager {
             timer.stop();
             timer = null;
         }
+    }
+
+    public int getRound()
+    {
+        return this.round;
     }
 }
