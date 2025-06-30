@@ -141,8 +141,8 @@ public class PointsScreen implements Screen
                 Animation<TextureRegion> ponto_inicio = Auxiliaries.animationFromFiles(pointsPaths[index] + "/inicio.png", pointsPaths[index] + "/inicio.json");
                 Animation<TextureRegion> ponto_meio = Auxiliaries.animationFromFiles(pointsPaths[index] + "/meio.png", pointsPaths[index] + "/meio.json");
 
-                ponto_inicio.setFrameDuration(0.05f);
-                ponto_meio.setFrameDuration(0.05f);
+                ponto_inicio.setFrameDuration(0.01f);
+                ponto_meio.setFrameDuration(0.01f);
                 for (int i = 0; i < p.getStars(); i++)
                 {
                     Animation<TextureRegion> ponto = (i == 0) ? ponto_inicio : ponto_meio;

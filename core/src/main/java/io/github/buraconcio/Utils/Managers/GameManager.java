@@ -296,9 +296,10 @@ public class GameManager {
 
         Rectangle area = getbluePrintArea();
         if (area != null) {
-            float invertedX = -(area.x + area.width / 2f);
+           
+            float centerX = area.x + area.width / 2f;
             float centerY = area.y + area.height / 2f;
-            Vector2 center = new Vector2(invertedX + 56f, centerY);
+            Vector2 center = new Vector2(centerX, centerY);
             moveCamera(center);
         }
 

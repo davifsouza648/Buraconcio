@@ -66,6 +66,19 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
 
             else if ("Buraco".equals(object.getName())) {
 
+                Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+                float minX = rect.x / pixelsPerMeter;
+                float minY = rect.y / pixelsPerMeter;
+                float maxX = (rect.x + rect.width) / pixelsPerMeter;
+                float maxY = (rect.y + rect.height) / pixelsPerMeter;
+
+                float randomX = (float) (minX + Math.random() * (maxX - minX));
+                float randomY = (float) (minY + Math.random() * (maxY - minY));
+
+                Vector2 pos = new Vector2(randomX, randomY);
+
+                GameManager.getInstance().setFlag(new Flag(pos, 1f));
 
             }
 
@@ -137,36 +150,28 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
         }
     }
 
-    // nao renderizar separado
-    public void renderBlueprint(OrthographicCamera camera) {
-        float mapWidth = map.getProperties().get("width", Integer.class) *
-                map.getProperties().get("tilewidth", Integer.class) * scale;
+    public Rectangle getBluePrintArea(){
+        MapObjects  blueprint = getMap().getLayers().get("blueprint").getObjects();
 
-        float gap = 50f;
+        for (MapObject object : blueprint)
+        {
+            if(object.getName() == null) continue;
+            else if ("blueprint".equals(object.getName())) {
+                if (object instanceof RectangleMapObject) {
+                    Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-        float blueprintWidth = bluePrint.getProperties().get("width", Integer.class) *
-                bluePrint.getProperties().get("tilewidth", Integer.class) * scale;
-        float blueprintHeight = bluePrint.getProperties().get("height", Integer.class) *
-                bluePrint.getProperties().get("tileheight", Integer.class) * scale;
+                    float x = rect.x;
+                    float y = rect.y;
+                    float width = rect.width;
+                    float height = rect.height;
 
-        OrthographicCamera blueprintCamera = new OrthographicCamera(camera.viewportWidth, camera.viewportHeight);
+                    System.out.println("Blueprint area: x=" + x + " y=" + y + " w=" + width + " h=" + height);
 
-        float blueprintCamX = camera.position.x - mapWidth - gap;
-        float blueprintCamY = camera.position.y;
-        blueprintCamera.position.set(blueprintCamX, blueprintCamY, camera.position.z);
-        blueprintCamera.zoom = camera.zoom;
-        blueprintCamera.update();
-
-        float rectX = blueprintCamX - blueprintWidth / 2f;
-        float rectY = blueprintCamY - blueprintHeight / 2f;
-        Rectangle bluePrintArea = new Rectangle(rectX, rectY, blueprintWidth, blueprintHeight);
-        GameManager.getInstance().setbluePrintArea(bluePrintArea);
-
-        setMap(bluePrint);
-        setView(blueprintCamera);
-        render();
-
-        setMap(map);
+                    return rect; 
+                    }
+            }
+        }
+        return null;
     }
 
     private void createArcCollider(Ellipse ellipse, String name, float pixelsPerMeter, float thickness) {
@@ -275,24 +280,24 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
         }
     }
 
-    public void setFlag() {
+    // public void setFlag() {
 
-        float pixelsPerMeter = 1 / scale;
+    //     float pixelsPerMeter = 1 / scale;
 
-        Rectangle rect = ((RectangleMapObject) object).getRectangle();
+    //     Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
-        float minX = rect.x / pixelsPerMeter;
-        float minY = rect.y / pixelsPerMeter;
-        float maxX = (rect.x + rect.width) / pixelsPerMeter;
-        float maxY = (rect.y + rect.height) / pixelsPerMeter;
+    //     float minX = rect.x / pixelsPerMeter;
+    //     float minY = rect.y / pixelsPerMeter;
+    //     float maxX = (rect.x + rect.width) / pixelsPerMeter;
+    //     float maxY = (rect.y + rect.height) / pixelsPerMeter;
 
-        float randomX = (float) (minX + Math.random() * (maxX - minX));
-        float randomY = (float) (minY + Math.random() * (maxY - minY));
+    //     float randomX = (float) (minX + Math.random() * (maxX - minX));
+    //     float randomY = (float) (minY + Math.random() * (maxY - minY));
 
-        Vector2 pos = new Vector2(randomX, randomY);
+    //     Vector2 pos = new Vector2(randomX, randomY);
 
-        GameManager.getInstance().setFlag(new Flag(pos, 1f));
-    }
+    //     GameManager.getInstance().setFlag(new Flag(pos, 1f));
+    // }
 
     public void renderBackground() {
         getBatch().begin();
