@@ -173,6 +173,7 @@ public class PhysicsTest implements Screen {
         mapRenderer.setView(camera);
         mapRenderer.render();
 
+        mapRenderer.renderBlueprint(camera);
         stage.draw();
 
         hud.render();

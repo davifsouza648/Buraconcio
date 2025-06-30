@@ -17,12 +17,14 @@ import java.util.List;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Objects.Game.Player;
+import io.github.buraconcio.Objects.Obstacles.Obstacle;
 import io.github.buraconcio.Utils.Common.Auxiliaries;
 import io.github.buraconcio.Utils.Common.Constants;
 import io.github.buraconcio.Utils.Managers.ConnectionManager;
 import io.github.buraconcio.Utils.Managers.FlowManager;
 import io.github.buraconcio.Utils.Managers.GameManager;
 import io.github.buraconcio.Utils.Managers.GameManager.PHASE;
+import io.github.buraconcio.Utils.Managers.ObstacleInfo;
 import io.github.buraconcio.Utils.Managers.PhysicsManager;
 import io.github.buraconcio.Utils.Managers.PlayerManager;
 import io.github.buraconcio.Screens.MainMenu;
@@ -253,12 +255,15 @@ public class Client {
                     case SPAWN_OBSTACLES -> {
 
                         @SuppressWarnings("unchecked")
-                        ArrayList<String> obsArray = (ArrayList<String>) msg.getPayload();
+                        ArrayList<ObstacleInfo> obsArray = (ArrayList<ObstacleInfo>) msg.getPayload();
 
-                        for (String type : obsArray)
+                        obsArray.forEach(type -> {
                             Gdx.app.postRunnable(() -> {
-                                GameManager.getInstance().spawnObstacle(type, null);
+                                Vector2 vec = new Vector2(type.obstaclePosX, type.obstaclePosY);
+                                GameManager.getInstance().spawnObstacle(type.obstacleName, vec);
                             });
+                        });
+
                     }
 
                     case PLAYERS_START_POS -> {

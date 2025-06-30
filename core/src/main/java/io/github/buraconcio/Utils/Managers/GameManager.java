@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -39,6 +40,8 @@ public class GameManager {
     private Flag flag;
 
     private FlowManager flow;
+
+    private Rectangle blueprintArea;
 
     private PlayInputAdapter playInput;
 
@@ -255,7 +258,7 @@ public class GameManager {
 
         if (Constants.isHosting()) {
             ConnectionManager.getInstance().getServer().sendMessage(Message.Type.PLAYERS_START_POS,
-                PhysicsManager.getInstance().getPlayerStartPosList());
+                    PhysicsManager.getInstance().getPlayerStartPosList());
         }
 
         Constants.localP().setCanSelect(false);
@@ -289,14 +292,35 @@ public class GameManager {
     public void setupSelectObstaclePhase() {
         PhysicsManager.getInstance().postRoundObstacles();
 
+        //jogar a camera pro centro do espaço reservado
+
+        Rectangle area = getbluePrintArea();
+        if (area != null) {
+            float invertedX = -(area.x + area.width / 2f);
+            float centerY = area.y + area.height / 2f;
+            Vector2 center = new Vector2(invertedX + 56f, centerY);
+            moveCamera(center);
+        }
+
         if (Constants.isHosting()) {
             int qtd = MathUtils.random(4, 7);
             ArrayList<String> blueprintObstacles = obstacleSpawner.selectRandomObstacles(qtd);
-            ConnectionManager.getInstance().getServer().sendArray(Message.Type.SPAWN_OBSTACLES,
-                    blueprintObstacles);
+
+            ArrayList<ObstacleInfo> obstaclesToSpawn = new ArrayList<>();
+
+            for (String type : blueprintObstacles) {
+
+                //dentro de randomposition ele puxa uma variavel rectangle de gameManager
+                Vector2 pos = obstacleSpawner.randomPositionInBlueprint();
+
+                ObstacleInfo info = new ObstacleInfo(type, pos.x, pos.y);
+                obstaclesToSpawn.add(info);
+            }
+
+            ConnectionManager.getInstance().getServer().sendMessage(Message.Type.SPAWN_OBSTACLES,
+                    obstaclesToSpawn);
         }
 
-        // Constants.localP().setCanSelect(true);
         PlayerManager.getInstance().setAllCanSelect(true);
         Constants.localP().setBallInteractable(false);
     }
@@ -331,5 +355,13 @@ public class GameManager {
 
     public FlowManager getFlow() {
         return flow;
+    }
+
+    public Rectangle getbluePrintArea() {
+        return blueprintArea;
+    }
+
+    public void setbluePrintArea(Rectangle p) {
+        this.blueprintArea = p;
     }
 }

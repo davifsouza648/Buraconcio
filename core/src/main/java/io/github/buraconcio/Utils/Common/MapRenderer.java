@@ -1,6 +1,10 @@
 package io.github.buraconcio.Utils.Common;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
@@ -9,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Ellipse;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -17,34 +22,34 @@ import io.github.buraconcio.Objects.Game.Flag;
 import io.github.buraconcio.Screens.PhysicsTest;
 import io.github.buraconcio.Utils.Managers.GameManager;
 
-public class MapRenderer extends OrthogonalTiledMapRenderer
-{
-    private static float scale = 1/32f;
+public class MapRenderer extends OrthogonalTiledMapRenderer {
+    private static float scale = 1 / 32f;
     private static TiledMap map;
+    private static TiledMap bluePrint;
     private Texture backgroundTexture;
     private Rectangle spawnArea;
 
-    public MapRenderer(String mapName)
-    {
+    public MapRenderer(String mapName) {
         super(map = new TmxMapLoader().load("maps/" + mapName + "/" + mapName + ".tmx"), scale);
+
+        bluePrint = new TmxMapLoader().load("backgrounds/blueprint/blueprint.tmx");// tirar isso aqui
+
         backgroundTexture = new Texture("maps/" + mapName + "/background" + mapName + ".png");
     }
 
-    public void createCollisions()
-    {
-        float pixelsPerMeter = 1/scale;
+    public void createCollisions() {
+        float pixelsPerMeter = 1 / scale;
 
         MapObjects objects = getMap().getLayers().get("Objetos").getObjects();
 
-        for (MapObject object : objects)
-        {
-            if(object.getName() == null) continue;
+        for (MapObject object : objects) {
+            if (object.getName() == null)
+                continue;
             else if ("SpawnArea".equals(object.getName())) {
                 spawnArea = ((RectangleMapObject) object).getRectangle();
             }
 
-            else if ("Box".equals(object.getName()))
-            {
+            else if ("Box".equals(object.getName())) {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
                 float x = (rect.x + rect.width / 2) / pixelsPerMeter;
@@ -59,31 +64,17 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
                 shape.dispose();
             }
 
-            else if ("Buraco".equals(object.getName()))
-            {
-                Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            else if ("Buraco".equals(object.getName())) {
 
-                float minX = rect.x / pixelsPerMeter;
-                float minY = rect.y / pixelsPerMeter;
-                float maxX = (rect.x + rect.width) / pixelsPerMeter;
-                float maxY = (rect.y + rect.height) / pixelsPerMeter;
 
-                float randomX = (float) (minX + Math.random() * (maxX - minX));
-                float randomY = (float) (minY + Math.random() * (maxY - minY));
-
-                Vector2 pos = new Vector2(randomX, randomY);
-
-                GameManager.getInstance().setFlag(new Flag(pos, 1f));
             }
 
-            else if (object.getName() != null && object.getName().startsWith("Curva"))
-            {
+            else if (object.getName() != null && object.getName().startsWith("Curva")) {
                 Ellipse ellipse = ((EllipseMapObject) object).getEllipse();
                 createArcCollider(ellipse, object.getName(), pixelsPerMeter, 0.005f);
             }
 
-            else if ("DiagonalPrincipal".equals(object.getName()) || "DiagonalSecundaria".equals(object.getName()))
-            {
+            else if ("DiagonalPrincipal".equals(object.getName()) || "DiagonalSecundaria".equals(object.getName())) {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
                 float x = (rect.x + rect.width / 2) / pixelsPerMeter;
@@ -114,18 +105,16 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
                 Vector2 normal = new Vector2(-dir.y, dir.x).scl(0.02f); // Espessura da linha (ajustável)
 
                 PolygonShape shape = new PolygonShape();
-                shape.set(new Vector2[]{
-                    p1.cpy().add(normal),
-                    p1.cpy().sub(normal),
-                    p2.cpy().sub(normal),
-                    p2.cpy().add(normal)
+                shape.set(new Vector2[] {
+                        p1.cpy().add(normal),
+                        p1.cpy().sub(normal),
+                        p2.cpy().sub(normal),
+                        p2.cpy().add(normal)
                 });
 
                 entity.getBody().createFixture(shape, 0f);
                 shape.dispose();
-            }
-            else if(object.getName().startsWith("Trem"))
-            {
+            } else if (object.getName().startsWith("Trem")) {
 
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
                 String sufix = object.getName().substring(4, object.getName().length());
@@ -134,25 +123,50 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
                 float y = (rect.y + rect.height / 2f) / pixelsPerMeter;
                 Vector2 pos = new Vector2(x, y);
 
-                if("Baixo".equals(sufix))
-                {
+                if ("Baixo".equals(sufix)) {
                     new TrainSpawner(pos, 1);
-                }
-                else if("Esq".equals(sufix))
-                {
+                } else if ("Esq".equals(sufix)) {
                     new TrainSpawner(pos, 0);
-                }
-                else if("Dir".equals(sufix))
-                {
+                } else if ("Dir".equals(sufix)) {
                     new TrainSpawner(pos, 2);
-                }
-                else if("Cima".equals(sufix))
-                {
+                } else if ("Cima".equals(sufix)) {
                     new TrainSpawner(pos, 3);
                 }
             }
 
         }
+    }
+
+    // nao renderizar separado
+    public void renderBlueprint(OrthographicCamera camera) {
+        float mapWidth = map.getProperties().get("width", Integer.class) *
+                map.getProperties().get("tilewidth", Integer.class) * scale;
+
+        float gap = 50f;
+
+        float blueprintWidth = bluePrint.getProperties().get("width", Integer.class) *
+                bluePrint.getProperties().get("tilewidth", Integer.class) * scale;
+        float blueprintHeight = bluePrint.getProperties().get("height", Integer.class) *
+                bluePrint.getProperties().get("tileheight", Integer.class) * scale;
+
+        OrthographicCamera blueprintCamera = new OrthographicCamera(camera.viewportWidth, camera.viewportHeight);
+
+        float blueprintCamX = camera.position.x - mapWidth - gap;
+        float blueprintCamY = camera.position.y;
+        blueprintCamera.position.set(blueprintCamX, blueprintCamY, camera.position.z);
+        blueprintCamera.zoom = camera.zoom;
+        blueprintCamera.update();
+
+        float rectX = blueprintCamX - blueprintWidth / 2f;
+        float rectY = blueprintCamY - blueprintHeight / 2f;
+        Rectangle bluePrintArea = new Rectangle(rectX, rectY, blueprintWidth, blueprintHeight);
+        GameManager.getInstance().setbluePrintArea(bluePrintArea);
+
+        setMap(bluePrint);
+        setView(blueprintCamera);
+        render();
+
+        setMap(map);
     }
 
     private void createArcCollider(Ellipse ellipse, String name, float pixelsPerMeter, float thickness) {
@@ -181,8 +195,10 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
             int curvaIndex = 1;
             try {
                 String indexString = name.replaceAll("[^0-9]", "");
-                if (!indexString.isEmpty()) curvaIndex = Integer.parseInt(indexString);
-            } catch (NumberFormatException ignored) {}
+                if (!indexString.isEmpty())
+                    curvaIndex = Integer.parseInt(indexString);
+            } catch (NumberFormatException ignored) {
+            }
 
             sweepAngle = (float) (Math.PI / 2);
 
@@ -222,12 +238,10 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
 
             outerArc[i] = new Vector2(
                     centerX + (float) Math.cos(angle) * outerRadiusX,
-                    centerY + (float) Math.sin(angle) * outerRadiusY
-            );
+                    centerY + (float) Math.sin(angle) * outerRadiusY);
             innerArc[i] = new Vector2(
                     centerX + (float) Math.cos(angle) * innerRadiusX,
-                    centerY + (float) Math.sin(angle) * innerRadiusY
-            );
+                    centerY + (float) Math.sin(angle) * innerRadiusY);
         }
 
         // Cria entidade física
@@ -241,7 +255,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
 
             // Triângulo 1
             PolygonShape shape1 = new PolygonShape();
-            shape1.set(new Vector2[]{
+            shape1.set(new Vector2[] {
                     new Vector2(p1.x - centerX, p1.y - centerY),
                     new Vector2(p2.x - centerX, p2.y - centerY),
                     new Vector2(p3.x - centerX, p3.y - centerY)
@@ -251,7 +265,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
 
             // Triângulo 2
             PolygonShape shape2 = new PolygonShape();
-            shape2.set(new Vector2[]{
+            shape2.set(new Vector2[] {
                     new Vector2(p1.x - centerX, p1.y - centerY),
                     new Vector2(p3.x - centerX, p3.y - centerY),
                     new Vector2(p4.x - centerX, p4.y - centerY)
@@ -259,6 +273,25 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
             entity.getBody().createFixture(shape2, 0f);
             shape2.dispose();
         }
+    }
+
+    public void setFlag() {
+
+        float pixelsPerMeter = 1 / scale;
+
+        Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+        float minX = rect.x / pixelsPerMeter;
+        float minY = rect.y / pixelsPerMeter;
+        float maxX = (rect.x + rect.width) / pixelsPerMeter;
+        float maxY = (rect.y + rect.height) / pixelsPerMeter;
+
+        float randomX = (float) (minX + Math.random() * (maxX - minX));
+        float randomY = (float) (minY + Math.random() * (maxY - minY));
+
+        Vector2 pos = new Vector2(randomX, randomY);
+
+        GameManager.getInstance().setFlag(new Flag(pos, 1f));
     }
 
     public void renderBackground() {
@@ -305,7 +338,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer
             backgroundTexture.dispose();
         }
         map.dispose();
+        bluePrint.dispose();
     }
-
 
 }
