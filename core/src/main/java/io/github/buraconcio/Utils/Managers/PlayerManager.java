@@ -201,8 +201,6 @@ public class PlayerManager {
         {
             if (p.getBall() != null && p.getBall().isAlive())
             {
-                System.out.print(p.getUsername());
-                System.out.println(" is alive");
                 return false;
             }
         }

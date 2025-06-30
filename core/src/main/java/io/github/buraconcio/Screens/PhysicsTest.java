@@ -72,7 +72,7 @@ public class PhysicsTest implements Screen {
         PhysicsManager.getInstance().setStage(stage);
 
         mapRenderer.createCollisions();
-        GameManager.getInstance().setbluePrintArea(mapRenderer.getBluePrintArea());
+        mapRenderer.setBluePrintGameManager();
 
         for (Player player : PlayerManager.getInstance().getAllPlayers()) {
             player.createBall();

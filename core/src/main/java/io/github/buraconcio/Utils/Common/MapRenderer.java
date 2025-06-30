@@ -25,14 +25,11 @@ import io.github.buraconcio.Utils.Managers.GameManager;
 public class MapRenderer extends OrthogonalTiledMapRenderer {
     private static float scale = 1 / 32f;
     private static TiledMap map;
-    private static TiledMap bluePrint;
     private Texture backgroundTexture;
     private Rectangle spawnArea, flagArea;
 
     public MapRenderer(String mapName) {
         super(map = new TmxMapLoader().load("maps/" + mapName + "/" + mapName + ".tmx"), scale);
-
-        bluePrint = new TmxMapLoader().load("backgrounds/blueprint/blueprint.tmx");// tirar isso aqui
 
         backgroundTexture = new Texture("maps/" + mapName + "/background" + mapName + ".png");
     }
@@ -114,7 +111,9 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
 
                 entity.getBody().createFixture(shape, 0f);
                 shape.dispose();
-            } else if (object.getName().startsWith("Trem")) {
+            } 
+            else if (object.getName().startsWith("Trem")) 
+            {
 
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
                 String sufix = object.getName().substring(4, object.getName().length());
@@ -133,40 +132,28 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
                     new TrainSpawner(pos, 3);
                 }
             }
+            
+
 
         }
     }
 
-    // nao renderizar separado
-    public void renderBlueprint(OrthographicCamera camera) {
-        float mapWidth = map.getProperties().get("width", Integer.class) *
-                map.getProperties().get("tilewidth", Integer.class) * scale;
+    public void setBluePrintGameManager()
+    {
+        MapObjects objects = getMap().getLayers().get("blueprint").getObjects();
 
-        float gap = 50f;
+        for(MapObject m: objects)
+        {
+            
+            if("blueprint".equals(m.getName()))
+            {
+                
+                Rectangle blueprint = ((RectangleMapObject) m).getRectangle();
+                System.out.println("Posição blue print: " + blueprint.getX() + " " + blueprint.getY());
 
-        float blueprintWidth = bluePrint.getProperties().get("width", Integer.class) *
-                bluePrint.getProperties().get("tilewidth", Integer.class) * scale;
-        float blueprintHeight = bluePrint.getProperties().get("height", Integer.class) *
-                bluePrint.getProperties().get("tileheight", Integer.class) * scale;
-
-        OrthographicCamera blueprintCamera = new OrthographicCamera(camera.viewportWidth, camera.viewportHeight);
-
-        float blueprintCamX = camera.position.x - mapWidth - gap;
-        float blueprintCamY = camera.position.y;
-        blueprintCamera.position.set(blueprintCamX, blueprintCamY, camera.position.z);
-        blueprintCamera.zoom = camera.zoom;
-        blueprintCamera.update();
-
-        float rectX = blueprintCamX - blueprintWidth / 2f;
-        float rectY = blueprintCamY - blueprintHeight / 2f;
-        Rectangle bluePrintArea = new Rectangle(rectX, rectY, blueprintWidth, blueprintHeight);
-        GameManager.getInstance().setbluePrintArea(bluePrintArea);
-
-        setMap(bluePrint);
-        setView(blueprintCamera);
-        render();
-
-        setMap(map);
+                GameManager.getInstance().setbluePrintArea(blueprint);
+            }
+        }
     }
 
     private void createArcCollider(Ellipse ellipse, String name, float pixelsPerMeter, float thickness) {
@@ -337,7 +324,6 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
             backgroundTexture.dispose();
         }
         map.dispose();
-        bluePrint.dispose();
     }
 
 }

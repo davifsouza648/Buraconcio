@@ -39,7 +39,7 @@ public class ObstacleSpawner {
     }
 
     public Rectangle getBlueprintArea() {
-        Rectangle area = GameManager.getInstance().getbluePrintArea();
+        Rectangle area = GameManager.getInstance().getBluePrintarea();
         if (area == null) {
             throw new IllegalStateException("Blueprint area is not set in GameManager.");
         }
@@ -53,8 +53,8 @@ public class ObstacleSpawner {
             throw new IllegalStateException("Blueprint area is not set.");
         }
 
-        float x = blueprintArea.x + random.nextFloat() * blueprintArea.width;
-        float y = blueprintArea.y + random.nextFloat() * blueprintArea.height;
+        float x = (blueprintArea.x + random.nextFloat() * blueprintArea.width) / 32;
+        float y = (blueprintArea.y + random.nextFloat() * blueprintArea.height) / 32;
 
         return new Vector2(x, y);
 

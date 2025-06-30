@@ -301,12 +301,14 @@ public class GameManager {
 
         // jogar a camera pro centro do espaço reservado
 
-        Rectangle area = getbluePrintArea();
+        Rectangle area = blueprintArea;
+        Vector2 center = new Vector2();
+
+        area.getCenter(center);
+        center.x /= 32;
+        center.y /= 32;
+
         if (area != null) {
-           
-            float centerX = area.x + area.width / 2f;
-            float centerY = area.y + area.height / 2f;
-            Vector2 center = new Vector2(centerX, centerY);
             moveCamera(center);
         }
 
@@ -365,11 +367,13 @@ public class GameManager {
         return flow;
     }
 
-    public Rectangle getbluePrintArea() {
-        return blueprintArea;
+    public void setbluePrintArea(Rectangle p) 
+    {
+        this.blueprintArea = p;
     }
 
-    public void setbluePrintArea(Rectangle p) {
-        this.blueprintArea = p;
+    public Rectangle getBluePrintarea()
+    {
+        return this.blueprintArea;
     }
 }

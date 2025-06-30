@@ -14,6 +14,7 @@ public class FlowManager {
     private int round = 0;
     private boolean playPhaseHandled = false;
 
+
     public FlowManager() {
     }
 
@@ -54,8 +55,7 @@ public class FlowManager {
         });
     }
 
-    private void startSelectObstaclePhase() {
-        System.out.println("INICIANDO FASE: SELECT OBSTACLE");
+    public void startSelectObstaclePhase() {
         changePhase("select_obj");
 
         flag = true;

@@ -32,7 +32,9 @@ public class GameCamera extends OrthographicCamera {
     }
 
     public void updateCamera() {
-        if (targetPos != null) {
+        if (targetPos != null) 
+        {
+            System.out.println("Posição da câmera: " + position.x + " " + position.y);
             Vector2 diff = new Vector2(position.x, position.y).sub(targetPos);
 
             if (diff.len2() < 25f && mode == Mode.obstacle) {
