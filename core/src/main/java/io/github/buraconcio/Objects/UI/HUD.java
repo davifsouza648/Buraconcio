@@ -158,6 +158,7 @@ public class HUD {
                     }
 
                     GameManager.getInstance().setCurrentScreen(game, new MainMenu(game));
+                    SoundManager.getInstance().stopMusic();
                     SoundManager.getInstance().playMusic("menu");
                     SoundManager.getInstance().playSound("buttonClick");
                     dispose();

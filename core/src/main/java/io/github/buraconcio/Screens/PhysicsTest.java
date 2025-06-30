@@ -53,14 +53,17 @@ public class PhysicsTest implements Screen {
 
         GameManager.getInstance().setPhase("play");
         this.game = game;
-        mapRenderer = new MapRenderer("mapa" + GameManager.getInstance().getMapIndex());
+        
+        int mapIndex = GameManager.getInstance().getMapIndex();
+        mapRenderer = new MapRenderer("mapa" + mapIndex);
+        SoundManager.getInstance().stopMusic();
+        SoundManager.getInstance().loadMusic("map" + mapIndex, "sounds/songs/map" + GameManager.getInstance().getMapIndex() + ".mp3");
+        SoundManager.getInstance().playMusic("map" + mapIndex);
 
         debugRenderer = new Box2DDebugRenderer();
 
         stage = new Stage(new ExtendViewport(23, 13));
         hudStage = new Stage(new FitViewport(1280, 720));
-
-        SoundManager.getInstance().stopMusic();
 
         //stage.setDebugAll(true);
         PhysicsManager.getInstance().setStage(stage);

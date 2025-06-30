@@ -9,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 import io.github.buraconcio.Utils.Common.Auxiliaries;
 import io.github.buraconcio.Utils.Common.PhysicsEntity;
+import io.github.buraconcio.Utils.Managers.PlayerManager;
+import io.github.buraconcio.Utils.Managers.SoundManager;
 import io.github.buraconcio.Objects.Game.Ball;
 
 public class Train extends Obstacle {
@@ -31,6 +33,8 @@ public class Train extends Obstacle {
 
         body.createFixture(fixtureDef);
         shapeDef.dispose();
+
+        SoundManager.getInstance().loadLoopSound("train-chuck", "sounds/obstacle-sounds/train/train-chuck.wav");
 
         this.claimed = true;
 
@@ -92,6 +96,14 @@ public class Train extends Obstacle {
 
 
         return false;
+    }
+
+    @Override
+    public void act(float delta) 
+    {
+        super.act(delta);
+
+        SoundManager.getInstance().loopProximity("train-chuck", this.getPosition(), PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
     }
 }
 

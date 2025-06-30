@@ -21,8 +21,8 @@ public class SoundManager {
     private Map<String, Long> soundsIds;
     private TreeSet<String> loopsTocando;
 
-    private float masterVolumeSounds = 0f;
-    private float masterVolumeMusic = 0f;
+    private float masterVolumeSounds = 0.5f;
+    private float masterVolumeMusic = 0.5f;
 
     private String currentMusicID;
     private Music currentMusic;
@@ -153,6 +153,7 @@ public class SoundManager {
 
     public void playMusic(String id)
     {
+        System.out.println("Tocando: " + id);
         Music m = music.get(id);
         if (m == null) return;
 
