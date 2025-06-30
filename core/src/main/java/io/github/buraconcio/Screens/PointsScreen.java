@@ -24,6 +24,7 @@ import io.github.buraconcio.Main;
 import io.github.buraconcio.Objects.Game.Player;
 import io.github.buraconcio.Utils.Common.Auxiliaries;
 import io.github.buraconcio.Utils.Managers.FlowManager;
+import io.github.buraconcio.Utils.Managers.GameManager;
 import io.github.buraconcio.Utils.Managers.PlayerManager;
 
 public class PointsScreen implements Screen {
@@ -37,7 +38,7 @@ public class PointsScreen implements Screen {
     private float elapsedTime = 0f;
     private final List<AnimatedPoint> animatedPoints = new ArrayList<>();
 
-    private String[] pointsPaths = 
+    private String[] pointsPaths =
     {
         "points/blue",
         "points/lightCian",
@@ -49,7 +50,7 @@ public class PointsScreen implements Screen {
         "points/white"
     };
 
-    private String[] numberPaths = 
+    private String[] numberPaths =
     {
         "rounds/top/0.png",
         "rounds/top/1.png",
@@ -86,7 +87,7 @@ public class PointsScreen implements Screen {
     }
 
     @Override
-    public void show() 
+    public void show()
     {
         animatedPoints.clear();
         Table root = new Table();
@@ -99,19 +100,19 @@ public class PointsScreen implements Screen {
         Table topTable = new Table();
         topTable.top();
 
-        String roundNumber = String.valueOf(FlowManager.getInstance().getRound());
+        String roundNumber = String.valueOf(GameManager.getInstance().getFlow().getRound());
 
         topTable.add(imageRound).center().pad(5).row();
 
-        for (int i = 0; i < roundNumber.length(); i++) 
+        for (int i = 0; i < roundNumber.length(); i++)
         {
             char c = roundNumber.charAt(i);
             Texture tex = new Texture(numberPaths[c - '0']);
             numTextures.add(tex);
-            topTable.add(new Image(tex)).pad(2); 
+            topTable.add(new Image(tex)).pad(2);
         }
 
-        for (Player p : PlayerManager.getInstance().getAllPlayers()) 
+        for (Player p : PlayerManager.getInstance().getAllPlayers())
         {
             Table playerTable = new Table();
             playerTable.defaults().pad(5);
@@ -133,12 +134,12 @@ public class PointsScreen implements Screen {
 
             playerTable.add(playerInfoTable).center().pad(10);
 
-            if (p.getStars() > 0) 
+            if (p.getStars() > 0)
             {
                 int index = r.nextInt(0,pointsPaths.length);
                 Animation<TextureRegion> ponto_inicio = Auxiliaries.animationFromFiles(pointsPaths[index] + "/inicio.png", pointsPaths[index] + "/inicio.json");
                 Animation<TextureRegion> ponto_meio = Auxiliaries.animationFromFiles(pointsPaths[index] + "/meio.png", pointsPaths[index] + "/meio.json");
-                for (int i = 0; i < p.getStars(); i++) 
+                for (int i = 0; i < p.getStars(); i++)
                 {
                     Animation<TextureRegion> ponto = (i == 0) ? ponto_inicio : ponto_meio;
 
@@ -147,7 +148,7 @@ public class PointsScreen implements Screen {
                     playerTable.add(star.image).pad(0.1f);
                     animatedPoints.add(star);
                 }
-                playerTable.row(); 
+                playerTable.row();
             }
 
             mainTable.add(playerTable).padBottom(20).row();
@@ -156,13 +157,13 @@ public class PointsScreen implements Screen {
 
 
 
-        topTable.top().center().padTop(10).padBottom(20); 
+        topTable.top().center().padTop(10).padBottom(20);
 
         root.add(topTable).expandX().padTop(10).row();
         root.add(mainTable).expand().top();
 
-        stage.addActor(imageBG);     
-        stage.addActor(root);   
+        stage.addActor(imageBG);
+        stage.addActor(root);
 
     }
 
@@ -173,7 +174,7 @@ public class PointsScreen implements Screen {
         stage.draw();
 
         elapsedTime += delta;
-        for (AnimatedPoint point : animatedPoints) 
+        for (AnimatedPoint point : animatedPoints)
         {
             point.update(elapsedTime);
         }
@@ -215,23 +216,23 @@ public class PointsScreen implements Screen {
 
 }
 
-class AnimatedPoint 
+class AnimatedPoint
 {
     final Image image;
     final Animation<TextureRegion> animation;
-    final float appearTime; 
+    final float appearTime;
 
-    AnimatedPoint(Animation<TextureRegion> animation, float appearTime) 
+    AnimatedPoint(Animation<TextureRegion> animation, float appearTime)
     {
         this.animation = animation;
         this.appearTime = appearTime;
         this.image = new Image(new TextureRegionDrawable(animation.getKeyFrame(0)));
-        this.image.setVisible(false); 
+        this.image.setVisible(false);
     }
 
-    void update(float totalElapsed) 
+    void update(float totalElapsed)
     {
-        if (totalElapsed >= appearTime) 
+        if (totalElapsed >= appearTime)
         {
             image.setVisible(true);
             float localTime = totalElapsed - appearTime;

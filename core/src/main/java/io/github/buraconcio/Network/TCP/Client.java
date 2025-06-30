@@ -183,7 +183,7 @@ public class Client {
                     case PHASE_CHANGE -> {
                         String phase = (String) msg.getPayload();
 
-                        FlowManager.getInstance().onReceivePhaseChange(phase);
+                        GameManager.getInstance().getFlow().onReceivePhaseChange(phase);
                         GameManager.getInstance().setPhase(phase);
 
                         if (listenerGame != null) {
@@ -227,6 +227,7 @@ public class Client {
                                 // System.out.println("recebeu stars update");
                             }
 
+                            System.out.println("CLIENT POINTS");
                             if (listenerGame != null) {
                                 listenerGame.showPoints();
                             }
@@ -245,7 +246,7 @@ public class Client {
 
                     case TIMER_STOP -> {
                         System.out.println("Recebeu TIMER_STOP, finalizando timer...");
-                        FlowManager.getInstance().onReceiveTimerStop();
+                        GameManager.getInstance().getFlow().onReceiveTimerStop();
                     }
 
                     case SPAWN_OBSTACLES -> {

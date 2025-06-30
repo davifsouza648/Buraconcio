@@ -51,6 +51,7 @@ public class PhysicsTest implements Screen {
     public PhysicsTest(Main game) {
         PlayerManager.getInstance().syncLocalPlayer();
 
+        GameManager.getInstance().setPhase("play");
         this.game = game;
         mapRenderer = new MapRenderer("mapa" + GameManager.getInstance().getMapIndex());
 
@@ -74,6 +75,7 @@ public class PhysicsTest implements Screen {
 
         camera = new GameCamera();
         stage.getViewport().setCamera(camera);
+        GameManager.getInstance().setCamera(camera);
         hud = new HUD(hudStage, PlayerManager.getInstance().getLocalPlayer().getId(), game);
 
         if (pBall == null) { // testing without server
@@ -100,11 +102,11 @@ public class PhysicsTest implements Screen {
             pBall.setCanInteract(true);
         }
 
-        FlowManager.getInstance();
-
         GameManager.getInstance().addProcessor(hudStage, 0);
         GameManager.getInstance().setGameInputProcessor();
         GameManager.getInstance().getInputAdapter().setHud(hud);
+
+        GameManager.getInstance().startFlow();
     }
 
     @Override
@@ -193,7 +195,7 @@ public class PhysicsTest implements Screen {
 
     @Override
     public void dispose() {
-        FlowManager.getInstance().onReceiveTimerStop();
+        GameManager.getInstance().getFlow().onReceiveTimerStop();
         mapRenderer.dispose();
         hudStage.dispose();
         stage.dispose();

@@ -37,15 +37,17 @@ public class GameManager {
     private ObstacleSpawner obstacleSpawner;
     private Flag flag;
 
+    private FlowManager flow;
+
     private PlayInputAdapter playInput;
 
     // gestao de tempo
     private int play_time = 50;
     private int select_time = 30;
-    private int points_time = 30;
+    private int points_time = 5;
     private int win_time = 55;
     private int pointsToWin = 10;
-    private int timeToClear = 15; //limpar os obstaculos nao selecionados
+    private int timeToClear = 15; // limpar os obstaculos nao selecionados
 
     // num de obstaculos
     private int obstacleNum = 6;
@@ -72,6 +74,8 @@ public class GameManager {
         inputs.addProcessor(playInput); // bem gambiarra por enquanto
         inputs.addProcessor(new ObstacleInputAdapter());
         inputs.addProcessor(new DebugInputAdapter());
+
+        this.flow = new FlowManager();
 
         // put this here or somewhere else?
         PhysicsManager.getInstance().getWorld().setContactListener(new ContactListener() {
@@ -118,8 +122,12 @@ public class GameManager {
 
     public void setPhysicsScreen(PhysicsTest screen) {
         this.physicsScreen = screen;
-        this.camera = screen.getCamera();
+
         this.stage = screen.getStage();
+    }
+
+    public void setCamera(GameCamera camera) {
+        this.camera = camera;
     }
 
     public PhysicsTest getPhysicsScreen() {
@@ -135,8 +143,7 @@ public class GameManager {
         return currentScreen;
     }
 
-    public PlayInputAdapter getInputAdapter()
-    {
+    public PlayInputAdapter getInputAdapter() {
         return this.playInput;
     }
 
@@ -229,11 +236,11 @@ public class GameManager {
         pointsToWin = x;
     }
 
-    public int getTimeToClear(){
+    public int getTimeToClear() {
         return timeToClear;
     }
 
-    public void setTimeToClear(int x){
+    public void setTimeToClear(int x) {
         timeToClear = x;
     }
 
@@ -281,8 +288,7 @@ public class GameManager {
     public void setupSelectObstaclePhase() {
         PhysicsManager.getInstance().postRoundObstacles();
 
-        if (Constants.isHosting())
-        {
+        if (Constants.isHosting()) {
             int qtd = MathUtils.random(4, 7);
             ArrayList<String> blueprintObstacles = obstacleSpawner.selectRandomObstacles(qtd);
             ConnectionManager.getInstance().getServer().sendArray(Message.Type.SPAWN_OBSTACLES,
@@ -308,5 +314,13 @@ public class GameManager {
 
     public Flag getFlag() {
         return this.flag;
+    }
+
+    public void startFlow() {
+        flow.start();
+    }
+
+    public FlowManager getFlow() {
+        return flow;
     }
 }

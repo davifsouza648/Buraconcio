@@ -12,47 +12,49 @@ public class FlowManager {
     private static FlowManager instance;
     int delayToClear = 0; //delay para limpar os obstaculos nao selecionados
     private int round = 0;
+    private boolean playPhaseHandled = false;
 
     public FlowManager() {
+    }
+
+    public void start(){
         this.isHost = Constants.isHosting();
         if (isHost) {
             startPlayPhase();
         }
     }
 
-    public static synchronized FlowManager getInstance() {
-        if (instance == null) {
-            instance = new FlowManager();
-        }
-
-        return instance;
-    }
-
     private void startPlayPhase() {
+        System.out.println("INICIANDO FASE: PLAY");
         changePhase("play");
         round++;
         PlayerManager.getInstance().getLocalPlayer().resetStrokes();
-        
+        playPhaseHandled = false;
         startHostTimer(GameManager.getInstance().getPlayTime(), new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {
-                if (PlayerManager.getInstance().areAllBallsDead()) {
+                if (!playPhaseHandled && PlayerManager.getInstance().areAllBallsDead()) {
+                    playPhaseHandled = true;
                     stopAndNotify();
-                    
+
                     startPointsPhase();
                 }
 
             }
 
             @Override
-            public void finish() 
+            public void finish()
             {
+                if (!playPhaseHandled) {
+                playPhaseHandled = true;
                 startPointsPhase();
+            }
             }
         });
     }
 
     private void startSelectObstaclePhase() {
+        System.out.println("INICIANDO FASE: SELECT OBSTACLE");
         changePhase("select_obj");
 
         flag = true;
@@ -94,8 +96,9 @@ public class FlowManager {
         });
     }
 
-    public void startPointsPhase() 
+    public void startPointsPhase()
     {
+        System.out.println("INICIANDO FASE: POINTS");
         System.out.println("Get win: " + PlayerManager.getInstance().getWin());
         System.out.println("Player: " + PlayerManager.getInstance().getLocalPlayer().getStars());
         if(PlayerManager.getInstance().getWin()) //Checa se alguém ganhou para ir para a victory screen
@@ -103,11 +106,11 @@ public class FlowManager {
             winPhase();
             return;
         }
-        
-        
+
         changePhase("show_points");
         PlayerManager.getInstance().getLocalPlayer().resetStrokes();
 
+        System.out.println("SHOW POINTS");
         startHostTimer(GameManager.getInstance().getPointsTime(), new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {
@@ -176,7 +179,7 @@ public class FlowManager {
         timer.start();
     }
 
-    private void changePhase(String phase) 
+    private void changePhase(String phase)
     {
         if (Constants.isHosting()) {
             ConnectionManager.getInstance().getServer().sendString(Message.Type.PHASE_CHANGE, phase);
