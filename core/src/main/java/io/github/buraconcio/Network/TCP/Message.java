@@ -17,6 +17,7 @@ public class Message implements Serializable {
         SPAWN_OBSTACLES,
         PLAYERS_START_POS,
         BLUEPRINT_OBSTACLES,
+        FLAG_POS
     }
 
     private Type type;

@@ -27,7 +27,7 @@ import io.github.buraconcio.Utils.Managers.FlowManager;
 import io.github.buraconcio.Utils.Managers.GameManager;
 import io.github.buraconcio.Utils.Managers.PlayerManager;
 
-public class PointsScreen implements Screen 
+public class PointsScreen implements Screen
 {
 
     private final Main game;
@@ -157,8 +157,6 @@ public class PointsScreen implements Screen
 
             mainTable.add(playerTable).padBottom(20).row();
         }
-
-
 
 
         topTable.top().center().padTop(10).padBottom(20);

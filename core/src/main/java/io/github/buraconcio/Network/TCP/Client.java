@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.github.buraconcio.Main;
+import io.github.buraconcio.Objects.Game.Flag;
 import io.github.buraconcio.Objects.Game.Player;
 import io.github.buraconcio.Objects.Obstacles.Obstacle;
 import io.github.buraconcio.Utils.Common.Auxiliaries;
@@ -280,7 +281,15 @@ public class Client {
                         }
                     }
 
+                    case FLAG_POS -> {
+                        Vector2 pos = (Vector2) msg.getPayload();
+                        Gdx.app.postRunnable(() -> {
+                            GameManager.getInstance().setFlag(new Flag(pos, 1f));
+                        });
+                    }
+
                     case CLEAR_UNCLAIMED -> {
+
                         PhysicsManager.getInstance().clearUnclaimedObstacles();
                     }
 

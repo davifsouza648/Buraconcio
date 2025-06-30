@@ -61,7 +61,7 @@ public class PhysicsTest implements Screen {
         SoundManager.getInstance().stopMusic();
         SoundManager.getInstance().loadMusic("map" + mapIndex, "sounds/songs/map" + mapIndex + ".mp3");
         SoundManager.getInstance().playMusic("map" + mapIndex);
-        
+
         debugRenderer = new Box2DDebugRenderer();
 
         stage = new Stage(new ExtendViewport(23, 13));
@@ -219,6 +219,10 @@ public class PhysicsTest implements Screen {
 
     public Main getGame() {
         return this.game;
+    }
+
+    public MapRenderer getMapRenderer(){
+        return this.mapRenderer;
     }
 
     public void setListeners() {

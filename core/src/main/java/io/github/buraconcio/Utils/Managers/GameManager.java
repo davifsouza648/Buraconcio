@@ -259,6 +259,9 @@ public class GameManager {
         if (Constants.isHosting()) {
             ConnectionManager.getInstance().getServer().sendMessage(Message.Type.PLAYERS_START_POS,
                     PhysicsManager.getInstance().getPlayerStartPosList());
+
+            ConnectionManager.getInstance().getServer().sendMessage(Message.Type.FLAG_POS,
+                    getPhysicsScreen().getMapRenderer().getRandomFlagArea());
         }
 
         Constants.localP().setCanSelect(false);
@@ -268,7 +271,11 @@ public class GameManager {
         Timer.schedule(new Task() {
             @Override
             public void run() {
-                camera.teleportTo(flag.getPosition());
+                if (flag != null) {
+                    camera.teleportTo(flag.getPosition());
+                } else {
+                    Timer.schedule(this, 0.05f);
+                }
             }
         }, 0.01f); // se rodar instantaneamente nao funciona nao sei por que mas desisto fds
 
@@ -292,7 +299,7 @@ public class GameManager {
     public void setupSelectObstaclePhase() {
         PhysicsManager.getInstance().postRoundObstacles();
 
-        //jogar a camera pro centro do espaço reservado
+        // jogar a camera pro centro do espaço reservado
 
         Rectangle area = getbluePrintArea();
         if (area != null) {
@@ -311,7 +318,7 @@ public class GameManager {
 
             for (String type : blueprintObstacles) {
 
-                //dentro de randomposition ele puxa uma variavel rectangle de gameManager
+                // dentro de randomposition ele puxa uma variavel rectangle de gameManager
                 Vector2 pos = obstacleSpawner.randomPositionInBlueprint();
 
                 ObstacleInfo info = new ObstacleInfo(type, pos.x, pos.y);
@@ -329,7 +336,7 @@ public class GameManager {
     public void setupWinPhase() {
         PhysicsManager.getInstance().destroyAllExceptBalls();
 
-        //Constants.localP().setBallInteractable(false);
+        // Constants.localP().setBallInteractable(false);
         Main game = physicsScreen.getGame();
         setCurrentScreen(game, new VictoryScreen(game));
     }
