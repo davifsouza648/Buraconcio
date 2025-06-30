@@ -27,7 +27,8 @@ import io.github.buraconcio.Utils.Managers.FlowManager;
 import io.github.buraconcio.Utils.Managers.GameManager;
 import io.github.buraconcio.Utils.Managers.PlayerManager;
 
-public class PointsScreen implements Screen {
+public class PointsScreen implements Screen 
+{
 
     private final Main game;
     private final Stage stage;
@@ -139,12 +140,15 @@ public class PointsScreen implements Screen {
                 int index = r.nextInt(0,pointsPaths.length);
                 Animation<TextureRegion> ponto_inicio = Auxiliaries.animationFromFiles(pointsPaths[index] + "/inicio.png", pointsPaths[index] + "/inicio.json");
                 Animation<TextureRegion> ponto_meio = Auxiliaries.animationFromFiles(pointsPaths[index] + "/meio.png", pointsPaths[index] + "/meio.json");
+
+                ponto_inicio.setFrameDuration(0.05f);
+                ponto_meio.setFrameDuration(0.05f);
                 for (int i = 0; i < p.getStars(); i++)
                 {
                     Animation<TextureRegion> ponto = (i == 0) ? ponto_inicio : ponto_meio;
 
                     ponto.setPlayMode(PlayMode.NORMAL);
-                    AnimatedPoint star = new AnimatedPoint(ponto, i * 3.5f);
+                    AnimatedPoint star = new AnimatedPoint(ponto, i * 1.5f);
                     playerTable.add(star.image).pad(0.1f);
                     animatedPoints.add(star);
                 }
