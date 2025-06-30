@@ -60,6 +60,7 @@ public class Ball extends PhysicsEntity {
 
         Skin skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
         Label labelUserName = new Label(player.getUsername(), skinLabel, "labelPixelyWhite32");
+        labelUserName.setColor(0, 0, 0, 1);
         labelUserName.setAlignment(Align.center);
         labelUserName.pack();
 
