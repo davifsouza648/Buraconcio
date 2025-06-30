@@ -69,12 +69,6 @@ public class GameManager {
     private Stage stage;
 
     private GameManager() {
-        System.out.println("creating game manager from");
-        StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-        for (int i = 2; i < stack.length; i++) {
-            System.out.println("\tat " + stack[i]);
-        }
-
         inputs = new InputMultiplexer();
 
         playInput = new PlayInputAdapter();
