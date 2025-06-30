@@ -34,9 +34,9 @@
 ### ASSETS
 
 - [X] Hud de vitória
-- [ ] Hud de configuração - slider - botao de resume
+- [X] Hud de configuração - slider - botao de resume
 - [X] Hud de Pontuação (Screen)
 - [X] Background do LoginScreen
 - [X] Fake Hole BORDINHA
 - [ ] VENTILADOR 😢😢😭😭😭😭😭😭😭😭😭😭😭😭😭😭
-- [ ] animacao de morte do trem?
+- [X] animacao de morte do trem?
