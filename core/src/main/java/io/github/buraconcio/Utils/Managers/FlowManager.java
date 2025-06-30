@@ -92,9 +92,16 @@ public class FlowManager {
         });
     }
 
-    private void startPointsPhase() {
+    private void startPointsPhase() 
+    {
+        if(PlayerManager.getInstance().getWin()) //Checa se alguém ganhou para ir para a victory screen
+        {
+            winPhase();
+            return;
+        }
         changePhase("show_points");
         PlayerManager.getInstance().getLocalPlayer().resetStrokes();
+
         startHostTimer(GameManager.getInstance().getPointsTime(), new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {
@@ -163,7 +170,8 @@ public class FlowManager {
         timer.start();
     }
 
-    private void changePhase(String phase) {
+    private void changePhase(String phase) 
+    {
         if (Constants.isHosting()) {
             ConnectionManager.getInstance().getServer().sendString(Message.Type.PHASE_CHANGE, phase);
         }

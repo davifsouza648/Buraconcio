@@ -235,4 +235,17 @@ public class PlayerManager {
 
         return true;
     }
+
+    public boolean getWin()
+    {
+        for(Player p: players)
+        {
+            if(p.getStars() >= Constants.POINTS_TO_WIN)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

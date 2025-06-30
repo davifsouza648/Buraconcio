@@ -24,13 +24,15 @@ public class Train extends Obstacle {
 
         PolygonShape shapeDef = new PolygonShape();
         shapeDef.setAsBox(size.x/2, size.y/2);
-
+        
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shapeDef;
         fixtureDef.isSensor = false;
 
         body.createFixture(fixtureDef);
         shapeDef.dispose();
+
+        this.claimed = true;
 
         body.setType(BodyType.KinematicBody);
         body.setBullet(true);

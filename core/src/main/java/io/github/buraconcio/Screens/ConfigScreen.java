@@ -84,6 +84,7 @@ public class ConfigScreen implements Screen
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) 
             {
+                SoundManager.getInstance().playSound("buttonClick");
                 game.setScreen(new MainMenu(game));
                 return true;
             }
