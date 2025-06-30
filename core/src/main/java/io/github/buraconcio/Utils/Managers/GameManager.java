@@ -22,6 +22,7 @@ import io.github.buraconcio.Utils.Common.GameCamera;
 import io.github.buraconcio.Objects.Game.Flag;
 import io.github.buraconcio.Objects.Obstacles.Obstacle;
 import io.github.buraconcio.Screens.PhysicsTest;
+import io.github.buraconcio.Screens.VictoryScreen;
 import io.github.buraconcio.Utils.Adapters.DebugInputAdapter;
 import io.github.buraconcio.Utils.Adapters.ObstacleInputAdapter;
 import io.github.buraconcio.Utils.Adapters.PlayInputAdapter;
@@ -68,6 +69,12 @@ public class GameManager {
     private Stage stage;
 
     private GameManager() {
+        System.out.println("creating game manager from");
+        StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+        for (int i = 2; i < stack.length; i++) {
+            System.out.println("\tat " + stack[i]);
+        }
+
         inputs = new InputMultiplexer();
 
         playInput = new PlayInputAdapter();
@@ -298,6 +305,14 @@ public class GameManager {
         // Constants.localP().setCanSelect(true);
         PlayerManager.getInstance().setAllCanSelect(true);
         Constants.localP().setBallInteractable(false);
+    }
+
+    public void setupWinPhase() {
+        PhysicsManager.getInstance().destroyAllExceptBalls();
+
+        //Constants.localP().setBallInteractable(false);
+        Main game = physicsScreen.getGame();
+        setCurrentScreen(game, new VictoryScreen(game));
     }
 
     public Obstacle spawnObstacle(String type, Vector2 pos) {

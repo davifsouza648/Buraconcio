@@ -29,6 +29,8 @@ public class DebugInputAdapter extends InputAdapter {
             GameManager.getInstance().setPhase(PHASE.SELECT_OBJ);
         } else if (keyCode == Keys.R) {
             GameManager.getInstance().reloadPhysics();
+        } else if (keyCode == Keys.W) {
+            GameManager.getInstance().getFlow().winPhase();
         }
 
 

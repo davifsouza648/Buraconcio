@@ -30,6 +30,7 @@ public class FlowManager {
         round++;
         PlayerManager.getInstance().getLocalPlayer().resetStrokes();
         playPhaseHandled = false;
+
         startHostTimer(GameManager.getInstance().getPlayTime(), new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {
@@ -123,7 +124,7 @@ public class FlowManager {
         });
     }
 
-    private void winPhase() {
+    public void winPhase() {
         changePhase("show_win");
         stopTimer();
     }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -191,15 +192,12 @@ public class Ball extends PhysicsEntity {
     }
 
     public void enterHole() {
-        isAlive = false;
-
         body.setLinearVelocity(new Vector2(0f, 0f));
         body.setAwake(false);
 
         labelGroup.setVisible(false);
 
-        // body.setTransform(new Vector2(-10f, -10f), 0f);
-        setVisible(false);
+        setAlive(false);
     }
 
     public void setShootingGuide(Vector2 mouse1, Vector2 mouse2) {
@@ -234,6 +232,7 @@ public class Ball extends PhysicsEntity {
 
     public void setCanInteract(boolean canInteract) {
         this.canInteract = canInteract;
+        setAlive(true);
     }
 
     public boolean canInteract() {
@@ -253,5 +252,14 @@ public class Ball extends PhysicsEntity {
         canInteract = flag;
         labelGroup.setVisible(flag);
         setVisible(flag);
+        animacao.setVisible(flag);
+
+        body.getFixtureList().forEach(fixture -> fixture.setSensor(!flag));
+    }
+
+    public void addToStage(Stage stage) {
+        super.addToStage(stage);
+
+        stage.addActor(labelGroup);
     }
 }

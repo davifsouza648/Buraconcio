@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import io.github.buraconcio.Objects.Obstacles.Obstacle;
 import io.github.buraconcio.Utils.Common.PhysicsEntity;
+import io.github.buraconcio.Objects.Game.Ball;
 import io.github.buraconcio.Objects.Game.Player;
 import io.github.buraconcio.Utils.Common.Constants;
 
@@ -307,7 +308,6 @@ public class PhysicsManager {
         }
     }
 
-    // TODO: METODO PARA ATUALIZAR VETOR DE ENTIDADES
     public void dispose() {
         while (world.isLocked())
             ;
@@ -342,10 +342,26 @@ public class PhysicsManager {
             if(entity != null){
 
                 entity.destroy();
-                entityList.remove(id);
 
             }
         }
     }
 
+    public void destroyAllExceptBalls() {
+        ArrayList<Integer> toRemove = new ArrayList<>();
+
+        for(PhysicsEntity entity : entityList.values()){
+            if (!(entity instanceof Ball)) {
+                toRemove.add(entity.getId());
+            }
+        }
+
+        for(int id : toRemove) {
+            PhysicsEntity entity = entityList.get(id);
+
+            if(entity != null){
+                entity.destroy();
+            }
+        }
+    }
 }

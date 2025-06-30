@@ -15,11 +15,16 @@ public class Podium extends PhysicsEntity {
         gold
     }
 
-    private static final Vector2 size = new Vector2(2f, -1f);
+    private static final Vector2 size = new Vector2(3f, -1f);
     private Vector2 startingPos;
 
-    public Podium(Vector2 pos, Type type) {
-        super(pos, size, "backgrounds/victoryScreen/" + getNameFromType(type) + ".png");
+    public Podium(Vector2 topPos, Type type) {
+        super(topPos, size, "backgrounds/victoryScreen/" + getNameFromType(type) + ".png");
+
+        Vector2 pos = new Vector2(topPos.x, topPos.y - getHeight()/2);
+
+        setPosition(pos.x - size.x/2, pos.y - size.y/2);
+        teleport(pos);
 
         startingPos = pos;
 
@@ -35,8 +40,10 @@ public class Podium extends PhysicsEntity {
 
         body.setType(BodyType.KinematicBody);
         System.out.println(getHeight());
-        body.setLinearVelocity(new Vector2(0f, 4f));
-        // getHeight()/animacao.getNumFrames()
+        //body.setLinearVelocity(new Vector2(0f, 4f));
+        body.setLinearVelocity(new Vector2(0f, 1f));
+
+        act(0f);
     }
 
     private static String getNameFromType(Type type) {
@@ -56,5 +63,9 @@ public class Podium extends PhysicsEntity {
 
         if (getY() >= startingPos.y + getHeight()/2)
             body.setLinearVelocity(new Vector2(0f, 0f));
+    }
+
+    public boolean reached() {
+        return body.getLinearVelocity().len2() < 0.1f;
     }
 }
