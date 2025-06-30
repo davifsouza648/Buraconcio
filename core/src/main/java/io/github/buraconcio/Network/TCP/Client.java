@@ -235,6 +235,7 @@ public class Client {
                         } else if (GameManager.getInstance().getCurrentPhase() == PHASE.SHOW_WIN) {
 
                             // ConnectionManager.getInstance().setUDPRun(false);
+                            Gdx.app.postRunnable(() -> GameManager.getInstance().setupWinPhase());
 
                             if (listenerGame != null) {
                                 System.out.println("showWINNNN");

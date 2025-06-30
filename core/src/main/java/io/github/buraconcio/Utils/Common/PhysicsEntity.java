@@ -3,6 +3,7 @@ package io.github.buraconcio.Utils.Common;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -119,6 +120,15 @@ public class PhysicsEntity extends Actor {
 
     public void teleport(Vector2 pos) {
         body.setTransform(pos, body.getTransform().getRotation());
+    }
+
+    public boolean isLastFrame() {
+        return animacao.isLastFrame();
+    }
+
+    public void addToStage(Stage stage) {
+        stage.addActor(this);
+        stage.addActor(animacao);
     }
 }
 
