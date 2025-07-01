@@ -194,6 +194,7 @@ public class Ball extends PhysicsEntity {
     public void enterHole() {
         body.setLinearVelocity(new Vector2(0f, 0f));
         body.setAwake(false);
+        teleport(new Vector2(999,999));
 
         labelGroup.setVisible(false);
 
@@ -236,7 +237,8 @@ public class Ball extends PhysicsEntity {
         setAlive(canInteract);
     }
 
-    public boolean canInteract() {
+    public boolean canInteract() 
+    {
         return canInteract;
     }
 
