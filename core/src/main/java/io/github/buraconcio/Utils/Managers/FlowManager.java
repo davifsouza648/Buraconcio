@@ -11,14 +11,13 @@ public class FlowManager {
     private CountdownTimer clientTimer;
     private CountdownTimer hostTimer;
     private boolean isHost, flag;
-    int delayToClear = 0; //delay para limpar os obstaculos nao selecionados
+    int delayToClear = 0; // delay para limpar os obstaculos nao selecionados
     private boolean playPhaseHandled = false;
-
 
     public FlowManager() {
     }
 
-    public void start(){
+    public void start() {
         this.isHost = Constants.isHosting();
         if (isHost) {
             startPlayPhase();
@@ -43,12 +42,11 @@ public class FlowManager {
             }
 
             @Override
-            public void finish()
-            {
+            public void finish() {
                 if (!playPhaseHandled) {
-                playPhaseHandled = true;
-                startPointsPhase();
-            }
+                    playPhaseHandled = true;
+                    startPointsPhase();
+                }
             }
         });
     }
@@ -67,7 +65,8 @@ public class FlowManager {
 
                 delayToClear++;
 
-                if((PlayerManager.getInstance().hasEveryoneClaimed() || delayToClear >= GameManager.getInstance().getTimeToClear()) && flag){
+                if ((PlayerManager.getInstance().hasEveryoneClaimed()
+                        || delayToClear >= GameManager.getInstance().getTimeToClear()) && flag) {
                     flag = false;
                 }
 
@@ -95,18 +94,21 @@ public class FlowManager {
         });
     }
 
-    public void startPointsPhase()
-    {
-        System.out.println("INICIANDO FASE: POINTS");
-        System.out.println("Get win: " + PlayerManager.getInstance().getWin());
-        System.out.println("Player: " + PlayerManager.getInstance().getLocalPlayer().getStars());
-        if(PlayerManager.getInstance().getWin()) //Checa se alguém ganhou para ir para a victory screen
+    public void startPointsPhase() {
+        PlayerManager.getInstance().updateArrivalOrder();
+
+        if (PlayerManager.getInstance().getWin()) // Checa se alguém ganhou para ir para a victory screen
         {
             winPhase();
             return;
         }
 
         changePhase("show_points");
+
+        System.out.println("INICIANDO FASE: POINTS");
+        System.out.println("Get win: " + PlayerManager.getInstance().getWin());
+        System.out.println("Player: " + PlayerManager.getInstance().getLocalPlayer().getStars());
+
         PlayerManager.getInstance().getLocalPlayer().resetStrokes();
 
         System.out.println("SHOW POINTS");
@@ -181,18 +183,18 @@ public class FlowManager {
         clientTimer = new CountdownTimer(seconds, new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {
-                if(GameManager.getInstance().phase == PHASE.PLAY){
+                if (GameManager.getInstance().phase == PHASE.PLAY) {
                     GameManager.getInstance().setArrivalTime(seconds - remainingSecs);
 
-                    if(GameManager.getInstance().getPhysicsScreen().getHUD() != null){
+                    if (GameManager.getInstance().getPhysicsScreen().getHUD() != null) {
                         GameManager.getInstance().getPhysicsScreen().getHUD().updateClock(remainingSecs);
                     }
                 }
 
-                if(GameManager.getInstance().phase == PHASE.SELECT_OBJ){
+                if (GameManager.getInstance().phase == PHASE.SELECT_OBJ) {
                     GameManager.getInstance().setArrivalTime(seconds - remainingSecs);
 
-                    if(GameManager.getInstance().getPhysicsScreen().getHUD() != null){
+                    if (GameManager.getInstance().getPhysicsScreen().getHUD() != null) {
                         GameManager.getInstance().getPhysicsScreen().getHUD().updateClock(remainingSecs);
                     }
                 }
@@ -205,8 +207,7 @@ public class FlowManager {
         clientTimer.start();
     }
 
-    private void changePhase(String phase)
-    {
+    private void changePhase(String phase) {
         if (Constants.isHosting()) {
             ConnectionManager.getInstance().getServer().sendString(Message.Type.PHASE_CHANGE, phase);
         }

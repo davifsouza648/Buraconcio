@@ -37,7 +37,7 @@ public class TrainSpawner {
             @Override
             public void run()
             {
-                if (Constants.isHosting()) {
+                if (Constants.isHosting() && GameManager.getInstance().getCurrentScreen() == GameManager.getInstance().getPhysicsScreen()) {
                     Vector3 info = new Vector3(spawnPos.x, spawnPos.y, direction);
                     ConnectionManager.getInstance().getServer().sendMessage(Message.Type.SPAWN_TRAIN, (Object) info);
                 }

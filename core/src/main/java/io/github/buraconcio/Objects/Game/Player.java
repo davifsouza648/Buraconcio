@@ -167,7 +167,7 @@ public class Player implements Serializable {
     public void firstOrLast(boolean flag) {
         if (flag) {
             if (stars < 10) {
-                stars += 1;
+                stars++;
                 return;
             }
         } else {

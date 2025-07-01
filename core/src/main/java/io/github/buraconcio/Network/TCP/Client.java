@@ -115,7 +115,6 @@ public class Client {
                         if (GameManager.getInstance().phase == PHASE.LOBBY) {
                             PlayerManager.getInstance().setPlayers(players);
 
-
                             if (listener != null) {
                                 listener.PlayerCon();
                             }
@@ -213,7 +212,7 @@ public class Client {
                         } else if (GameManager.getInstance().getCurrentPhase() == PHASE.SHOW_POINTS) {
 
                             // Map<Integer, Integer> info = Map.of(Constants.localP().getId(),
-                            //         Constants.localP().getStars());
+                            // Constants.localP().getStars());
 
                             // Message starsMsg = new Message(Message.Type.STARS_UPDATE, info);
                             // out.writeObject(starsMsg);
@@ -221,14 +220,16 @@ public class Client {
 
                             // Object response = in.readObject();
 
-                            // if (response instanceof Message respMsg && respMsg.getType() == Message.Type.STARS_UPDATE) {
+                            // if (response instanceof Message respMsg && respMsg.getType() ==
+                            // Message.Type.STARS_UPDATE) {
 
-                            //     @SuppressWarnings("unchecked")
-                            //     Map<Integer, Integer> starsList = (Map<Integer, Integer>) respMsg.getPayload();
+                            // @SuppressWarnings("unchecked")
+                            // Map<Integer, Integer> starsList = (Map<Integer, Integer>)
+                            // respMsg.getPayload();
 
-                            //     PlayerManager.getInstance().updateStars(starsList);
+                            // PlayerManager.getInstance().updateStars(starsList);
 
-                            //     // System.out.println("recebeu stars update");
+                            // // System.out.println("recebeu stars update");
                             // }
 
                             PlayerManager.getInstance().updateArrivalOrder();
@@ -272,9 +273,12 @@ public class Client {
                     case SPAWN_TRAIN -> {
                         Vector3 info = (Vector3) msg.getPayload();
 
-                        Gdx.app.postRunnable(() -> {
-                            TrainSpawner.spawnTrain(new Vector2(info.x, info.y), (int) info.z);
-                        });
+                        if (GameManager.getInstance().phase == PHASE.PLAY) {
+                            Gdx.app.postRunnable(() -> {
+
+                                TrainSpawner.spawnTrain(new Vector2(info.x, info.y), (int) info.z);
+                            });
+                        }
                     }
 
                     case PLAYERS_START_POS -> {
@@ -291,8 +295,7 @@ public class Client {
                         }
                     }
 
-                    case FLAG_POS ->
-                    {
+                    case FLAG_POS -> {
                         Vector2 pos = (Vector2) msg.getPayload();
                         Gdx.app.postRunnable(() -> {
                             GameManager.getInstance().setFlag(new Flag(pos, 1f));

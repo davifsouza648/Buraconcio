@@ -240,8 +240,9 @@ public class PlayerManager {
     }
 
     public boolean getWin() {
+        System.out.println("GETWINGETWINGETWIN");
         for (Player p : players) {
-            if (p.getStars() >= Constants.POINTS_TO_WIN) {
+            if (p.getStars() >= GameManager.getInstance().getPointsToWin()) {
                 return true;
             }
         }

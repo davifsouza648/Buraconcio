@@ -29,10 +29,11 @@ import io.github.buraconcio.Utils.Managers.SoundManager;
 
 public class VictoryScreen implements Screen {
     private static final List<Vector2> startingPositions = Arrays.asList(
-        new Vector2(15f, 0f), new Vector2(20f, 0f), new Vector2(10f, 0f), new Vector2(5f, 0f)); // from first to fourth
+            new Vector2(15f, 0f), new Vector2(20f, 0f), new Vector2(10f, 0f), new Vector2(5f, 0f)); // from first to
+                                                                                                    // fourth
 
     private static final List<Podium.Type> podiumTypes = Arrays.asList(
-        Podium.Type.gold, Podium.Type.silver, Podium.Type.bronze);
+            Podium.Type.gold, Podium.Type.silver, Podium.Type.bronze);
 
     private final MapRenderer mapRenderer;
     private final Main game;
@@ -42,10 +43,9 @@ public class VictoryScreen implements Screen {
 
     private Podium currentPodium;
     private int currentPodiumIndex;
-    private Image titleImage;
+    private boolean interactionEnabled = false;
 
-
-    public VictoryScreen(Main game){
+    public VictoryScreen(Main game) {
         this.game = game;
 
         stage = new Stage(new ExtendViewport(23, 13));
@@ -61,31 +61,31 @@ public class VictoryScreen implements Screen {
         stage.getViewport().setCamera(camera);
 
         ArrayList<Player> playerRankings = new ArrayList<Player>(PlayerManager.getInstance().getAllPlayers());
+        playerRankings.sort((p1, p2) -> p2.getStars() - p1.getStars());
 
-        playerRankings.sort((p1, p2) -> p2.getStars() - p1.getStars() );
 
-        int i = 0;
-        for (Player p : playerRankings) {
-            Vector2 pos = startingPositions.get(i++).cpy().add(new Vector2(0f, 2f));
-            p.getBall().teleport(pos);
-            p.getBall().addToStage(stage);
-            p.getBall().getBody().setAwake(true);
-        }
-
-        currentPodiumIndex = startingPositions.size() - 2;
         Timer.schedule(new Task() {
             @Override
             public void run() {
-                currentPodium = new Podium(startingPositions.get(currentPodiumIndex), podiumTypes.get(currentPodiumIndex));
+                int i = 0;
+                for (Player p : playerRankings) {
+                    Vector2 pos = startingPositions.get(i++).cpy().add(new Vector2(0f, 2f));
+                    p.getBall().teleport(pos);
+                    p.getBall().addToStage(stage);
+                    p.getBall().getBody().setAwake(true);
+                }
+
+                currentPodiumIndex = startingPositions.size() - 2;
+                currentPodium = new Podium(startingPositions.get(currentPodiumIndex),
+                        podiumTypes.get(currentPodiumIndex));
             }
-        }, 1f);
+        }, 0.01f);
 
         PhysicsManager.getInstance().getWorld().setGravity(new Vector2(0f, -9.8f));
     }
 
     @Override
     public void show() {
-
     }
 
     @Override
@@ -97,10 +97,18 @@ public class VictoryScreen implements Screen {
             if (currentPodium.reached()) {
                 if (currentPodiumIndex > 0) {
                     --currentPodiumIndex;
-
-                    currentPodium = new Podium(startingPositions.get(currentPodiumIndex), podiumTypes.get(currentPodiumIndex));
+                    currentPodium = new Podium(startingPositions.get(currentPodiumIndex),
+                            podiumTypes.get(currentPodiumIndex));
                 } else {
-                    PlayerManager.getInstance().getLocalPlayer().setBallInteractable(true);
+
+                    Timer.schedule(new Task() {
+                        @Override
+                        public void run() {
+                            PlayerManager.getInstance().getLocalPlayer().setBallInteractable(true);
+                            interactionEnabled = true;
+                        }
+                    }, 0.5f);
+                    currentPodium = null;
                 }
             }
         }
@@ -115,29 +123,33 @@ public class VictoryScreen implements Screen {
 
         GameManager.getInstance().setGameInputProcessor();
         GameManager.getInstance().setPhase("play");
-        PlayerManager.getInstance().getLocalPlayer().setBallInteractable(true);
+
+        if (interactionEnabled) {
+            PlayerManager.getInstance().getLocalPlayer().setBallInteractable(true);
+        }
 
         stage.draw();
-
         PhysicsManager.getInstance().tick();
     }
 
     @Override
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+    }
 
     @Override
-    public void pause() {}
+    public void pause() {
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+    }
 
     @Override
-    public void hide() {}
+    public void hide() {
+    }
 
     @Override
     public void dispose() {
         stage.dispose();
     }
 }
-
-
