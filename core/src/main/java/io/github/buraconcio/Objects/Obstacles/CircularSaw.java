@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 import io.github.buraconcio.Objects.Game.Ball;
 import io.github.buraconcio.Utils.Common.PhysicsEntity;
@@ -31,6 +32,7 @@ public class CircularSaw extends Obstacle {
         SoundManager.getInstance().loadLoopSound("saw", "sounds/obstacle-sounds/saw/saw.wav");
 
         createSawFixture(0f);
+        body.setType(BodyType.DynamicBody);
 
         animationDuration = animacao.getNumFrames();
         framesToMove = animationDuration/2 - idleFrames - 1;
@@ -40,6 +42,7 @@ public class CircularSaw extends Obstacle {
     public void act(float delta) {
         super.act(delta);
 
+        body.setAwake(true);
         elapsedTime += delta;
 
         if (!active) elapsedTime = 0f;
@@ -68,7 +71,7 @@ public class CircularSaw extends Obstacle {
         {
             body.destroyFixture(body.getFixtureList().get(0));
         }catch(Exception e){e.printStackTrace();}
-        
+
 
         createSawFixture(sawPosition);
     }
@@ -87,6 +90,13 @@ public class CircularSaw extends Obstacle {
         }
 
         return false;
+    }
+
+    @Override
+    public void place() {
+        super.place();
+        preRound();
+        body.setType(BodyType.DynamicBody);
     }
 
     @Override
@@ -125,8 +135,9 @@ public class CircularSaw extends Obstacle {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
-        fixtureDef.isSensor = false;
+        fixtureDef.isSensor = true;
         body.createFixture(fixtureDef);
+        body.setUserData(id);
 
         circle.dispose();
     }
