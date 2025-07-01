@@ -56,7 +56,8 @@ public class VictoryScreen implements Screen {
         stage.getViewport().setCamera(camera);
 
         ArrayList<Player> playerRankings = new ArrayList<Player>(PlayerManager.getInstance().getAllPlayers());
-        playerRankings.sort((p1, p2) -> p1.getStars() - p2.getStars());
+
+        playerRankings.sort((p1, p2) -> p2.getStars() - p1.getStars() );
 
         int i = 0;
         for (Player p : playerRankings) {
