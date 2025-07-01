@@ -113,9 +113,11 @@ public class VictoryScreen implements Screen {
         mapRenderer.setView(camera);
         mapRenderer.render();
 
-        stage.draw();
+        GameManager.getInstance().setGameInputProcessor();
+        GameManager.getInstance().setPhase("play");
+        PlayerManager.getInstance().getLocalPlayer().setBallInteractable(true);
 
-        debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
+        stage.draw();
 
         PhysicsManager.getInstance().tick();
     }
