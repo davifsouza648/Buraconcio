@@ -4,6 +4,7 @@ import io.github.buraconcio.Network.TCP.Message;
 import io.github.buraconcio.Objects.Game.Player;
 import io.github.buraconcio.Utils.Common.Constants;
 import io.github.buraconcio.Utils.Common.CountdownTimer;
+import io.github.buraconcio.Utils.Managers.GameManager.PHASE;
 
 public class FlowManager {
 
@@ -166,8 +167,8 @@ public class FlowManager {
         clientTimer = new CountdownTimer(seconds, new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {
-                // se quisermos fazer uma label mudando no topo da tela usando os segundos é
-                // aqui
+                if(GameManager.getInstance().phase == PHASE.PLAY)
+                    GameManager.getInstance().setArrivalTime(seconds - remainingSecs);
             }
 
             @Override

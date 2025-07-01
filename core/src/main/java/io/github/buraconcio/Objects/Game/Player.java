@@ -31,8 +31,7 @@ public class Player implements Serializable {
 
     private transient Ball ball;
 
-    public Player(String username)
-    {
+    public Player(String username) {
         this.username = username;
         stars = 0;
 
@@ -42,10 +41,8 @@ public class Player implements Serializable {
         selectedObstacle = null;
     }
 
-    public Ball createBall()
-    {
-        if (startingPos == null)
-        {
+    public Ball createBall() {
+        if (startingPos == null) {
             System.out.println("starting position not defined");
             return null;
         }
@@ -140,18 +137,32 @@ public class Player implements Serializable {
 
         stars++;
 
-        if (hasStar)
-            stars += 1;
-
-        if (strokes <= 2) {
-            stars += 3;
-        } else if (strokes <= 5) {
-            stars += 1;
+        if (hasStar) {
+            stars++;
+            hasStar = false;
         }
+
+        PlayerManager.getInstance().addToArrivalOrder(this.id);
+
     }
 
     public void collectStar() {
         hasStar = true;
+    }
+
+    public void firstOrLast(boolean flag) {
+        if (flag) {
+            if (stars < 10) {
+                stars += 1;
+                return;
+            }
+        } else {
+            if ((stars > 0 && GameManager.getInstance().getArrivalTime() >= 110)
+                    && PlayerManager.getInstance().getArrivalOrder().size() == 1) {
+                stars--;
+                return;
+            }
+        }
     }
 
     public void placeObstacle() {
@@ -192,7 +203,7 @@ public class Player implements Serializable {
     }
 
     public void teleportToStartingPos() {
-        if(ball != null)
+        if (ball != null)
             ball.teleport(startingPos);
     }
 
@@ -233,8 +244,7 @@ public class Player implements Serializable {
         this.skinBallPath = path;
     }
 
-    public String getSkinBallPath()
-    {
+    public String getSkinBallPath() {
         return this.skinBallPath;
     }
 
@@ -254,8 +264,7 @@ public class Player implements Serializable {
         return this.strokes;
     }
 
-    public void resetStrokes()
-    {
+    public void resetStrokes() {
         this.strokes = 0;
 
     }

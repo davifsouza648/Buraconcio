@@ -1,5 +1,6 @@
 package io.github.buraconcio.Utils.Managers;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
@@ -46,15 +48,17 @@ public class GameManager {
     private PlayInputAdapter playInput;
 
     // gestao de tempo
-    private int play_time = 50;
+    private int play_time = 120;
     private int select_time = 30;
     private int points_time = 5;
-    private int win_time = 55;
-    private int pointsToWin = 10;
+    private int win_time = 25;
     private int timeToClear = 15; // limpar os obstaculos nao selecionados
 
+    private int arrivalTime;
     // num de obstaculos
     private int obstacleNum = 6;
+
+    private int pointsToWin = 10;
 
     private int mapIndex;
     public PHASE phase = PHASE.LOOBY;
@@ -397,4 +401,13 @@ public class GameManager {
     {
         return this.round;
     }
+
+    public int getArrivalTime(){
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(int arrivalTime){
+        this.arrivalTime = arrivalTime;
+    }
+
 }

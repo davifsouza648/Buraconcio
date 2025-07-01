@@ -20,8 +20,11 @@ public class PlayerManager {
     private int localPlayerID;
     private Player localPlayer;
 
+    private List<Integer> orderOfArrival;
+
     public PlayerManager() {
         players = new ArrayList<>();
+        orderOfArrival = new ArrayList<>();
     }
 
     public static synchronized PlayerManager getInstance() {
@@ -197,10 +200,8 @@ public class PlayerManager {
     }
 
     public boolean areAllBallsDead() {
-        for (Player p : players)
-        {
-            if (p.getBall() != null && p.getBall().isAlive())
-            {
+        for (Player p : players) {
+            if (p.getBall() != null && p.getBall().isAlive()) {
                 return false;
             }
         }
@@ -238,16 +239,41 @@ public class PlayerManager {
         return true;
     }
 
-    public boolean getWin()
-    {
-        for(Player p: players)
-        {
-            if(p.getStars() >= Constants.POINTS_TO_WIN)
-            {
+    public boolean getWin() {
+        for (Player p : players) {
+            if (p.getStars() >= Constants.POINTS_TO_WIN) {
                 return true;
             }
         }
         return false;
+    }
+
+    public void addToArrivalOrder(int id) {
+        if (!orderOfArrival.contains(id)) {
+            orderOfArrival.add(id);
+        }
+    }
+
+    public List<Integer> getArrivalOrder() {
+        return orderOfArrival;
+    }
+
+    public void updateArrivalOrder() {
+        if (orderOfArrival.isEmpty())
+            return;
+
+        int firstId = orderOfArrival.get(0);
+        int lastId = orderOfArrival.get(orderOfArrival.size() - 1);
+
+        for (Player p : players) {
+            if (p.getId() == firstId) {
+                p.firstOrLast(true);
+            } else if (p.getId() == lastId) {
+                p.firstOrLast(false);
+            }
+        }
+
+        orderOfArrival.clear();
     }
 
 }

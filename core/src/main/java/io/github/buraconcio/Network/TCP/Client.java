@@ -232,6 +232,8 @@ public class Client {
                                 // System.out.println("recebeu stars update");
                             }
 
+                            PlayerManager.getInstance().updateArrivalOrder();
+
                             System.out.println("CLIENT POINTS");
                             if (listenerGame != null) {
                                 listenerGame.showPoints();

@@ -118,8 +118,6 @@ public class PointsScreen implements Screen
             Table playerTable = new Table();
             playerTable.defaults().pad(5);
 
-
-
             Texture skinBall = new Texture(Gdx.files.internal(p.getSkinBallPath()));
             skinTextures.add(skinBall);
 
