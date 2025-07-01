@@ -157,8 +157,7 @@ public class Player implements Serializable {
                 return;
             }
         } else {
-            if ((stars > 0 && GameManager.getInstance().getArrivalTime() >= 110)
-                    && PlayerManager.getInstance().getArrivalOrder().size() == 1) {
+            if ((stars > 0 && GameManager.getInstance().getArrivalTime() >= 110)) {
                 stars--;
                 return;
             }

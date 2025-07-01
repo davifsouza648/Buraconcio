@@ -151,12 +151,13 @@ public class PointsScreen implements Screen
                     animatedPoints.add(star);
                 }
                 Label pontuacao = new Label(String.valueOf(p.getStars()) + " points", skinLabel, "labelPixelyWhite32");
+                pontuacao.setColor(0,0,0,1);
                 playerTable.add(pontuacao);
                 playerTable.row();
             }
 
-            
-            
+
+
 
             mainTable.add(playerTable).padBottom(20).row();
         }

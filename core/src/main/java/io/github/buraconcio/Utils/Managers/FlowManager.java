@@ -167,8 +167,13 @@ public class FlowManager {
         clientTimer = new CountdownTimer(seconds, new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {
-                if(GameManager.getInstance().phase == PHASE.PLAY)
+                if(GameManager.getInstance().phase == PHASE.PLAY){
                     GameManager.getInstance().setArrivalTime(seconds - remainingSecs);
+
+                    if(GameManager.getInstance().getPhysicsScreen().getHUD() != null){
+                        GameManager.getInstance().getPhysicsScreen().getHUD().updateClock(remainingSecs);
+                    }
+                }
             }
 
             @Override

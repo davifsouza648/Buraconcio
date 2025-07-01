@@ -223,6 +223,10 @@ public class PhysicsTest implements Screen {
         return this.mapRenderer;
     }
 
+    public HUD getHUD(){
+        return this.hud;
+    }
+
     public void setListeners() {
 
         try {
