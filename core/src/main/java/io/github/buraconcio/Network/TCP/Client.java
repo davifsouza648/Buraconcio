@@ -302,7 +302,7 @@ public class Client {
 
                     case CLEAR_UNCLAIMED -> {
 
-                        PhysicsManager.getInstance().clearUnclaimedObstacles();
+                        //PhysicsManager.getInstance().clearUnclaimedObstacles();
                     }
 
                     default -> {
