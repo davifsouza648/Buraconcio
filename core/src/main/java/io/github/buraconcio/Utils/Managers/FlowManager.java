@@ -25,7 +25,6 @@ public class FlowManager {
     }
 
     private void startPlayPhase() {
-        System.out.println("INICIANDO FASE: PLAY");
         changePhase("play");
         playPhaseHandled = false;
 
@@ -105,13 +104,8 @@ public class FlowManager {
 
         changePhase("show_points");
 
-        System.out.println("INICIANDO FASE: POINTS");
-        System.out.println("Get win: " + PlayerManager.getInstance().getWin());
-        System.out.println("Player: " + PlayerManager.getInstance().getLocalPlayer().getStars());
-
         PlayerManager.getInstance().getLocalPlayer().resetStrokes();
 
-        System.out.println("SHOW POINTS");
         startHostTimer(GameManager.getInstance().getPointsTime(), new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {

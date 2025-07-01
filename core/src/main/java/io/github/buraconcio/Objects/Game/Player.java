@@ -134,7 +134,7 @@ public class Player implements Serializable {
 
         alreadyScored = true;
 
-        System.out.println("REWARDSTAR");
+        //System.out.println("REWARDSTAR");
         ball.enterHole();
 
         rewardStar();

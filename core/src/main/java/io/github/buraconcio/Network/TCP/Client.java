@@ -110,8 +110,6 @@ public class Client {
                         @SuppressWarnings("unchecked")
                         List<Player> players = (List<Player>) msg.getPayload();
 
-                        System.out.println("PHASE" + GameManager.getInstance().phase);
-
                         if (GameManager.getInstance().phase == PHASE.LOBBY) {
                             PlayerManager.getInstance().setPlayers(players);
 
@@ -211,30 +209,8 @@ public class Client {
 
                         } else if (GameManager.getInstance().getCurrentPhase() == PHASE.SHOW_POINTS) {
 
-                            // Map<Integer, Integer> info = Map.of(Constants.localP().getId(),
-                            // Constants.localP().getStars());
-
-                            // Message starsMsg = new Message(Message.Type.STARS_UPDATE, info);
-                            // out.writeObject(starsMsg);
-                            // out.flush();
-
-                            // Object response = in.readObject();
-
-                            // if (response instanceof Message respMsg && respMsg.getType() ==
-                            // Message.Type.STARS_UPDATE) {
-
-                            // @SuppressWarnings("unchecked")
-                            // Map<Integer, Integer> starsList = (Map<Integer, Integer>)
-                            // respMsg.getPayload();
-
-                            // PlayerManager.getInstance().updateStars(starsList);
-
-                            // // System.out.println("recebeu stars update");
-                            // }
-
                             PlayerManager.getInstance().updateArrivalOrder();
 
-                            System.out.println("CLIENT POINTS");
                             if (listenerGame != null) {
                                 listenerGame.showPoints();
                             }
@@ -252,7 +228,6 @@ public class Client {
                     }
 
                     case TIMER_STOP -> {
-                        System.out.println("Recebeu TIMER_STOP, finalizando timer...");
                         GameManager.getInstance().getFlow().onReceiveTimerStop();
                     }
 

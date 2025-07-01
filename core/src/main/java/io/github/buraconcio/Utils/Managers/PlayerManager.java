@@ -240,7 +240,6 @@ public class PlayerManager {
     }
 
     public boolean getWin() {
-        System.out.println("GETWINGETWINGETWIN");
         for (Player p : players) {
             if (p.getStars() >= GameManager.getInstance().getPointsToWin()) {
                 return true;

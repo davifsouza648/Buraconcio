@@ -84,7 +84,7 @@ public class GameManager {
         inputs = new InputMultiplexer();
 
         playInput = new PlayInputAdapter();
-        inputs.addProcessor(new DebugInputAdapter());
+        // inputs.addProcessor(new DebugInputAdapter());
         inputs.addProcessor(playInput); // bem gambiarra por enquanto
         inputs.addProcessor(new ObstacleInputAdapter());
 

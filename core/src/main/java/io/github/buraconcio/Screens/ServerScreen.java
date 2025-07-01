@@ -205,8 +205,6 @@ public class ServerScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                System.out.println("Start Match pressionado!");
-                System.out.println("LOCAL HOSTING" + Constants.isHosting());
                 SoundManager.getInstance().playSound("buttonClick");
                 if (Constants.isHosting()) {
                     server.changeButton(false);
