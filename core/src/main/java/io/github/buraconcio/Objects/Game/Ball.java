@@ -233,6 +233,11 @@ public class Ball extends PhysicsEntity {
 
     public void setCanInteract(boolean canInteract) 
     {
+        System.out.println("=== Stack trace: " + " ===");
+        StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+        for (int i = 2; i < stack.length; i++) {
+            System.out.println("\tat " + stack[i]);
+        }
         this.canInteract = canInteract;
         setAlive(canInteract);
     }
@@ -251,6 +256,11 @@ public class Ball extends PhysicsEntity {
     }
 
     public void setAlive(boolean flag){ //encaixar isso em uma funcao de renascer elas no spawn point
+        System.out.println("=== Stack trace: " + " ===");
+        StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+        for (int i = 2; i < stack.length; i++) {
+            System.out.println("\tat " + stack[i]);
+        }
         isAlive = flag;
         canInteract = flag;
         labelGroup.setVisible(flag);

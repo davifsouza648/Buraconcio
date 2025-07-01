@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Network.TCP.Message;
+import io.github.buraconcio.Objects.Game.Player;
 import io.github.buraconcio.Screens.MainMenu;
 import io.github.buraconcio.Utils.Common.Constants;
 import io.github.buraconcio.Utils.Managers.ConnectionManager;
@@ -112,8 +113,10 @@ public class HUD {
         ImageButton giveUpButton = giveUp.createButton("giveUp", "giveup");
 
         giveUpButton.addListener(new InputListener() {
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                startCountdown();
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) 
+            {
+                if(PlayerManager.getInstance().getLocalPlayer().getBall().isAlive())
+                    startCountdown();
                 return true;
             }
 
