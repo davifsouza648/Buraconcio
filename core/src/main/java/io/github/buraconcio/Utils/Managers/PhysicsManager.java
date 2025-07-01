@@ -98,7 +98,6 @@ public class PhysicsManager {
         while (it.hasNext()) {
             Contact contact = it.next();
 
-            System.out.println("cc");
             try {
 
                 PhysicsEntity entityA = getEntity(contact.getFixtureA().getBody().getUserData());

@@ -103,7 +103,7 @@ public class PointsScreen implements Screen
 
         String roundNumber = String.valueOf(GameManager.getInstance().getRound());
 
-        topTable.add(imageRound).center().pad(10);
+        topTable.add(imageRound).center().pad(30);
 
         for (int i = 0; i < roundNumber.length(); i++) {
             char c = roundNumber.charAt(i);
@@ -153,21 +153,22 @@ public class PointsScreen implements Screen
                 }
                 Label pontuacao = new Label(String.valueOf(p.getStars()) + " points", skinLabel, "labelPixelyWhite32");
                 pontuacao.setColor(0,0,0,1);
-                playerTable.add(pontuacao);
+                playerTable.add(pontuacao).padLeft(30);
                 playerTable.row();
             }
 
 
 
 
-            mainTable.add(playerTable).padBottom(20).row();
+            mainTable.add(playerTable).expandX().fillX().padBottom(20).height(150).row();
+
         }
 
 
         topTable.top().center().padTop(10).padBottom(20);
 
         root.add(topTable).expandX().padTop(10).row();
-        root.add(mainTable).expand().top();
+        root.add(mainTable).expand().top().padTop(15);
 
         stage.addActor(imageBG);
         stage.addActor(root);

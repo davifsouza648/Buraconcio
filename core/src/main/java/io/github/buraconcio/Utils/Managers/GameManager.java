@@ -52,7 +52,7 @@ public class GameManager {
     // gestao de tempo
     private int play_time = 120;
     private int select_time = 30;
-    private int points_time = 5;
+    private int points_time = 10;
     private int win_time = 25;
     private int timeToClear = 15; // limpar os obstaculos nao selecionados
 
