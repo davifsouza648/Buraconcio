@@ -430,4 +430,11 @@ public class GameManager {
     public void addTrainSpawner(TrainSpawner spawner) {
         trainSpawners.add(spawner);
     }
+
+    public static void destroyInstance() {
+        if (instance != null) {
+            instance.dispose();
+            instance = null;
+        }
+    }
 }

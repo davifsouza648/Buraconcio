@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Contact;
 
 import io.github.buraconcio.Utils.Managers.PhysicsManager;
 
@@ -19,11 +20,10 @@ public class PhysicsEntity extends Actor {
     protected int id;
     protected AnimationPlay animacao;
 
-    public PhysicsEntity(Vector2 pos, Vector2 size)
-    {
+    public PhysicsEntity(Vector2 pos, Vector2 size) {
         super();
 
-        setPosition(pos.x - size.x/2, pos.y - size.y/2);
+        setPosition(pos.x - size.x / 2, pos.y - size.y / 2);
         setOrigin(Align.center);
 
         setSize(size.x, size.y);
@@ -41,7 +41,8 @@ public class PhysicsEntity extends Actor {
         animacao = new AnimationPlay(texturePath, this);
         PhysicsManager.getInstance().addToStage(this); // choggs pq precisa ser posto dps da animacao
 
-        if (size.y == -1f || size.x == -1f) setSize(animacao.getWidth(), animacao.getHeight());
+        if (size.y == -1f || size.x == -1f)
+            setSize(animacao.getWidth(), animacao.getHeight());
     }
 
     public PhysicsEntity(Vector2 pos, Vector2 size, Animation<TextureRegion> animacao) {
@@ -50,7 +51,8 @@ public class PhysicsEntity extends Actor {
         this.animacao = new AnimationPlay(animacao, this);
         PhysicsManager.getInstance().addToStage(this);
 
-        if (size.y == -1f || size.x == -1f) setSize(this.animacao.getWidth(), this.animacao.getHeight());
+        if (size.y == -1f || size.x == -1f)
+            setSize(this.animacao.getWidth(), this.animacao.getHeight());
     }
 
     public PhysicsEntity(Vector2 pos, Vector2 size, AnimationPlay animacao) {
@@ -59,7 +61,8 @@ public class PhysicsEntity extends Actor {
         this.animacao = animacao;
         PhysicsManager.getInstance().addToStage(this);
 
-        if (size.y == -1f || size.x == -1f) setSize(animacao.getWidth(), animacao.getHeight());
+        if (size.y == -1f || size.x == -1f)
+            setSize(animacao.getWidth(), animacao.getHeight());
     }
 
     // Método para destruir a entidade
@@ -67,7 +70,8 @@ public class PhysicsEntity extends Actor {
         PhysicsManager.getInstance().destroyBody(body);
 
         remove();
-        if (animacao != null) animacao.remove();
+        if (animacao != null)
+            animacao.remove();
     }
 
     // Método para setar o id
@@ -82,8 +86,7 @@ public class PhysicsEntity extends Actor {
         return id;
     }
 
-    public boolean contact(PhysicsEntity entity)
-    {
+    public boolean contact(PhysicsEntity entity) {
         return false;
     }
 
@@ -131,4 +134,3 @@ public class PhysicsEntity extends Actor {
         stage.addActor(animacao);
     }
 }
-

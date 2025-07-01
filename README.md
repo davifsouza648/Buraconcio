@@ -10,7 +10,7 @@
 - [x] Sobreposição da bola sobre o mel e boostpad
 - [x] Nukar o mapa1
 - [x] Index do mapa esta indo errado no host
-- [ ] HUD de configuração tudo quebrado os botoes
+- [x] HUD de configuração tudo quebrado os botoes
 
 ### Implementações
 
@@ -19,16 +19,16 @@
   - [X] Em jogo (Overlay)
   - [X] No menu (Screen)
 - [x] Hud de Pontuação (Screen)
-  - [ ] Ideia: Bolas se mexendo
+  - [x] Ideia: Bolas se mexendo
 - [x] Caso use a borracha no vazio, perde a borracha
 - [ ] Verificar se a borracha funciona no server/client
-- [ ] TREM + tempo de cada e etc
+- [x] TREM + tempo de cada e etc
   - [x] Colisão
   - [x] Agora eles morrem logo quando spawna
-  - [ ] Timing de cada trem
-- [ ] Organizar o vetor de mapas
+  - [x] Timing de cada trem
+- [x] Organizar o vetor de mapas
 - [ ] Ventilador
-- [ ] MOLDURAAAAAA
+- [x] MOLDURAAAAAA
 
 
 ### ASSETS

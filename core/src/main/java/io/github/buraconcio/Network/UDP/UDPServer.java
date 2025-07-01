@@ -56,7 +56,10 @@ public class UDPServer {
 
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Erro no servidor UDP: " + e.getMessage());
-            e.printStackTrace();
+
+            if(!e.getMessage().contains("Socket closed"))
+                e.printStackTrace();
+
         } finally {
             if (socket != null && !socket.isClosed()) {
                 socket.close();

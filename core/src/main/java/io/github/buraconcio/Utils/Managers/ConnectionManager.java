@@ -68,4 +68,17 @@ public class ConnectionManager {
             setUDPclient(null);
         }
     }
+
+    public static void destroyInstance() {
+        if (instance != null) {
+            instance.dispose();
+            instance = null;
+        }
+    }
+
+    private void dispose() {
+        closeUDPS();
+        client = null;
+        server = null;
+    }
 }

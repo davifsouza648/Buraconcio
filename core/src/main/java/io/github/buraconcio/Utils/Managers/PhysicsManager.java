@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import io.github.buraconcio.Objects.Obstacles.Obstacle;
+import io.github.buraconcio.Objects.Obstacles.WoodBox;
 import io.github.buraconcio.Utils.Common.PhysicsEntity;
 import io.github.buraconcio.Objects.Game.Ball;
 import io.github.buraconcio.Objects.Game.Player;
@@ -103,14 +104,25 @@ public class PhysicsManager {
 
             try {
 
+                boolean skipContact = false;
+
                 PhysicsEntity entityA = getEntity(contact.getFixtureA().getBody().getUserData());
                 PhysicsEntity entityB = getEntity(contact.getFixtureB().getBody().getUserData());
 
+                if (contact.getFixtureA().isSensor() || contact.getFixtureB().isSensor()) {
+                    if ((entityA instanceof WoodBox) || (entityB instanceof WoodBox)) {
+                        skipContact = true;
+                    }
+                }
                 // return true if contact should be removed
                 // be carefull not to run same collision logic on both objects
-                boolean dA = entityA.contact(entityB);
-                boolean dB = entityB.contact(entityA);
-                if (dA || dB) { // nao iria rodar as duas colisoes se funcoes tivessem dentro do if :(
+                if (!skipContact) {
+                    boolean dA = entityA.contact(entityB);
+                    boolean dB = entityB.contact(entityA);
+                    if (dA || dB) { // nao iria rodar as duas colisoes se funcoes tivessem dentro do if :(
+                        it.remove();
+                    }
+                }else{
                     it.remove();
                 }
 
@@ -353,6 +365,13 @@ public class PhysicsManager {
             if (entity != null) {
                 entity.destroy();
             }
+        }
+    }
+
+    public static void destroyInstance() {
+        if (instance != null) {
+            instance.dispose();
+            instance = null;
         }
     }
 }

@@ -42,6 +42,8 @@ public class Eraser extends Obstacle {
             PhysicsEntity entityA = PhysicsManager.getInstance().getEntity(contact.getFixtureA().getBody().getUserData());
             PhysicsEntity entityB = PhysicsManager.getInstance().getEntity(contact.getFixtureB().getBody().getUserData());
 
+            if (entityA == null || entityB == null) continue;
+
             if (entityA.getId() == getId() && entityB instanceof Obstacle) {
                 toErase = (Obstacle) entityB;
                 break;

@@ -22,6 +22,7 @@ import io.github.buraconcio.Objects.Game.Player;
 import io.github.buraconcio.Objects.Obstacles.Obstacle;
 import io.github.buraconcio.Utils.Common.Auxiliaries;
 import io.github.buraconcio.Utils.Common.Constants;
+import io.github.buraconcio.Utils.Common.ResetSingleton;
 import io.github.buraconcio.Utils.Common.TrainSpawner;
 import io.github.buraconcio.Utils.Managers.ConnectionManager;
 import io.github.buraconcio.Utils.Managers.FlowManager;
@@ -317,11 +318,11 @@ public class Client {
                 PhysicsManager.getInstance().getWorld().setGravity(new Vector2(0f, 0f));
                 GameManager.getInstance().setRound(0);
                 PlayerManager.getInstance().getLocalPlayer().setStars(0);
+                PlayerManager.getInstance().resetAllScoredFlag();
+                ResetSingleton.resetAll();
                 game.setScreen(new MainMenu(game));
             });
         }
-
-
     }
 
     public void dsListener() {
