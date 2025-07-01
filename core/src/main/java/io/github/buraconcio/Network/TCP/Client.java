@@ -291,7 +291,7 @@ public class Client {
                         }
                     }
 
-                    case FLAG_POS -> 
+                    case FLAG_POS ->
                     {
                         Vector2 pos = (Vector2) msg.getPayload();
                         Gdx.app.postRunnable(() -> {
@@ -301,7 +301,7 @@ public class Client {
 
                     case CLEAR_UNCLAIMED -> {
 
-                        //PhysicsManager.getInstance().clearUnclaimedObstacles();
+                        PhysicsManager.getInstance().clearUnclaimedObstacles();
                     }
 
                     default -> {

@@ -72,15 +72,18 @@ public class ObstacleSpawner {
     }
 
     public Obstacle spawnObstacle(String type, Vector2 pos) {
+
         Function<Vector2, Obstacle> factory = obstacleFactory.get(type.toLowerCase());
         if (factory != null) {
             return factory.apply(pos);
         } else {
             throw new IllegalArgumentException("Unknown obstacle type: " + type);
         }
+
     }
 
     public ArrayList<String> selectRandomObstacles(int count) {
+
         ArrayList<String> pool = new ArrayList<>(List.of(types));
         ArrayList<String> selected = new ArrayList<>();
         for (int i = 0; i < count && !pool.isEmpty(); i++) {

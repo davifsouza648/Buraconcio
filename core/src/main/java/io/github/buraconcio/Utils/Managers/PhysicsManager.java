@@ -21,6 +21,8 @@ import io.github.buraconcio.Utils.Common.PhysicsEntity;
 import io.github.buraconcio.Objects.Game.Ball;
 import io.github.buraconcio.Objects.Game.Player;
 import io.github.buraconcio.Utils.Common.Constants;
+import java.util.Map;
+import java.util.Iterator;
 
 // singleton
 public class PhysicsManager {
@@ -89,7 +91,8 @@ public class PhysicsManager {
 
         try {
             copy.forEach(Runnable::run);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         clearScheduler();
 
@@ -98,6 +101,7 @@ public class PhysicsManager {
         while (it.hasNext()) {
             Contact contact = it.next();
 
+            // System.out.println("cc");
             try {
 
                 PhysicsEntity entityA = getEntity(contact.getFixtureA().getBody().getUserData());
@@ -150,7 +154,7 @@ public class PhysicsManager {
     public void destroyBody(Body body) {
         Runnable task = () -> {
             if (body == null || !entityList.containsKey((Integer) body.getUserData())) {
-                //System.out.println("could not destroy body");
+                // System.out.println("could not destroy body");
                 return;
             }
 
@@ -200,17 +204,19 @@ public class PhysicsManager {
             while (it.hasNext()) {
                 Contact exContact = it.next();
                 PhysicsEntity entityA, entityB, exentityA, exentityB;
-                try
-                {
+                try {
                     entityA = getEntity(contact.getFixtureA().getBody().getUserData());
                     entityB = getEntity(contact.getFixtureB().getBody().getUserData());
 
                     exentityA = getEntity(exContact.getFixtureA().getBody().getUserData());
                     exentityB = getEntity(exContact.getFixtureB().getBody().getUserData());
 
-                }catch(Exception e){return;}
+                } catch (Exception e) {
+                    return;
+                }
 
-                if(entityA == null || entityB == null || exentityA == null || exentityB == null) return;
+                if (entityA == null || entityB == null || exentityA == null || exentityB == null)
+                    return;
 
                 if (entityA.getId() == exentityA.getId() && entityB.getId() == exentityB.getId()) {
                     it.remove();
@@ -319,30 +325,16 @@ public class PhysicsManager {
         playerStartPosById.clear();
     }
 
-    public void clearUnclaimedObstacles(){
+    public void clearUnclaimedObstacles() {
+        Iterator<Map.Entry<Integer, PhysicsEntity>> iterator = entityList.entrySet().iterator();
 
-        ArrayList<Integer> toRemove = new ArrayList<>();
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, PhysicsEntity> entry = iterator.next();
+            PhysicsEntity entity = entry.getValue();
 
-        for(PhysicsEntity entity : entityList.values()){
-
-            if(entity instanceof Obstacle) {
-
-                Obstacle obs = (Obstacle) entity;
-
-                if(!obs.claimed()){
-                    toRemove.add(entity.getId());
-                }
-            }
-        }
-
-        for(int id : toRemove) {
-
-            PhysicsEntity entity = entityList.get(id);
-
-            if(entity != null){
-
+            if (entity instanceof Obstacle obs && !obs.claimed()) {
                 entity.destroy();
-
+                iterator.remove();
             }
         }
     }
@@ -350,16 +342,16 @@ public class PhysicsManager {
     public void destroyAllExceptBalls() {
         ArrayList<Integer> toRemove = new ArrayList<>();
 
-        for(PhysicsEntity entity : entityList.values()){
+        for (PhysicsEntity entity : entityList.values()) {
             if (!(entity instanceof Ball)) {
                 toRemove.add(entity.getId());
             }
         }
 
-        for(int id : toRemove) {
+        for (int id : toRemove) {
             PhysicsEntity entity = entityList.get(id);
 
-            if(entity != null){
+            if (entity != null) {
                 entity.destroy();
             }
         }

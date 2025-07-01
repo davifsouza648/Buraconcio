@@ -58,7 +58,7 @@ public class GameManager {
 
     private int arrivalTime;
     // num de obstaculos
-    private int obstacleNum = 6;
+    private int obstacleNum = 4;
 
     private int pointsToWin = 10;
 
@@ -332,8 +332,8 @@ public class GameManager {
         }
 
         if (Constants.isHosting()) {
-            int qtd = MathUtils.random(4, 7);
-            ArrayList<String> blueprintObstacles = obstacleSpawner.selectRandomObstacles(qtd);
+
+            ArrayList<String> blueprintObstacles = obstacleSpawner.selectRandomObstacles(obstacleNum);
 
             ArrayList<ObstacleInfo> obstaclesToSpawn = new ArrayList<>();
 

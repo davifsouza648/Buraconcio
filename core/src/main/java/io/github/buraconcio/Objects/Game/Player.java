@@ -104,6 +104,8 @@ public class Player implements Serializable {
             if (obstacle == null)
                 return;
 
+
+            obstacle.claim();
             obstacle.place();
         }
 
