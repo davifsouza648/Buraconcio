@@ -58,6 +58,7 @@ public class GameManager {
 
     private int mapIndex;
     public PHASE phase = PHASE.LOOBY;
+    private int round = -1;
 
     public enum PHASE {
         LOOBY,
@@ -251,6 +252,9 @@ public class GameManager {
     }
 
     public void setupPlayPhase() {
+        round++;
+        PlayerManager.getInstance().getLocalPlayer().resetStrokes();
+
         PhysicsManager.getInstance().preRoundObstacles();
 
         PlayerManager.getInstance().setEveryonePlaced(false);
@@ -262,7 +266,8 @@ public class GameManager {
             ConnectionManager.getInstance().getServer().sendMessage(Message.Type.PLAYERS_START_POS,
                     PhysicsManager.getInstance().getPlayerStartPosList());
 
-            ConnectionManager.getInstance().getServer().sendMessage(Message.Type.FLAG_POS,
+            if (round == 0)
+                ConnectionManager.getInstance().getServer().sendMessage(Message.Type.FLAG_POS,
                     getPhysicsScreen().getMapRenderer().getRandomFlagArea());
         }
 
@@ -287,8 +292,6 @@ public class GameManager {
                 camera.setCameraLerpSpeed(0.02f);
             }
         }, 1f); // show hole for 1 second
-
-        System.out.println(normalLerpSpeed);
 
         Runnable whenReached = () -> {
             camera.setCameraLerpSpeed(normalLerpSpeed);
@@ -380,7 +383,7 @@ public class GameManager {
         return flow;
     }
 
-    public void setbluePrintArea(Rectangle p) 
+    public void setbluePrintArea(Rectangle p)
     {
         this.blueprintArea = p;
     }
@@ -388,5 +391,10 @@ public class GameManager {
     public Rectangle getBluePrintarea()
     {
         return this.blueprintArea;
+    }
+
+    public int getRound()
+    {
+        return this.round;
     }
 }

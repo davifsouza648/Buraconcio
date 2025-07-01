@@ -1,7 +1,5 @@
 package io.github.buraconcio.Utils.Managers;
 
-import com.badlogic.gdx.Game;
-
 import io.github.buraconcio.Network.TCP.Message;
 import io.github.buraconcio.Objects.Game.Player;
 import io.github.buraconcio.Utils.Common.Constants;
@@ -9,11 +7,10 @@ import io.github.buraconcio.Utils.Common.CountdownTimer;
 
 public class FlowManager {
 
-    private CountdownTimer timer;
+    private CountdownTimer clientTimer;
+    private CountdownTimer hostTimer;
     private boolean isHost, flag;
-    private static FlowManager instance;
     int delayToClear = 0; //delay para limpar os obstaculos nao selecionados
-    private int round = 0;
     private boolean playPhaseHandled = false;
 
 
@@ -30,8 +27,6 @@ public class FlowManager {
     private void startPlayPhase() {
         System.out.println("INICIANDO FASE: PLAY");
         changePhase("play");
-        round++;
-        PlayerManager.getInstance().getLocalPlayer().resetStrokes();
         playPhaseHandled = false;
 
         startHostTimer(GameManager.getInstance().getPlayTime(), new CountdownTimer.TimerListener() {
@@ -128,13 +123,14 @@ public class FlowManager {
 
     public void winPhase() {
         changePhase("show_win");
-        stopTimer();
+        stopClientTimer();
+        stopHostTimer();
     }
 
     private void startHostTimer(int seconds, CountdownTimer.TimerListener listener) {
-        stopTimer();
-        timer = new CountdownTimer(seconds, listener);
-        timer.start();
+        stopHostTimer();
+        hostTimer = new CountdownTimer(seconds, listener);
+        hostTimer.start();
     }
 
     private void sendTimerStopMessage() {
@@ -144,7 +140,7 @@ public class FlowManager {
     }
 
     public void onReceivePhaseChange(String phaseStr) {
-        stopTimer();
+        stopClientTimer();
 
         int phaseTime = switch (phaseStr) {
 
@@ -165,10 +161,9 @@ public class FlowManager {
     }
 
     private void startClientTimer(int seconds) {
-        stopTimer();
+        stopClientTimer();
 
-        System.out.println("timando");
-        timer = new CountdownTimer(seconds, new CountdownTimer.TimerListener() {
+        clientTimer = new CountdownTimer(seconds, new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {
                 // se quisermos fazer uma label mudando no topo da tela usando os segundos é
@@ -179,7 +174,7 @@ public class FlowManager {
             public void finish() {
             }
         });
-        timer.start();
+        clientTimer.start();
     }
 
     private void changePhase(String phase)
@@ -190,23 +185,25 @@ public class FlowManager {
     }
 
     private void stopAndNotify() {
-        stopTimer();
+        stopHostTimer();
         sendTimerStopMessage();
     }
 
     public void onReceiveTimerStop() {
-        stopTimer();
+        stopClientTimer();
     }
 
-    private void stopTimer() {
-        if (timer != null) {
-            timer.stop();
-            timer = null;
+    private void stopClientTimer() {
+        if (clientTimer != null) {
+            clientTimer.stop();
+            clientTimer = null;
         }
     }
 
-    public int getRound()
-    {
-        return this.round;
+    private void stopHostTimer() {
+        if (hostTimer != null) {
+            hostTimer.stop();
+            hostTimer = null;
+        }
     }
 }

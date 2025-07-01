@@ -111,8 +111,8 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
 
                 entity.getBody().createFixture(shape, 0f);
                 shape.dispose();
-            } 
-            else if (object.getName().startsWith("Trem")) 
+            }
+            else if (object.getName().startsWith("Trem"))
             {
 
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
@@ -132,7 +132,7 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
                     new TrainSpawner(pos, 3);
                 }
             }
-            
+
 
 
         }
@@ -144,10 +144,10 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
 
         for(MapObject m: objects)
         {
-            
+
             if("blueprint".equals(m.getName()))
             {
-                
+
                 Rectangle blueprint = ((RectangleMapObject) m).getRectangle();
                 System.out.println("Posição blue print: " + blueprint.getX() + " " + blueprint.getY());
 

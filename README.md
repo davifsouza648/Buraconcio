@@ -8,17 +8,17 @@
   - [x] Colocar um timer na pré primeira rodada
 - [x] Tratar erros ao quitar no meio do game (**prioridade baixa**)
 - [x] Sobreposição da bola sobre o mel e boostpad
-- [ ] Nukar o mapa1
+- [x] Nukar o mapa1
 - [x] Index do mapa esta indo errado no host
 - [ ] HUD de configuração tudo quebrado os botoes
 
 ### Implementações
 
-- [ ] Hud de vitória (Screen)
+- [x] Hud de vitória (Screen)
 - [X] Hud de configuração
   - [X] Em jogo (Overlay)
   - [X] No menu (Screen)
-- [ ] Hud de Pontuação (Screen)
+- [x] Hud de Pontuação (Screen)
   - [ ] Ideia: Bolas se mexendo
 - [x] Caso use a borracha no vazio, perde a borracha
 - [ ] Verificar se a borracha funciona no server/client

@@ -101,7 +101,7 @@ public class PointsScreen implements Screen
         Table topTable = new Table();
         topTable.top();
 
-        String roundNumber = String.valueOf(GameManager.getInstance().getFlow().getRound());
+        String roundNumber = String.valueOf(GameManager.getInstance().getRound());
 
         topTable.add(imageRound).center().pad(5).row();
 

@@ -2,7 +2,6 @@ package io.github.buraconcio.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -23,7 +22,6 @@ import io.github.buraconcio.Utils.Managers.SoundManager;
 import io.github.buraconcio.Utils.Managers.ConnectionManager;
 import io.github.buraconcio.Utils.Common.Constants;
 import io.github.buraconcio.Utils.Managers.CursorManager;
-import io.github.buraconcio.Utils.Managers.FlowManager;
 import io.github.buraconcio.Utils.Managers.GameManager;
 import io.github.buraconcio.Utils.Managers.GameManager.PHASE;
 import io.github.buraconcio.Utils.Common.MapRenderer;

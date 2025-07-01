@@ -2,11 +2,13 @@ package io.github.buraconcio.Objects.Obstacles;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
+import io.github.buraconcio.Utils.Common.AnimationPlay;
 import io.github.buraconcio.Utils.Common.Auxiliaries;
 import io.github.buraconcio.Utils.Common.PhysicsEntity;
 import io.github.buraconcio.Utils.Managers.PlayerManager;
@@ -26,7 +28,7 @@ public class Train extends Obstacle {
 
         PolygonShape shapeDef = new PolygonShape();
         shapeDef.setAsBox(size.x/2, size.y/2);
-        
+
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shapeDef;
         fixtureDef.isSensor = false;
@@ -52,26 +54,25 @@ public class Train extends Obstacle {
             }
         }, 0.5f);
 
-        switch (directionIndex)
-        {
-            case 0:
-                body.setTransform(body.getPosition(), (float) (-Math.PI / 2)); // -90°
-                break;
-            case 1:
-                body.setTransform(body.getPosition(), 0f);
-                break;
-            case 2:
-                body.setTransform(body.getPosition(), (float) (Math.PI / 2));
-                break;
-            case 3:
-                body.setTransform(body.getPosition(), (float) Math.PI);
-                break;
-        }
+        body.setTransform(body.getPosition(), angleFromIndex(directionIndex));
 
         act(0f);
     }
 
-    private Vector2 getDirectionFromIndex(int dir) {
+    public static float angleFromIndex(int directionIndex) {
+        float res = switch (directionIndex)
+        {
+            case 0 -> (float) (-Math.PI / 2); // -90°
+            case 1 -> 0f;
+            case 2 -> (float) (Math.PI / 2); // -90°
+            case 3 -> (float) Math.PI; // -90°
+            default -> 0f;
+        };
+
+        return res;
+    }
+
+    private static Vector2 getDirectionFromIndex(int dir) {
         switch (dir) {
             case 0: return new Vector2(1, 0);   // direita
             case 1: return new Vector2(0, 1);   // cima
@@ -89,8 +90,11 @@ public class Train extends Obstacle {
         if (!(entity instanceof Ball || entity instanceof Train ||
             entity instanceof BlackHole || entity instanceof TrainCollider))
         {
-            this.destroy();
             trainCollider.destroy();
+
+            body.setLinearVelocity(new Vector2(0f, 0f));
+            new TrainDeathAnimation(this);
+
             return true;
         }
 
@@ -99,11 +103,18 @@ public class Train extends Obstacle {
     }
 
     @Override
-    public void act(float delta) 
+    public void act(float delta)
     {
         super.act(delta);
 
         SoundManager.getInstance().loopProximity("train-chuck", this.getPosition(), PlayerManager.getInstance().getLocalPlayer().getBall().getPosition());
+    }
+
+    public Vector2 getHeadPos() {
+        if (trainCollider == null)
+            return null;
+
+        return trainCollider.getPosition();
     }
 }
 
@@ -128,21 +139,7 @@ class TrainCollider extends Obstacle {
 
         this.parent = parent;
 
-        switch (directionIndex)
-        {
-            case 0:
-                body.setTransform(body.getPosition(), (float) (-Math.PI / 2)); // -90°
-                break;
-            case 1:
-                body.setTransform(body.getPosition(), 0f);
-                break;
-            case 2:
-                body.setTransform(body.getPosition(), (float) (Math.PI / 2));
-                break;
-            case 3:
-                body.setTransform(body.getPosition(), (float) Math.PI);
-                break;
-        }
+        body.setTransform(body.getPosition(), Train.angleFromIndex(directionIndex));
 
         act(0f);
     }
@@ -150,5 +147,38 @@ class TrainCollider extends Obstacle {
     @Override
     public boolean contact(PhysicsEntity entity) {
         return parent.contact(entity);
+    }
+}
+
+class TrainDeathAnimation extends AnimationPlay {
+    private static final int WHITEOUT_FRAME = 4;
+
+    public TrainDeathAnimation(Train parentActor) {
+        super( Auxiliaries.animationFromFiles("obstacles/train/trainDestruction.png",
+            "obstacles/train/trainDestruction.json"), parentActor);
+
+        Vector2 head = parentActor.getHeadPos();
+        setPosition(head.x, head.y);
+
+        pauseAnimation();
+        playOnce();
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        if (getFrameIndex() == WHITEOUT_FRAME) {
+            if (parentActor instanceof PhysicsEntity) {
+                PhysicsEntity p = (PhysicsEntity) parentActor;
+                try {
+                    p.destroy();
+                } catch (Error e) {}
+            }
+        } else if (isLastFrame()) {
+            try {
+                this.remove();
+            } catch (Error e) {}
+        }
     }
 }

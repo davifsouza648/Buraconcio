@@ -103,11 +103,14 @@ public class CircularSaw extends Obstacle {
 
     @Override
     public void preRound() {
+        super.preRound();
         animacao.resumeAnimation();
+        active = true;
     }
 
     @Override
     public void postRound(){
+        super.postRound();
         animacao.pauseAnimation();
     }
 
