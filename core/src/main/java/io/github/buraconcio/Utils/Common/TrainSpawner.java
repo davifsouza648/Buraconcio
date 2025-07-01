@@ -1,5 +1,6 @@
 package io.github.buraconcio.Utils.Common;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Timer;
@@ -7,6 +8,7 @@ import com.badlogic.gdx.utils.Timer;
 import io.github.buraconcio.Network.TCP.Message;
 import io.github.buraconcio.Objects.Obstacles.Train;
 import io.github.buraconcio.Utils.Managers.ConnectionManager;
+import io.github.buraconcio.Utils.Managers.GameManager;
 import io.github.buraconcio.Utils.Managers.PlayerManager;
 import io.github.buraconcio.Utils.Managers.SoundManager;
 
@@ -21,10 +23,11 @@ public class TrainSpawner {
         this.spawnPos = spawnPos;
         this.direction = direction;
         SoundManager.getInstance().loadSound("train-horn", "sounds/obstacle-sounds/train/horn.wav");
-        startSpawning();
+
+        GameManager.getInstance().addTrainSpawner(this);
     }
 
-    private void startSpawning()
+    public void startSpawning()
     {
         if (!Constants.isHosting())
             return;
@@ -42,7 +45,7 @@ public class TrainSpawner {
                 Timer.schedule(this, 10f + (float) Math.random() * 5f);
             }
         };
-        Timer.schedule(spawnTask, 15f);
+        Timer.schedule(spawnTask, 14f + (float) Math.random() * 1f);
     }
 
     public static void spawnTrain(Vector2 spawnPos, int direction)

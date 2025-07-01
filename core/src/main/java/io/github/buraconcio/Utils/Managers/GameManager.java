@@ -31,6 +31,7 @@ import io.github.buraconcio.Utils.Adapters.ObstacleInputAdapter;
 import io.github.buraconcio.Utils.Adapters.PlayInputAdapter;
 import io.github.buraconcio.Utils.Common.Constants;
 import io.github.buraconcio.Utils.Common.ObstacleSpawner;
+import io.github.buraconcio.Utils.Common.TrainSpawner;
 
 public class GameManager {
 
@@ -39,6 +40,7 @@ public class GameManager {
     private PhysicsTest physicsScreen;
     private Screen currentScreen;
     private ObstacleSpawner obstacleSpawner;
+    private ArrayList<TrainSpawner> trainSpawners;
     private Flag flag;
 
     private FlowManager flow;
@@ -110,6 +112,7 @@ public class GameManager {
         });
 
         obstacleSpawner = new ObstacleSpawner();
+        trainSpawners = new ArrayList<TrainSpawner>();
     }
 
     public static GameManager getInstance() {
@@ -266,6 +269,10 @@ public class GameManager {
         PlayerManager.getInstance().setAllBallsAlive(); // setar como vivas as a ideia principal é fazer um respawn
         PhysicsManager.getInstance().randomizePlayerPositions();
 
+        trainSpawners.forEach(spawner -> {
+            spawner.startSpawning();
+        });
+
         if (Constants.isHosting()) {
             ConnectionManager.getInstance().getServer().sendMessage(Message.Type.PLAYERS_START_POS,
                     PhysicsManager.getInstance().getPlayerStartPosList());
@@ -308,8 +315,11 @@ public class GameManager {
     public void setupSelectObstaclePhase() {
         PhysicsManager.getInstance().postRoundObstacles();
 
-        // jogar a camera pro centro do espaço reservado
+        trainSpawners.forEach(spawner -> {
+            spawner.stop();
+        });
 
+        // jogar a camera pro centro do espaço reservado
         Rectangle area = blueprintArea;
         Vector2 center = new Vector2();
 
@@ -346,6 +356,7 @@ public class GameManager {
 
     public void setupWinPhase() {
         PhysicsManager.getInstance().destroyAllExceptBalls();
+        trainSpawners.clear();
 
         // Constants.localP().setBallInteractable(false);
         Main game = physicsScreen.getGame();
@@ -410,4 +421,7 @@ public class GameManager {
         this.arrivalTime = arrivalTime;
     }
 
+    public void addTrainSpawner(TrainSpawner spawner) {
+        trainSpawners.add(spawner);
+    }
 }

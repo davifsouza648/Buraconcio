@@ -83,6 +83,10 @@ public class AnimationPlay extends Image {
         super.draw(batch, parentAlpha);
     }
 
+    public void drawImage(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+    }
+
     @Override
     public void act(float delta)
     {
