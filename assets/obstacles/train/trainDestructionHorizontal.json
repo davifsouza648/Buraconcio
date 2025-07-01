@@ -1,0 +1,95 @@
+{ "frames": [
+   {
+    "filename": "trainDestruction 0.ase",
+    "frame": { "x": 0, "y": 0, "w": 371, "h": 64 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 371, "h": 64 },
+    "sourceSize": { "w": 371, "h": 64 },
+    "duration": 60
+   },
+   {
+    "filename": "trainDestruction 1.ase",
+    "frame": { "x": 371, "y": 0, "w": 371, "h": 64 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 371, "h": 64 },
+    "sourceSize": { "w": 371, "h": 64 },
+    "duration": 60
+   },
+   {
+    "filename": "trainDestruction 2.ase",
+    "frame": { "x": 742, "y": 0, "w": 371, "h": 64 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 371, "h": 64 },
+    "sourceSize": { "w": 371, "h": 64 },
+    "duration": 60
+   },
+   {
+    "filename": "trainDestruction 3.ase",
+    "frame": { "x": 1113, "y": 0, "w": 371, "h": 64 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 371, "h": 64 },
+    "sourceSize": { "w": 371, "h": 64 },
+    "duration": 60
+   },
+   {
+    "filename": "trainDestruction 4.ase",
+    "frame": { "x": 1484, "y": 0, "w": 371, "h": 64 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 371, "h": 64 },
+    "sourceSize": { "w": 371, "h": 64 },
+    "duration": 60
+   },
+   {
+    "filename": "trainDestruction 5.ase",
+    "frame": { "x": 1855, "y": 0, "w": 371, "h": 64 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 371, "h": 64 },
+    "sourceSize": { "w": 371, "h": 64 },
+    "duration": 60
+   },
+   {
+    "filename": "trainDestruction 6.ase",
+    "frame": { "x": 2226, "y": 0, "w": 371, "h": 64 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 371, "h": 64 },
+    "sourceSize": { "w": 371, "h": 64 },
+    "duration": 60
+   },
+   {
+    "filename": "trainDestruction 7.ase",
+    "frame": { "x": 2597, "y": 0, "w": 371, "h": 64 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 371, "h": 64 },
+    "sourceSize": { "w": 371, "h": 64 },
+    "duration": 60
+   },
+   {
+    "filename": "trainDestruction 8.ase",
+    "frame": { "x": 2968, "y": 0, "w": 371, "h": 64 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 371, "h": 64 },
+    "sourceSize": { "w": 371, "h": 64 },
+    "duration": 60
+   }
+ ],
+ "meta": {
+  "app": "https://github.com/LibreSprite/LibreSprite/",
+  "version": "1.1-dev",
+  "image": "C:\\Users\\Masao\\Downloads\\POO-GAME\\assets\\obstacles\\train\\trainDestructionHorizontal.png",
+  "format": "RGBA8888",
+  "size": { "w": 3339, "h": 64 },
+  "scale": "1",
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ]
+ }
+}
