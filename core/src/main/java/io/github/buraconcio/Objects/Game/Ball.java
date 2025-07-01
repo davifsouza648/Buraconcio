@@ -230,9 +230,10 @@ public class Ball extends PhysicsEntity {
         return isAirborne;
     }
 
-    public void setCanInteract(boolean canInteract) {
+    public void setCanInteract(boolean canInteract) 
+    {
         this.canInteract = canInteract;
-        setAlive(true);
+        setAlive(canInteract);
     }
 
     public boolean canInteract() {
