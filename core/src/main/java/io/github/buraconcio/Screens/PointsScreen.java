@@ -124,7 +124,7 @@ public class PointsScreen implements Screen
 
             Label labelNome = new Label(p.getUsername(), skinLabel, "labelPixelyWhite32");
             labelNome.setFontScale(1f);
-            labelNome.setColor(1, 1, 1, 1);
+            labelNome.setColor(0, 0, 0, 1);
 
             Image skinImage = new Image(skinBall);
 
