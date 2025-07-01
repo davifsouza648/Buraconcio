@@ -63,12 +63,12 @@ public class Player implements Serializable {
     }
 
     public void update(Vector2 ballPos, Vector2 velocity, boolean state) {
-        
+
         if (ball == null) {
             System.out.println("ball not yet created");
             return;
         }
-        
+
         ball.setAlive(state);
         ball.setPos(ballPos);
         ball.setVelocity(velocity);
@@ -186,7 +186,7 @@ public class Player implements Serializable {
     public void selectObstacle(Obstacle obstacle) {
 
         if (!obstacle.wasTeleported()) {
-            obstacle.teleport(new Vector2(30f, 15f));
+            obstacle.teleport(new Vector2(5f, 5f));
             obstacle.markAsTeleported(true);
         }
 

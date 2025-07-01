@@ -174,6 +174,14 @@ public class FlowManager {
                         GameManager.getInstance().getPhysicsScreen().getHUD().updateClock(remainingSecs);
                     }
                 }
+
+                if(GameManager.getInstance().phase == PHASE.SELECT_OBJ){
+                    GameManager.getInstance().setArrivalTime(seconds - remainingSecs);
+
+                    if(GameManager.getInstance().getPhysicsScreen().getHUD() != null){
+                        GameManager.getInstance().getPhysicsScreen().getHUD().updateClock(remainingSecs);
+                    }
+                }
             }
 
             @Override
