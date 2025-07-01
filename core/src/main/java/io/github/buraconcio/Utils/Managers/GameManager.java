@@ -58,7 +58,7 @@ public class GameManager {
 
     private int arrivalTime;
     // num de obstaculos
-    private int obstacleNum = 4;
+    private int obstacleNum = 6;
 
     private int pointsToWin = 10;
 

@@ -123,7 +123,7 @@ public class FlowManager {
         stopClientTimer();
         stopHostTimer();
 
-        startHostTimer(20, new CountdownTimer.TimerListener() {
+        startHostTimer(GameManager.getInstance().getWinTime(), new CountdownTimer.TimerListener() {
             @Override
             public void tick(int remainingSecs) {
                 // Se quiser, aqui pode atualizar HUD ou mostrar contagem

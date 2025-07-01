@@ -48,7 +48,7 @@ public class Server {
                 clients.add(clientHandler);
                 new Thread(clientHandler).start();
 
-                if (clients.size() >= 4) {
+                if (clients.size() > 4) {
                     stopAccepting();
                 }
             }
