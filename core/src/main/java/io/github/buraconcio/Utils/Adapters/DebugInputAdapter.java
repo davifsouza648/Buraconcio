@@ -30,7 +30,7 @@ public class DebugInputAdapter extends InputAdapter {
         } else if (keyCode == Keys.R) {
             GameManager.getInstance().reloadPhysics();
         } else if (keyCode == Keys.W) {
-            GameManager.getInstance().getFlow().startSelectObstaclePhase();
+            GameManager.getInstance().getFlow().winPhase();
         }
 
 

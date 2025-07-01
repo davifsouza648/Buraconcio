@@ -126,6 +126,20 @@ public class FlowManager {
         changePhase("show_win");
         stopClientTimer();
         stopHostTimer();
+
+        startHostTimer(20, new CountdownTimer.TimerListener() {
+            @Override
+            public void tick(int remainingSecs) {
+                // Se quiser, aqui pode atualizar HUD ou mostrar contagem
+            }
+
+            @Override
+            public void finish() {
+                // Fechar o jogo ao final
+                System.out.println("Tempo de vitória encerrado. Fechando o jogo...");
+                System.exit(0);
+            }
+        });
     }
 
     private void startHostTimer(int seconds, CountdownTimer.TimerListener listener) {
