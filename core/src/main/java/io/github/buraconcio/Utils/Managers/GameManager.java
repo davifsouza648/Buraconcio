@@ -71,6 +71,8 @@ public class GameManager {
     private GameCamera camera;
     private Stage stage;
 
+    private Vector2 mapCoords = new Vector2(5,5);
+
     private GameManager() {
         inputs = new InputMultiplexer();
 
@@ -309,7 +311,7 @@ public class GameManager {
         center.y /= 32;
 
         if (area != null) {
-            moveCamera(center);
+            teleportCamera(center);
         }
 
         if (Constants.isHosting()) {
@@ -349,6 +351,17 @@ public class GameManager {
 
     public void moveCamera(Vector2 pos) {
         camera.setTarget(pos);
+    }
+
+    public void cameraBack()
+    {
+        camera.setTarget(mapCoords);
+    }
+
+    public void teleportCamera(Vector2 pos)
+    {
+        camera.setTarget(pos);
+        camera.teleportTo(pos);
     }
 
     public void setFlag(Flag flag) {

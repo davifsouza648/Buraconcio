@@ -53,8 +53,8 @@ public class ObstacleSpawner {
             throw new IllegalStateException("Blueprint area is not set.");
         }
 
-        float x = (blueprintArea.x + random.nextFloat() * blueprintArea.width) / 32;
-        float y = (blueprintArea.y + random.nextFloat() * blueprintArea.height) / 32;
+        float x = (blueprintArea.x + random.nextFloat() * (blueprintArea.width - 100)) / 32;
+        float y = (blueprintArea.y + random.nextFloat() * (blueprintArea.height - 100)) / 32;
 
         return new Vector2(x, y);
 

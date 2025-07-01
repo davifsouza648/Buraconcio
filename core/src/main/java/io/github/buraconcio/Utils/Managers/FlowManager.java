@@ -1,5 +1,7 @@
 package io.github.buraconcio.Utils.Managers;
 
+import com.badlogic.gdx.Game;
+
 import io.github.buraconcio.Network.TCP.Message;
 import io.github.buraconcio.Objects.Game.Player;
 import io.github.buraconcio.Utils.Common.Constants;
