@@ -20,6 +20,7 @@ public class Obstacle extends PhysicsEntity {
     private int rotationIndex = 0;
     private Vector2 targetPos = null;
 
+    private boolean teleported = false;
     protected boolean claimed = false;
     protected boolean active = false;
     protected boolean disabled = false;
@@ -153,6 +154,14 @@ public class Obstacle extends PhysicsEntity {
 
     public boolean claimed() {
         return claimed;
+    }
+
+    public void markAsTeleported(boolean flag){
+        teleported = flag;
+    }
+
+    public boolean wasTeleported(){
+        return teleported;
     }
 
     // 0 clock 1 counter

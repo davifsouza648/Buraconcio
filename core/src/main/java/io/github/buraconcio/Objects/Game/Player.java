@@ -183,8 +183,10 @@ public class Player implements Serializable {
     }
 
     public void selectObstacle(Obstacle obstacle) {
-        if (id == PlayerManager.getInstance().getLocalPlayer().getId()) {
+
+        if (!obstacle.wasTeleported()) {
             obstacle.teleport(new Vector2(30f, 15f));
+            obstacle.markAsTeleported(true);
         }
 
         selectedObstacle = obstacle;
