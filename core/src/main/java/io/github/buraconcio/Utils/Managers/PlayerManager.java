@@ -276,4 +276,10 @@ public class PlayerManager {
         orderOfArrival.clear();
     }
 
+    public void resetAllScoredFlag(){
+        for(Player p : players){
+            p.resetScoredFlag();
+        }
+    }
+
 }

@@ -63,7 +63,7 @@ public class ClientHandler implements Runnable {
 
                         case STARS_UPDATE:
                             if (GameManager.getInstance().getCurrentPhase() == PHASE.SHOW_POINTS) {
-                                handleStarsUpdate(msg);
+                                // handleStarsUpdate(msg);
                             } else {
                                 System.out.println("Ignoring STARS_UPDATE");
                             }

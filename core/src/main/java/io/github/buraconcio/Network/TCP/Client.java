@@ -212,24 +212,24 @@ public class Client {
 
                         } else if (GameManager.getInstance().getCurrentPhase() == PHASE.SHOW_POINTS) {
 
-                            Map<Integer, Integer> info = Map.of(Constants.localP().getId(),
-                                    Constants.localP().getStars());
+                            // Map<Integer, Integer> info = Map.of(Constants.localP().getId(),
+                            //         Constants.localP().getStars());
 
-                            Message starsMsg = new Message(Message.Type.STARS_UPDATE, info);
-                            out.writeObject(starsMsg);
-                            out.flush();
+                            // Message starsMsg = new Message(Message.Type.STARS_UPDATE, info);
+                            // out.writeObject(starsMsg);
+                            // out.flush();
 
-                            Object response = in.readObject();
+                            // Object response = in.readObject();
 
-                            if (response instanceof Message respMsg && respMsg.getType() == Message.Type.STARS_UPDATE) {
+                            // if (response instanceof Message respMsg && respMsg.getType() == Message.Type.STARS_UPDATE) {
 
-                                @SuppressWarnings("unchecked")
-                                Map<Integer, Integer> starsList = (Map<Integer, Integer>) respMsg.getPayload();
+                            //     @SuppressWarnings("unchecked")
+                            //     Map<Integer, Integer> starsList = (Map<Integer, Integer>) respMsg.getPayload();
 
-                                PlayerManager.getInstance().updateStars(starsList);
+                            //     PlayerManager.getInstance().updateStars(starsList);
 
-                                // System.out.println("recebeu stars update");
-                            }
+                            //     // System.out.println("recebeu stars update");
+                            // }
 
                             PlayerManager.getInstance().updateArrivalOrder();
 

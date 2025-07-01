@@ -269,6 +269,8 @@ public class GameManager {
         PlayerManager.getInstance().setAllBallsAlive(); // setar como vivas as a ideia principal é fazer um respawn
         PhysicsManager.getInstance().randomizePlayerPositions();
 
+        PlayerManager.getInstance().resetAllScoredFlag();
+
         trainSpawners.forEach(spawner -> {
             spawner.startSpawning();
         });

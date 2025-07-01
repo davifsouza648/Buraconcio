@@ -29,6 +29,8 @@ public class Player implements Serializable {
     private boolean hasPlacedObstacle;
     private int lastObsId = -1;
 
+    private boolean alreadyScored = false;
+
     private transient Ball ball;
 
     public Player(String username) {
@@ -104,7 +106,6 @@ public class Player implements Serializable {
             if (obstacle == null)
                 return;
 
-
             obstacle.claim();
             obstacle.place();
         }
@@ -127,6 +128,13 @@ public class Player implements Serializable {
     }
 
     public void score() {
+
+        if (alreadyScored)
+            return;
+
+        alreadyScored = true;
+
+        System.out.println("REWARDSTAR");
         ball.enterHole();
 
         rewardStar();
@@ -137,7 +145,6 @@ public class Player implements Serializable {
     }
 
     public void rewardStar() {
-
         stars++;
 
         if (hasStar) {
@@ -151,6 +158,10 @@ public class Player implements Serializable {
 
     public void collectStar() {
         hasStar = true;
+    }
+
+    public void resetScoredFlag() {
+        alreadyScored = false;
     }
 
     public void firstOrLast(boolean flag) {
