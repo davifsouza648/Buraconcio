@@ -63,7 +63,7 @@ public class CreditsScreen implements Screen {
         titleImage = new Image(titleTextute);
 
         // Texture texture = new Texture(Gdx.files.internal("credits/teste.jpg"));
-        Texture texture = new Texture(Gdx.files.internal("credits/foto1.png"));
+        Texture texture = new Texture(Gdx.files.internal("credits/team.png"));
         fotoImage = new Image(texture);
 
         float originalWidth = texture.getWidth();
