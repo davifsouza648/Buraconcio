@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import io.github.buraconcio.Objects.Game.Player;
 import io.github.buraconcio.Objects.Obstacles.Obstacle;
 import io.github.buraconcio.Utils.Common.Auxiliaries;
 import io.github.buraconcio.Utils.Common.Constants;
+import io.github.buraconcio.Utils.Common.TrainSpawner;
 import io.github.buraconcio.Utils.Managers.ConnectionManager;
 import io.github.buraconcio.Utils.Managers.FlowManager;
 import io.github.buraconcio.Utils.Managers.GameManager;
@@ -265,6 +267,14 @@ public class Client {
                             });
                         });
 
+                    }
+
+                    case SPAWN_TRAIN -> {
+                        Vector3 info = (Vector3) msg.getPayload();
+
+                        Gdx.app.postRunnable(() -> {
+                            TrainSpawner.spawnTrain(new Vector2(info.x, info.y), (int) info.z);
+                        });
                     }
 
                     case PLAYERS_START_POS -> {
