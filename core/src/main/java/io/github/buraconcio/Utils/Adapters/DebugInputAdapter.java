@@ -3,6 +3,7 @@ package io.github.buraconcio.Utils.Adapters;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 import io.github.buraconcio.Objects.Obstacles.Train;
 import io.github.buraconcio.Utils.Managers.FlowManager;
@@ -17,6 +18,8 @@ public class DebugInputAdapter extends InputAdapter {
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
+        Vector3 unp = GameManager.getInstance().getPhysicsCamera().unproject(new Vector3(x, y, 0));
+        System.out.println(new Vector2(unp.x, unp.y));
         return false;
     }
 
