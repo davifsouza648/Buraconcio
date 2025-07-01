@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import io.github.buraconcio.Utils.Common.Constants;
 import io.github.buraconcio.Utils.Common.PhysicsEntity;
 import io.github.buraconcio.Utils.Managers.PhysicsManager;
+import io.github.buraconcio.Utils.Managers.PlayerManager;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -257,6 +258,10 @@ public class Ball extends PhysicsEntity {
         animacao.setVisible(flag);
 
         body.getFixtureList().forEach(fixture -> fixture.setSensor(!flag));
+
+        if (flag == false && PlayerManager.getInstance().getLocalPlayer().getId() != player.getId()) {
+            teleport(new Vector2(-100f, -100f));
+        }
     }
 
     public void addToStage(Stage stage) {
