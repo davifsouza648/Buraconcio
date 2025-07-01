@@ -64,7 +64,7 @@ public class GameManager {
 
     private int mapIndex;
     public PHASE phase = PHASE.LOOBY;
-    private int round = 10;
+    private int round = 0;
 
     public enum PHASE {
         LOOBY,
