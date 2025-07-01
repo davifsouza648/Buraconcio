@@ -107,7 +107,7 @@ public class VictoryScreen implements Screen {
                             PlayerManager.getInstance().getLocalPlayer().setBallInteractable(true);
                             interactionEnabled = true;
                         }
-                    }, 0.5f);
+                    }, 0.01f);
                     currentPodium = null;
                 }
             }

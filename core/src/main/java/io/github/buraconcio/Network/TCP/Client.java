@@ -339,9 +339,14 @@ public class Client {
             Constants.localP().setHosting(false);
 
             Gdx.app.postRunnable(() -> {
+                PhysicsManager.getInstance().getWorld().setGravity(new Vector2(0f, 0f));
+                GameManager.getInstance().setRound(0);
+                PlayerManager.getInstance().getLocalPlayer().setStars(0);
                 game.setScreen(new MainMenu(game));
             });
         }
+
+
     }
 
     public void dsListener() {

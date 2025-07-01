@@ -415,6 +415,10 @@ public class GameManager {
         return this.round;
     }
 
+    public void setRound(int newRound){
+        round = newRound;
+    }
+
     public int getArrivalTime(){
         return arrivalTime;
     }
