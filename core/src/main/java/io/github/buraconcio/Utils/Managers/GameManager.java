@@ -58,7 +58,7 @@ public class GameManager {
 
     private int mapIndex;
     public PHASE phase = PHASE.LOOBY;
-    private int round = -1;
+    private int round = 0;
 
     public enum PHASE {
         LOOBY,
@@ -266,7 +266,7 @@ public class GameManager {
             ConnectionManager.getInstance().getServer().sendMessage(Message.Type.PLAYERS_START_POS,
                     PhysicsManager.getInstance().getPlayerStartPosList());
 
-            if (round == 0)
+            if (round == 1)
                 ConnectionManager.getInstance().getServer().sendMessage(Message.Type.FLAG_POS,
                     getPhysicsScreen().getMapRenderer().getRandomFlagArea());
         }

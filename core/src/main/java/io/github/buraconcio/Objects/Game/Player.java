@@ -3,6 +3,7 @@ package io.github.buraconcio.Objects.Game;
 import io.github.buraconcio.Objects.Obstacles.Obstacle;
 import io.github.buraconcio.Objects.UI.HUD;
 import io.github.buraconcio.Utils.Common.Constants;
+import io.github.buraconcio.Utils.Managers.GameManager;
 import io.github.buraconcio.Utils.Managers.PhysicsManager;
 import io.github.buraconcio.Utils.Managers.PlayerManager;
 import io.github.buraconcio.Utils.Managers.SoundManager;
@@ -172,10 +173,9 @@ public class Player implements Serializable {
     }
 
     public void selectObstacle(Obstacle obstacle) {
-
-        // disable for testing
-        // if (!canSelect)
-        // return;
+        if (id == PlayerManager.getInstance().getLocalPlayer().getId()) {
+            obstacle.teleport(new Vector2(30f, 15f));
+        }
 
         selectedObstacle = obstacle;
         obstacle.claim();
