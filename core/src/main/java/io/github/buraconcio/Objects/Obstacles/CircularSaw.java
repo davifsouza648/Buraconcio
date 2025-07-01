@@ -64,7 +64,11 @@ public class CircularSaw extends Obstacle {
             sawPosition = (framesOfMovement - 2*idleFrames - framesToMove + 3) * (x0 - xf) / framesToMove + xf;
         }
 
-        body.destroyFixture(body.getFixtureList().get(0));
+        try
+        {
+            body.destroyFixture(body.getFixtureList().get(0));
+        }catch(Exception e){e.printStackTrace();}
+        
 
         createSawFixture(sawPosition);
     }

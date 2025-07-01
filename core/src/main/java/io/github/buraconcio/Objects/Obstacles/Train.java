@@ -22,12 +22,16 @@ public class Train extends Obstacle {
     private boolean invincible = true;
     private TrainCollider trainCollider;
 
+    int directionIndex;
+
     public Train(Vector2 pos, int directionIndex)
     {
         super(pos, size, Auxiliaries.animationFromFiles("obstacles/train/train.png", "obstacles/train/train.json"));
 
         PolygonShape shapeDef = new PolygonShape();
         shapeDef.setAsBox(size.x/2, size.y/2);
+
+        this.directionIndex = directionIndex;
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shapeDef;
@@ -116,6 +120,12 @@ public class Train extends Obstacle {
 
         return trainCollider.getPosition();
     }
+
+    public int getDirectionIndex() 
+    {
+    return directionIndex;
+    }
+
 }
 
 class TrainCollider extends Obstacle {
@@ -152,12 +162,26 @@ class TrainCollider extends Obstacle {
 
 class TrainDeathAnimation extends AnimationPlay {
     private static final int WHITEOUT_FRAME = 4;
+    private final Train parentActor;
 
     public TrainDeathAnimation(Train parentActor) {
-        super( Auxiliaries.animationFromFiles("obstacles/train/trainDestruction.png",
-            "obstacles/train/trainDestruction.json"), parentActor);
+        super(
+            Auxiliaries.animationFromFiles("obstacles/train/trainDestruction.png",
+            "obstacles/train/trainDestruction.json"), 
+            parentActor
+        );
 
-        Vector2 head = parentActor.getHeadPos();
+        this.parentActor = parentActor;
+
+        Vector2 base = parentActor.getPosition(); 
+        float angleRad = Train.angleFromIndex(parentActor.getDirectionIndex()); 
+
+
+        float halfLength = 11.59f / 2f;
+        Vector2 offset = new Vector2(0, halfLength).rotateRad(angleRad);
+
+        // Posição do bico = centro + offset rotacionado
+        Vector2 head = base.cpy().add(offset);
         setPosition(head.x, head.y);
 
         pauseAnimation();
@@ -168,8 +192,10 @@ class TrainDeathAnimation extends AnimationPlay {
     public void act(float delta) {
         super.act(delta);
 
-        if (getFrameIndex() == WHITEOUT_FRAME) {
-            if (parentActor instanceof PhysicsEntity) {
+        if (getFrameIndex() == WHITEOUT_FRAME) 
+        {
+            if (parentActor instanceof PhysicsEntity) 
+            {
                 PhysicsEntity p = (PhysicsEntity) parentActor;
                 try {
                     p.destroy();
@@ -182,3 +208,4 @@ class TrainDeathAnimation extends AnimationPlay {
         }
     }
 }
+
