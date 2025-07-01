@@ -60,7 +60,7 @@ public class GameManager {
     // num de obstaculos
     private int obstacleNum = 4;
 
-    private int pointsToWin = 2;
+    private int pointsToWin = 10;
 
     private int mapIndex;
     public PHASE phase = PHASE.LOOBY;
