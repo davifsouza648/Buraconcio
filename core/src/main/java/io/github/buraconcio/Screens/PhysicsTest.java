@@ -35,7 +35,7 @@ public class PhysicsTest implements Screen {
     private Stage stage;
     private Stage hudStage;
 
-    private Box2DDebugRenderer debugRenderer;
+
     private GameCamera camera;
 
     private Ball pBall;
@@ -60,7 +60,6 @@ public class PhysicsTest implements Screen {
         SoundManager.getInstance().loadMusic("map" + mapIndex, "sounds/songs/map" + mapIndex + ".mp3");
         SoundManager.getInstance().playMusic("map" + mapIndex);
 
-        debugRenderer = new Box2DDebugRenderer();
 
         stage = new Stage(new ExtendViewport(23, 13));
         hudStage = new Stage(new FitViewport(1280, 720));
@@ -176,7 +175,6 @@ public class PhysicsTest implements Screen {
 
         hud.render();
 
-        debugRenderer.render(PhysicsManager.getInstance().getWorld(), camera.combined);
 
         PhysicsManager.getInstance().tick();
     }
@@ -204,7 +202,6 @@ public class PhysicsTest implements Screen {
         mapRenderer.dispose();
         hudStage.dispose();
         stage.dispose();
-        debugRenderer.dispose();
     }
 
     public GameCamera getCamera() {
