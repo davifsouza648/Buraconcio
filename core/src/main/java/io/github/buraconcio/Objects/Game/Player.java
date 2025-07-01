@@ -71,8 +71,8 @@ public class Player implements Serializable {
             return;
         }
 
-        ball.setAlive(state);
         ball.setPos(ballPos);
+        ball.setAlive(state);
         ball.setVelocity(velocity);
     }
 
