@@ -39,7 +39,6 @@ public class Podium extends PhysicsEntity {
         polygonShape.dispose();
 
         body.setType(BodyType.KinematicBody);
-        System.out.println(getHeight());
         //body.setLinearVelocity(new Vector2(0f, 4f));
         body.setLinearVelocity(new Vector2(0f, 1f));
 

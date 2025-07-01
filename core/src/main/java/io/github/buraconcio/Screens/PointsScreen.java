@@ -103,7 +103,7 @@ public class PointsScreen implements Screen
 
         String roundNumber = String.valueOf(GameManager.getInstance().getRound());
 
-        topTable.add(imageRound).center().pad(30);
+        topTable.add(imageRound).center().pad(15);
 
         for (int i = 0; i < roundNumber.length(); i++) {
             char c = roundNumber.charAt(i);

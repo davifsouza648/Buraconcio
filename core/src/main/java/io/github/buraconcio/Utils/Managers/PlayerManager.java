@@ -129,7 +129,6 @@ public class PlayerManager {
                     p.update(obstaclePos, pack.getObsId(),
                             pack.getObsRotationIndex());
 
-                            System.out.println("x: " + pack.getObsX() + "y: " + pack.getObsY());
                 } else {
                     p.update(pack.getObsPlaced(), pack.getflagPlaced());
                     continue;

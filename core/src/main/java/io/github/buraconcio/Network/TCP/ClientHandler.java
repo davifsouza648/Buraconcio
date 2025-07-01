@@ -69,7 +69,6 @@ public class ClientHandler implements Runnable {
                             }
                             break;
                         case BLUEPRINT_OBSTACLES:
-                            System.out.println("ta aqui");
 
                         default:
                             System.out.println("Unknown message type: " + msg.getType());
@@ -93,7 +92,6 @@ public class ClientHandler implements Runnable {
         } finally {
             //dar cleanup ao entrar em uma tela diferente
                 cleanup();
-            System.out.println("KKKKKKKKKKKKKKK");
         }
     }
 

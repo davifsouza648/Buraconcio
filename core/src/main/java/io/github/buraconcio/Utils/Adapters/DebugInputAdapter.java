@@ -17,7 +17,6 @@ public class DebugInputAdapter extends InputAdapter {
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
-        System.out.println("dbg processor is on");
         return false;
     }
 

@@ -209,7 +209,6 @@ public class ServerScreen implements Screen {
                 System.out.println("LOCAL HOSTING" + Constants.isHosting());
                 SoundManager.getInstance().playSound("buttonClick");
                 if (Constants.isHosting()) {
-                    System.out.println("entei aqio");
                     server.changeButton(false);
                 }
             }

@@ -149,7 +149,6 @@ public class MapRenderer extends OrthogonalTiledMapRenderer {
             {
 
                 Rectangle blueprint = ((RectangleMapObject) m).getRectangle();
-                System.out.println("Posição blue print: " + blueprint.getX() + " " + blueprint.getY());
 
                 GameManager.getInstance().setbluePrintArea(blueprint);
             }

@@ -115,7 +115,6 @@ public class Client {
                         if (GameManager.getInstance().phase == PHASE.LOBBY) {
                             PlayerManager.getInstance().setPlayers(players);
 
-                            System.out.println("ENTRIIIIIII");
 
                             if (listener != null) {
                                 listener.PlayerCon();
@@ -245,7 +244,6 @@ public class Client {
                             Gdx.app.postRunnable(() -> GameManager.getInstance().setupWinPhase());
 
                             if (listenerGame != null) {
-                                System.out.println("showWINNNN");
                                 listenerGame.showWin();
                             }
 

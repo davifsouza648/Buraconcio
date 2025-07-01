@@ -153,7 +153,6 @@ public class SoundManager {
 
     public void playMusic(String id)
     {
-        System.out.println("Tocando: " + id);
         Music m = music.get(id);
         if (m == null) return;
 
