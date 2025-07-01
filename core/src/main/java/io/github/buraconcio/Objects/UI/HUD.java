@@ -73,13 +73,14 @@ public class HUD {
         mainTable.setDebug(false);
 
         Skin skinLabel = new Skin(Gdx.files.internal("fonts/pixely/labels/labelPixely.json"));
+        Skin skinLabelStroke = new Skin(Gdx.files.internal("fonts/hachiro/label/labelHachiro.json"));
         Skin skinSlider = new Skin(Gdx.files.internal("slider/slider.json"));
 
         countdownLabel = new Label("", skinLabel, "labelPixelyWhite32");
         countdownLabel.setVisible(false);
         countdownLabel.setScale(3f);
 
-        strokeLabel = new Label("Strokes: " + PlayerManager.getInstance().getLocalPlayer().getStrokes(), skinLabel, "labelPixelyWhite32");
+        strokeLabel = new Label("Strokes: " + PlayerManager.getInstance().getLocalPlayer().getStrokes(), skinLabelStroke, "hachiro");
         strokeLabel.setVisible(true);
         strokeLabel.setScale(2f);
 

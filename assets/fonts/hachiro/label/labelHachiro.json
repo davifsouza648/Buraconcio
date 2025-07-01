@@ -1,0 +1,57 @@
+{
+"com.badlogic.gdx.graphics.g2d.BitmapFont": {
+	"HachicroUndertaleBattleFontRegular-PKzBg1": {
+		"file": "HachicroUndertaleBattleFontRegular-PKzBg(1).fnt",
+		"scaledSize": -1,
+		"markupEnabled": false,
+		"flip": false
+	}
+},
+"com.badlogic.gdx.graphics.Color": {
+	"RGBA_0_0_0_255": {
+		"r": 0,
+		"g": 0,
+		"b": 0,
+		"a": 1
+	},
+	"RGBA_112_112_112_255": {
+		"r": 0.4392157,
+		"g": 0.4392157,
+		"b": 0.4392157,
+		"a": 1
+	},
+	"RGBA_255_255_255_255": {
+		"r": 1,
+		"g": 1,
+		"b": 1,
+		"a": 1
+	},
+	"RGBA_3_0_198_255": {
+		"r": 0.011764706,
+		"g": 0,
+		"b": 0.7764706,
+		"a": 1
+	},
+	"RGBA_83_83_83_255": {
+		"r": 0.3254902,
+		"g": 0.3254902,
+		"b": 0.3254902,
+		"a": 1
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+	"default": {
+		"font": "HachicroUndertaleBattleFontRegular-PKzBg1",
+		"fontColor": "RGBA_255_255_255_255"
+	},
+	"hachiro": {
+		"font": "HachicroUndertaleBattleFontRegular-PKzBg1",
+		"fontColor": "RGBA_255_255_255_255"
+	}
+},
+"com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle": {
+	"default": {
+		"label": "default"
+	}
+}
+}
