@@ -23,9 +23,8 @@ Buraconcio is a **top-down golf-like game** where the maps evolve dynamically du
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/your-username/Buraconcio.git
+git clone https://github.com/ringass/Buraconcio.git
 cd Buraconcio
-
 ```
 
 2. **Run the project using Gradle**
@@ -50,7 +49,7 @@ cd Buraconcio
 </p>
 
 ## Server Screen
-
+The Server Screen acts as a map manager and player organizer for the game, making everything easier to set up. Its design was inspired by Black Ops 2.
 <p align="center">
   <img src="assets/screenshots/serverscreen.png" width="400" alt="Server Screen 1" />
   <img src="assets/screenshots/serverscreen2.png" width="400" alt="Server Screen 2" />
@@ -62,7 +61,7 @@ cd Buraconcio
 ![Train Map](assets/screenshots/ingame-train.png)
 
 ## Points Screen
-
+The points bar increases with an animation.
 ![Points](assets/screenshots/points.png)
 
 ## Select Obstacle
