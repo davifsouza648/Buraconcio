@@ -36,7 +36,18 @@ cd Buraconcio
 
 ## Main Menu
 
-![](assets/screenshots/mainmenu.png)
+![main-menu](assets/screenshots/mainmenu.png)
+
+## Maps
+
+<p align="center">
+  <img src="assets/maps-preview/teste.jpg" width="400" alt="Tutorial" />
+  <img src="assets/maps-preview/teste4.jpg" width="400" alt="Trem" />
+</p>
+
+<p align="center">
+  <img src="assets/maps-preview/teste3.jpg" width="820" alt="Florestinha sem árvore" />
+</p>
 
 ## Server Screen
 
@@ -44,6 +55,7 @@ cd Buraconcio
   <img src="assets/screenshots/serverscreen.png" width="400" alt="Server Screen 1" />
   <img src="assets/screenshots/serverscreen2.png" width="400" alt="Server Screen 2" />
 </p>
+
 
 ## In Game
 
@@ -59,6 +71,10 @@ cd Buraconcio
 
 ## Victory Screen
 
+The victory screen isn't just a regular screen — it's an interactive space where you can control the balls and have fun with your friends.  
+It works like a mini coliseum, with physics and gravity applied, since the screen itself is also a fully simulated world.
+
+![Victory](assets/screenshots/victoryscreen.png)
 
 ## Sounds
 
