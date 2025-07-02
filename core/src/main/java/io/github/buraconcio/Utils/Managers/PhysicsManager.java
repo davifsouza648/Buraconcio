@@ -165,7 +165,10 @@ public class PhysicsManager {
     public void destroyBody(Body body) {
         Runnable task = () -> {
             if (body == null || !entityList.containsKey((Integer) body.getUserData())) {
-                // System.out.println("could not destroy body");
+
+                if(Constants.DEBUG)
+                    System.out.println("could not destroy body");
+
                 return;
             }
 

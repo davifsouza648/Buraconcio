@@ -1,42 +1,81 @@
 # Buraconcio
 
+## About the Project
+
+**Buraconcio** is a game developed by @ringass, @argArthur, @mukaimasao, and @davifsouza648 as part of an academic assignment for the Object-Oriented Programming subject in the Computer Science course at **UNESP – Bauru**.
+
+The project is built in **Java**, using the **LibGDX** and **Box2D** libraries. It applies various programming concepts learned in class, such as **sockets**, **threads**, and **object-oriented design**.
+
+---
+
+## The Game
+
+Buraconcio is a **top-down golf-like game** where the maps evolve dynamically during gameplay. Inspired by _Ultimate Chicken Horse_, it allows players to freely place (or erase) obstacles between rounds, resulting in a chaotic and unpredictable environment.
+
+---
+
+## How to Run
+
+> Make sure you have Java and Gradle installed.
+
+### Steps to start:
+
+1. **Clone the repository:**
+
+```bash
+git clone https://github.com/your-username/Buraconcio.git
+cd Buraconcio
+
+```
+
+2. **Run the project using Gradle**
+
+```bash
+./gradlew run
+```
+
+## Main Menu
+
+![](assets/screenshots/mainmenu.png)
+
+## Server Screen
+
+<p align="center">
+  <img src="assets/screenshots/serverscreen.png" width="400" alt="Server Screen 1" />
+  <img src="assets/screenshots/serverscreen2.png" width="400" alt="Server Screen 2" />
+</p>
+
+## In Game
+
+![Train Map](assets/screenshots/ingame-train.png)
+
+## Points Screen
+
+![Points](assets/screenshots/points.png)
+
+## Select Obstacle
+
+![Obstacles](assets/screenshots/obstacle.png)
+
+## Victory Screen
+
+
+## Sounds
+
+The game features a complete sound environment — including button click effects, background music in the lobby and server screens, and proximity-based obstacle sounds.  
+Each obstacle has its own unique audio feedback, and every map includes an exclusive soundtrack to enhance the gameplay experience.
+
 ## TODO
 
 ### Erros
 
-- [x] "Camera is null" acontece quando inicia o game e os players jogam muito "rápido"
-  - [x] Colocar um timer na pré primeira rodada
-- [x] Tratar erros ao quitar no meio do game (**prioridade baixa**)
-- [x] Sobreposição da bola sobre o mel e boostpad
-- [x] Nukar o mapa1
-- [x] Index do mapa esta indo errado no host
-- [x] HUD de configuração tudo quebrado os botoes
+- [ ] Pontuação inconsistente
 
 ### Implementações
 
-- [x] Hud de vitória (Screen)
-- [X] Hud de configuração
-  - [X] Em jogo (Overlay)
-  - [X] No menu (Screen)
-- [x] Hud de Pontuação (Screen)
-  - [x] Ideia: Bolas se mexendo
-- [x] Caso use a borracha no vazio, perde a borracha
-- [ ] Verificar se a borracha funciona no server/client
-- [x] TREM + tempo de cada e etc
-  - [x] Colisão
-  - [x] Agora eles morrem logo quando spawna
-  - [x] Timing de cada trem
-- [x] Organizar o vetor de mapas
+- [ ] Sistema de envio de pontuação
 - [ ] Ventilador
-- [x] MOLDURAAAAAA
-
 
 ### ASSETS
 
-- [X] Hud de vitória
-- [X] Hud de configuração - slider - botao de resume
-- [X] Hud de Pontuação (Screen)
-- [X] Background do LoginScreen
-- [X] Fake Hole BORDINHA
 - [ ] VENTILADOR 😢😢😭😭😭😭😭😭😭😭😭😭😭😭😭😭
-- [X] animacao de morte do trem?

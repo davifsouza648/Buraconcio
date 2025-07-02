@@ -211,7 +211,10 @@ public class PlayerManager {
     public boolean hasEveryonePlaced() {
         for (Player p : players) {
             if (!p.hasPlacedObstacle()) {
-                // System.out.println("ainda nao coloquei");
+
+                if(Constants.DEBUG)
+                    System.out.println("ainda nao coloquei");
+
                 return false;
             }
         }

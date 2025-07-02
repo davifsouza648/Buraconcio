@@ -11,6 +11,7 @@ import java.util.List;
 
 import io.github.buraconcio.Objects.Game.Player;
 import io.github.buraconcio.Screens.ServerScreen;
+import io.github.buraconcio.Utils.Common.Constants;
 import io.github.buraconcio.Utils.Managers.GameManager;
 import io.github.buraconcio.Utils.Managers.GameManager.PHASE;
 import io.github.buraconcio.Utils.Managers.PhysicsManager;
@@ -56,7 +57,8 @@ public class ClientHandler implements Runnable {
                             if (Server.flagAccept) {
                                 handlePlayerUpdate(msg);
                             } else {
-                                System.out.println("Ignoring PLAYER_UPDATE");
+                                if(Constants.DEBUG)
+                                    System.out.println("Ignoring PLAYER_UPDATE");
                             }
 
                             break;
@@ -65,14 +67,16 @@ public class ClientHandler implements Runnable {
                             if (GameManager.getInstance().getCurrentPhase() == PHASE.SHOW_POINTS) {
                                 // handleStarsUpdate(msg);
                             } else {
-                                System.out.println("Ignoring STARS_UPDATE");
+                                if(Constants.DEBUG)
+                                    System.out.println("Ignoring STARS_UPDATE");
                             }
                             break;
                         case BLUEPRINT_OBSTACLES:
 
                         default:
-                            System.out.println("Unknown message type: " + msg.getType());
-                            break;
+                            if(Constants.DEBUG)
+                                System.out.println("Unknown message type: " + msg.getType());
+                                break;
                     }
 
                 }
@@ -84,7 +88,8 @@ public class ClientHandler implements Runnable {
         } catch (IOException | ClassNotFoundException e) {
 
             if (e instanceof java.net.SocketException && e.getMessage().equals("Connection reset")) {
-                System.out.println("Cliente desconectou abruptamente.");
+                if(Constants.DEBUG)
+                    System.out.println("Cliente desconectou abruptamente.");
             } else {
                 e.printStackTrace();
             }
@@ -105,9 +110,11 @@ public class ClientHandler implements Runnable {
 
             broadcastPlayerList();
 
-            System.out.println("new player connected: " + newPlayer.getUsername());
+            if(Constants.DEBUG)
+                System.out.println("new player connected: " + newPlayer.getUsername());
         } else {
-            System.out.println("Invalid payload for PLAYER_UPDATE");
+            if(Constants.DEBUG)
+                System.out.println("Invalid payload for PLAYER_UPDATE");
         }
     }
 
@@ -199,11 +206,15 @@ public class ClientHandler implements Runnable {
         if (currentPlayer != null) {
             PlayerManager.getInstance().getPlayer(currentPlayer.getId()).getBall().setAlive(false);
             PlayerManager.getInstance().removePlayerbyId(currentPlayer.getId());
-            System.out.println("Jogador removido: " + currentPlayer.getUsername());
+
+            if(Constants.DEBUG)
+                System.out.println("Jogador removido: " + currentPlayer.getUsername());
         }
 
         clients.remove(this);
-        System.out.println("Client successfully removed");
+
+        if(Constants.DEBUG)
+            System.out.println("Client successfully removed");
 
         broadcastPlayerList();
     }

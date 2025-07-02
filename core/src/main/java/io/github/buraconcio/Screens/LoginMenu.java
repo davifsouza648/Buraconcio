@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.buraconcio.Main;
 import io.github.buraconcio.Objects.Game.Player;
 import io.github.buraconcio.Objects.UI.Button;
+import io.github.buraconcio.Utils.Common.Constants;
 import io.github.buraconcio.Utils.Managers.CursorManager;
 import io.github.buraconcio.Utils.Managers.PlayerManager;
 import io.github.buraconcio.Utils.Managers.SoundManager;
@@ -156,7 +157,8 @@ public class LoginMenu implements Screen {
 
                     PlayerManager.getInstance().setLocalPlayer(player);
 
-                    System.out.println("Usuario: " + player.getUsername());
+                    if(Constants.DEBUG)
+                        System.out.println("Usuario: " + player.getUsername());
 
                     game.setScreen(new MainMenu(game));
                 }

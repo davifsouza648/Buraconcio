@@ -35,14 +35,17 @@ public class Server {
     private void runTCPServer() {
         try {
             serverSocket = new ServerSocket(Constants.PORT);
-            System.out.println("server TCP CRIADO");
+
+            if(Constants.DEBUG)
+                System.out.println("server TCP CRIADO");
 
             flagAccept = true;
 
             while (flagAccept) {
                 Socket socket = serverSocket.accept();
 
-                System.out.println("Server connected");
+                if(Constants.DEBUG)
+                    System.out.println("Server connected");
 
                 ClientHandler clientHandler = new ClientHandler(socket, clients);
                 clients.add(clientHandler);
@@ -55,7 +58,8 @@ public class Server {
 
         } catch (IOException e) {
 
-            // System.out.println("socket TCP fail");
+            if(Constants.DEBUG)
+                System.out.println("socket TCP fail");
 
             if ("Socket closed".equals(e.getMessage())) {
 
@@ -64,7 +68,9 @@ public class Server {
             } else if (e.getMessage() != null && e.getMessage().toLowerCase().contains("address already in use")) {
 
                 Constants.localP().setHosting(false);
-                System.out.println("entering as client");
+
+                if(Constants.DEBUG)
+                    System.out.println("entering as client");
 
             } else {
 

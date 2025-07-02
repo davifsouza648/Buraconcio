@@ -176,7 +176,8 @@ public class UDPClient {
 
         } catch (IOException | ClassNotFoundException e) {
 
-            // System.out.println("erro no recebimento: " + e.getMessage());
+            if(Constants.DEBUG)
+                System.out.println("erro no recebimento: " + e.getMessage());
 
         }
 

@@ -228,7 +228,8 @@ public class ServerScreen implements Screen {
                         server.stop();
                     }
 
-                    System.out.println("host encerrou a sala");
+                    if(Constants.DEBUG)
+                        System.out.println("host encerrou a sala");
 
                 } else {
 
@@ -243,7 +244,8 @@ public class ServerScreen implements Screen {
                         }
                     }
 
-                    System.out.println("saiu da sala");
+                    if(Constants.DEBUG)
+                        System.out.println("saiu da sala");
                 }
 
                 Auxiliaries.clearAddLocal();

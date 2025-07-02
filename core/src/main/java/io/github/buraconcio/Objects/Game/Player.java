@@ -45,7 +45,9 @@ public class Player implements Serializable {
 
     public Ball createBall() {
         if (startingPos == null) {
-            System.out.println("starting position not defined");
+
+            if(Constants.DEBUG)
+                System.out.println("starting position not defined");
             return null;
         }
 
@@ -67,7 +69,9 @@ public class Player implements Serializable {
     public void update(Vector2 ballPos, Vector2 velocity, boolean state) {
 
         if (ball == null) {
-            System.out.println("ball not yet created");
+
+            if(Constants.DEBUG)
+                System.out.println("ball not yet created");
             return;
         }
 
@@ -97,7 +101,10 @@ public class Player implements Serializable {
     }
 
     public void update(boolean placed, boolean flag) {
-        // System.out.println("atualizando o placed para: " + placed);
+
+        if(Constants.DEBUG)
+            System.out.println("atualizando o placed para: " + placed);
+
         setHasPlacedObstacle(placed);
 
         if (flag) {
@@ -134,7 +141,9 @@ public class Player implements Serializable {
 
         alreadyScored = true;
 
-        //System.out.println("REWARDSTAR");
+        if(Constants.DEBUG)
+            System.out.println("REWARDSTAR");
+
         ball.enterHole();
 
         rewardStar();

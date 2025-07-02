@@ -60,7 +60,8 @@ public class Client {
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
             String serverMsg = (String) in.readObject();
-            System.out.println("receive: " + serverMsg);
+            if(Constants.DEBUG)
+                System.out.println("receive: " + serverMsg);
 
             int index = (int) in.readObject();
             ServerScreen.mapIndex = index;
@@ -140,7 +141,6 @@ public class Client {
                             }
 
                             for (int id : toRemove) {
-                                System.out.println("TOMETOMETOMETOMETOME");
                                 PlayerManager.getInstance().getPlayer(id).getBall().setAlive(false);
 
                                 PlayerManager.getInstance().removePlayerbyId(id);
@@ -292,7 +292,8 @@ public class Client {
                 }
 
             } else {
-                System.out.println("Invalid message");
+                if(Constants.DEBUG)
+                    System.out.println("Invalid message");
             }
 
         }
@@ -356,7 +357,8 @@ public class Client {
             socket.close();
         }
 
-        System.out.println("client disconnect");
+        if(Constants.DEBUG)
+            System.out.println("client disconnect");
     }
 
     public interface GameStageListener {

@@ -28,7 +28,8 @@ public class UDPServer {
         try {
             socket = new DatagramSocket(Constants.UDP_PORT_SERVER);
 
-            System.out.println("Porta " + Constants.UDP_PORT_SERVER + " aberta.");
+            if(Constants.DEBUG)
+                System.out.println("Porta " + Constants.UDP_PORT_SERVER + " aberta.");
 
             new Thread(() -> {
                 while (run) {
@@ -79,7 +80,8 @@ public class UDPServer {
 
         } else {
 
-            System.out.println("ERRO NO PACKAGE");
+            if(Constants.DEBUG)
+                System.out.println("ERRO NO PACKAGE");
             return null;
 
         }

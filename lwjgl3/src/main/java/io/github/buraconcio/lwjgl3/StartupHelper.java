@@ -18,6 +18,9 @@ package io.github.buraconcio.lwjgl3;
 
 import com.badlogic.gdx.Version;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3NativesLoader;
+
+import io.github.buraconcio.Utils.Common.Constants;
+
 import org.lwjgl.system.macosx.LibC;
 import org.lwjgl.system.macosx.ObjCRuntime;
 
@@ -167,7 +170,8 @@ public class StartupHelper {
                 String line;
 
                 while ((line = processOutput.readLine()) != null) {
-                    System.out.println(line);
+                    if(Constants.DEBUG)
+                        System.out.println(line);
                 }
 
                 process.waitFor();

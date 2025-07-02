@@ -125,7 +125,8 @@ public class LoadingScreen implements Screen {
 
                 if (isIpvalid(ipField)) {
                     handleConnection(table);
-                    System.out.println(_ip);
+                    if(Constants.DEBUG)
+                        System.out.println(_ip);
                 } else {
                     showErrorMessage("IP invalid", "Digite o IP (ipv4) corretamente (exemplo: xxx.xxx.xx.x)");
                     ipField.setText("");

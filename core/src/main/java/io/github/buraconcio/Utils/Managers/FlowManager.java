@@ -132,7 +132,9 @@ public class FlowManager {
             @Override
             public void finish() {
                 // Fechar o jogo ao final
-                System.out.println("Tempo de vitória encerrado");
+                if(Constants.DEBUG)
+                    System.out.println("Tempo de vitória encerrado");
+
                 ConnectionManager.getInstance().getServer().stop();
 
             }
