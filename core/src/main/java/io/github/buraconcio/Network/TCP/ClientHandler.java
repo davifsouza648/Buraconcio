@@ -197,7 +197,7 @@ public class ClientHandler implements Runnable {
         }
 
         if (currentPlayer != null) {
-
+            PlayerManager.getInstance().getPlayer(currentPlayer.getId()).getBall().setAlive(false);
             PlayerManager.getInstance().removePlayerbyId(currentPlayer.getId());
             System.out.println("Jogador removido: " + currentPlayer.getUsername());
         }

@@ -78,7 +78,7 @@ public class GameManager {
     private GameCamera camera;
     private Stage stage;
 
-    private Vector2 mapCoords = new Vector2(5,5);
+    private Vector2 mapCoords = new Vector2(5, 5);
 
     private GameManager() {
         inputs = new InputMultiplexer();
@@ -210,20 +210,18 @@ public class GameManager {
     }
 
     public void dispose() {
-        if (physicsScreen != null) {
+        if (currentScreen != null) {
+            currentScreen.dispose();
 
+            if (physicsScreen == currentScreen) {
+                physicsScreen = null;
+            }
+
+            currentScreen = null;
+        } else if (physicsScreen != null) {
             physicsScreen.dispose();
             physicsScreen = null;
-
         }
-
-        if (currentScreen != null) {
-
-            currentScreen.dispose();
-            currentScreen = null;
-
-        }
-
     }
 
     public int getPlayTime() {
@@ -281,7 +279,7 @@ public class GameManager {
 
             if (round == 1)
                 ConnectionManager.getInstance().getServer().sendMessage(Message.Type.FLAG_POS,
-                    getPhysicsScreen().getMapRenderer().getRandomFlagArea());
+                        getPhysicsScreen().getMapRenderer().getRandomFlagArea());
         }
 
         Constants.localP().setCanSelect(false);
@@ -373,13 +371,11 @@ public class GameManager {
         camera.setTarget(pos);
     }
 
-    public void cameraBack()
-    {
+    public void cameraBack() {
         camera.setTarget(mapCoords);
     }
 
-    public void teleportCamera(Vector2 pos)
-    {
+    public void teleportCamera(Vector2 pos) {
         camera.setTarget(pos);
         camera.teleportTo(pos);
     }
@@ -400,30 +396,27 @@ public class GameManager {
         return flow;
     }
 
-    public void setbluePrintArea(Rectangle p)
-    {
+    public void setbluePrintArea(Rectangle p) {
         this.blueprintArea = p;
     }
 
-    public Rectangle getBluePrintarea()
-    {
+    public Rectangle getBluePrintarea() {
         return this.blueprintArea;
     }
 
-    public int getRound()
-    {
+    public int getRound() {
         return this.round;
     }
 
-    public void setRound(int newRound){
+    public void setRound(int newRound) {
         round = newRound;
     }
 
-    public int getArrivalTime(){
+    public int getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(int arrivalTime){
+    public void setArrivalTime(int arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 

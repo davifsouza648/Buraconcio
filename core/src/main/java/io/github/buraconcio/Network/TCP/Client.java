@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.channels.Pipe.SourceChannel;
 import java.sql.Connection;
 import java.util.Map;
 
@@ -139,9 +140,11 @@ public class Client {
                             }
 
                             for (int id : toRemove) {
+                                System.out.println("TOMETOMETOMETOMETOME");
+                                PlayerManager.getInstance().getPlayer(id).getBall().setAlive(false);
+
                                 PlayerManager.getInstance().removePlayerbyId(id);
                             }
-
                         }
                     }
 
