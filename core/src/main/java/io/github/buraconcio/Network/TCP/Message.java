@@ -19,7 +19,6 @@ public class Message implements Serializable {
         BLUEPRINT_OBSTACLES,
         FLAG_POS,
         SPAWN_TRAIN,
-        BALL_ENTERED_HOLE
     }
 
     private Type type;

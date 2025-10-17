@@ -73,6 +73,7 @@ public class Ball extends PhysicsEntity {
         PhysicsManager.getInstance().addToStage(labelGroup);
 
         this.player = player;
+
         mouseMovement = new Vector2(0, 0);
 
         // shooting segment sprites

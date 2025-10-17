@@ -49,8 +49,10 @@ public class CircularSaw extends Obstacle {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
-        fixtureDef.isSensor = false; // Garante que a serra tenha uma hitbox física
+        fixtureDef.isSensor = true;
         body.createFixture(fixtureDef);
+
+        teleport(new Vector2(getX() + getWidth() - circleRadius - 0.15f, body.getPosition().y));
 
         circle.dispose();
     }
@@ -102,9 +104,8 @@ public class CircularSaw extends Obstacle {
         if (other instanceof Ball) {
             Ball ball = (Ball) other;
 
-            // A serra deve matar a bola, independentemente de estar no ar ou não.
-            // A verificação isAirborne() está incorreta aqui.
-            ball.getPlayer().die();
+            if (!ball.isAirborne()) // coloquei um active aqui fds kkk
+                ball.getPlayer().die();
 
             return true;
         }
@@ -117,8 +118,9 @@ public class CircularSaw extends Obstacle {
         super.place();
 
         Vector2 centerPos = origin.cpy().add(new Vector2(getWidth()/2, getHeight()/2));
-        // O teletransporte deve ser para o centro da área de colocação, não com offset.
-        teleport(centerPos);
+        Vector2 offset = new Vector2(getWidth()/2 - circleRadius - 0.15f, 0f);
+        offset.rotateDeg(getRotation());
+        teleport(centerPos.cpy().add(offset));
 
         body.setType(BodyType.DynamicBody);
     }
@@ -151,15 +153,5 @@ public class CircularSaw extends Obstacle {
         super.postRound();
         animacao.pauseAnimation();
     }
-
-    @Override
-    public void teleport(Vector2 centerPos) {
-        Vector2 cornerPos = centerPos.cpy().sub(new Vector2(getWidth()/2, getHeight()/2));
-        origin = cornerPos;
-
-        Vector2 offset = new Vector2(getWidth()/2 - circleRadius - 0.15f, 0f);
-        offset.rotateDeg(getRotation());
-
-        super.teleport(centerPos.cpy().add(offset));
-    }
 }
+
