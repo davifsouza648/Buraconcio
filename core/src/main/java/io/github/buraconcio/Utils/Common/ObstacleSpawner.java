@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class ObstacleSpawner {
 
     private static final String[] types = {"blackhole", "boostpad", "crossbow", "honey", "lmetalbox",
-            "longmetalbox", "longwoodbox", "metalbox", "mine", "star", "woodbox"};
+            "longmetalbox", "longwoodbox", "metalbox", "mine", "star", "woodbox", "trampoline", "eraser", "circularsaw"};
 
     private Random random;
     private Map<String, Function<Vector2, Obstacle>> obstacleFactory;
